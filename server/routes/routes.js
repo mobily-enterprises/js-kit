@@ -30,19 +30,26 @@ eval(fs.readFileSync('../client/validators.js').toString());
 // application
 // ******************************
 exports.index = function(req, res){
-  res.render('index',  {layout:false} );
+
+  // If the user is not logged in, the page won't load at all, it will
+  // redirect to login page
+  if(! req.session.loggedIn ){
+    res.redirect('/login');
+    return; 
+  }
+  res.render('index',  {layout:false, login: req.session.login  } );
 };
 
 exports.login = function(req, res){
-  res.render('login',  {layout:false} );
+  res.render('login',  {layout:false, login: req.session.login } );
 };
 
 exports.recover = function(req, res){
-  res.render('recover',  {layout:false} );
+  res.render('recover',  {layout:false, login: req.session.login } );
 };
 
 exports.register = function(req, res){
-  res.render('register',  {layout:false} );
+  res.render('register',  {layout:false, login: req.session.login } );
 };
 
 
@@ -158,12 +165,15 @@ exports.postWorkspacesAnon = function(req, res, next){
   var User = mongoose.model("User");
 
 
-  // Is the user logged in?
-  if(! req.session.loggedIn ){
-    next( new g.errors.ForbiddenError403());
-    return; 
-  }
-  req.session.loggedIn = false;
+  // Chuck user out if he's not logged in.
+  // TODO: Move this into a middleware
+  // (And DEFINITELY out of a function that is meant to work for anonymous)
+  //if(! req.session.loggedIn ){
+  //  next( new g.errors.ForbiddenError403());
+  //  return; 
+  //}
+
+  req.session.loggedIn = false; // FIXME: THIS IS HERE ONLY FOR TESTING PURPOSES
 
   // **************************************************************
   // PHASE #1: SOFT VALIDATION (NO DB INTERACTION YET)
@@ -361,29 +371,6 @@ exports.postLoginAnon = function(req, res, next){
 
 
 
-  var login;
-
-  // FIXME: Take this out. This is horrible. Client NEEDS to resend their
-  // login name...
-  // If no "login" is offered, it will look in the ession. This way, this
-  // call can be used by just supplying the password if the user
-  // is already logged in
-  if( typeof(req.body.login) != 'undefined' ){
-    login = req.body.login;
-  } else {
-    if( typeof(req.session.login) != 'undefined'){
-      login = req.body.login;
-    } else {
-
-      // This will definitely return errors. Doing it this way so that
-      // it will set the default error message
-      parametersAreThere(req.body, ['login'], errors); 
-
-      // Call the error handler, 422 will return all errors
-      next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
-    }
-  }
-
 
   // **************************************************************
   // PHASE #1: SOFT VALIDATION (NO DB INTERACTION YET)
@@ -391,7 +378,7 @@ exports.postLoginAnon = function(req, res, next){
   // **************************************************************
     
   // Validate user name
-  var validatorLogin = Validators.login(login); // FIXME: If field is empty, this KILLS node
+  var validatorLogin = Validators.login(req.body.login); // FIXME: If field is empty, this KILLS node
   if( ! validatorLogin.result ){
     errors.push( {field: 'login' , message: validatorLogin.message });
   }
@@ -408,14 +395,15 @@ exports.postLoginAnon = function(req, res, next){
   // 
   // *******************************************************
 
-  User.findOne( { login: login}, function(err, docs){
+  User.findOne( { login: req.body.login}, function(err, docs){
     // Log database error if it's there
     if(err ){
       next(new g.errors.BadError503("Database error fetching user") );
     } else {
       // If the user exists, add it to the error vector BUT keep going
       if(! docs || docs.password != req.body.password){
-          errors.push({ field:'password', message: 'Password incorrect', mustChange: false } );
+          errors.push({ field:'password', message: 'Password incorrect', mustChange: true } );
+          errors.push({ field:'', message: 'Login failed' });
           next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
       } else {
         if( docs.password == req.body.password ) {
@@ -442,6 +430,7 @@ exports.postLogout = function(req, res, next){
   // *****
 
     // There is nothing to be checked: simply logs out by clearing the session variables
+    // NOTE: req.session.login is properly set to null as the user really wanted to login
     req.session.loggedIn = false;
     req.session.login = null;
 
@@ -454,5 +443,30 @@ exports.postLogout = function(req, res, next){
 
 }
 
+
+  /*
+  SCRAP
+  var login;
+  // FIXME: Take this out. This is horrible. Client NEEDS to resend their
+  // login name...
+  // If no "login" is offered, it will look in the ession. This way, this
+  // call can be used by just supplying the password if the user
+  // is already logged in
+  if( typeof(req.body.login) != 'undefined' ){
+    login = req.body.login;
+  } else {
+    if( typeof(req.session.login) != 'undefined'){
+      login = req.body.login;
+    } else {
+
+      // This will definitely return errors. Doing it this way so that
+      // it will set the default error message
+      parametersAreThere(req.body, ['login'], errors); 
+
+      // Call the error handler, 422 will return all errors
+      next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    }
+  }
+*/
 
 

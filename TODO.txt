@@ -1,21 +1,19 @@
 
 +++ THE LOGIN (10 days)
-  * CLIENT: Make sure logging in will _actually_ direct to the app
-  * CLEINT: Decide how to store the login name client-side, get client to re-send it
-  * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
+  * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
+  * C/S   : Add a proper button that does something to test the "lose login" thing to test things properly
+  * SERVER: Put the login/logout/register pages (non-data ones) in a separate module
   
   * C/S   : Make sure that the workspace name can be appended to the login screen, so that it becomes the login for *that* specific
             workspace and nothing else. (This will allow personalisations).
   * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace (!)
 
-  * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
 
   * C/S   : Change the "register" page so that if you are logged in, it allows you to EITHER 1) register it without logging in OR 2) logout
   * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
             redirect: pull out a list of workspaces instead, and let user pick
-  * C/S   : Encrypt passwords more seriously       
-
+  * C/S   : Encrypt passwords
 
 
 +++ MESSAGES
@@ -31,13 +29,21 @@
           reload if there are network issues. 
 
 +++ SETTINGS
-  * Write basic "User settings" screen where people can update their info (Name, Photo)
+  * Write basic "User settings" screen where people can update their info (Name, Photo, others)
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace
   * Write a widget that allows users to create line-records and edit them (account types, booking categories, and so on)
 
                           -------------------------
                           !! YOU ARE NOW ALL SET !!
                           -------------------------
+
+  * Add customer form
+  * See messages form
+  * Ability to send messages (email and SMS) depending on configured subsystems
+  * Ability to create bookings
+  * Ability to send invoices AND store invoices
+  * Basic accounting
+  * First version finished
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -78,3 +84,7 @@
   * C/S   : Restructure the whole directory tree so that it makes a lot more sense and can use Dojo 1.8 as a library
   * C/S   : Add logout button to the app and to the server and to the application (make widget), so that we can test things out
   * C/S   : Change app so that if a request is made and response is "unauthorised", asks for login 3 times and after that redirects to login
+  * CLIENT: Make sure logging in will _actually_ direct to the app
+  * CLIENT: Decide how to store the login name client-side, get client to re-send it
+  * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
+  * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)

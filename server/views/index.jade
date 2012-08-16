@@ -1,6 +1,6 @@
 !!!
 head#head
-  title#Booking Dojo
+  title#Booking Dojo AND #{login}
   script(type='text/javascript', src='/libs/dojo/dojo/dojo.js',data-dojo-config="parseOnLoad: false, async:true,isDebug:false, cacheBust:false")
   link(type='text/css', rel='stylesheet', href="/app/main.css")
   link(type='text/css', rel='stylesheet', href="/app/widgets/css/AlertBar.css")
@@ -9,6 +9,8 @@ head#head
   script(type='text/javascript', src='/app/validators.js')
   link(type='text/css', rel='stylesheet', href='/libs/dojo/dijit/themes/claro/claro.css', media='screen')
 body.claro
+  script
+    loginValue="#{login}";
   #network-alert-bar
   #app-alert-bar
   #loadingOverlay.pageOverlay

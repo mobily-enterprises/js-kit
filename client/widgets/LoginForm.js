@@ -76,7 +76,15 @@ define([
 
       postCreate: function(){
         var that = this;
-        THIS = this;
+
+        //  If the global variable loginValue is set, then set the login name to
+        //  the right value, and focus on the password widget
+        if( typeof(loginValue) != 'undefined' && loginValue != '' ){
+          this.login.set('value', loginValue);
+          this.password.focus();
+        } else {
+          this.login.focus();
+        }
 
         // Don't ACTUALLY submit the form
         this.recoverForm.onSubmit = ds.defaultSubmit(this.recoverForm, this.recoverButton, function(){
@@ -86,8 +94,8 @@ define([
 
           // Submit the info
           stores.recoverAnon.put(data).then(
-				  	ds.UIMsg('ok', that.recoverForm, that.recoverButton, that.recoverAlertBar),
-            ds.UIMsg('error', that.recoverForm, that.recoverButton, that.recoverAlertBar)
+				  	ds.UIMsg('ok', that.recoverForm, that.recoverButton, that.recoverAlertBar, true),
+            ds.UIMsg('error', that.recoverForm, that.recoverButton, that.recoverAlertBar, true)
           ).then(
             function(res){
 
@@ -121,6 +129,9 @@ define([
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
               that.loginButton.cancel(); 
               window.location = '/';
+            },
+            function(err){
+              that.password.reset();
             }
           );  // stores.loginanon.put(data)
  

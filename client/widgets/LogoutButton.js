@@ -54,8 +54,8 @@ define([
 
           // Try saving it...
           stores.logout.put({}).then(
-            ds.UIMsg('ok', that.form, that.button, null ),
-            ds.UIMsg('error', that.form, that.button, null, false )
+            ds.UIMsg('ok', that.form, that.button, null, true),
+            ds.UIMsg('error', that.form, that.button, null, true )
           ).then(
             // This is the only spot where things _actually_ went OK... So the callback will get called
             function(res){

@@ -92,7 +92,7 @@ define([
 
         // Get the form's values
         var data = that.form.getValues();
-        data.login = 'merc'; // TODO: Put user name in session
+        data.login = loginValue; // NOTE: this is loginName "the" global variable
 
         // Store the data 
         stores.loginAnon.put(data).then(
@@ -271,16 +271,15 @@ define([
 
             button ? button.cancel() : null;
 
-            // Show the error at application level
-            gw.appAlertBar.set('message', 'Authentication problem');
-            gw.appAlertBar.show(5000);
+            // Only show the alert and the problems if the noLogin flag is false. This flag is basically for
+            // the login form and the recoverPassword form and for the workspace form
+            if(! noLogin){
 
-             /*
-             dialog = new r.RetypePasswordDialog();
-             dialog.show();
-             */
-
-             r.retypePasswordDialog.show();
+              // Show the error at application level
+              gw.appAlertBar.set('message', 'Authentication problem');
+              gw.appAlertBar.show(5000);
+              r.retypePasswordDialog.show();
+            }
 
             throw(err);
  

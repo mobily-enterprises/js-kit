@@ -101,8 +101,8 @@ define([
 
           // Try saving it...
           stores.workspacesAnon.put(data).then(
-            ds.UIMsg('ok', that.form, that.button, that.alertBar ),
-            ds.UIMsg('error', that.form, that.button, that.alertBar )
+            ds.UIMsg('ok', that.form, that.button, that.alertBar , true ),
+            ds.UIMsg('error', that.form, that.button, that.alertBar, true )
           ).then(
             // This is the only spot where things _actually_ went OK... So the callback will get called
             function(res){
