@@ -1,0 +1,50 @@
+/* Thank you http://www.threestyles.com/tutorials/css3-login-form-tutorial/ */
+
+html {
+  height: 100%;
+}
+
+body {
+	background-color: #fcfcfc;
+	font: 9pt/1.5em Helvetica Neue, Helvetica, Arial, sans-serif;
+	margin: 0  0;
+  height: 100%;
+}
+
+#_loginForm {
+   height: 200px;
+}
+
+
+#loginForm, #registerForm {
+    width: 300px;
+	  margin: 0 auto;
+    padding: 20px;
+
+    -moz-border-radius: 20px;
+    -webkit-border-radius: 20px;
+ 
+    /*** Background Gradient - 2 declarations one for Firefox and one for Webkit ***/
+    background:  -moz-linear-gradient(19% 75% 90deg,#FCFCFC, #CCCCCC);
+    background:-webkit-gradient(linear, 0% 0%, 0% 100%, from(#FCFCFC), to(#CCCCCC));
+ 
+    /*** Shadow behind the box ***/
+    -moz-box-shadow:0px -5px 300px #a9a0a0;
+    -webkit-box-shadow:0px -5px 300px #a9a0a0;
+}
+
+
+label {
+  display: block;
+}
+
+
+.dijitTextBox {
+  display: block;
+}
+
+
+h1 {
+	text-align: center;
+  margin-bottom: 20px;
+}

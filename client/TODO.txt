@@ -1,0 +1,72 @@
+
++++ THE LOGIN (10 days)
+  * C/S   : Add logout button to the app and to the server and to the application (make widget), so that we can test things out
+  * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
+  * C/S   : Change app so that if a request is made and response is "unauthorised", asks for login 3 times and after that redirects to login
+
+  * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)
+  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
+
+  * C/S   : Change the "register" page so that if you are logged in, it allows you to EITHER 1) register it without logging in OR 2) logout
+  * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
+            redirect: pull out a list of workspaces instead, and let user pick
+  * C/S   : Encrypt passwords more seriously       
+
++++ MESSAGES
+  * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
+            status
+  * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
+            link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
+            which in turns should output the list of workspaces (since the user is already logged in)
+
++++ BROWSING DATA
+  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range)
+  * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
+          reload if there are network issues. 
+
++++ SETTINGS
+  * Write basic "User settings" screen where people can update their info (Name, Photo)
+  * Write basic "settings" screen with sub-tabs where people can set things for their workspace
+  * Write a widget that allows users to create line-records and edit them (account types, booking categories, and so on)
+
+                          -------------------------
+                          !! YOU ARE NOW ALL SET !!
+                          -------------------------
+
+  DONE:
+  * Password1 and password2, fields, make dependent on each other
+  * Understand, fully, the whole "events" on widgets and DOM nodes http://livedocs.dojotoolkit.org/quickstart/events
+  * Add a busybutton -- Look into dojox/widgets/standby and forms/busybutton
+  * Check things with server, make sure server can respond with form setting error messages
+  * Understand _fully_ the whole promise thing in Dojo
+  * Write functions for server (sending errors) to keep things dry
+  * Initial data saving with MongoDB
+  * Write async code to save everything, MAYBE using Async library https://github.com/caolan/async#series (niiice!)
+  * Actually create account/workspace with MongoDB
+  * CLIENT: Fix forms, as it turns out we don't really need labels (not possible, I was dreaming)
+  * Validation/error manager framework:
+  -- Change client so that it shows which fields had what problem from the server adding validators on the fly
+  -- CLIENT: Add a xhr function for client (making request, writing a message) to keep things dry. Do it with promises and new Form
+  -- CLIENT: Make sure that the busybutton itself cancels itself if the form doesn't validate _somehow_
+  -- CLIENT: Finish the new warning bar!
+  -- CLIENT: Make error printing MUCH nicer than a bloody alert() using the new great bar!
+  -- CLIENT: Simplify IFs so that it only needs to cancel if it didn't validate, and do anything if it worked OK. Errors
+             and messages handled by generic function 
+  -- C/S   : Complete the validation server-side and client-size properly (use the same validators as client side!)
+  --SERVER: Make up log library to log ANYTHING with Workspace as a key (not just errors). Log ALL activity
+  --CLIENT: Enable logging of all activity with Console.log (to be turned on, so wrap console.log in function)
+    +++ THE INTERACTION GALORE (2 days)
+  --CLIENT: Create initial models on the client side for Mongo's data ('workspace')
+  --CLIENT: Write more models for future use/reference (won't work until implemented on server)
+    CLIENT: Change COMPLETELY the logic for forms. Make stores "NewWorkspaces" and "NewWorkspacesAsUser" 
+  --SERVER: Write function part on server for workspace and username checking (store: "Workspaces" which only works with the
+            right filter).
+  --CLIENT: Actually check workspace names and user names using AJAX on the client side (don't allow submit if duplicate)
+  * SERVER: Reinstall Express, work out what's in the "-s" field (see differences with and without) AND check that app still runs
+  * SERVER: Have a look at the middleware used to refresh your memory a little
+  * SERVER: Configure a store with Mongodb
+  * SERVER: Get familiar with sessions
+  * C/S   : Set "logged in variable" when login is successful (store password unencrypted for now)
+  * CLIENT: Slim up the submit function, avoid ANY code repetition that is not 100% strictly necessary
+  * CLIENT: Write a basic empty applicationwith a simple button to interact with server
+  * C/S   : Restructure the whole directory tree so that it makes a lot more sense and can use Dojo 1.8 as a library
