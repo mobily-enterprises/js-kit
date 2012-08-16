@@ -61,10 +61,8 @@ app.get('/Employee/:id', routes.employees);
  ****************************************************************
 */
 
-// DATA CALLS: WorkspacesAnon
 app.get( '/data/workspacesAnon', routes.getWorkspacesAnon );
 app.post('/data/workspacesAnon', routes.postWorkspacesAnon );
-
 
 
 /* 
@@ -73,22 +71,10 @@ app.post('/data/workspacesAnon', routes.postWorkspacesAnon );
  ****************************************************************
 */
 
-// RecoverAnon, loginAnon and logoutAnon
+// Simple non-data calls: RecoverAnon, loginAnon and logout
 app.post('/data/recoverAnon', routes.postRecoverAnon );
 app.post('/data/loginAnon', routes.postLoginAnon);
 app.post('/data/logout', routes.postLogout);
-
-
-
-/* 
- ****************************************************************
- * DATA STORE CALLS
- ****************************************************************
-*/
-
-// WorkspaceUser
-app.post('/data/workspacesUser', routes.postWorkspacesUser );
-
 
 
 http.createServer(app).listen(app.get('port'), function(){

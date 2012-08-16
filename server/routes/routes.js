@@ -352,13 +352,46 @@ exports.postLoginAnon = function(req, res, next){
   var errors = [];
   var User = mongoose.model("User");
 
+
+
   // **************************************************************
   // PHASE #1: SOFT VALIDATION (NO DB INTERACTION YET)
   //           "Because you cannot trust Javascript validation"
   // **************************************************************
 
+
+
+  var login;
+
+  // FIXME: Take this out. This is horrible. Client NEEDS to resend their
+  // login name...
+  // If no "login" is offered, it will look in the ession. This way, this
+  // call can be used by just supplying the password if the user
+  // is already logged in
+  if( typeof(req.body.login) != 'undefined' ){
+    login = req.body.login;
+  } else {
+    if( typeof(req.session.login) != 'undefined'){
+      login = req.body.login;
+    } else {
+
+      // This will definitely return errors. Doing it this way so that
+      // it will set the default error message
+      parametersAreThere(req.body, ['login'], errors); 
+
+      // Call the error handler, 422 will return all errors
+      next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    }
+  }
+
+
+  // **************************************************************
+  // PHASE #1: SOFT VALIDATION (NO DB INTERACTION YET)
+  //           "Because you cannot trust Javascript validation"
+  // **************************************************************
+    
   // Validate user name
-  var validatorLogin = Validators.login(req.body.login); // FIXME: If field is empty, this KILLS node
+  var validatorLogin = Validators.login(login); // FIXME: If field is empty, this KILLS node
   if( ! validatorLogin.result ){
     errors.push( {field: 'login' , message: validatorLogin.message });
   }
@@ -375,7 +408,7 @@ exports.postLoginAnon = function(req, res, next){
   // 
   // *******************************************************
 
-  User.findOne( { login: req.body.login}, function(err, docs){
+  User.findOne( { login: login}, function(err, docs){
     // Log database error if it's there
     if(err ){
       next(new g.errors.BadError503("Database error fetching user") );

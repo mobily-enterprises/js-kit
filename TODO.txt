@@ -1,8 +1,12 @@
 
 +++ THE LOGIN (10 days)
-  * C/S   : Add logout button to the app and to the server and to the application (make widget), so that we can test things out
+  * CLIENT: Make sure logging in will _actually_ direct to the app
+  * CLEINT: Decide how to store the login name client-side, get client to re-send it
   * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
-  * C/S   : Change app so that if a request is made and response is "unauthorised", asks for login 3 times and after that redirects to login
+  
+  * C/S   : Make sure that the workspace name can be appended to the login screen, so that it becomes the login for *that* specific
+            workspace and nothing else. (This will allow personalisations).
+  * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace (!)
 
   * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
@@ -11,6 +15,8 @@
   * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
             redirect: pull out a list of workspaces instead, and let user pick
   * C/S   : Encrypt passwords more seriously       
+
+
 
 +++ MESSAGES
   * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
@@ -70,3 +76,5 @@
   * CLIENT: Slim up the submit function, avoid ANY code repetition that is not 100% strictly necessary
   * CLIENT: Write a basic empty applicationwith a simple button to interact with server
   * C/S   : Restructure the whole directory tree so that it makes a lot more sense and can use Dojo 1.8 as a library
+  * C/S   : Add logout button to the app and to the server and to the application (make widget), so that we can test things out
+  * C/S   : Change app so that if a request is made and response is "unauthorised", asks for login 3 times and after that redirects to login
