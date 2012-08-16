@@ -87,6 +87,7 @@ define([
     postCreate: function(){
       that = this;
 
+
       this.form.onSubmit = r.defaultSubmit(this.form, this.button, function(){
 
         // Get the form's values
@@ -100,11 +101,17 @@ define([
         ).then(
           function(res){
             Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
+            that.form.reset();
             that.button.cancel();
             that.dialog.hide();
+            r.RetypePasswordDialog.failureCounts = 0;
           },
           function(err){
             that.form.reset();
+            r.RetypePasswordDialog.failureCounts ++;
+            if( r.RetypePasswordDialog.failureCounts > 2){
+              window.location="/login";
+            }
           }
         );  // stores.loginanon.put(data)
 
@@ -116,6 +123,7 @@ define([
     }
 
   });
+  r.RetypePasswordDialog.failureCounts = 0;
 
 
 

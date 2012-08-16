@@ -8,7 +8,7 @@
           <label for="${id}_login">Login</label>  
           <input name="login" id="${id}_login" data-dojo-attach-point="login" data-dojo-type="dijit.form.ValidationTextBox" data-dojo-props="required:true"/>
           <label for="${id}_password">Password</label>  
-          <input name="password" id="${id}_password0" data-dojo-attach-point="password" data-dojo-type="app.ValidationPassword" />
+          <input type="password" name="password" id="${id}_password0" data-dojo-attach-point="password" data-dojo-type="app.ValidationPassword" />
           <input type="submit" data-dojo-attach-point="loginButton" data-dojo-type="app.BusyButton" label="Login!" />
         </form>
         <div data-dojo-attach-event="onclick:_onRecoverClick">Recover your password</div>

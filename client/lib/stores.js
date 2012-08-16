@@ -11,14 +11,20 @@ define([
 
   // Make all of the stores, which will be used across the application
   [
-    'loginAnon',
-    'workspacesAnon',
+
+    // Non-data calls
     'recoverAnon',
-    'workspaces',
-    'workspaceSettings',
-    'cities',
-    'contacts',
-    'products'
+    'loginAnon',
+    'logout',
+
+    // Data calls
+    'workspacesAnon',
+
+    'workspaces',       //
+    'workspaceSettings',//
+    'cities',           //
+    'contacts',         //
+    'products'          //
   ].forEach( function(i){
     console.log("I is " + i);
     stores[i] = new JsonRest({

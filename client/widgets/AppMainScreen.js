@@ -5,19 +5,13 @@ define([
   "dijit/_TemplatedMixin",
   "dijit/_WidgetsInTemplateMixin",
 
-  "dijit/layout/BorderContainer",
-  "dijit/layout/StackContainer",
-  "dijit/layout/TabContainer",
-  "dijit/layout/ContentPane",
-  "dijit/Dialog",
+   "dijit/layout/BorderContainer",
+   "dijit/layout/StackContainer",
+   "dijit/layout/TabContainer",
+   "dijit/layout/ContentPane",
+   "dijit/Dialog",
 
-  //"app/lib/globals",
-  //"app/lib/globalWidgets",
-  //"app/lib/Logger",
-  //"app/lib/defaultSubmit",
-  //"app/lib/stores",
-
-  // 'app/widgets/LoginForm',
+   "app/widgets/LogoutButton",
    "app/widgets/Dashboard",
    "app/widgets/SearchPage",
 
@@ -33,13 +27,7 @@ define([
      , ContentPane
      , Dialog
 
-     //, g
-     //, gw
-     //, ds
-     //, Logger
-     //, stores
-
-     //, LoginForm
+     , LogoutButton
      , Dashboard
      , SearchPage
 
@@ -53,7 +41,9 @@ define([
       templateString: '' +
         '<div>' +
         '  <div class="appContainer" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design: \'headline\'">' +
-        '    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: \'top\'">Booking Dojo</div>' +
+        '    <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: \'top\'">' +
+        '       Booking Dojo <span data-dojo-type="app.LogoutButton"> </span>' +
+        '   </div>' +
         '    <div data-dojo-type="dijit.layout.TabContainer" data-dojo-props="region: \'center\', tabPosition: \'left-h\'">' +
         '      <div data-dojo-type="app.Dashboard" data-dojo-props="title: \'Dashboard\'">Section One</div>' +
         '      <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title: \'Two\'">Section Two</div>' +

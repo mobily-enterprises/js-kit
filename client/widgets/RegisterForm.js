@@ -19,6 +19,7 @@ define([
   "app/lib/defaultSubmit",
   "app/lib/globals",
   "app/lib/stores",
+  "app/lib/Logger",
 
   "app/widgets/ValidationWorkspace",
   "app/widgets/ValidationUsername",
@@ -50,6 +51,7 @@ define([
      , ds
      , g
      , stores
+     , Logger
 
      , ValidationWorkspace
      , ValidationUsername
@@ -104,7 +106,7 @@ define([
           ).then(
             // This is the only spot where things _actually_ went OK... So the callback will get called
             function(res){
-              g.Log("Jsonrest put(data) returned OK: " + json.toJson(res) );
+              Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
               that.button.cancel();
             }
           ); // stores.workspacesAnon.put(data).then
@@ -118,103 +120,4 @@ define([
    });
 
 });
-
-
-/* SCRAP 
-
-// Don't ACTUALLY submit the form
-        this.form.onSubmit___  = function(e){
-
-          // Make the button busy
-          that.button.makeReallyBusy();
-
-          // Validate the form
-          this.validate();
-          if(! this.isValid() ){
-            g.Log("Didn't validate, cancelling");
-            that.button.cancel(); 
-          } else {
-
-            // res = g.formXhr( that.form, that.alertBar );
-            // FIXME: Make this automatic!
-            data = that.form.getValues();
-
-            // Store the data 
-            g.stores.workspacesAnon.put(data).then(
-              g.UIMsg('ok', that.form, that.alertBar ),
-              g.UIMsg('error', that.form, that.alertBar )
-            ).then(
-              function(res){
-                g.Log("Jsonrest put(data) returned OK: " + json.toJson(res) );
-                that.button.cancel(); 
-
-                g.stores.workspacesAnon.query({name:'pippo'}).then(
-                  function(res){
-                    console.log("Result: " + res);
-                  }
-                );
-
-              }
-            );
-
-            res.then(
-              function(res){
-                g.Log("Main program: success with: " + json.toJson(res) );
-                if(res.response == 'OK'){
-                  g.Log("The form worked OK");
-                  // var test = g.stores.workspace.get('pp');
-                } 
-              }
-            );
-            ..
-              function(err){
-                g.Log("Jsonrest put(data) returned ERROR: " + json.toJson(err) );
-                that.button.cancel(); 
-              }
-
-          }
-
-*/
-
-/* SCRAP
-        // This will ensure that if the user pressed the button, AND the form
-        // didn't validate, the button returns clickable (the user is still on the form)
-        this.button.afterClick = lang.hitch(this, function(){
-          if( ! this.form.validate() ){
-            this.button.cancel();
-          }
-        });
-        */
-        
-        /*
-          // CHUNK: FULL FORM VALUDATION WITH EVERY CONDITION MANAGED
-          // (NOT NEEDED SINCE THE POINT OF HTE INFRASTRUCTURE IS TO MANAGE
-          // MOST OF THE UNEXPECTED SITUATIONS)
-          if(this.isValid() ){
-
-            res = g.formXhr( that.form );
-            res.then(
-              function(res){
-                console.log("Main program: success with: " + res);
-                if(res.response == 'OK'){
-                  console.log("The form worked OK");
-                } else {
-                  console.log("The form had validation issues");
-                }
-                that.button.cancel();
-              }
-              , function(res){
-                console.log("Main program: failed with: " + res );
-                that.button.cancel();
-              }
-              
-            );
-
-
-          } else {
-            console.log("Didn't validate, cancelling");
-            that.button.cancel(); 
-          }
-        */
-
 

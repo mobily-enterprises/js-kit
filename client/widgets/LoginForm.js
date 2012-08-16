@@ -120,6 +120,7 @@ define([
             function(res){
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
               that.loginButton.cancel(); 
+              window.location = '/';
             }
           );  // stores.loginanon.put(data)
  
