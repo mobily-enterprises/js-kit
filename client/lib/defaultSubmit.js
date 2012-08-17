@@ -101,8 +101,11 @@ define([
         ).then(
           function(res){
             Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-            that.form.reset();
             that.button.cancel();
+
+            // Reset things so that it will look right if it happens again
+            that.form.reset();
+            that.alertBar.hide();
             that.dialog.hide();
             r.RetypePasswordDialog.failureCounts = 0;
           },

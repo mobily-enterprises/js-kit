@@ -5,7 +5,13 @@ var express = require('express'),
     http = require('http'),
     mongoose = require('mongoose'),
     db = require('./db.js'),
-    routes = require('./routes/routes.js'),
+
+    // Pages and routes
+    routesData = require('./routes/routesData.js'),
+    routesDataAnon = require('./routes/routesDataAnon.js'),
+    routesNonData = require('./routes/routesNonData.js'),
+    routesPages = require('./routes/routesPages.js'),
+
     AppErrorHandler = require('./AppErrorHandler.js').AppErrorHandler,
     fs = require('fs'),
     path = require('path');
@@ -47,13 +53,38 @@ app.configure('production', function(){
   // app.use(express.errorHandler());
 });
 
-// Page routes
-app.get('/', routes.index);
-app.get('/login', routes.login);
-app.get('/recover', routes.recover);
-app.get('/register', routes.register);
 
-app.get('/Employee/:id', routes.employees);
+/* 
+ ****************************************************************
+ * PAGES
+ ****************************************************************
+*/
+app.get('/app', routesPages.app);
+app.get('/login', routesPages.login);
+app.get('/recover', routesPages.recover);
+app.get('/register', routesPages.register);
+
+/* 
+ ****************************************************************
+ * NON-DATA CALLS
+ ****************************************************************
+*/
+
+app.post('/data/recoverAnon', routesNonData.postRecoverAnon );
+app.post('/data/loginAnon', routesNonData.postLoginAnon);
+app.post('/data/logout', routesNonData.postLogout);
+
+
+/* 
+ ****************************************************************
+ * DATA CALLS -- ANONYMOUS
+ ****************************************************************
+*/
+
+app.get( '/data/workspacesAnon', routesDataAnon.getWorkspacesAnon );
+app.post('/data/workspacesAnon', routesDataAnon.postWorkspacesAnon );
+app.get( '/data/usersAnon'     , routesDataAnon.getUsersAnon );
+
 
 /* 
  ****************************************************************
@@ -61,22 +92,12 @@ app.get('/Employee/:id', routes.employees);
  ****************************************************************
 */
 
-app.get( '/data/workspacesAnon', routes.getWorkspacesAnon );
-app.post('/data/workspacesAnon', routes.postWorkspacesAnon );
+app.post( '/data/test', routesData.postTest );
 
 
-/* 
- ****************************************************************
- * NON-DATA CALLS (still using JsonRest for consistency)
- ****************************************************************
-*/
-
-// Simple non-data calls: RecoverAnon, loginAnon and logout
-app.post('/data/recoverAnon', routes.postRecoverAnon );
-app.post('/data/loginAnon', routes.postLoginAnon);
-app.post('/data/logout', routes.postLogout);
 
 
+// Create the actual server
 http.createServer(app).listen(app.get('port'), function(){
   console.log("Express server listening on port " + app.get('port'));
 });

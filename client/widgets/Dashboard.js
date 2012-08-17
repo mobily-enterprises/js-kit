@@ -61,7 +61,7 @@ define([
           data = that.form.getValues();
 
           // Try saving it...
-          stores.workspacesAnon.put(data).then(
+          stores.test.put(data).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),
             ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(

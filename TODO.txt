@@ -1,19 +1,25 @@
 
 +++ THE LOGIN (10 days)
-  * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
-  * C/S   : Add a proper button that does something to test the "lose login" thing to test things properly
-  * SERVER: Put the login/logout/register pages (non-data ones) in a separate module
+  * C/S   : Add a proper button that does something to test the "session expires" thing to test things properly
+  * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   
-  * C/S   : Make sure that the workspace name can be appended to the login screen, so that it becomes the login for *that* specific
-            workspace and nothing else. (This will allow personalisations).
-  * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace (!)
+  * C/S   : Make sure that the workspace name can be appended to the login screen, so that it 1) Allows personalisation 2) Allows automatic
+            redirect once the login has worked (if the workspace is not accessible, will come up with list)
+  * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace. If not,
+            simply redirect to the login page!!!!!
+
+  * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
 
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
+  * SERVER: Make sure that there is _always_ a workspace parameter in each and every call (set it as a global variable?) and make 100% sure
+            that user has access to that specific workspace. EACH JsonRest call should check workspace access!!! Note: if there is no access
+            to that workspace specifically, then it should simply redirect to login page!
 
   * C/S   : Change the "register" page so that if you are logged in, it allows you to EITHER 1) register it without logging in OR 2) logout
   * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
             redirect: pull out a list of workspaces instead, and let user pick
   * C/S   : Encrypt passwords
+
 
 
 +++ MESSAGES
@@ -88,3 +94,4 @@
   * CLIENT: Decide how to store the login name client-side, get client to re-send it
   * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
   * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)
+  * SERVER: Put the login/logout/register pages (non-data ones) in a separate module

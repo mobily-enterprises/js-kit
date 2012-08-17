@@ -18,8 +18,8 @@ define([
     'logout',
 
     // Data calls
-    'workspacesAnon',
-
+    'test',             //
+    'workspacesAnon',   //
     'workspaces',       //
     'workspaceSettings',//
     'cities',           //
