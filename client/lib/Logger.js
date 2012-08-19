@@ -7,8 +7,4 @@ define([
       console.log(message);
     // }
   }
-
 });
-
-
-
