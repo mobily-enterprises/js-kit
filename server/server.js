@@ -82,8 +82,8 @@ app.post('/data/logout', routesNonData.postLogout);
 */
 
 app.get( '/data/workspacesAnon', routesDataAnon.getWorkspacesAnon );
-app.post('/data/workspacesAnon', routesDataAnon.postWorkspacesAnon );
 app.get( '/data/usersAnon'     , routesDataAnon.getUsersAnon );
+app.post('/data/workspacesAnon', routesDataAnon.postWorkspacesAnon );
 
 
 /* 
@@ -93,6 +93,7 @@ app.get( '/data/usersAnon'     , routesDataAnon.getUsersAnon );
 */
 
 app.post( '/data/test', routesData.postTest );
+app.post( '/data/workspaces', routesData.postWorkspaces);
 
 
 

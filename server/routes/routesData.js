@@ -45,3 +45,67 @@ exports.postTest = function(req, res, next){
 }
 
 
+exports.postWorkspaces = function(req, res, next){
+
+  // *****
+  setTimeout(function(){
+  // *****
+
+  Workspace = mongoose.model('Workspace');
+  User = mongoose.model('User');
+
+  errors = [];
+
+  // Chuck user out if he's not logged in.
+  // TODO: Move this into a middleware
+  if(! req.session.loggedIn ){
+    next( new g.errors.ForbiddenError403());
+    return; 
+  }
+
+  parametersAreThere(req.body, ['workspace'], errors);
+
+
+  // There were errors: end of story, don't even bother the database
+  if(errors.length){
+    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    return;
+  }
+
+  // Step 1: Check that the workspace is not already taken
+  Workspace.find({ name:req.body.workspace }, function(err, docs){
+    if(err){
+      next(new g.errors.BadError503("Database error fetching workspace") );
+    } else {
+      if(docs){
+        errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
+        next( new g.errors.ValidationError422('Db-oriented validation of parameters failed', errors));
+      } else {
+
+        // Assign values
+        var w = new Workspace();
+        w.name = req.body.workspace;
+        w.activeFlag = true;
+        w.ownerUserId = null; // FIXME
+        w.save( function(err){
+          if(err){
+             next(new g.errors.BadError503("Database error saving workspace") );
+          } else{
+            res.json( { response: 'OK' } , 200);
+          }
+        });
+      }
+    }
+  });
+
+
+  //
+  } , 500); // Artificial timeout
+  //
+
+}
+
+
+
+
+

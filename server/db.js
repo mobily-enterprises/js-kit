@@ -37,7 +37,6 @@ var Workspace = new Schema({
   name           : { type: String, lowercase: true, unique: true},
   activeFlag     : Boolean,
   ownerUserId    : { type: ObjectId, index: true },
-  countryId      : { type: ObjectId, index: true },
 });
 mongoose.model('Workspace', Workspace);
 
@@ -47,6 +46,8 @@ var WorkspaceSettings = new Schema({
   InvoiceTemplate : String,
   LongName        : String,
   DefaultCountry  : String,
+  allowedUserIds : [ { type: ObjectId, index: true } ], 
+  countryId      : { type: ObjectId, index: true },
 });
 mongoose.model('WorkspaceSettings', WorkspaceSettings);
 
@@ -110,7 +111,6 @@ var User = new Schema({
   login         : { type: String, unique: true, lowercase: true },
   password      : { type: String },
   email         : { type: String, lowercase:true },
-  workspaceIds  : [ { type: ObjectId, index: true } ], 
 });
 mongoose.model('User', User);
 
