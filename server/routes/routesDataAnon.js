@@ -198,7 +198,6 @@ exports.postWorkspacesAnon = function(req, res, next){
                 w.name = req.body.workspace;
                 w.activeFlag = true;
                 w.ownerUserId = u._id;
-                w.countryId = null;
                 w.save( function(err){
                   if(err ){
                     next( new g.errors.BadError503("Database error saving workspace. User created, but no workspace assigned") );

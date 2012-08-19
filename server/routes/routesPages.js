@@ -30,7 +30,14 @@ exports.recover = function(req, res){
   res.render('recover',  { layout:false, login: req.session.login } );
 };
 
+// If you are already logged in, you cannot register a workspace from here
+// and you are redirected to the login page (which in turn will show the
+// list of workspaces)
 exports.register = function(req, res){
+  if( req.session.loggedIn){
+     res.redirect('/login');
+     return;
+  }
   res.render('register',  { layout:false, login: req.session.login } );
 };
 

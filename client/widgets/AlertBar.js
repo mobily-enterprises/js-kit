@@ -153,6 +153,8 @@ return declare("app.AlertBar", [_WidgetBase, _TemplatedMixin], {
 
 
   show: function(timeout, force){
+
+
     //  summary:
     //    Shows the bar. Do not call directly.
     //    Use notify();

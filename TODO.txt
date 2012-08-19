@@ -1,25 +1,28 @@
 
 +++ THE LOGIN (10 days)
-  * C/S   : Add a proper button that does something to test the "session expires" thing to test things properly
-  * SERVER: Set an expiration time to the login, check that it can be "since last communication"
-  
+
+  "THE WORKSPACES"
+  * C/S   : Add a form to register a new workspace while in it
   * C/S   : Make sure that the workspace name can be appended to the login screen, so that it 1) Allows personalisation 2) Allows automatic
             redirect once the login has worked (if the workspace is not accessible, will come up with list)
   * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace. If not,
             simply redirect to the login page!!!!!
-
-  * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
-
-  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
-  * SERVER: Make sure that there is _always_ a workspace parameter in each and every call (set it as a global variable?) and make 100% sure
+  * C/S   : Add a possible authentication error which is triggered server side if the user IS logged in but does NOT have access to that
+            specific workspace. In such a case, the user should be redirected to /login straight away. Different error code or
+            extra parameter in ajax of existing error?
+  *         Make sure that there is _always_ a workspace parameter in each and every call (set it as a global variable?) and make 100% sure
             that user has access to that specific workspace. EACH JsonRest call should check workspace access!!! Note: if there is no access
             to that workspace specifically, then it should simply redirect to login page!
-
-  * C/S   : Change the "register" page so that if you are logged in, it allows you to EITHER 1) register it without logging in OR 2) logout
   * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
-            redirect: pull out a list of workspaces instead, and let user pick
-  * C/S   : Encrypt passwords
+            redirect: pull out a list of workspaces instead, and let user pick.
+  * C/S   : Think of something if there is NO workspace available (possible)
 
+  "THE LAST TOUCHES"
+
+  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
+  * SERVER: Set an expiration time to the login, check that it can be "since last communication"
+  * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
+  * C/S   : Encrypt passwords
 
 
 +++ MESSAGES
@@ -28,6 +31,9 @@
   * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
             link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
             which in turns should output the list of workspaces (since the user is already logged in)
+  * C/S   : Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
+            which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
+            write a bit of a wizard.
 
 +++ BROWSING DATA
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range)
@@ -37,15 +43,16 @@
 +++ SETTINGS
   * Write basic "User settings" screen where people can update their info (Name, Photo, others)
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace
-  * Write a widget that allows users to create line-records and edit them (account types, booking categories, and so on)
+  * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
 
                           -------------------------
                           !! YOU ARE NOW ALL SET !!
                           -------------------------
 
   * Add customer form
-  * See messages form
-  * Ability to send messages (email and SMS) depending on configured subsystems
+  * Browse customers widget
+  * See messages widget
+  * Ability to send messages (email and SMS) depending on configured/existing subsystems
   * Ability to create bookings
   * Ability to send invoices AND store invoices
   * Basic accounting
@@ -95,3 +102,5 @@
   * C/S   : Change app so that if you are not logged in it will send TO login screen (redirect straight from the jade page)
   * CLIENT: Change login form so that if the user is already set, it will not ask for it again (and option to change user)
   * SERVER: Put the login/logout/register pages (non-data ones) in a separate module
+  * C/S   : Add a proper button that does something to test the "session expires" thing to test things properly
+  * C/S   : Change the "register" page so that if you are logged in, it redirects to the login page

@@ -15,7 +15,7 @@ define([
 
   "app/widgets/AlertBar",
   "app/widgets/BusyButton",
-  "app/widgets/ValidationPassword",
+  "app/widgets/ValidationWorkspace",
 
    ], function(
      declare
@@ -34,7 +34,7 @@ define([
 
      , AlertBar
      , BusyButton
-     , ValidationPassword
+     , ValidationWorkspace
  ){
     // Create the "login" pane, based on a normal ContentPane
     return declare('app.Dashboard', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
@@ -46,6 +46,7 @@ define([
         '<div>' +
         '  <div data-dojo-type="app.AlertBar" data-dojo-attach-point="alertBar"></div>' +
         '  <form data-dojo-type="dijit.form.Form" data-dojo-attach-point="form" method="POST"> ' +
+        '    <input id="${id}_workspace" data-dojo-type="app.ValidationWorkspace" name="workspace" />' +
         '    <input type="submit" data-dojo-attach-point="button" data-dojo-type="app.BusyButton" label="Create!" />' +
         '  </form>' +
         '</div>',
@@ -60,8 +61,11 @@ define([
           // Store the data 
           data = that.form.getValues();
 
+          // YOU ARE HERE: Strange, once it fails from the server side, validation stops working for scope
+          // problems
+
           // Try saving it...
-          stores.test.put(data).then(
+          stores.workspaces.put(data).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),
             ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(
