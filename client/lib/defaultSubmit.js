@@ -222,17 +222,12 @@ define([
                     // Use Dojo aspects to add an extra check to the original widget's
                     // validation function, so that the client will never ever serve
                     // that function again
-                    //aspect.around(widget, 'validator', function(originalValidator){
                     aspect.around(widget, 'validator', function(originalValidator){
                       return function(value){
-                        console.log("MIDDLE MAN STARTED AND THIS IS: " + widget.id);
-                        console.log(this);
                         if( value == badValue){
                           this.invalidMessage = error.message;
                           return false;
                         } else {
-                          // TODO: FIND OUT WHY WE NEED THIS "call"
-                          // return originalValidator(value);
                           return originalValidator.call(this, value);
                         }
                       };

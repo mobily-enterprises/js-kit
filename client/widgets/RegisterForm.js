@@ -87,24 +87,39 @@ define([
         //this.password1.mustMatch = this.password0;
 
         // SUbmit form
-        this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
+        this.formAsAnon.onSubmit = ds.defaultSubmit(this.formAsAnon, this.buttonAsAnon, function(){
 
           // Store the data 
-          data = that.form.getValues();
+          var data = that.formAsAnon.getValues();
 
           // Try saving it...
           stores.workspacesAnon.put(data).then(
-            ds.UIMsg('ok', that.form, that.button, that.alertBar , true ),
-            ds.UIMsg('error', that.form, that.button, that.alertBar, true )
+            ds.UIMsg('ok', that.formAsAnon, that.buttonAsAnon, that.alertBarAsAnon , true ),
+            ds.UIMsg('error', that.formAsAnon, that.buttonAsAnon, that.alertBarAsAnon, true )
           ).then(
             // This is the only spot where things _actually_ went OK... So the callback will get called
             function(res){
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              that.button.cancel();
+              that.buttonAsAnon.cancel();
             }
           ); // stores.workspacesAnon.put(data).then
           
-        }); // this.form.onSubmit
+        }); // this.formAsAnon.onSubmit
+
+        this.formAsUser.onSubmit = ds.defaultSubmit(this.formAsUser, this.buttonAsUser, function(){
+          var data = that.formAsUser.getValues();
+
+          stores.workspaces.put(data).then(
+            ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, that.alertBarAsUser , true ),
+            ds.UIMsg('error', that.formAsUser, that.buttonAsUser, that.alertBarAsUser, true )
+          ).then(
+             function(res){
+              Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
+            }
+          );
+
+ 
+        });
 
 
       }, // postCreate
