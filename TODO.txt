@@ -2,20 +2,34 @@
 +++ THE LOGIN (10 days)
 
   "THE WORKSPACES"
-  * C/S   : Add a form to register a new workspace while in it
-  * C/S   : Make sure that the workspace name can be appended to the login screen, so that it 1) Allows personalisation 2) Allows automatic
-            redirect once the login has worked (if the workspace is not accessible, will come up with list)
-  * C/S   : Make sure that once Login has gone through, and main page is loaded, the user has access to *that* particular workspace. If not,
-            simply redirect to the login page!!!!!
-  * C/S   : Add a possible authentication error which is triggered server side if the user IS logged in but does NOT have access to that
-            specific workspace. In such a case, the user should be redirected to /login straight away. Different error code or
-            extra parameter in ajax of existing error?
-  *         Make sure that there is _always_ a workspace parameter in each and every call (set it as a global variable?) and make 100% sure
-            that user has access to that specific workspace. EACH JsonRest call should check workspace access!!! Note: if there is no access
-            to that workspace specifically, then it should simply redirect to login page!
+  * C/S   : Change register form so that if user is already logged in it only asks for the workspace name
+  * C/S   : In case user already is logged in, register form should have an info box and explain that they are already logged in and
+            the workspace will be registered under their username, providing a logout link too.
+  * CLIENT: In case user is not logged in, warn users that if they already are customers, they should login so that
+            the workspace will fall under their existing username (with link to a login page)
+
+  * C/S   : * The app URL must always have /workspacename at the end
+            * When loading app, the workspace name is set as a global variable just like loginValue (workspaceIdValue)
+            * Change JsonRest call in client so that it automatically appends workspaceIdValue as workspaceId. Every call to the server 
+              will have to have either tokenId or workspaceId, always
+            * On the server side, a middleware will set req.application.workspaceId and req.application.userId:
+              - If there is tokenId with the request, the values will be based on the token's value
+              - If there is just workspaceId with the request, the values will be based on the session's login and the workspace's id
+              If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
+              that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
+              error (and at that point the client needs to redirect to /login immediately)
+            * Change existing calls (the ones that expect a login) so that they use the new middleware value, except the 'Anon" ones
+            * Check whether we want the user id in the session too (most likely, since all real calls will use it). Check the whole
+              "are we using workspace/login names or workspace/login IDs
+            
+  * C/S   : Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
+            login has worked
+
   * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
             redirect: pull out a list of workspaces instead, and let user pick.
-  * C/S   : Think of something if there is NO workspace available (possible)
+
+  * C/S   : Think of something if there is NO workspace available (possible). Where is the user directed? Possibly to the "user config"
+            widget which they would normally access from the top in the normal application?
 
   "THE LAST TOUCHES"
 
@@ -41,8 +55,9 @@
           reload if there are network issues. 
 
 +++ SETTINGS
-  * Write basic "User settings" screen where people can update their info (Name, Photo, others)
-  * Write basic "settings" screen with sub-tabs where people can set things for their workspace
+  * Write basic "User settings" screen where people can update their info (Name, Photo, others). This will possibly be what comes out
+    if a user logs in without ANY workspaces
+  * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
 
                           -------------------------

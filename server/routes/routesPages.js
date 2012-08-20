@@ -34,10 +34,6 @@ exports.recover = function(req, res){
 // and you are redirected to the login page (which in turn will show the
 // list of workspaces)
 exports.register = function(req, res){
-  if( req.session.loggedIn){
-     res.redirect('/login');
-     return;
-  }
   res.render('register',  { layout:false, login: req.session.login } );
 };
 

@@ -6,7 +6,10 @@ define([
   "dojo/_base/json",
   "dojo/aspect",
   "dojo/query",
+  "dojo/text!./templates/RegisterForm.html",
 
+  "dijit/layout/StackContainer",
+  "dijit/layout/ContentPane",
   "dijit/form/Form",
   "dijit/_WidgetBase",
   "dijit/_TemplatedMixin",
@@ -38,7 +41,10 @@ define([
      , json
      , aspect
      , query
+     , templateString
 
+     , StackContainer
+     , ContentPane
      , Form
      , _WidgetBase
      , _TemplatedMixin
@@ -66,28 +72,15 @@ define([
 
       widgetsInTemplate: true,
 
-      templateString: '' +
-        '<div>' +
-        '  <div data-dojo-type="app.AlertBar" data-dojo-attach-point="alertBar"></div>' +
-        '  <form style="height:100%" data-dojo-type="dijit.form.Form" data-dojo-attach-point="form" method="POST"> ' +
-        '    <label for="${id}_workspace">Workspace name</label>  ' +
-        '    <input name="workspace" id="${id}_workspace" data-dojo-attach-point="workspace" data-dojo-type="app.ValidationWorkspace" />' + 
-        '    <label for="${id}_email">Email</label>  ' +
-        '    <input name="email" id="${id}_email" data-dojo-attach-point="email" data-dojo-type="app.ValidationEmail" />' + 
-        '    <label for="${id}_login">Login</label>  ' +
-        '    <input name="login" id="${id}_login" data-dojo-attach-point="login" data-dojo-type="app.ValidationUsername" />' + 
-        '    <label for="${id}_password0">Password</label>  ' +
-        '    <input name="password" id="${id}_password0" data-dojo-attach-point="password0" data-dojo-type="app.ValidationPassword" />' + 
-        '    <label for="${id}_password1">Confirm password</label>  ' +
-        '    <input name="password" id="${id}_password1" data-dojo-attach-point="password1" data-dojo-type="app.ValidationPassword" />' + 
-        '    <input type="submit" data-dojo-attach-point="button" data-dojo-type="app.BusyButton" label="Create!" />' +
-        '  </form>' +
-        '</div>',
-
+      templateString: templateString,
 
       postCreate: function(){
         var that = this;
-        THIS = this;
+
+        // Select the right container for the job, depending of whether the
+        // user is already logged in or not
+        this.container.selectChild( loginValue ? this.registerAsUser : this.registerAsAnon );
+            
 
         // Setting password2 so that it must match password1. I cannot do this within the
         // template as I cannot think of a way to write it in the definition
