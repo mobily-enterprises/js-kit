@@ -72,8 +72,9 @@ exports.postWorkspaces = function(req, res, next){
     return;
   }
 
+
   // Step 1: Check that the workspace is not already taken
-  Workspace.find({ name:req.body.workspace }, function(err, docs){
+  Workspace.findOne({ name:req.body.workspace }, function(err, docs){
     if(err){
       next(new g.errors.BadError503("Database error fetching workspace") );
     } else {
@@ -86,7 +87,7 @@ exports.postWorkspaces = function(req, res, next){
         var w = new Workspace();
         w.name = req.body.workspace;
         w.activeFlag = true;
-        w.ownerUserId = null; // FIXME
+        w.ownerUserId = null; // FIXME: set to owner (once user infrastructure is done)
         w.save( function(err){
           if(err){
              next(new g.errors.BadError503("Database error saving workspace") );

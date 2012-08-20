@@ -115,7 +115,13 @@ define([
           ).then(
              function(res){
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-            }
+            },
+             function(err){
+               if( err.status == 403 ){
+                 Logger("User is no longer logged in, redirecting to normal register form");
+                 that.container.selectChild( that.registerAsAnon );
+               }
+             }
           );
 
  

@@ -98,16 +98,6 @@ exports.postWorkspacesAnon = function(req, res, next){
   var User = mongoose.model("User");
 
 
-  // Chuck user out if he's not logged in.
-  // TODO: Move this into a middleware
-  // (And DEFINITELY out of a function that is meant to work for anonymous)
-  //if(! req.session.loggedIn ){
-  //  next( new g.errors.ForbiddenError403());
-  //  return; 
-  //}
-
-  req.session.loggedIn = false; // FIXME: THIS IS HERE ONLY FOR TESTING PURPOSES
-
   // **************************************************************
   // PHASE #1: SOFT VALIDATION (NO DB INTERACTION YET)
   //           "Because you cannot trust Javascript validation"
@@ -163,14 +153,15 @@ exports.postWorkspacesAnon = function(req, res, next){
       next(new g.errors.BadError503("Database error fetching user") );
     } else {
       // If the user exists, add it to the error vector BUT keep going
-      if(docs){
+      console.log("CHECK: %j",doc);
+      if(doc){
         errors.push({ field:'login', message: 'Login name taken, sorry!', mustChange: true } );
       }
-      Workspace.findOne({ name: req.body.workspace }, function(err, docs){
+      Workspace.findOne({ name: req.body.workspace }, function(err, doc){
         if(err ){
           next(new g.errors.BadError503("Database error fetching workspace") );
         } else {
-          if(docs){
+          if(doc){
             errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
           } 
 

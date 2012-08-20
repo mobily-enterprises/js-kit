@@ -96,7 +96,7 @@ define([
 
         // Store the data 
         stores.loginAnon.put(data).then(
-          r.UIMsg('ok', that.form, that.button, that.alertBar ),
+          r.UIMsg('ok', that.form, that.button, that.alertBar, true ),
           r.UIMsg('error', that.form, that.button, that.alertBar, true )
         ).then(
           function(res){
@@ -271,16 +271,23 @@ define([
           break;   
 
           case 403:
+            // Get the response text as Json if present (otherwise, just use the error's own message)
+            res = err.responseText ?
+              json.fromJson(err.responseText) :
+              { message: err.message };
 
+
+            // Cancel the submit button
             button ? button.cancel() : null;
 
             // Only show the alert and the problems if the noLogin flag is false. This flag is basically for
             // the login form and the recoverPassword form and for the workspace form
-            if(! noLogin){
+            // Show the error at application level
+            gw.appAlertBar.set('message', 'Authentication problem: ' + res.message );
+            gw.appAlertBar.show(5000);
 
-              // Show the error at application level
-              gw.appAlertBar.set('message', 'Authentication problem');
-              gw.appAlertBar.show(5000);
+            if(! noLogin){
+              // Show the form to retype the password
               r.retypePasswordDialog.show();
             }
 
