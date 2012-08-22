@@ -48,3 +48,11 @@ h1 {
 	text-align: center;
   margin-bottom: 20px;
 }
+
+.registerMessage {
+  background-color: yellow;
+  border: 1px solid black;
+  padding: 6px;
+  margin: 5px;
+}
+

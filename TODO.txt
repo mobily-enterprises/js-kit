@@ -2,13 +2,12 @@
 +++ THE LOGIN (10 days)
 
   "THE WORKSPACES"
-  * C/S   : Change register form so that if user is already logged in it only asks for the workspace name
-  * C/S   : In case user already is logged in, register form should have an info box and explain that they are already logged in and
+- * C/S   : In case user already is logged in, register form should have an info box and explain that they are already logged in and
             the workspace will be registered under their username, providing a logout link too.
   * CLIENT: In case user is not logged in, warn users that if they already are customers, they should login so that
             the workspace will fall under their existing username (with link to a login page)
 
-  * C/S   : * The app URL must always have /workspacename at the end
+- * C/S   : * The app URL must always have /workspacename at the end
             * When loading app, the workspace name is set as a global variable just like loginValue (workspaceIdValue)
             * Change JsonRest call in client so that it automatically appends workspaceIdValue as workspaceId. Every call to the server 
               will have to have either tokenId or workspaceId, always
@@ -22,14 +21,13 @@
             * Check whether we want the user id in the session too (most likely, since all real calls will use it). Check the whole
               "are we using workspace/login names or workspace/login IDs
             
-  * C/S   : Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
-            login has worked
-
-  * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
-            redirect: pull out a list of workspaces instead, and let user pick.
+- * C/S   : Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
+            login has worked and user has access to it
+- * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
+            redirect: pull out a list of workspaces instead, and let user pick (open them in a new window)
 
   * C/S   : Think of something if there is NO workspace available (possible). Where is the user directed? Possibly to the "user config"
-            widget which they would normally access from the top in the normal application?
+            widget which they would normally access from the top in the normal application? Yes, make an empty one
 
   "THE LAST TOUCHES"
 
@@ -37,6 +35,7 @@
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords
+  * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
 
 
 +++ MESSAGES
@@ -119,3 +118,4 @@
   * SERVER: Put the login/logout/register pages (non-data ones) in a separate module
   * C/S   : Add a proper button that does something to test the "session expires" thing to test things properly
   * C/S   : Change the "register" page so that if you are logged in, it redirects to the login page
+  * C/S   : Change register form so that if user is already logged in it only asks for the workspace name

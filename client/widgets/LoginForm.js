@@ -121,14 +121,17 @@ define([
           var data = that.loginForm.getValues();
 
           // Store the data 
-          stores.loginAnon.put(data).then(
+          this.onLoginPromise = stores.loginAnon.put(data).then(
             ds.UIMsg('ok', that.loginForm, that.loginButton, that.loginAlertBar ),
             ds.UIMsg('error', that.loginForm, that.loginButton, that.loginAlertBar )
           ).then(
             function(res){
-              Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              that.loginButton.cancel(); 
-              window.location = '/app';
+              if( typeof(that.onLogin) == 'function'){
+                 that.onLogin();
+              }
+              // Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
+              // that.loginButton.cancel(); 
+              // window.location = '/app';
             },
             function(err){
               that.password.reset();

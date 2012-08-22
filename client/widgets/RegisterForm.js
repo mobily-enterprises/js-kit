@@ -30,6 +30,7 @@ define([
   "app/widgets/ValidationEmail",
   "app/widgets/AlertBar",
   "app/widgets/BusyButton",
+  "app/widgets/LoginForm",
 
 
 
@@ -65,6 +66,7 @@ define([
      , ValidationEmail
      , AlertBar
      , BusyButton
+     , LoginForm
  ){
     // Create the "login" pane, based on a normal ContentPane
     return declare('app.RegisterForm', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
@@ -74,19 +76,53 @@ define([
 
       templateString: templateString,
 
+      
+      _loginAndSwap: function(){
+      
+        this.loginDialog.show();
+        THATS = this;
+        // TODO: Add an "afterLogin" hook to the LoginForm, so that this particular form will be usable for this particular
+        // screen
+ 
+        console.log("HERE");
+      },
+
+      _logoutAndSwap: function(){
+       that = this;
+
+        // Runs the logout and select the right tab (the one with the new registration form)
+        stores.logout.put({}).then(
+          ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, null, true),
+          ds.UIMsg('error', that.formAsUser, that.buttonAsUser, null, true )
+        ).then(
+          function(res){
+            that.container.selectChild( that.registerAsAnon);
+          }
+        );
+      },
+
       postCreate: function(){
         var that = this;
+
 
         // Select the right container for the job, depending of whether the
         // user is already logged in or not
         this.container.selectChild( loginValue ? this.registerAsUser : this.registerAsAnon );
             
-
         // Setting password2 so that it must match password1. I cannot do this within the
         // template as I cannot think of a way to write it in the definition
-        //this.password1.mustMatch = this.password0;
+        this.password1.mustMatch = this.password0;
 
-        // SUbmit form
+        this.loginForm.onLogin = function(res){
+          that.loginForm.loginForm.reset();
+          that.loginForm.login.focus()
+          that.loginDialog.hide();
+          that.container.selectChild( that.registerAsUser );
+        }
+
+        // Submit form
+        // -- As ANONYMOUS
+        //
         this.formAsAnon.onSubmit = ds.defaultSubmit(this.formAsAnon, this.buttonAsAnon, function(){
 
           // Store the data 
@@ -106,6 +142,13 @@ define([
           
         }); // this.formAsAnon.onSubmit
 
+
+
+
+
+        // Submit form
+        // -- As LOGGED IN USER
+        //
         this.formAsUser.onSubmit = ds.defaultSubmit(this.formAsUser, this.buttonAsUser, function(){
           var data = that.formAsUser.getValues();
 

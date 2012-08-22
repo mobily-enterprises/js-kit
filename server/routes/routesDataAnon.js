@@ -147,7 +147,7 @@ exports.postWorkspacesAnon = function(req, res, next){
   // PHASE #1: ADDING RECORDS TO DB (WITH CHECKS)
   // *******************************************************
 
-  User.findOne( { login: req.body.login}, function(err, docs){
+  User.findOne( { login: req.body.login}, function(err, doc){
     // Log database error if it's there
     if(err ){
       next(new g.errors.BadError503("Database error fetching user") );
