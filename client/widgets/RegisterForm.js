@@ -71,6 +71,7 @@ define([
     // Create the "login" pane, based on a normal ContentPane
     return declare('app.RegisterForm', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
 
+      loginValue: loginValue,
 
       widgetsInTemplate: true,
 
@@ -78,11 +79,9 @@ define([
 
       
       _loginAndSwap: function(){
-      
+     
         this.loginDialog.show();
-        THATS = this;
-        // TODO: Add an "afterLogin" hook to the LoginForm, so that this particular form will be usable for this particular
-        // screen
+        this.loginForm.tabContainer.resize(); 
  
         console.log("HERE");
       },
@@ -114,10 +113,10 @@ define([
         this.password1.mustMatch = this.password0;
 
         this.loginForm.onLogin = function(res){
-          that.loginForm.loginForm.reset();
           that.loginForm.login.focus()
           that.loginDialog.hide();
           that.container.selectChild( that.registerAsUser );
+          that.loginForm.loginForm.reset();
         }
 
         // Submit form

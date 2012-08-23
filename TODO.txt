@@ -2,11 +2,6 @@
 +++ THE LOGIN (10 days)
 
   "THE WORKSPACES"
-- * C/S   : In case user already is logged in, register form should have an info box and explain that they are already logged in and
-            the workspace will be registered under their username, providing a logout link too.
-  * CLIENT: In case user is not logged in, warn users that if they already are customers, they should login so that
-            the workspace will fall under their existing username (with link to a login page)
-
 - * C/S   : * The app URL must always have /workspacename at the end
             * When loading app, the workspace name is set as a global variable just like loginValue (workspaceIdValue)
             * Change JsonRest call in client so that it automatically appends workspaceIdValue as workspaceId. Every call to the server 
@@ -119,3 +114,7 @@
   * C/S   : Add a proper button that does something to test the "session expires" thing to test things properly
   * C/S   : Change the "register" page so that if you are logged in, it redirects to the login page
   * C/S   : Change register form so that if user is already logged in it only asks for the workspace name
+- * C/S   : In case user already is logged in, register form should have an info box and explain that they are already logged in and
+            the workspace will be registered under their username, providing a logout link too.
+  * CLIENT: In case user is not logged in, warn users that if they already are customers, they should login so that
+            the workspace will fall under their existing username (with link to a login page)
