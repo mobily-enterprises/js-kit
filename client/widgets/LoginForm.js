@@ -117,8 +117,10 @@ define([
         // Submit function
         this.loginForm.onSubmit = ds.defaultSubmit(this.loginForm, this.loginButton, function(){
 
-          // Get the form's values
+          // Get the form's values, adding workspaceNameValue (which comes from the page)
           var data = that.loginForm.getValues();
+          data.workspaceName = 'something';
+          alert("The parameter should be: ");
 
           // Store the data 
           this.onLoginPromise = stores.loginAnon.put(data).then(
@@ -127,11 +129,8 @@ define([
           ).then(
             function(res){
               if( typeof(that.onLogin) == 'function'){
-                 that.onLogin();
+                 that.onLogin(res);
               }
-              // Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              // that.loginButton.cancel(); 
-              // window.location = '/app';
             },
             function(err){
               that.password.reset();

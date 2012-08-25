@@ -41,14 +41,14 @@ exports.postRecoverAnon = function(req, res, next){
   // PHASE #1: ADDING RECORDS TO DB (WITH CHECKS)
   // *******************************************************
 
-  User.findOne( { login: req.body.email }, function(err, docs){
+  User.findOne( { login: req.body.email }, function(err, doc){
     // Log database error if it's there
     if(err ){
       next(new g.errors.BadError503("Database error fetching user") );
     } else {
       // If the user exists, add it to the error vector BUT keep going
-      if(docs){
-        console.log("Sending email for " + docs.email);
+      if(doc){
+        console.log("Sending email for " + doc.email);
         // TODO: SEND EMAIL USING NEW EMAIL INFRASTRUCTURE
       }
       res.json( { response: 'OK' } , 200);
@@ -69,6 +69,7 @@ exports.postLoginAnon = function(req, res, next){
 
   var errors = [];
   var User = mongoose.model("User");
+  var Workspace = mongoose.model("Workspace");
 
 
   // **************************************************************
@@ -102,23 +103,53 @@ exports.postLoginAnon = function(req, res, next){
   // 
   // *******************************************************
 
-  User.findOne( { login: req.body.login}, function(err, docs){
+  var forWorkspaceId = '';
+  User.findOne( { login: req.body.login}, function(err, docUser){
     // Log database error if it's there
     if(err ){
       next(new g.errors.BadError503("Database error fetching user") );
     } else {
-      // If the user exists, add it to the error vector BUT keep going
-      if(! docs || docs.password != req.body.password){
+      // Password is incorrect: return errors
+      if(! docUser || docUser.password != req.body.password){
           errors.push({ field:'password', message: 'Password incorrect', mustChange: true } );
           errors.push({ field:'', message: 'Login failed' });
           next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
       } else {
-        if( docs.password == req.body.password ) {
-          errors.push({ field:'password', message: 'Password Match!', mustChange: false } );
-          res.json( { response: 'OK' } , 200);
+        if( docUser.password == req.body.password ) {
+
+                    
+          // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
           req.session.loggedIn = true;
           req.session.login = req.body.login;
-        }
+
+          // The client requested a login for a specific workspace name: attempt to set forWorkspaceId (if they have
+          // access to that specific workspace)
+          if( req.body.workspaceName != ''){
+
+            Workspace.findOne( { 'name': req.body.workspaceName, 'access.login' : req.body.login }, function(err, docWorkspace){
+              console.log("HERE2!?!");
+              if(err ){
+                next(new g.errors.BadError503("Database error fetching workspace") );
+              } else {
+                if(docWorkspace){
+                  forWorkspaceId = docWorkspace._id;
+                }
+                res.json( { response: 'OK', forWorkspaceId:forWorkspaceId } , 200);
+              }
+            });
+          } // if( req.workspaceName != ''){
+
+
+          // There was no specific requirement in terms of workspace, just return OK with empty forWorkspaceId
+          else {
+
+            // Finally send the OK response, which might or might not have forWorkspace set
+            res.json( { response: 'OK', forWorkspaceId:'' } , 200);
+
+          } // ELSE ( if( req.workspaceName != ''){ )
+
+
+        } //if( docUser.password == req.body.password ) {
       }
     }
   }); // User.findOne()
@@ -137,7 +168,7 @@ exports.postLogout = function(req, res, next){
   // *****
 
     // There is nothing to be checked: simply logs out by clearing the session variables
-    // NOTE: req.session.login is properly set to null as the user really wanted to login
+    // NOTE: req.session.login is properly set to null as the user really wanted to logout
     req.session.loggedIn = false;
     req.session.login = null;
 

@@ -51,10 +51,10 @@ exports.postWorkspaces = function(req, res, next){
   setTimeout(function(){
   // *****
 
-  Workspace = mongoose.model('Workspace');
-  User = mongoose.model('User');
+  var Workspace = mongoose.model('Workspace');
+  var User = mongoose.model('User');
 
-  errors = [];
+  var errors = [];
 
   // Chuck user out if he's not logged in.
   // TODO: Move this into a middleware
@@ -74,11 +74,11 @@ exports.postWorkspaces = function(req, res, next){
 
 
   // Step 1: Check that the workspace is not already taken
-  Workspace.findOne({ name:req.body.workspace }, function(err, docs){
+  Workspace.findOne({ name:req.body.workspace }, function(err, doc){
     if(err){
       next(new g.errors.BadError503("Database error fetching workspace") );
     } else {
-      if(docs){
+      if(doc){
         errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
         next( new g.errors.ValidationError422('Db-oriented validation of parameters failed', errors));
       } else {
@@ -92,7 +92,11 @@ exports.postWorkspaces = function(req, res, next){
           if(err){
              next(new g.errors.BadError503("Database error saving workspace") );
           } else{
-            res.json( { response: 'OK' } , 200);
+
+            // Register the workspace, and return the worksapce Id in as an option (to allow redirect)
+            res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+
+
           }
         });
       }

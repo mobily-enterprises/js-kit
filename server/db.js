@@ -33,23 +33,30 @@ var Country =  new Schema({
 });
 mongoose.model('Country', Country);
 
+
+
+var Access = new Schema({
+  login          : { type: String },
+  key            : { type: String, index: true },
+  isOwner        : { type: Boolean, index: true }, 
+});
+mongoose.model('Access', Access);
+
 var Workspace = new Schema({
   name           : { type: String, lowercase: true, unique: true},
   activeFlag     : Boolean,
-  ownerUserId    : { type: ObjectId, index: true },
+  settings       : { 
+    welcomeMessage  : String,
+    invoiceTemplate : String,
+    longName        : String,
+    defaultCountry  : String,
+    countryId       : { type: ObjectId, index: true },
+  },
+  access          : [ Access ],
+ 
 });
 mongoose.model('Workspace', Workspace);
 
-var WorkspaceSettings = new Schema({
-  workspaceId     : { type: ObjectId, unique: true} ,
-  WelcomeMessage  : String,
-  InvoiceTemplate : String,
-  LongName        : String,
-  DefaultCountry  : String,
-  allowedUserIds : [ { type: ObjectId, index: true } ], 
-  countryId      : { type: ObjectId, index: true },
-});
-mongoose.model('WorkspaceSettings', WorkspaceSettings);
 
 var City = new Schema({
   workspaceId        : { type: ObjectId, index: true },

@@ -2,27 +2,26 @@
 +++ THE LOGIN (10 days)
 
   "THE WORKSPACES"
-- * C/S   : * The app URL must always have /workspacename at the end
-            * When loading app, the workspace name is set as a global variable just like loginValue (workspaceIdValue)
-            * Change JsonRest call in client so that it automatically appends workspaceIdValue as workspaceId. Every call to the server 
-              will have to have either tokenId or workspaceId, always
-            * On the server side, a middleware will set req.application.workspaceId and req.application.userId:
-              - If there is tokenId with the request, the values will be based on the token's value
-              - If there is just workspaceId with the request, the values will be based on the session's login and the workspace's id
+- * C/S: 
+            * Make LoginForm functional, needs to find out the workspace to redirect to from the URL bar using a path
+            * Finish (write) the picker
+            * Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions
+            * Write a quick form to add a user to a workspace (use existing silly form), make sure permissions are correct
+            * Recheck everything.
+            * Write a function to check if a user has access to a specific workspace
+            * Get TOKENS (rename "key" in db and code) actually created when a user is added.
+            * Set the key as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
+            * Change JsonRest call in client so that it automatically appends, to URL, the key from the global variable
+            * Tidy up the calls, make sure the whole data/nondata etc. makes 100% sense
+            * Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
+
+            * On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
               If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
               that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
               error (and at that point the client needs to redirect to /login immediately)
-            * Change existing calls (the ones that expect a login) so that they use the new middleware value, except the 'Anon" ones
-            * Check whether we want the user id in the session too (most likely, since all real calls will use it). Check the whole
-              "are we using workspace/login names or workspace/login IDs
-            
-- * C/S   : Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
-            login has worked and user has access to it
-- * C/S   : Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
-            redirect: pull out a list of workspaces instead, and let user pick (open them in a new window)
+  
+  * C/S   : If user has NO workspaces available, the "list" of workspaces will be empty: display the UserConfiguration widget instead
 
-  * C/S   : Think of something if there is NO workspace available (possible). Where is the user directed? Possibly to the "user config"
-            widget which they would normally access from the top in the normal application? Yes, make an empty one
 
   "THE LAST TOUCHES"
 
@@ -31,6 +30,8 @@
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
+  * C/S   : Comment each function, client and server, using Dojo's new standard
+  * C/S   : Generally re-check code
 
 
 +++ MESSAGES
@@ -60,7 +61,7 @@
 
   * Add customer form
   * Browse customers widget
-  * See messages widget
+  * See/send messages widget
   * Ability to send messages (email and SMS) depending on configured/existing subsystems
   * Ability to create bookings
   * Ability to send invoices AND store invoices
@@ -118,3 +119,11 @@
             the workspace will be registered under their username, providing a logout link too.
   * CLIENT: In case user is not logged in, warn users that if they already are customers, they should login so that
             the workspace will fall under their existing username (with link to a login page)
+            * The app URL must always have /workspacename at the end
+  * C/S     Do things so that the workspace ID is part of the URL, and not the workspace name, so that URLs stay forever even
+            if workspace name changes
+  * C/S    Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
+           login has worked and user has access to it. To do this, get the login screen to be there with workspaceId set as a variable
+           if present, and get the login routine to check if that is available.
+  * C/S    Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
+           redirect: pull out a list of workspaces instead, and let user pick (open them in a new window)

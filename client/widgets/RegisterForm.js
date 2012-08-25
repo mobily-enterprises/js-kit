@@ -87,10 +87,10 @@ define([
       },
 
       _logoutAndSwap: function(){
-       that = this;
+       var that = this;
 
         // Runs the logout and select the right tab (the one with the new registration form)
-        stores.logout.put({}).then(
+        stores.logoutAnon.put({}).then(
           ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, null, true),
           ds.UIMsg('error', that.formAsUser, that.buttonAsUser, null, true )
         ).then(
@@ -134,8 +134,11 @@ define([
           ).then(
             // This is the only spot where things _actually_ went OK... So the callback will get called
             function(res){
+
+              // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              that.buttonAsAnon.cancel();
+              window.location = '/ws/'+res.workspaceId;
+
             }
           ); // stores.workspacesAnon.put(data).then
           
@@ -156,7 +159,11 @@ define([
             ds.UIMsg('error', that.formAsUser, that.buttonAsUser, that.alertBarAsUser, true )
           ).then(
              function(res){
+
+              // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
+              window.location = '/ws/'+res.workspaceId;
+
             },
              function(err){
                if( err.status == 403 ){

@@ -11,11 +11,10 @@ define([
 
   // Make all of the stores, which will be used across the application
   [
-
     // Non-data calls
     'recoverAnon',
     'loginAnon',
-    'logout',
+    'logoutAnon',
 
     // Data calls
     'test',             //
@@ -26,9 +25,14 @@ define([
     'contacts',         //
     'products'          //
   ].forEach( function(i){
-    console.log("I is " + i);
+
+    // Exception for the non-data URLs. I will still make them usable with JsonRest, since they are
+    // all POST ones (so, it's convenient)
+    var path = (i == 'recoverAnon' || i == 'loginAnon' || i == 'logoutAnon') ? '/nondata/' : '/data/';
+
+    // Create the store
     stores[i] = new JsonRest({
-      target:'data/' + i + '/',
+      target: path + i + '/',
 			idProperty: '_id',
       sortParam: 'sortBy',
     });

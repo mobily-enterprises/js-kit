@@ -53,7 +53,7 @@ define([
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
 
           // Try saving it...
-          stores.logout.put({}).then(
+          stores.logoutAnon.put({}).then(
             ds.UIMsg('ok', that.form, that.button, null, true),
             ds.UIMsg('error', that.form, that.button, null, true )
           ).then(
@@ -61,7 +61,7 @@ define([
             function(res){
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
               that.button.cancel();
-              window.location="/login";
+              window.location = '/login/' + workspaceNameValue;
             }
           ); // stores.workspacesAnon.put(data).then
           

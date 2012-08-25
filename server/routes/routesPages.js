@@ -11,19 +11,101 @@ eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validat
 // ******************************
 
 
-exports.app = function(req, res){
+exports.ws = function(req, res){
 
-  // If the user is not logged in, the page won't load at all, it will
-  // redirect to login page
+  // The DB is down: return a nice "we are down" page
+  if(req.dbDown){
+    console.log("HERE");
+    res.status = 500;
+    res.render('error',  { layout:false } );
+    return;
+  }
+
+  // The workspace doesn't exist: return the "Workspace not found" page
+  if(req.noWorkspace){
+    res.status = 404;
+    res.render('notFound',  { layout:false } );
+    return;
+  }
+
+  // User is not logged in (?!?): redirect to the login page
   if(! req.session.loggedIn ){
     res.redirect('/login');
     return; 
   }
-  res.render('index',  { layout:false, login: req.session.login  } );
+
+  // Render the index page -- yay!
+  res.render('ws',  { layout:false, login: req.session.login, workspaceId:req.workspaceId, workspaceName:req.workspaceName } );
+
 };
 
+
+
+exports.pick = function(req, res){
+
+  // User is not logged in: redirect to the login page
+  if(! req.session.loggedIn ){
+    res.redirect('/login');
+    return; 
+  }
+
+  // TODO: make up a list of workspaces user has access to, and pass it to the jade template
+  var list = [];
+
+  // Render the pick template
+  res.render('pick',  { layout:false, login: req.session.login, list:list } );
+}
+
+
 exports.login = function(req, res){
-  res.render('login',  { layout:false, login: req.session.login } );
+
+  var Workspace = mongoose.model("Workspace");
+
+  // The DB is down: return a nice "we are down" page
+  if(req.dbDown){
+    res.status = 500;
+    res.render('error',  { layout:false } );
+    return;
+  }
+
+  // The workspace doesn't exist: return the "Workspace not found" page
+  if(req.noWorkspace){
+    res.status = 404;
+    res.render('notFound',  { layout:false } );
+    return;
+  }
+  
+  // User is not logged in: show the login page.
+  if(! req.session.loggedIn ){
+    res.render('login',  { layout:false } );
+
+  // User IS logged in: do the right redirect
+  } else {
+      
+    // If they are trying to access a specific workspace, and have
+    // access to it, then simply redirect there
+    if( req.workspaceId ){
+
+      Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
+        if(err ){
+          next(new g.errors.BadError503("Database error fetching workspace") );
+        } else {
+          if(doc){
+            res.redirect('/ws/' + req.workspaceId);
+          } else {
+            res.redirect('/pick');
+          }
+        }
+
+      }); // Workspace.findOne()
+
+    // There was no specific requirement: just go back to pick
+    } else {
+      res.redirect('/pick');
+    }
+  }
+
+
 };
 
 exports.recover = function(req, res){

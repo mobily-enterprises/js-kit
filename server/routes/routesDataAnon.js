@@ -153,7 +153,6 @@ exports.postWorkspacesAnon = function(req, res, next){
       next(new g.errors.BadError503("Database error fetching user") );
     } else {
       // If the user exists, add it to the error vector BUT keep going
-      console.log("CHECK: %j",doc);
       if(doc){
         errors.push({ field:'login', message: 'Login name taken, sorry!', mustChange: true } );
       }
@@ -188,12 +187,16 @@ exports.postWorkspacesAnon = function(req, res, next){
                 var w = new Workspace();
                 w.name = req.body.workspace;
                 w.activeFlag = true;
-                w.ownerUserId = u._id;
+                w.access = {  login: u.login, key:'stucazz', isOwner: true };
                 w.save( function(err){
                   if(err ){
                     next( new g.errors.BadError503("Database error saving workspace. User created, but no workspace assigned") );
                   } else{
-                    res.json( { response: 'OK' } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+                    // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
+                    req.session.loggedIn = true;
+                    req.session.login = req.body.login;
+
+                    res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
                   }
                 }) // w.save()
               } 

@@ -9,10 +9,11 @@ head#head
   script(type='text/javascript', src='/app/validators.js')
   link(type='text/css', rel='stylesheet', href='/libs/dojo/dijit/themes/claro/claro.css', media='screen')
 body.claro
+  script
+    loginValue="#{login}";
   #network-alert-bar
   #app-alert-bar
   #loadingOverlay.pageOverlay
     .loadingMessage Loading...
-  h1 Login to Booking Dojo
-  #loginForm
-    
+  h1 Pick your workspace
+  p Here you can pick which workspace you want to jump to 
