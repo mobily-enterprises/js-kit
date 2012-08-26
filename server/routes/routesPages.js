@@ -15,7 +15,6 @@ exports.ws = function(req, res){
 
   // The DB is down: return a nice "we are down" page
   if(req.dbDown){
-    console.log("HERE");
     res.status = 500;
     res.render('error',  { layout:false } );
     return;
@@ -36,9 +35,7 @@ exports.ws = function(req, res){
 
   // Render the index page -- yay!
   res.render('ws',  { layout:false, login: req.session.login, workspaceId:req.workspaceId, workspaceName:req.workspaceName } );
-
 };
-
 
 
 exports.pick = function(req, res){
@@ -49,11 +46,28 @@ exports.pick = function(req, res){
     return; 
   }
 
-  // TODO: make up a list of workspaces user has access to, and pass it to the jade template
+  // Make up a list of workspaces user has access to, and pass it to the jade template
   var list = [];
+  var Workspace = mongoose.model('Workspace');
+  Workspace.find( { 'access.login': req.session.login }, function(err, docs){
+    if( err ){
+      next(new g.errors.BadError503("Database error fetching login") );
+    } else {
+      docs.forEach( function(workspace){
+        list.push( { name: workspace.name, description: workspace.description, id: workspace._id } );
+      });
 
-  // Render the pick template
-  res.render('pick',  { layout:false, login: req.session.login, list:list } );
+      console.log(list);
+      console.log(list.length);
+      console.log(list[0].id);
+      // If there is only one workspace in the list, there is no point in having to pick: goes straight there
+      if( list.length == 1){
+        res.redirect('/ws/' + list[0].id);
+      } else {
+        res.render('pick',  { layout:false, login: req.session.login, list:list, emptyList: list.length == 0 } );
+      }
+    }
+  });
 }
 
 

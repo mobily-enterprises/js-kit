@@ -11,12 +11,7 @@ body {
   height: 100%;
 }
 
-#_loginForm {
-   height: 200px;
-}
-
-
-#loginForm, #registerForm {
+#loginForm, #registerForm, #pickForm, #roundForm {
     width: 300px;
 	  margin: 0 auto;
     padding: 20px;
@@ -31,6 +26,30 @@ body {
     /*** Shadow behind the box ***/
     -moz-box-shadow:0px -5px 300px #a9a0a0;
     -webkit-box-shadow:0px -5px 300px #a9a0a0;
+}
+
+.simpleList {
+  font-size:15px;
+}
+.simpleList { list-style: none; }
+.simpleList li a { 
+  display:block;
+  text-decoration:none;
+  /*
+  color:#000000;
+  background-color:#FFFFFF;
+  line-height:30px;
+  border-bottom-style:solid;
+  border-bottom-width:1px;
+  border-bottom-color:#CCCCCC;
+  padding-left:10px;
+  cursor:pointer; */
+}
+
+.simpleList li a:hover { 
+  color:black;
+  /* background-image:url(../images/hover.png);*/
+  background-repeat:repeat-x;
 }
 
 

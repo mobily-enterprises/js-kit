@@ -2,25 +2,21 @@
 +++ THE LOGIN (10 days)
 
   "THE WORKSPACES"
-- * C/S: 
-            * Make LoginForm functional, needs to find out the workspace to redirect to from the URL bar using a path
-            * Finish (write) the picker
-            * Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions
-            * Write a quick form to add a user to a workspace (use existing silly form), make sure permissions are correct
-            * Recheck everything.
-            * Write a function to check if a user has access to a specific workspace
-            * Get TOKENS (rename "key" in db and code) actually created when a user is added.
-            * Set the key as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
-            * Change JsonRest call in client so that it automatically appends, to URL, the key from the global variable
-            * Tidy up the calls, make sure the whole data/nondata etc. makes 100% sense
-            * Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
 
-            * On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
-              If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
-              that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
-              error (and at that point the client needs to redirect to /login immediately)
-  
-  * C/S   : If user has NO workspaces available, the "list" of workspaces will be empty: display the UserConfiguration widget instead
+  * SERVER: Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions (DB changed)
+  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure permissions work
+  * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
+  * SERVER: Set the key as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
+  * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
+  * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
+
+  * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
+            If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
+            that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
+            error (and at that point the client needs to redirect to /login immediately)
+  * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
+  * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
+  * C/S     Recheck everything.
 
 
   "THE LAST TOUCHES"
@@ -50,7 +46,8 @@
           reload if there are network issues. 
 
 +++ SETTINGS
-  * Write basic "User settings" screen where people can update their info (Name, Photo, others). This will possibly be what comes out
+  * Write basic "User settings" screen where people can update their info (Name, Photo, others).
+  * Add a link to the user profile in the workspace picker
     if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
@@ -122,8 +119,12 @@
             * The app URL must always have /workspacename at the end
   * C/S     Do things so that the workspace ID is part of the URL, and not the workspace name, so that URLs stay forever even
             if workspace name changes
-  * C/S    Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
-           login has worked and user has access to it. To do this, get the login screen to be there with workspaceId set as a variable
-           if present, and get the login routine to check if that is available.
-  * C/S    Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
-           redirect: pull out a list of workspaces instead, and let user pick (open them in a new window)
+  * C/S     Make sure that the workspace name can be appended to the login screen, and that users are automatically redirected there if
+            login has worked and user has access to it. To do this, get the login screen to be there with workspaceId set as a variable
+            if present, and get the login routine to check if that is available.
+  * C/S     Change login screen so that if you login and have only one workspace, redirects there; if you have several workspaces, don't
+            redirect: pull out a list of workspaces instead, and let user pick (open them in a new window)
+  * CLIENT: Make LoginForm functional, needs to find out the workspace to redirect to from the URL bar using a path
+  * SERVER: Finish (write) the picker
+  * CLIENT: Add roundForm classes to CSS so that notFound and "error" don't have the loginForm class (silly)
+  * CLIENT: Make picker way prettier, 

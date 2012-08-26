@@ -16,4 +16,9 @@ body.claro
   #loadingOverlay.pageOverlay
     .loadingMessage Loading...
   h1 Pick your workspace
-  p Here you can pick which workspace you want to jump to 
+  #pickForm
+    each workspace in list
+      ul.simpleList
+        li
+          a(href="/ws/#{workspace.id}") #{workspace.name}
+          p #{workspace.description}

@@ -119,8 +119,9 @@ define([
 
           // Get the form's values, adding workspaceNameValue (which comes from the page)
           var data = that.loginForm.getValues();
-          data.workspaceName = 'something';
-          alert("The parameter should be: ");
+
+          // Gets the workspaceName from the URL
+          data.workspaceName = window.location.pathname.split(/\//)[2];
 
           // Store the data 
           this.onLoginPromise = stores.loginAnon.put(data).then(

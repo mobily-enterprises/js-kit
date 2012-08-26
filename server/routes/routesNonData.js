@@ -127,7 +127,6 @@ exports.postLoginAnon = function(req, res, next){
           if( req.body.workspaceName != ''){
 
             Workspace.findOne( { 'name': req.body.workspaceName, 'access.login' : req.body.login }, function(err, docWorkspace){
-              console.log("HERE2!?!");
               if(err ){
                 next(new g.errors.BadError503("Database error fetching workspace") );
               } else {

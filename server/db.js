@@ -44,6 +44,7 @@ mongoose.model('Access', Access);
 
 var Workspace = new Schema({
   name           : { type: String, lowercase: true, unique: true},
+  description    : String,
   activeFlag     : Boolean,
   settings       : { 
     welcomeMessage  : String,
