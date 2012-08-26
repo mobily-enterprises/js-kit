@@ -1,26 +1,27 @@
 
 +++ THE LOGIN (10 days)
 
-  "THE WORKSPACES"
+  "USERS IN WORKSPACES"
 
-  * SERVER: Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions (DB changed)
-  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure permissions work
-  * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
-  * SERVER: Set the key as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
-  * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
   * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
+  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure permissions work
 
+  "THE TOKEN"
+
+  * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
+  * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
+  * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
   * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
             If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
             that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
             error (and at that point the client needs to redirect to /login immediately)
   * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
-  * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
   * C/S     Recheck everything.
 
 
   "THE LAST TOUCHES"
 
+  * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
@@ -41,7 +42,7 @@
             write a bit of a wizard.
 
 +++ BROWSING DATA
-  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range)
+  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
           reload if there are network issues. 
 
@@ -58,8 +59,8 @@
 
   * Add customer form
   * Browse customers widget
-  * See/send messages widget
-  * Ability to send messages (email and SMS) depending on configured/existing subsystems
+  * See/send messages widget <--- !! 
+  * Ability to send messages (email and SMS) depending on configured/existing subsystems <-- !!
   * Ability to create bookings
   * Ability to send invoices AND store invoices
   * Basic accounting
@@ -128,3 +129,4 @@
   * SERVER: Finish (write) the picker
   * CLIENT: Add roundForm classes to CSS so that notFound and "error" don't have the loginForm class (silly)
   * CLIENT: Make picker way prettier, 
+  * SERVER: Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions (DB changed)

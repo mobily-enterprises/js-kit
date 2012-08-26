@@ -45,7 +45,7 @@ mongoose.model('Access', Access);
 var Workspace = new Schema({
   name           : { type: String, lowercase: true, unique: true},
   description    : String,
-  activeFlag     : Boolean,
+  isActive       : Boolean,
   settings       : { 
     welcomeMessage  : String,
     invoiceTemplate : String,
@@ -72,8 +72,8 @@ mongoose.model('City', City);
 
 var Contact = new Schema({
   workspaceId        : { type: ObjectId, index: true },
-  resellerFlag       : { type: Boolean, index: true },
-  bookableFlag       : { type: Boolean, index: true },
+  isReseller         : { type: Boolean, index: true },
+  isBookable           : { type: Boolean, index: true },
   createdTime        : { type: Date, index: true },
   productIds         : [ { type: ObjectId, index: true}],
   firstName          : { type: String, index: true },
@@ -89,8 +89,6 @@ var Contact = new Schema({
   landLineNumber1    : { type: String, index: true },
   landLineNumber2    : { type: String, index: true },
   mobileNumber       : { type: String, index: true },
-  noEmailFlag        : { type: String, index: true },
-  noSmsFlag          : { type: String, index: true },
   ownerUserId        : { type: ObjectId, index: true },
   createdByUserId    : { type: ObjectId, index: true },
 });
@@ -105,12 +103,12 @@ var Product = new Schema({
   minimumPrice      : Number,
   maximumPrice      : Number,
   markup            : Number,
-  timedFlag         : Boolean,
+  isTimed           : Boolean,
   timedTimeUnit     : { type: String, enum:['minute', 'hour', 'day']},
   durationMinimum   : Number,
   available         : { type: Boolean, index: true },
   contactId         : { type: ObjectId,  index: true },
-  publicFlag        : { type: Boolean, index: true },
+  isPublic          : { type: Boolean, index: true },
 });
 mongoose.model('Product', Product);
 
@@ -146,7 +144,7 @@ var PaymentMethod = new Schema({
   workspaceId       : { type: ObjectId, index: true },
   name              : String,
   description       : String, 
-  obsoleteFlag      : String, 
+  isObsolete        : String, 
 });
 mongoose.model('PaymentMethod',PaymentMethod);
 
@@ -158,7 +156,7 @@ var Payment = new Schema({
   paymentTypeId     : { type: ObjectId, index: true },
   receivedOn        : { type: Date, index: true },
   amount            : { type: Number, index: true },
-  forBalanceFlag    : { type: Boolean, index: true },
+  isForBalance      : { type: Boolean, index: true },
   account           : String,
   notes             : String,
   receipt_code      : String,
@@ -185,7 +183,7 @@ var Message = new Schema({
   body              : String,
   sentByUserId      : ObjectId,
   SentOn            : { type: Date, index: true },
-  deliveredFlag     : { type: Boolean, index: true },
+  isDelivered       : { type: Boolean, index: true },
   deliveryLog       : [DeliveryLog],
 });
 mongoose.model('Message',Message);
@@ -215,7 +213,7 @@ mongoose.model('BookingPossibleStatus',BookingPossibleStatus);
 var BookedContactPossibleStatus = new Schema({
   workspaceId       : { type: ObjectId, index: true },
   description       : { type: String, unique: true },
-  redFlag           : { type: Boolean, index: true },
+  isRed            : { type: Boolean, index: true },
 });
 mongoose.model('BookedContactPossibleStatus',BookedContactPossibleStatus);
 
@@ -232,10 +230,10 @@ var Booking = new Schema({
   description        : String,
   privateDescription : String,
   status             : { type: String, index: true },
-  redFlag            : { type: Boolean, index: true },
+  isRed              : { type: Boolean, index: true },
   clientContactId    : { type: ObjectId, index: true },
-  hasGuestsFlag      : { type: Boolean,   index: true },
-  cancelledFlag      : { type: Boolean, index: true },
+  hasGuests          : { type: Boolean,   index: true },
+  isCancelled        : { type: Boolean, index: true },
   resellerContactId  : { type: ObjectId, index: true },
   ownerUserId        : { type: ObjectId, index: true },
   createdOn          : { type: Date, index: true },
@@ -261,7 +259,7 @@ mongoose.model('Booking', Booking);
 
 var Preference = new Schema({
   contactId     : { type: ObjectId, index: true },
-  contactedFlag : { type: Boolean, index: true },
+  isContacted   : { type: Boolean, index: true },
   answer        : String,
 });
 //
@@ -272,7 +270,7 @@ var BookedContact = new Schema({
   preferences         : [Preference],
   status              : { type: String, index: true },
   //
-  noshowFlag          : { type: Boolean, index: true },
+  isNoshow            : { type: Boolean, index: true },
   customerRating      : { type: Number, index: true },
   ratedOn             : { type: Date, index: true },
   customerComment     : String,

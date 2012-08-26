@@ -87,7 +87,7 @@ exports.postWorkspaces = function(req, res, next){
         var w = new Workspace();
         w.name = req.body.workspace;
         w.activeFlag = true;
-        w.ownerUserId = null; // FIXME: set to owner (once user infrastructure is done)
+        w.access = {  login: req.session.login, key:'stucazz2', isOwner: true }; 
         w.save( function(err){
           if(err){
              next(new g.errors.BadError503("Database error saving workspace") );
