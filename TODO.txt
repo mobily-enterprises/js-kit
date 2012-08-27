@@ -1,10 +1,8 @@
 
-+++ THE LOGIN (10 days)
 
   "USERS IN WORKSPACES"
 
-  * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
-  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure permissions work
+  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure logging in as them works
 
   "THE TOKEN"
 
@@ -14,21 +12,22 @@
   * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
             If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
             that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
-            error (and at that point the client needs to redirect to /login immediately)
+            error (and at that point the client needs to redirect to /login immediately). NOTE: IMPLEMENT ROLES.
   * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
   * C/S     Recheck everything.
 
 
   "THE LAST TOUCHES"
 
+  * CLIENT: Hide passwords
   * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
-  * C/S   : Encrypt passwords
+  * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
   * C/S   : Comment each function, client and server, using Dojo's new standard
-  * C/S   : Generally re-check code
+  * C/S   : Comment CSS nicely
 
 
 +++ MESSAGES
@@ -48,19 +47,21 @@
 
 +++ SETTINGS
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
-  * Add a link to the user profile in the workspace picker
-    if a user logs in without ANY workspaces
+  * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
 
-                          -------------------------
-                          !! YOU ARE NOW ALL SET !!
-                          -------------------------
++++ USE CASE
+  * Add a "customer" form, and a customers browser
 
-  * Add customer form
-  * Browse customers widget
-  * See/send messages widget <--- !! 
-  * Ability to send messages (email and SMS) depending on configured/existing subsystems <-- !!
+                          ----------------------------
+                          !!  BOILERPLATE FINISHED  !!
+                          ----------------------------
+
+  * Add messages *receiving* infrastructure (smtp, pop, sms), with configuration and setting of default for sending
+  * View messages widget under customers with ability to send messages
+  * Inbox: ability to see the inbox, and match a "from" to a contact (messages will obviously appear under contact)
+  * 
   * Ability to create bookings
   * Ability to send invoices AND store invoices
   * Basic accounting
@@ -130,3 +131,6 @@
   * CLIENT: Add roundForm classes to CSS so that notFound and "error" don't have the loginForm class (silly)
   * CLIENT: Make picker way prettier, 
   * SERVER: Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions (DB changed)
+  * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
+            grep 'req\.[^sbqu]' `find .` Note: change workspaceId's parameter string into workspaceIdPages 
+  * SERVER: Tidy up code for middleware, put it in a different file.

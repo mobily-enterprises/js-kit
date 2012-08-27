@@ -5,23 +5,23 @@ g = require('../globals.js'),
 mongoose = require('mongoose');
 eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
 
-// ******************************
-// The four pages in the whole
+// *****************************************
+// The four^H^H^H^Hfive pages in the whole
 // application
-// ******************************
+// *****************************************
 
 
 exports.ws = function(req, res){
 
   // The DB is down: return a nice "we are down" page
-  if(req.dbDown){
+  if(req.pages.dbDown){
     res.status = 500;
     res.render('error',  { layout:false } );
     return;
   }
 
   // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.noWorkspace){
+  if(req.pages.noWorkspace){
     res.status = 404;
     res.render('notFound',  { layout:false } );
     return;
@@ -34,7 +34,64 @@ exports.ws = function(req, res){
   }
 
   // Render the index page -- yay!
-  res.render('ws',  { layout:false, login: req.session.login, workspaceId:req.workspaceId, workspaceName:req.workspaceName } );
+  res.render('ws',  { layout:false, login: req.session.login, workspaceId:req.pages.workspaceId, workspaceName:req.pages.workspaceName } );
+};
+
+
+exports.login = function(req, res){
+
+  var Workspace = mongoose.model("Workspace");
+
+  // The middleware workspaceNamePages in not guaranteed to have been called,
+  // since the login page might get called with or without it. So, just in case,
+  // set the req.pages variable
+  req.pages = req.pages || {};
+
+  // The DB is down: return a nice "we are down" page
+  if(req.pages.dbDown){
+    res.status = 500;
+    res.render('error',  { layout:false } );
+    return;
+  }
+
+  // The workspace doesn't exist: return the "Workspace not found" page
+  if(req.pages.noWorkspace){
+    res.status = 404;
+    res.render('notFound',  { layout:false } );
+    return;
+  }
+  
+  // User is not logged in: show the login page.
+  if(! req.session.loggedIn ){
+    res.render('login',  { layout:false } );
+
+  // User IS logged in: do the right redirect
+  } else {
+      
+    // If they are trying to access a specific workspace, and have
+    // access to it, then simply redirect there
+    if( req.pages.workspaceId ){
+
+      Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
+        if(err ){
+          next(new g.errors.BadError503("Database error fetching workspace") );
+        } else {
+          if(doc){
+            res.redirect('/ws/' + req.workspaceId);
+          } else {
+            res.redirect('/pick');
+          }
+        }
+
+      }); // Workspace.findOne()
+
+    // No speicfic worskspace: just go and pick
+    } else {
+      res.redirect('/pick');
+    }
+  }
+
+
 };
 
 
@@ -57,9 +114,6 @@ exports.pick = function(req, res){
         list.push( { name: workspace.name, description: workspace.description, id: workspace._id } );
       });
 
-      console.log(list);
-      console.log(list.length);
-      console.log(list[0].id);
       // If there is only one workspace in the list, there is no point in having to pick: goes straight there
       if( list.length == 1){
         res.redirect('/ws/' + list[0].id);
@@ -70,57 +124,6 @@ exports.pick = function(req, res){
   });
 }
 
-
-exports.login = function(req, res){
-
-  var Workspace = mongoose.model("Workspace");
-
-  // The DB is down: return a nice "we are down" page
-  if(req.dbDown){
-    res.status = 500;
-    res.render('error',  { layout:false } );
-    return;
-  }
-
-  // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.noWorkspace){
-    res.status = 404;
-    res.render('notFound',  { layout:false } );
-    return;
-  }
-  
-  // User is not logged in: show the login page.
-  if(! req.session.loggedIn ){
-    res.render('login',  { layout:false } );
-
-  // User IS logged in: do the right redirect
-  } else {
-      
-    // If they are trying to access a specific workspace, and have
-    // access to it, then simply redirect there
-    if( req.workspaceId ){
-
-      Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
-        if(err ){
-          next(new g.errors.BadError503("Database error fetching workspace") );
-        } else {
-          if(doc){
-            res.redirect('/ws/' + req.workspaceId);
-          } else {
-            res.redirect('/pick');
-          }
-        }
-
-      }); // Workspace.findOne()
-
-    // There was no specific requirement: just go back to pick
-    } else {
-      res.redirect('/pick');
-    }
-  }
-
-
-};
 
 exports.recover = function(req, res){
   res.render('recover',  { layout:false, login: req.session.login } );

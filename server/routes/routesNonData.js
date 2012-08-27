@@ -136,7 +136,7 @@ exports.postLoginAnon = function(req, res, next){
                 res.json( { response: 'OK', forWorkspaceId:forWorkspaceId } , 200);
               }
             });
-          } // if( req.workspaceName != ''){
+          } // if( req.body.workspaceName != ''){
 
 
           // There was no specific requirement in terms of workspace, just return OK with empty forWorkspaceId
@@ -145,7 +145,7 @@ exports.postLoginAnon = function(req, res, next){
             // Finally send the OK response, which might or might not have forWorkspace set
             res.json( { response: 'OK', forWorkspaceId:'' } , 200);
 
-          } // ELSE ( if( req.workspaceName != ''){ )
+          } // ELSE ( if( req.body.workspaceName != ''){ )
 
 
         } //if( docUser.password == req.body.password ) {
