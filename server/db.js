@@ -37,7 +37,7 @@ mongoose.model('Country', Country);
 
 var Access = new Schema({
   login          : { type: String },
-  key            : { type: String, index: true },
+  token          : { type: String, index: true },
   isOwner        : { type: Boolean, index: true }, 
 });
 mongoose.model('Access', Access);

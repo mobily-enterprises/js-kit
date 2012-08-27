@@ -1,12 +1,7 @@
 
 
-  "USERS IN WORKSPACES"
-
-  * CLIENT: Write a quick form to add a user to a workspace (use existing silly form), make sure logging in as them works
-
   "THE TOKEN"
 
-  * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
   * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
   * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
   * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
@@ -14,12 +9,14 @@
             that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
             error (and at that point the client needs to redirect to /login immediately). NOTE: IMPLEMENT ROLES.
   * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
+  * CLIENT: Write a quick form/call to add a user to a workspace (use existing silly form), make sure logging in as them works
   * C/S     Recheck everything.
 
 
   "THE LAST TOUCHES"
 
   * CLIENT: Hide passwords
+  * C/S   : Make sure that workspace names are regiistered as lowercase, AND that searching them is case insensitive!
   * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
@@ -134,3 +131,5 @@
   * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
             grep 'req\.[^sbqu]' `find .` Note: change workspaceId's parameter string into workspaceIdPages 
   * SERVER: Tidy up code for middleware, put it in a different file.
+  * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
+

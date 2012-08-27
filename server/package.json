@@ -8,5 +8,6 @@
     "mongodb": "*",
     "mongoose": "*",
     "jade": "*"
+    "node-uuid": "*"
   }
 }

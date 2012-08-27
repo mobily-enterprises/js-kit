@@ -1,5 +1,5 @@
 
-var util = require('util'),
+var utils = require('../utils.js'),
 fs = require('fs'),
 g = require('../globals.js'),
 mongoose = require('mongoose');
@@ -87,21 +87,26 @@ exports.postWorkspaces = function(req, res, next){
         var w = new Workspace();
         w.name = req.body.workspace;
         w.activeFlag = true;
-        w.access = {  login: req.session.login, key:'stucazz2', isOwner: true }; 
-        w.save( function(err){
+        utils.makeToken( function(err, token) {
           if(err){
-             next(new g.errors.BadError503("Database error saving workspace") );
-          } else{
+             next(new g.errors.BadError503("Could not generate token") );
+          } else {
+            w.access = {  login: req.session.login, token:token, isOwner: true }; 
+            w.save( function(err){
+              if(err){
+                 next(new g.errors.BadError503("Database error saving workspace") );
+              } else{
 
-            // Register the workspace, and return the worksapce Id in as an option (to allow redirect)
-            res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+                // Register the workspace, and return the worksapce Id in as an option (to allow redirect)
+                res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
 
-
+              }
+            }); // w.save
           }
-        });
+        }); // utils.makeToken
       }
     }
-  });
+  }); // Workspace.findOne
 
 
   //

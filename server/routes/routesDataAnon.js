@@ -1,5 +1,5 @@
 
-var util = require('util'),
+var utils = require('../utils.js'),
 fs = require('fs'),
 g = require('../globals.js'),
 mongoose = require('mongoose');
@@ -187,20 +187,29 @@ exports.postWorkspacesAnon = function(req, res, next){
                 var w = new Workspace();
                 w.name = req.body.workspace;
                 w.activeFlag = true;
-                w.access = {  login: u.login, key:'stucazz', isOwner: true };
-                w.save( function(err){
-                  if(err ){
-                    next( new g.errors.BadError503("Database error saving workspace. User created, but no workspace assigned") );
-                  } else{
-                    // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
-                    req.session.loggedIn = true;
-                    req.session.login = req.body.login;
 
-                    res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
-                  }
-                }) // w.save()
-              } 
+                utils.makeToken( function(err, token) {
+                  if(err){
+                    next(new g.errors.BadError503("Could not generate token") );
+                  } else {
+                    w.access = {  login: u.login, token:token, isOwner: true };
+                    w.save( function(err){
+                      if(err ){
+                        next( new g.errors.BadError503("Database error saving workspace. User created, but no workspace assigned") );
+                      } else{
+                        // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
+                        req.session.loggedIn = true;
+                        req.session.login = req.body.login;
+
+                        res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+                      }
+                    }) // w.save()
+                  } 
+                }) // utils.makeToken()
+
+              }
             }) // u.save
+
           } // if(errors.length != 0)
         }
       }) // Workspace.findOne()
