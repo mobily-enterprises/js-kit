@@ -2,7 +2,6 @@
 
   "THE TOKEN"
 
-  * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
   * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
   * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
             If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
@@ -132,4 +131,4 @@
             grep 'req\.[^sbqu]' `find .` Note: change workspaceId's parameter string into workspaceIdPages 
   * SERVER: Tidy up code for middleware, put it in a different file.
   * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
-
+  * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)

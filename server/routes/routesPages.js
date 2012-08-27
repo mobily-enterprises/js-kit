@@ -34,7 +34,13 @@ exports.ws = function(req, res){
   }
 
   // Render the index page -- yay!
-  res.render('ws',  { layout:false, login: req.session.login, workspaceId:req.pages.workspaceId, workspaceName:req.pages.workspaceName } );
+  res.render('ws',  { 
+    layout: false, 
+    login: req.session.login,
+    workspaceId: req.pages.workspaceId,
+    workspaceName: req.pages.workspaceName,
+    token: req.pages.token,
+  });
 };
 
 
