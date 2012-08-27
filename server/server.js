@@ -80,9 +80,9 @@ app.get('/pick', routesPages.pick);
  ****************************************************************
 */
 
-app.post('/nondata/recoverAnon', routesNonData.postRecoverAnon );
-app.post('/nondata/loginAnon', routesNonData.postLoginAnon);
-app.post('/nondata/logoutAnon', routesNonData.postLogout);
+app.post('/recoverAnon', routesNonData.postRecoverAnon );
+app.post('/loginAnon', routesNonData.postLoginAnon);
+app.post('/logoutAnon', routesNonData.postLogout);
 
 
 /* 
@@ -91,9 +91,9 @@ app.post('/nondata/logoutAnon', routesNonData.postLogout);
  ****************************************************************
 */
 
-app.get( '/data/workspacesAnon', routesDataAnon.getWorkspacesAnon );
-app.get( '/data/usersAnon'     , routesDataAnon.getUsersAnon );
-app.post('/data/workspacesAnon', routesDataAnon.postWorkspacesAnon );
+app.get( '/workspacesAnon', routesDataAnon.getWorkspacesAnon );
+app.get( '/usersAnon'     , routesDataAnon.getUsersAnon );
+app.post('/workspacesAnon', routesDataAnon.postWorkspacesAnon );
 
 
 /* 
@@ -102,8 +102,8 @@ app.post('/data/workspacesAnon', routesDataAnon.postWorkspacesAnon );
  ****************************************************************
 */
 
-app.post( '/data/test', routesData.postTest );
-app.post( '/data/workspaces', routesData.postWorkspaces);
+app.post( '/test', routesData.postTest );
+app.post( '/workspaces', routesData.postWorkspaces);
 
 
 

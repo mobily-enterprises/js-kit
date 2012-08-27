@@ -28,7 +28,7 @@ define([
 
     // Exception for the non-data URLs. I will still make them usable with JsonRest, since they are
     // all POST ones (so, it's convenient)
-    var path = (i == 'recoverAnon' || i == 'loginAnon' || i == 'logoutAnon') ? '/nondata/' : '/data/';
+    var path = i.match(/Anon$/) ? '/' : '/' + tokenValue + '/';
 
     // Create the store
     stores[i] = new JsonRest({
