@@ -1,41 +1,59 @@
 define([
   'app/JsonRest',
+  'dojo/domReady!',
   ],function(
   JsonRest
   ){
 
 
-
   // Stores
-  var stores = {};
+  var stores = {},
+      path;
+  
+
+  // Initialise tokenValue (might not be set)
+  if( typeof(tokenValue) == 'undefined' ){
+    tokenValue = null;
+  }
+ 
 
   // Make all of the stores, which will be used across the application
   [
     // Non-data calls
     'recoverAnon',
     'loginAnon',
-    'logoutAnon',
+    'logoutUser',
 
     // Data calls
-    'test',             //
     'workspacesAnon',   //
-    'workspaces',       //
+    'workspacesUser',   //
     'workspaceSettings',//
-    'cities',           //
+    'users',           //
     'contacts',         //
     'products'          //
   ].forEach( function(i){
 
-    // Exception for the non-data URLs. I will still make them usable with JsonRest, since they are
-    // all POST ones (so, it's convenient)
-    var path = i.match(/Anon$/) ? '/' : '/' + tokenValue + '/';
+    // Check if the call is anonymous
+    isAnon = i.match(/Anon$/);
+    isUser = i.match(/User$/);
 
-    // Create the store
-    stores[i] = new JsonRest({
-      target: path + i + '/',
-			idProperty: '_id',
-      sortParam: 'sortBy',
-    });
+    // tokenValue = '873535f1b3c3cfffe76a68dfc9048647';
+     
+    // Either the token must be set, or the call needs to be a /user or /anon call
+    if( tokenValue || isAnon || isUser ){
+
+      // Set the path depending on the store's name, to keep URL namespace clean
+      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/api/1/' + tokenValue + '/') ;
+
+      // console.log("Creating store " + path + i + '/');
+
+      // Create the store
+      stores[i] = new JsonRest({
+        target: path + i + '/',
+		  	idProperty: '_id',
+        sortParam: 'sortBy',
+      });
+    }
   });
 
   return stores;

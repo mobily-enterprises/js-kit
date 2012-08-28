@@ -12,11 +12,11 @@ require(["app/widgets/LoginForm", 'app/lib/Logger'], function( LoginForm , Logge
 
       // If validation returned OK for that specific workspace, then redirect straight there
       if( res.forWorkspaceId ) {
-        window.location = '/ws/' + res.forWorkspaceId;
+        window.location = '/pages/ws/' + res.forWorkspaceId;
 
       // Login was OK, but not for any particular workspace: just go to /pick which will allow users to pick one
       } else {
-        window.location = '/pick';
+        window.location = '/pages/pick';
       }
   };
 

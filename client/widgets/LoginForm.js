@@ -121,7 +121,7 @@ define([
           var data = that.loginForm.getValues();
 
           // Gets the workspaceName from the URL
-          data.workspaceName = window.location.pathname.split(/\//)[2];
+          data.workspaceName = window.location.pathname.split(/\//)[3];
 
           // Store the data 
           this.onLoginPromise = stores.loginAnon.put(data).then(

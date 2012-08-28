@@ -113,7 +113,7 @@ define([
             that.form.reset();
             r.RetypePasswordDialog.failureCounts ++;
             if( r.RetypePasswordDialog.failureCounts > 2){
-              window.location="/login";
+              window.location="/pages/login";
             }
           }
         );  // stores.loginanon.put(data)
@@ -178,6 +178,13 @@ define([
 
       // AJAX JsonRest failure: set error messages etc. and rethrow
       return function(err){
+
+        var response;
+        try { 
+          response = json.fromJson(err.responseText)  
+        } catch(e){
+          response = null;
+        }
 
         switch(err.status){
 

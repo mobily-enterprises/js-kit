@@ -1,31 +1,39 @@
 
+  "THE ERRORS"
 
-  "THE TOKEN"
+  * C/S   : Since 403 is for "user is not logged in", return a different error in case the user IS logged in but has no access to
+            the url requested. (It shouldn't happen, and it will only really happen when a permission change happens while the
+            user is using the application).
+  * SERVER: Find a _good_ way to keep the original error when throwing messages in db errors, maybe providing info to the user? Check
+            logging too -- check that logging is happening properly
+  * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
+            be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
 
-  * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
-            If the middleware finds that the user is not logged in, needs to return the right 4xx error. If the middleware finds out
-            that the user IS logged in, but doesn't actually have access to that specific workspace, it needs to return a different
-            error (and at that point the client needs to redirect to /login immediately). NOTE: IMPLEMENT ROLES.
+  "THE ROLES"
+`
+  * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
+            is the first "real" API call. 
+  * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
+            *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
+            to specified roles. Delete the isOwner flag in DB
+
   * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
-  * CLIENT: Write a quick form/call to add a user to a workspace (use existing silly form), make sure logging in as them works
-  * C/S     Recheck everything.
 
 
   "THE LAST TOUCHES"
 
-  * CLIENT: Hide passwords
-  * C/S   : Make sure that workspace names are regiistered as lowercase, AND that searching them is case insensitive!
   * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
-  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed.
+  * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
+  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
-  * C/S   : Comment each function, client and server, using Dojo's new standard
+  * C/S   : Comment each function, client and server, using Dojo's new standard (client) and node's standard (server)
   * C/S   : Comment CSS nicely
 
 
-+++ MESSAGES
++++ MESSAGES AND INVITES
   * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
             status
   * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
@@ -35,19 +43,28 @@
             which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
             write a bit of a wizard.
 
-+++ BROWSING DATA
++++ BROWSING DATA + PERMISSIONS
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
-          reload if there are network issues. 
+            reload if there are network issues. 
+  * SERVER: Put down foundations for a function(user_id, 'role', 'collection') which will manufacture a where() statement so that
+            permissions are fulfilled.
+  * SERVER: Put down foundations for a function(user_id, 'role', 'collection', [{object}] ) returns an object where keys 'get', 'put',
+            'post' are defined).
+  * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined.
+  * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
+            Improve logging accordingly
 
 +++ SETTINGS
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
+  * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
 +++ USE CASE
-  * Add a "customer" form, and a customers browser
+  * Add a "customer" form, and a customers browser. In order to test the system, also add the ability to have
+    "private" customers
 
                           ----------------------------
                           !!  BOILERPLATE FINISHED  !!
@@ -132,3 +149,9 @@
   * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
   * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
   * CLIENT: Change JsonRest call in client so that it automatically appends, to call URL, the key from the global variable
+  * C/S   : Revise all code, make sure that names of stores are consistent, place pages under /pages/login, pages/register etc,
+            change the store names
+  * C/S   : On the server side, a middleware will read the token from URL and set req.application.workspaceId and req.application.userId:
+            If the middleware finds that the user is not logged in, needs to return the right 4xx error.
+  * SERVER: Check that middleware tokenApi actually works (check by getting Javascript to provide the wrong API key).
+  * CLIENT: Hide passwords

@@ -58,14 +58,33 @@ define([
         // SUbmit form
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
 
+          stores.users.put( {} ).then(
+            ds.UIMsg('ok', that.form, that.button, null ),
+            ds.UIMsg('error', that.form, that.button, null )
+          ).then(
+            function(res){
+              console.log("Returned: ");
+              console.log(res);
+            },
+            function(err){
+              console.log("Error:");
+              console.log(err);
+            }
+          );
+
+
+
+
           // Store the data 
           data = that.form.getValues();
 
           // YOU ARE HERE: Strange, once it fails from the server side, validation stops working for scope
           // problems
 
+          /*
+
           // Try saving it...
-          stores.workspaces.put(data).then(
+          stores.workspacesUser.put(data).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),
             ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(
@@ -76,6 +95,8 @@ define([
             }
           ); // stores.workspacesAnon.put(data).then
           
+          */
+
         }); // this.form.onSubmit
 
 

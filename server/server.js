@@ -8,9 +8,9 @@ var express = require('express'),
     middleware = require('./middleware.js'),
 
     // Pages and routes
-    routesData = require('./routes/routesData.js'),
-    routesDataAnon = require('./routes/routesDataAnon.js'),
-    routesNonData = require('./routes/routesNonData.js'),
+    routesApi = require('./routes/routesApi.js'),
+    routesAnon = require('./routes/routesAnon.js'),
+    routesUser = require('./routes/routesUser.js'),
     routesPages = require('./routes/routesPages.js'),
 
     AppErrorHandler = require('./AppErrorHandler.js').AppErrorHandler,
@@ -20,7 +20,7 @@ var express = require('express'),
 var app = express();
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/bookings2');
+mongoose.connect('mongodb://localhost/bookings4');
 
 // Configuration
 
@@ -56,55 +56,54 @@ app.configure('production', function(){
 
 
 // Set parameter functions for middlewares
-app.param('workspaceNamePages', middleware.workspaceNamePages);
-app.param('workspaceIdPages', middleware.workspaceIdPages);
-app.param('workspaceIdCall', middleware.workspaceIdCall);
+app.param('workspaceNamePages', middleware.workspaceNamePages); // Used by /pages/login
+app.param('workspaceIdPages', middleware.workspaceIdPages);     // Used by /pages/ws
+app.param('tokenApi', middleware.tokenApi);         // Used by API calls
 
 /* 
  ****************************************************************
  * PAGES
  ****************************************************************
 */
-app.get('/ws', function(req, res, next){ res.redirect('/login'); } );
-app.get('/ws/:workspaceIdPages', routesPages.ws);
-app.get('/recover', routesPages.recover);
-app.get('/login', routesPages.login);
-app.get('/login/:workspaceNamePages', routesPages.login);
-app.get('/register', routesPages.register);
-app.get('/pick', routesPages.pick);
+app.get('/pages/ws', function(req, res, next){ res.redirect('/pages/login'); } );
+app.get('/pages/ws/:workspaceIdPages', routesPages.ws);
+app.get('/pages/recover', routesPages.recover);
+app.get('/pages/login', routesPages.login);
+app.get('/pages/login/:workspaceNamePages', routesPages.login);
+app.get('/pages/register', routesPages.register);
+app.get('/pages/pick', routesPages.pick);
 
 
 /* 
  ****************************************************************
- * NON-DATA CALLS
+ * DATA AJAX CALLS -- ANONYMOUS
  ****************************************************************
 */
 
-app.post('/recoverAnon', routesNonData.postRecoverAnon );
-app.post('/loginAnon', routesNonData.postLoginAnon);
-app.post('/logoutAnon', routesNonData.postLogout);
+app.post('/anon/recoverAnon',    routesAnon.postRecoverAnon );   // NONDATA
+app.post('/anon/loginAnon',      routesAnon.postLoginAnon);      // NONDATA
+app.get( '/anon/workspacesAnon', routesAnon.getWorkspacesAnon );
+app.get( '/anon/usersAnon'     , routesAnon.getUsersAnon );
+app.post('/anon/workspacesAnon', routesAnon.postWorkspacesAnon );
 
 
 /* 
  ****************************************************************
- * DATA CALLS -- ANONYMOUS
+ * DATA AJAX CALLS -- USERS
  ****************************************************************
 */
 
-app.get( '/workspacesAnon', routesDataAnon.getWorkspacesAnon );
-app.get( '/usersAnon'     , routesDataAnon.getUsersAnon );
-app.post('/workspacesAnon', routesDataAnon.postWorkspacesAnon );
+app.post('/user/workspacesUser', routesUser.postWorkspacesUser);
+app.post('/user/logoutUser',     routesUser.postLogoutUser);   // NONDATA
 
 
 /* 
  ****************************************************************
- * DATA CALLS
+ * DATA AJAX CALLS -- API
  ****************************************************************
 */
 
-app.post( '/test', routesData.postTest );
-app.post( '/workspaces', routesData.postWorkspaces);
-
+app.post('/api/1/:tokenApi/users', routesApi.postUsersApi1);
 
 
 // Create the actual server

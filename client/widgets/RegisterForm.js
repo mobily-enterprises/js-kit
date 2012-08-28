@@ -79,11 +79,8 @@ define([
 
       
       _loginAndSwap: function(){
-     
         this.loginDialog.show();
         this.loginForm.tabContainer.resize(); 
- 
-        console.log("HERE");
       },
 
       _logoutAndSwap: function(){
@@ -124,6 +121,7 @@ define([
         //
         this.formAsAnon.onSubmit = ds.defaultSubmit(this.formAsAnon, this.buttonAsAnon, function(){
 
+
           // Store the data 
           var data = that.formAsAnon.getValues();
 
@@ -137,7 +135,7 @@ define([
 
               // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              window.location = '/ws/'+res.workspaceId;
+              window.location = '/pages/ws/'+res.workspaceId;
 
             }
           ); // stores.workspacesAnon.put(data).then
@@ -154,7 +152,7 @@ define([
         this.formAsUser.onSubmit = ds.defaultSubmit(this.formAsUser, this.buttonAsUser, function(){
           var data = that.formAsUser.getValues();
 
-          stores.workspaces.put(data).then(
+          stores.workspacesUser.put(data).then(
             ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, that.alertBarAsUser , true ),
             ds.UIMsg('error', that.formAsUser, that.buttonAsUser, that.alertBarAsUser, true )
           ).then(
@@ -162,7 +160,7 @@ define([
 
               // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              window.location = '/ws/'+res.workspaceId;
+              window.location = '/pages/ws/'+res.workspaceId;
 
             },
              function(err){

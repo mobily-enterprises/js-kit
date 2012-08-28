@@ -1,6 +1,8 @@
 
 var express = require('express'),
-    mongoose = require('mongoose');
+    mongoose = require('mongoose'),
+    g = require('./globals.js'),
+    ObjectId = mongoose.Types.ObjectId;
 
 
 exports.workspaceNamePages = function( req, res, next, workspaceName ){
@@ -49,7 +51,7 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
       if(doc){
         req.pages.workspaceId = doc._id;
         req.pages.workspaceName = doc.name;
-        req.pages.token = doc.access.filter(function(user){ return user.login == req.session.login;  } )[0].token;
+        req.pages.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
         next();
       } else {
         req.pages.noWorkspace = true;
@@ -59,11 +61,58 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
   });
 };
 
-exports.workspaceIdCall = function( req, res, next, workspaceId ){
+exports.tokenApi = function( req, res, next, token ){
 
   Workspace = mongoose.model('Workspace');
+  User = mongoose.model('User');
 
-  Workspace.findOne( {_id : mongoose.Types.ObjectId(worspaceId) }, function(err, doc){
+  req.application = {};
+
+  // Find the token
+  Workspace.findOne({ 'access.token': token } , function(err, doc){
+    if(err){
+      next( new g.errors.BadError503('Database error resolving workspace Id') );
+    } else {
+      if(! doc ){
+        next( new g.errors.ForbiddenError403('Access denied') );
+      } else {
+
+        // The token is there and it's valid.
+        // Set req.application.workspaceId, req.application.login and
+        //  req.application.workspace (which contains all of the settings!)
+        req.application.workspaceId = doc._id;
+        req.application.workspace = doc;
+        req.application.login = doc.access.filter(function(entry){ return entry.token == token;  } )[0].login;
+        next();
+      }
+    }
   });
-  next();
+
 }
+
+
+
+
+
+
+
+
+
+   /*
+        // SCRAP. Don't need it, as THROUGHOUT the application I will use 'login' (to set permissions etc.). This is because
+        // "login" can come from *anywhere* (an external source, etc.)
+        User.findOne({ login: login }, function(err, doc){
+          if(err){
+            next( new g.errors.BadError503('Database error resolving user') );
+          } else {
+            if(!doc){
+              next( new g.errors.BadError503('Database error in user lookup') );
+            } else {
+              req.application.login = doc._id;
+
+              console.log("DID IT! Workspace: " + req.application.workspaceId + " and user: " + req.application.userId);
+            }
+          }
+        });*/
+
+

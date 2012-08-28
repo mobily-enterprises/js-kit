@@ -29,7 +29,7 @@ exports.ws = function(req, res){
 
   // User is not logged in (?!?): redirect to the login page
   if(! req.session.loggedIn ){
-    res.redirect('/login');
+    res.redirect('/pages/login');
     return; 
   }
 
@@ -83,9 +83,9 @@ exports.login = function(req, res){
           next(new g.errors.BadError503("Database error fetching workspace") );
         } else {
           if(doc){
-            res.redirect('/ws/' + req.workspaceId);
+            res.redirect('/pages/ws/' + req.workspaceId);
           } else {
-            res.redirect('/pick');
+            res.redirect('/pages/pick');
           }
         }
 
@@ -93,7 +93,7 @@ exports.login = function(req, res){
 
     // No speicfic worskspace: just go and pick
     } else {
-      res.redirect('/pick');
+      res.redirect('/pages/pick');
     }
   }
 
@@ -105,7 +105,7 @@ exports.pick = function(req, res){
 
   // User is not logged in: redirect to the login page
   if(! req.session.loggedIn ){
-    res.redirect('/login');
+    res.redirect('/pages/login');
     return; 
   }
 
@@ -122,7 +122,7 @@ exports.pick = function(req, res){
 
       // If there is only one workspace in the list, there is no point in having to pick: goes straight there
       if( list.length == 1){
-        res.redirect('/ws/' + list[0].id);
+        res.redirect('/pages/ws/' + list[0].id);
       } else {
         res.render('pick',  { layout:false, login: req.session.login, list:list, emptyList: list.length == 0 } );
       }

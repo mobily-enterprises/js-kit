@@ -17,35 +17,7 @@ function parametersAreThere(obj, attributes, errors){
 
 
 
-
-
-exports.postTest = function(req, res, next){
-
-  // *****
-  setTimeout(function(){
-  // *****
-
-
-  // Chuck user out if he's not logged in.
-  // TODO: Move this into a middleware
-  // (And DEFINITELY out of a function that is meant to work for anonymous)
-  if(! req.session.loggedIn ){
-    next( new g.errors.ForbiddenError403());
-    return; 
-  }
-
-  req.session.loggedIn = false;
-  res.json( { response: 'OK' } , 200);
-
-
-  //
-  } , 500); // Artificial timeout
-  //
-
-}
-
-
-exports.postWorkspaces = function(req, res, next){
+exports.postWorkspacesUser = function(req, res, next){
 
   // *****
   setTimeout(function(){
@@ -95,6 +67,7 @@ exports.postWorkspaces = function(req, res, next){
             w.save( function(err){
               if(err){
                  next(new g.errors.BadError503("Database error saving workspace") );
+                 console.log(err);
               } else{
 
                 // Register the workspace, and return the worksapce Id in as an option (to allow redirect)
@@ -117,5 +90,23 @@ exports.postWorkspaces = function(req, res, next){
 
 
 
+exports.postLogoutUser = function(req, res, next){
 
+  // *****
+  setTimeout(function(){
+  // *****
+
+    // There is nothing to be checked: simply logs out by clearing the session variables
+    // NOTE: req.session.login is properly set to null as the user really wanted to logout
+    req.session.loggedIn = false;
+    req.session.login = null;
+
+    // Send an OK response. It's up to the client to redirect/etc.
+    res.json( { response: 'OK' } , 200);
+
+  //
+  } , 500); // Artificial timeout
+  //
+
+}
 
