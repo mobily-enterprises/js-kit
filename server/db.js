@@ -1,4 +1,8 @@
 
+
+
+
+
 var mongoose = require('mongoose');
 
 var Schema = mongoose.Schema;
@@ -14,10 +18,14 @@ var ObjectId = Schema.ObjectId;
 // LOGGER
 // *************************
 var Log = new Schema({
-  workspaceName  : { type: String },
-  userId         : { type: ObjectId, index: true },
+  workspaceId    : { type: String, index: true },
+  workspaceName  : { type: String, index: true },
+  loginSession   : { type: String, index: true },
+  tokenLogin     : { type: String, index: true },
+  token          : { type: String, index: true },
   logLevel       : { type: Number, enum:[0,1] },
-  message        : { type: String },
+  errorName      : { type: String, index: true },
+  message        : { type: String, index: true },
   reqInfo        : { type: String },
   data           : { type: String },
   loggedOn       : { type: Date, index: true },

@@ -4,28 +4,26 @@ var express = require('express'),
     g = require('./globals.js'),
     ObjectId = mongoose.Types.ObjectId;
 
-
 exports.workspaceNamePages = function( req, res, next, workspaceName ){
 
   var Workspace = mongoose.model('Workspace');
-  req.pages = {};
-
-  if(! req.session.loggedIn){
-    next();
-    return;
-  }
+  req.application = {};
 
   Workspace.findOne({ name: workspaceName}, function(err, doc){
     if(err){
-      req.pages.dbDown = true;
+      req.application.dbDown = true;
       next();
     } else {
       if(doc){
-        req.pages.workspaceId = doc._id;
-        req.pages.workspaceName = doc.name;
+
+        req.application.workspaceId = doc._id;
+        req.application.workspaceName = doc.name;
+        req.application.token = '';
+        req.application.workspace = doc; // Contains all of the settings!
+
         next();
       } else {
-        req.pages.noWorkspace = true;
+        req.application.noWorkspace = true;
         next();
       }
     }
@@ -36,7 +34,7 @@ exports.workspaceNamePages = function( req, res, next, workspaceName ){
 exports.workspaceIdPages = function( req, res, next, workspaceId ){
 
   var Workspace = mongoose.model('Workspace');
-  req.pages = {};
+  req.application = {};
 
   if(! req.session.loggedIn){
     next();
@@ -45,16 +43,19 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
 
   Workspace.findOne({ _id: mongoose.Types.ObjectId(workspaceId), 'access.login':req.session.login }, function(err, doc){
     if(err){
-      req.pages.dbDown = true;
+      req.application.dbDown = true;
       next();
     } else {
       if(doc){
-        req.pages.workspaceId = doc._id;
-        req.pages.workspaceName = doc.name;
-        req.pages.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
+
+        req.application.workspaceId = doc._id;
+        req.application.workspaceName = doc.name;
+        req.application.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
+        req.application.workspace = doc; // Contains all of the settings!
+
         next();
       } else {
-        req.pages.noWorkspace = true;
+        req.application.noWorkspace = true;
         next();
       }
     }
@@ -71,48 +72,22 @@ exports.tokenApi = function( req, res, next, token ){
   // Find the token
   Workspace.findOne({ 'access.token': token } , function(err, doc){
     if(err){
-      next( new g.errors.BadError503('Database error resolving workspace Id') );
+      next( new g.errors.RuntimeError503( err ) );
     } else {
       if(! doc ){
-        next( new g.errors.ForbiddenError403('Access denied') );
+        next( new g.errors.BadtokenError403() );
       } else {
 
-        // The token is there and it's valid.
-        // Set req.application.workspaceId, req.application.login and
-        //  req.application.workspace (which contains all of the settings!)
         req.application.workspaceId = doc._id;
-        req.application.workspace = doc;
-        req.application.login = doc.access.filter(function(entry){ return entry.token == token;  } )[0].login;
+        req.application.workspaceName = doc.name;
+        req.application.token = token;
+        req.application.tokenLogin = doc.access.filter(function(entry){ return entry.token == token;  } )[0].login;
+        req.application.workspace = doc; // Contains all of the settings!
+
         next();
       }
     }
   });
 
 }
-
-
-
-
-
-
-
-
-
-   /*
-        // SCRAP. Don't need it, as THROUGHOUT the application I will use 'login' (to set permissions etc.). This is because
-        // "login" can come from *anywhere* (an external source, etc.)
-        User.findOne({ login: login }, function(err, doc){
-          if(err){
-            next( new g.errors.BadError503('Database error resolving user') );
-          } else {
-            if(!doc){
-              next( new g.errors.BadError503('Database error in user lookup') );
-            } else {
-              req.application.login = doc._id;
-
-              console.log("DID IT! Workspace: " + req.application.workspaceId + " and user: " + req.application.userId);
-            }
-          }
-        });*/
-
 

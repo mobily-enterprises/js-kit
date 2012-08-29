@@ -1,18 +1,20 @@
-var util = require('util');
-var fs = require('fs');
-var mongoose = require('mongoose');
+
+var mongoose = require('mongoose'),
+util = require('util');
 
 exports.errors = {};
 
-// Defining the BadError error type, thrown by the application itself
+// Defining the RuntimeError error type, thrown by the application itself when a
+// callback comes back with "err" set
 //
-function BadError503( message ){
+function RuntimeError503( err ){
   this.httpError = 503;
-  this.message = message || "Internal error";
+  this.message = err.message || "Runtime error";
   this.name = this.constructor.name;
+  this.originalError = err;
 }
-util.inherits(BadError503, Error);
-exports.errors.BadError503 = BadError503;
+util.inherits(RuntimeError503, Error);
+exports.errors.RuntimeError503 = RuntimeError503;
 
 // Defining the NotFoundError error type, thrown by the application itself
 //
@@ -35,43 +37,79 @@ function ValidationError422( message , errors ){
 util.inherits(ValidationError422, Error);
 exports.errors.ValidationError422 = ValidationError422;
 
-// Defining the Error error type, thrown by the application itself
+// Defining the NotLoggedinError error type, thrown by the application itself
+//
+function BadTokenError403( message ){
+  this.httpError = 403;
+  this.message = message || "Bad token";
+  this.name = this.constructor.name;
+}
+util.inherits(BadTokenError403, Error);
+exports.errors.BadTokenError403 = BadTokenError403;
+
+// Defining the Forbidden error type, thrown by the application itself
+// when a resource is requested, but the user has no rights to access it
+// FIXME: Check the code, 402 might not be a good one for this sort of thing
 //
 function ForbiddenError403( message ){
   this.httpError = 403;
-  this.message = message || "User not logged in";
+  this.message = message || "Not enough privileges for the requested resource";
   this.name = this.constructor.name;
 }
 util.inherits(ForbiddenError403, Error);
 exports.errors.ForbiddenError403 = ForbiddenError403;
 
 
-// Defining the ParamError error type, thrown by the application itself
-//
-/* 
-function ParamError516( message ){
-  this.httpError = 516;
-  this.message = message;
-  this.name = this.constructor.name;
-}
-util.inherits(ParamError516, Error);
-exports.errors.ParamError516 = ParamError516;
-*/
-
-
-
 // Save a log entry onto the Log table, with the current timestamp. Workspace and userId can be empty
-exports.Logger = function(workspaceName, userId, logLevel, message, req, data){
-  var Log = mongoose.model("Log");
+exports.Logger = function(logEntry){
+  var Log = mongoose.model("Log"),
+      req = logEntry.req;
+
   log = new Log();
-  log.workspaceName = workspaceName;
-  log.userId = userId;
-  log.logLevel = logLevel;
-  log.message = message;
-  log.reqInfo = JSON.stringify( {info: req.info, headers:req.headers, method:req.method, body:req.body, route:req.route, params:req.params });
-  // console.log('Logged: "%s", "%s", "%d", "%s", "%s", "%s"', workspaceName, userId, logLevel, message, log.reqInfo, log.data );  
-  data = data || {};
-  log.data = JSON.stringify(data);
+
+  // Sorts out log.reqInfo
+  if ( logEntry.req){
+    log.reqInfo = JSON.stringify({
+      info   : req.info,
+      headers: req.headers,
+      method : req.method,
+      body   : req.body,
+      route  : req.route,
+      params : req.params 
+    });
+  } else {
+    logEntry.reqInfo = {};
+  }
+ 
+  // Sets the log.loginSession variable if user is logged in
+  // (note: they might not be logged in and still make requests,
+  // as long as they have the token)
+  log.loginSession = req.session.loggedIn ? req.session.login : '';
+
+    
+  // Set log.workspaceId, log.workspaceName, log.token and log.tokenLogin
+  // if they are defined
+  if( req.application) {
+    log.workspaceId   = req.application.workspaceId   ? req.application.workspaceId   : '';
+    log.workspaceName = req.application.workspaceName ? req.application.workspaceName : '';
+    log.token         = req.application.token         ? req.application.token         : '';
+    log.tokenLogin    = req.application.loginToken    ? req.application.loginToken : '';
+  } else {
+    log.workspaceId   = '';
+    log.workspaceName = '';
+    log.token         = '';
+    log.tokenLogin    = '';
+  }
+
+  // Sorts out all of the other fields with sane defaults.
+  // FIXME: improve this code, it's grown into something ugly and repetitive
+  // http://stackoverflow.com/questions/12171336/saving-an-object-with-defaults-in-mongoose-node
+  log.logLevel   = logEntry.logLevel  ? logEntry.logLevel  : 0;
+  log.errorName  = logEntry.errorName ? logEntry.errorName : '';
+  log.message    = logEntry.message   ? logEntry.message   : '';
+  log.data       = logEntry.data      ? logEntry.data      : {};
+
+  // Sorts out log.loggedOn
   log.loggedOn = new Date();
   log.save();
 } 

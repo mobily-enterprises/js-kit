@@ -14,14 +14,14 @@ eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validat
 exports.ws = function(req, res){
 
   // The DB is down: return a nice "we are down" page
-  if(req.pages.dbDown){
+  if(req.application.dbDown){
     res.status = 500;
     res.render('error',  { layout:false } );
     return;
   }
 
   // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.pages.noWorkspace){
+  if(req.application.noWorkspace){
     res.status = 404;
     res.render('notFound',  { layout:false } );
     return;
@@ -37,9 +37,9 @@ exports.ws = function(req, res){
   res.render('ws',  { 
     layout: false, 
     login: req.session.login,
-    workspaceId: req.pages.workspaceId,
-    workspaceName: req.pages.workspaceName,
-    token: req.pages.token,
+    workspaceId: req.application.workspaceId,
+    workspaceName: req.application.workspaceName,
+    token: req.application.token,
   });
 };
 
@@ -50,18 +50,18 @@ exports.login = function(req, res){
 
   // The middleware workspaceNamePages in not guaranteed to have been called,
   // since the login page might get called with or without it. So, just in case,
-  // set the req.pages variable
-  req.pages = req.pages || {};
+  // set the req.application variable
+  req.application = req.application || {};
 
   // The DB is down: return a nice "we are down" page
-  if(req.pages.dbDown){
+  if(req.application.dbDown){
     res.status = 500;
     res.render('error',  { layout:false } );
     return;
   }
 
   // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.pages.noWorkspace){
+  if(req.application.noWorkspace){
     res.status = 404;
     res.render('notFound',  { layout:false } );
     return;
@@ -76,11 +76,11 @@ exports.login = function(req, res){
       
     // If they are trying to access a specific workspace, and have
     // access to it, then simply redirect there
-    if( req.pages.workspaceId ){
+    if( req.application.workspaceId ){
 
       Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
         if(err ){
-          next(new g.errors.BadError503("Database error fetching workspace") );
+          next(new g.errors.RuntimeError503( err ) );
         } else {
           if(doc){
             res.redirect('/pages/ws/' + req.workspaceId);
@@ -114,7 +114,7 @@ exports.pick = function(req, res){
   var Workspace = mongoose.model('Workspace');
   Workspace.find( { 'access.login': req.session.login }, function(err, docs){
     if( err ){
-      next(new g.errors.BadError503("Database error fetching login") );
+      next(new g.errors.RuntimeError503( err ) );
     } else {
       docs.forEach( function(workspace){
         list.push( { name: workspace.name, description: workspace.description, id: workspace._id } );

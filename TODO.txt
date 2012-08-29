@@ -1,13 +1,9 @@
 
   "THE ERRORS"
 
-  * C/S   : Since 403 is for "user is not logged in", return a different error in case the user IS logged in but has no access to
-            the url requested. (It shouldn't happen, and it will only really happen when a permission change happens while the
-            user is using the application).
-  * SERVER: Find a _good_ way to keep the original error when throwing messages in db errors, maybe providing info to the user? Check
-            logging too -- check that logging is happening properly
   * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
             be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
+  * SERVER: Check that things haven't bombed after latest extensive changes, and that logging still happens OK
 
   "THE ROLES"
 `
@@ -155,3 +151,12 @@
             If the middleware finds that the user is not logged in, needs to return the right 4xx error.
   * SERVER: Check that middleware tokenApi actually works (check by getting Javascript to provide the wrong API key).
   * CLIENT: Hide passwords
+  * SERVER: Rename error objects so that make more sense, _and_ make sure that original error is kept in case of "Runtime error".
+  * SERVER: Improve the Log() function so that IT does all the work (lookup etc.) and stores things right
+  * C/S   : Since 403 is for "user is not logged in", return a different error in case the user IS logged in but has no access to
+            the url requested. (It shouldn't happen, and it will only really happen when a permission change happens while the
+            user is using the application).
+  * SERVER: Find a _good_ way to keep the original error when throwing messages in db errors, maybe providing info to the user? Check
+            logging too -- check that logging is happening properly (sent email to stack overflow)
+  * SERVER: Uniform the way things are set, into req.application, regardless of what middleware is called
+            

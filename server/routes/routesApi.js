@@ -11,7 +11,7 @@ eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validat
 exports.postUsersApi1 = function(req, res, next){
   
   var Workspace = mongoose.model('Workspace');
- 
+  next( new g.errors.ForbiddenError403() );
    
-  res.json( [{name:'ppp'}] );
+  // res.json( [{name:'ppp'}] );
 }

@@ -20,7 +20,7 @@ var express = require('express'),
 var app = express();
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/bookings4');
+mongoose.connect('mongodb://localhost/bookings5');
 
 // Configuration
 
@@ -56,22 +56,22 @@ app.configure('production', function(){
 
 
 // Set parameter functions for middlewares
-app.param('workspaceNamePages', middleware.workspaceNamePages); // Used by /pages/login
-app.param('workspaceIdPages', middleware.workspaceIdPages);     // Used by /pages/ws
-app.param('tokenApi', middleware.tokenApi);         // Used by API calls
+app.param('workspaceNamePages', middleware.workspaceNamePages);   // Used by /pages/login
+app.param('workspaceIdPages',   middleware.workspaceIdPages);     // Used by /pages/ws
+app.param('tokenApi',           middleware.tokenApi);             // Used by API calls
 
 /* 
  ****************************************************************
  * PAGES
  ****************************************************************
 */
-app.get('/pages/ws', function(req, res, next){ res.redirect('/pages/login'); } );
-app.get('/pages/ws/:workspaceIdPages', routesPages.ws);
-app.get('/pages/recover', routesPages.recover);
-app.get('/pages/login', routesPages.login);
+app.get('/pages/ws',                        function(req, res, next){ res.redirect('/pages/login'); } );
+app.get('/pages/ws/:workspaceIdPages',      routesPages.ws);
+app.get('/pages/recover',                   routesPages.recover);
+app.get('/pages/login',                     routesPages.login);
 app.get('/pages/login/:workspaceNamePages', routesPages.login);
-app.get('/pages/register', routesPages.register);
-app.get('/pages/pick', routesPages.pick);
+app.get('/pages/register',                  routesPages.register);
+app.get('/pages/pick',                      routesPages.pick);
 
 
 /* 

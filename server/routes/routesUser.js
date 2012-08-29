@@ -31,7 +31,7 @@ exports.postWorkspacesUser = function(req, res, next){
   // Chuck user out if he's not logged in.
   // TODO: Move this into a middleware
   if(! req.session.loggedIn ){
-    next( new g.errors.ForbiddenError403());
+    next( new g.errors.ForbiddenError403('Not logged in'));
     return; 
   }
 
@@ -48,7 +48,7 @@ exports.postWorkspacesUser = function(req, res, next){
   // Step 1: Check that the workspace is not already taken
   Workspace.findOne({ name:req.body.workspace }, function(err, doc){
     if(err){
-      next(new g.errors.BadError503("Database error fetching workspace") );
+      next(new g.errors.RuntimeError503( err ) );
     } else {
       if(doc){
         errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
@@ -61,12 +61,12 @@ exports.postWorkspacesUser = function(req, res, next){
         w.activeFlag = true;
         utils.makeToken( function(err, token) {
           if(err){
-             next(new g.errors.BadError503("Could not generate token") );
+             next(new g.errors.RuntimeError503( err ) );
           } else {
             w.access = {  login: req.session.login, token:token, isOwner: true }; 
             w.save( function(err){
               if(err){
-                 next(new g.errors.BadError503("Database error saving workspace") );
+                 next(new g.errors.RuntimeError503( err ) );
                  console.log(err);
               } else{
 

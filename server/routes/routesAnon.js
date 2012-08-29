@@ -37,7 +37,7 @@ exports.getWorkspacesAnon = function(req, res, next){
   } else {
     Workspace.findOne({ name: name }, function(err, doc){
       if(err ){
-        next(new g.errors.BadError503("Database error fetching workspace") );
+        next(new g.errors.RuntimeError503( err ) );
       } else {
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
@@ -71,7 +71,7 @@ exports.getUsersAnon = function(req, res, next){
   } else {
     User.findOne({ login: login }, function(err, doc){
       if(err ){
-        next(new g.errors.BadError503("Database error fetching workspace") );
+        next(new g.errors.RuntimeError503( err ) );
       } else {
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
@@ -150,7 +150,7 @@ exports.postWorkspacesAnon = function(req, res, next){
   User.findOne( { login: req.body.login}, function(err, doc){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.BadError503("Database error fetching user") );
+      next(new g.errors.RuntimeError503( err ) );
     } else {
       // If the user exists, add it to the error vector BUT keep going
       if(doc){
@@ -158,7 +158,7 @@ exports.postWorkspacesAnon = function(req, res, next){
       }
       Workspace.findOne({ name: req.body.workspace }, function(err, doc){
         if(err ){
-          next(new g.errors.BadError503("Database error fetching workspace") );
+          next(new g.errors.RuntimeError503( err ) );
         } else {
           if(doc){
             errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
@@ -182,7 +182,7 @@ exports.postWorkspacesAnon = function(req, res, next){
  
             u.save( function(err) {
               if(err){
-                next( new g.errors.BadError503("Database error saving user") );
+                next( new g.errors.RuntimeError503( err ) );
               } else {
                 var w = new Workspace();
                 w.name = req.body.workspace;
@@ -190,12 +190,12 @@ exports.postWorkspacesAnon = function(req, res, next){
 
                 utils.makeToken( function(err, token) {
                   if(err){
-                    next(new g.errors.BadError503("Could not generate token") );
+                    next(new g.errors.RuntimeError503( err ) );
                   } else {
                     w.access = {  login: u.login, token:token, isOwner: true };
                     w.save( function(err){
                       if(err ){
-                        next( new g.errors.BadError503("Database error saving workspace. User created, but no workspace assigned") );
+                        next( new g.errors.RuntimeError503( err ) );
                       } else{
                         // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
                         req.session.loggedIn = true;
@@ -261,7 +261,7 @@ exports.postRecoverAnon = function(req, res, next){
   User.findOne( { login: req.body.email }, function(err, doc){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.BadError503("Database error fetching user") );
+      next(new g.errors.RuntimeError503( err ) );
     } else {
       // If the user exists, add it to the error vector BUT keep going
       if(doc){
@@ -324,7 +324,7 @@ exports.postLoginAnon = function(req, res, next){
   User.findOne( { login: req.body.login}, function(err, docUser){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.BadError503("Database error fetching user") );
+      next(new g.errors.RuntimeError503( err ) );
     } else {
       // Password is incorrect: return errors
       if(! docUser || docUser.password != req.body.password){
@@ -345,7 +345,7 @@ exports.postLoginAnon = function(req, res, next){
 
             Workspace.findOne( { 'name': req.body.workspaceName, 'access.login' : req.body.login }, function(err, docWorkspace){
               if(err ){
-                next(new g.errors.BadError503("Database error fetching workspace") );
+                next(new g.errors.RuntimeError503( err ) );
               } else {
                 if(docWorkspace){
                   forWorkspaceId = docWorkspace._id;
