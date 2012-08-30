@@ -20,8 +20,7 @@ var ObjectId = Schema.ObjectId;
 var Log = new Schema({
   workspaceId    : { type: String, index: true },
   workspaceName  : { type: String, index: true },
-  loginSession   : { type: String, index: true },
-  tokenLogin     : { type: String, index: true },
+  login          : { type: String, index: true },
   token          : { type: String, index: true },
   logLevel       : { type: Number, enum:[0,1] },
   errorName      : { type: String, index: true },

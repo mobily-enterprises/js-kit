@@ -159,6 +159,7 @@ define([
 
           Logger("Got an empty result from xhr call");
           throw(new Error("Empty result from xhr call"));
+
         } else {
 
 
@@ -191,7 +192,7 @@ define([
 
         switch(err.status){
 
-          // Field validation error
+          // ValidationError
           case 422:
 
             // ***********************************************
@@ -202,6 +203,7 @@ define([
             // didn't like values, but didn't enforce a change before re-submitting
             var artificialErrorWidgets = [];
 
+            // There is a message: display it
             if( res.message && alertBar ){
               alertBar.set('message','Error: ' + res.message );
               alertBar.show(); // Persistent
@@ -274,13 +276,13 @@ define([
             button ? button.cancel() : null;
 
             Logger("Response came back with validation errors: " + json.toJson(res.errors) );
+
+            // Rethrow
             throw(err);
           break;   
 
+          // BadTokenError, ForbiddenError
           case 403:
-
-            // Cancel the submit button
-            button ? button.cancel() : null;
 
             // Only show the alert and the problems if the noLogin flag is false. This flag is basically for
             // the login form and the recoverPassword form and for the workspace form
@@ -289,22 +291,32 @@ define([
             gw.appAlertBar.show(5000);
 
             if(! noLogin){
+
               // Show the form to retype the password
               r.retypePasswordDialog.show();
             }
 
+            // Cancel the submit button
+            button ? button.cancel() : null;
+
+            Logger("Response came back with error 403: " + res.message);
+
+            // Rethrow
             throw(err);
  
           break;
 
+          // Other errors
           default:
-          
+
+            // Show the error at application level
+            gw.appAlertBar.set('message', 'Application error: ' + res.message + ' Status: ' + err.status );
+            gw.appAlertBar.show(5000);
+
             // Cancel the submit button
             button ? button.cancel() : null;
 
-            // Show the error at application level
-            gw.appAlertBar.set('message', 'Application error: ' + res.message);
-            gw.appAlertBar.show(5000);
+            Logger("Respose came back with error 500: " + res.message + ' Status: ' + err.status );
 
             // Rethrow
             throw(err);

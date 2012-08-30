@@ -12,8 +12,8 @@ define([
   
 
   // Initialise tokenValue (might not be set)
-  if( typeof(tokenValue) == 'undefined' ){
-    tokenValue = null;
+  if( typeof(workspaceIdValue) == 'undefined' ){
+    workspaceIdValue = null;
   }
  
 
@@ -41,12 +41,13 @@ define([
     // tokenValue = '873535f1b3c3cfffe76a68dfc9048647';
      
     // Either the token must be set, or the call needs to be a /user or /anon call
-    if( tokenValue || isAnon || isUser ){
+    if( workspaceIdValue || isAnon || isUser ){
 
       // Set the path depending on the store's name, to keep URL namespace clean
-      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/api/1/' + tokenValue + '/') ;
+			// path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/api/1/' + tokenValue + '/') ;
+      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/call/' + workspaceIdValue + '/') ;
 
-      // console.log("Creating store " + path + i + '/');
+      console.log("Creating store " + path + i + '/');
 
       // Create the store
       stores[i] = new JsonRest({

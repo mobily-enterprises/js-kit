@@ -81,24 +81,20 @@ exports.Logger = function(logEntry){
     logEntry.reqInfo = {};
   }
  
-  // Sets the log.loginSession variable if user is logged in
-  // (note: they might not be logged in and still make requests,
-  // as long as they have the token)
-  log.loginSession = req.session.loggedIn ? req.session.login : '';
+  // req.application.login is always set if the user has logged in
 
     
-  // Set log.workspaceId, log.workspaceName, log.token and log.tokenLogin
-  // if they are defined
+  // Set other variables if they are defined (or default to '')
   if( req.application) {
     log.workspaceId   = req.application.workspaceId   ? req.application.workspaceId   : '';
     log.workspaceName = req.application.workspaceName ? req.application.workspaceName : '';
     log.token         = req.application.token         ? req.application.token         : '';
-    log.tokenLogin    = req.application.loginToken    ? req.application.loginToken : '';
+    log.login         = req.application.login         ? req.application.login         : '';
   } else {
     log.workspaceId   = '';
     log.workspaceName = '';
     log.token         = '';
-    log.tokenLogin    = '';
+    log.login         = '';
   }
 
   // Sorts out all of the other fields with sane defaults.

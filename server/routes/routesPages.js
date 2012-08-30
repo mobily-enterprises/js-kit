@@ -39,7 +39,7 @@ exports.ws = function(req, res){
     login: req.session.login,
     workspaceId: req.application.workspaceId,
     workspaceName: req.application.workspaceName,
-    token: req.application.token,
+    // token: req.application.token,
   });
 };
 

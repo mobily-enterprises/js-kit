@@ -58,7 +58,8 @@ app.configure('production', function(){
 // Set parameter functions for middlewares
 app.param('workspaceNamePages', middleware.workspaceNamePages);   // Used by /pages/login
 app.param('workspaceIdPages',   middleware.workspaceIdPages);     // Used by /pages/ws
-app.param('tokenApi',           middleware.tokenApi);             // Used by API calls
+app.param('tokenCall',          middleware.tokenCall);            // Used by API calls
+app.param('workspaceIdCall',    middleware.workspaceIdCall);            // Used by API calls
 
 /* 
  ****************************************************************
@@ -102,8 +103,8 @@ app.post('/user/logoutUser',     routesUser.postLogoutUser);   // NONDATA
  * DATA AJAX CALLS -- API
  ****************************************************************
 */
-
-app.post('/api/1/:tokenApi/users', routesApi.postUsersApi1);
+app.post( '/api/1/:tokenCall/users'     , routesApi.postUsersApi1 );
+app.post( '/call/:workspaceIdCall/users', routesApi.postUsersApi1 );
 
 
 // Create the actual server

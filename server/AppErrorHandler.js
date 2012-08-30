@@ -16,7 +16,7 @@ exports.AppErrorHandler = function( err, req, res, next){
     // as well as the error message
     case 'ValidationError422':
       logLevel = 3;
-      utils.sendResponse( res, { ack: 'ERROR', message:err.message, errors: err.errors, status: err.httpError } );
+      utils.sendResponse( res, { ack: 'ERROR', message: err.message, errors: err.errors, status: err.httpError } );
     break;
 
     // Common custom-made errors. They all do the same thing: return the error as err.message and
@@ -26,7 +26,7 @@ exports.AppErrorHandler = function( err, req, res, next){
     case 'NotFoundError404':
     case 'RuntimeError503':
       logLevel = 4;
-      utils.sendResponse( res, { ack: 'ERROR', message:err.message, status: err.httpError } );
+      utils.sendResponse( res, { ack: 'ERROR', message: err.message, status: err.httpError } );
     break;
 
     // Unexpected errors. These really shouldn't happen. Will return a generic
@@ -34,7 +34,7 @@ exports.AppErrorHandler = function( err, req, res, next){
     default:
       console.log(err.stack);
       logLevel = 5;
-      utils.sendResponse( res, { ack: 'ERROR', message:err.message, status: 500 } );
+      utils.sendResponse( res, { ack: 'ERROR', message: err.message, status: 500 } );
     break;
   } 
 

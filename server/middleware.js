@@ -19,6 +19,7 @@ exports.workspaceNamePages = function( req, res, next, workspaceName ){
         req.application.workspaceId = doc._id;
         req.application.workspaceName = doc.name;
         req.application.token = '';
+        req.application.login = '';
         req.application.workspace = doc; // Contains all of the settings!
 
         next();
@@ -51,6 +52,7 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
         req.application.workspaceId = doc._id;
         req.application.workspaceName = doc.name;
         req.application.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
+        req.application.login = req.session.login;
         req.application.workspace = doc; // Contains all of the settings!
 
         next();
@@ -62,7 +64,38 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
   });
 };
 
-exports.tokenApi = function( req, res, next, token ){
+
+exports.workspaceIdCall = function( req, res, next, workspaceId ){
+  var Workspace = mongoose.model('Workspace');
+  req.application = {};
+
+  // Not authorized to di anything as not logged in
+  if(! req.session.loggedIn){
+    next( new g.errors.ForbiddenError403() );
+    return;
+  }
+
+  // Attempts to set the required variables
+  Workspace.findOne({ _id: mongoose.Types.ObjectId(workspaceId), 'access.login':req.session.login }, function(err, doc){
+    if(err){
+      next( new g.errors.RuntimeError503( err ) );
+    } else {
+      if(doc){
+        req.application.workspaceId = doc._id;
+        req.application.workspaceName = doc.name;
+        req.application.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
+        req.application.login = req.session.login;
+        req.application.workspace = doc; // Contains all of the settings!
+
+        next();
+      } else {
+        next( new g.errors.ForbiddenError403() );
+      }
+    }
+  });
+};
+
+exports.tokenCall = function( req, res, next, token ){
 
   Workspace = mongoose.model('Workspace');
   User = mongoose.model('User');
@@ -81,7 +114,7 @@ exports.tokenApi = function( req, res, next, token ){
         req.application.workspaceId = doc._id;
         req.application.workspaceName = doc.name;
         req.application.token = token;
-        req.application.tokenLogin = doc.access.filter(function(entry){ return entry.token == token;  } )[0].login;
+        req.application.login = doc.access.filter(function(entry){ return entry.token == token;  } )[0].login;
         req.application.workspace = doc; // Contains all of the settings!
 
         next();

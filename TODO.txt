@@ -1,10 +1,7 @@
 
-  "THE ERRORS"
-  * SERVER: Change the login scheme completely. The client mustn't send the token for each call, but simply "session" (as an option). On
-            the server, the "session" needs to go by workspace. So, when token is "session", setting of variables will depend on
-            the session rather than the passed token. (the "login" request makes sense)
 
-  * SERVER: Make sure it won't break if ObjectId is the wrong size
+  * SERVER: Make the session scoped to the workspace, so that logging out of workspace A doesn't log a user out of workspace B
+  * SERVER: Make sure it won't break if ObjectId is the wrong size (workspaceId), check its format first
 
   "THE ROLES"
 `
@@ -165,3 +162,6 @@
   * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
             be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
   * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
+  * SERVER: Change the login scheme completely. The client mustn't send the token for each call, but simply "session" (as an option). On
+            the server, the "session" needs to go by workspace. So, when token is "session", setting of variables will depend on
+            the session rather than the passed token. (the "login" request makes sense)
