@@ -1,7 +1,7 @@
 hotplate
 ========
 
-Framework to create multi-homed SaaS with NodeJs, Express, MongoDB, Dojo
+Framework to create multi-homed SaaS with [NodeJs](http://nodejs.org), Express, MongoDB, Dojo
 
 Alright, here it is. Hotplate is a framework to create SaaS. It's still very much under heavy development. If you have a look at the TODO now, you will see what I mean.
 
