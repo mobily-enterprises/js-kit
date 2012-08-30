@@ -30,8 +30,8 @@ define([
         // 
         return this.ajaxValidate(value, {
            ajaxInvalidMessage: "Login name taken",
-           ajaxStore: stores.workspacesAnon,
-           ajaxFilterField: 'name',
+           ajaxStore: stores.usersAnon,
+           ajaxFilterField: 'login',
         });
 
       },

@@ -59,8 +59,8 @@ define([
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
 
           stores.users.put( {} ).then(
-            ds.UIMsg('ok', that.form, that.button, null ),
-            ds.UIMsg('error', that.form, that.button, null )
+            ds.UIMsg('ok', that.form, that.button, that.alertBar ),
+            ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(
             function(res){
               console.log("Returned: ");

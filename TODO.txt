@@ -1,14 +1,15 @@
 
   "THE ERRORS"
+  * SERVER: Change the login scheme completely. The client mustn't send the token for each call, but simply "session" (as an option). On
+            the server, the "session" needs to go by workspace. So, when token is "session", setting of variables will depend on
+            the session rather than the passed token. (the "login" request makes sense)
 
-  * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
-            be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
-  * SERVER: Check that things haven't bombed after latest extensive changes, and that logging still happens OK
+  * SERVER: Make sure it won't break if ObjectId is the wrong size
 
   "THE ROLES"
 `
   * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
-            is the first "real" API call. 
+            is the first "real" API/backend call. 
   * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
             *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
             to specified roles. Delete the isOwner flag in DB
@@ -18,14 +19,14 @@
 
   "THE LAST TOUCHES"
 
-  * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)
   * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
   * SERVER: Set an expiration time to the login, check that it can be "since last communication"
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
-  * C/S   : Comment each function, client and server, using Dojo's new standard (client) and node's standard (server)
+  * CLENT:  Comment each function, client and server, using Dojo's new standard (client) 
+  * CLENT:  Comment each function, client and server, using node's standard
   * C/S   : Comment CSS nicely
 
 
@@ -160,3 +161,7 @@
             logging too -- check that logging is happening properly (sent email to stack overflow)
   * SERVER: Uniform the way things are set, into req.application, regardless of what middleware is called
             
+  * SERVER: Check logging, and Check that things haven't bombed after latest extensive changes, and that logging still happens OK.
+  * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
+            be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
+  * CLIENT: Fix password so that it's not "mustChange" in login form (user might decide to change username and not password)

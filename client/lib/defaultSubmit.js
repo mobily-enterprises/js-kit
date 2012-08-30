@@ -16,6 +16,7 @@ define([
   "app/lib/globalWidgets",
   "app/lib/Logger",
   "app/lib/stores",
+  "app/lib/utils",
 
   'app/widgets/ValidationPassword',
   "app/widgets/AlertBar",
@@ -39,6 +40,7 @@ define([
   , gw
   , Logger
   , stores
+  , utils
 
   , ValidationPassword
   , AlertBar
@@ -164,11 +166,9 @@ define([
           button ? button.cancel() : null;
           Logger("The form was accepted by the server");
 
-          // Ready for the next chained call
-          return res;
+          // Ready for the next chained call, with "res" cleaned up
+          return utils.goodify(res);
         }
-
-        
       }
     }
 
@@ -179,18 +179,20 @@ define([
       // AJAX JsonRest failure: set error messages etc. and rethrow
       return function(err){
 
-        var response;
+        var res;
+
         try { 
-          response = json.fromJson(err.responseText)  
+          res = json.fromJson(err.responseText)  
         } catch(e){
-          response = null;
+          res = { };
         }
+        res = utils.goodify(res);
+        // res.message = res.message || err.message;
 
         switch(err.status){
 
           // Field validation error
           case 422:
-            res = json.fromJson(err.responseText);
 
             // ***********************************************
             // WATCH OUT: RESPONSE FROM THE SERVER WAS "ERROR"
@@ -200,17 +202,15 @@ define([
             // didn't like values, but didn't enforce a change before re-submitting
             var artificialErrorWidgets = [];
 
-            res.forEach( function(error){
+            if( res.message && alertBar ){
+              alertBar.set('message','Error: ' + res.message );
+              alertBar.show(); // Persistent
+            }
+
+            res.errors.forEach( function(error){
     
+              // This cannot really happen anymore, FIXME: DELETEME
               if( error.field == ''){
-
-                // Error without field: show it in the form's alertBar (if AlertBar present)
-                // TODO: Maybe if the alertbar is not defined display in main bar
-                if( alertBar) {
-                  alertBar.set('message','Error: ' + error.message);
-                  alertBar.show(); // Persistent
-                }
-
               } else {
 
                 // Get the widget by its name. 
@@ -251,8 +251,8 @@ define([
 
                 } else {
                   Logger("Widget not found: " + error.field);
-                  alertBar.show(); // Persistent
                 }
+
               }
 
             });                      
@@ -273,16 +273,11 @@ define([
             // Cancel the submit button
             button ? button.cancel() : null;
 
-            Logger("Response came back with validation errors: " + json.toJson(res) );
+            Logger("Response came back with validation errors: " + json.toJson(res.errors) );
             throw(err);
           break;   
 
           case 403:
-            // Get the response text as Json if present (otherwise, just use the error's own message)
-            res = err.responseText ?
-              json.fromJson(err.responseText) :
-              { message: err.message };
-
 
             // Cancel the submit button
             button ? button.cancel() : null;
@@ -303,11 +298,6 @@ define([
           break;
 
           default:
-
-            // Get the response text as Json if present (otherwise, just use the error's own message)
-            res = err.responseText ? 
-              json.fromJson(err.responseText) : 
-              { message: err.message };
           
             // Cancel the submit button
             button ? button.cancel() : null;

@@ -23,6 +23,7 @@ define([
   "app/lib/globals",
   "app/lib/stores",
   "app/lib/Logger",
+  "app/lib/utils",
 
   "app/widgets/ValidationWorkspace",
   "app/widgets/ValidationUsername",
@@ -59,6 +60,7 @@ define([
      , g
      , stores
      , Logger
+     , utils
 
      , ValidationWorkspace
      , ValidationUsername
@@ -92,6 +94,7 @@ define([
           ds.UIMsg('error', that.formAsUser, that.buttonAsUser, null, true )
         ).then(
           function(res){
+
             that.container.selectChild( that.registerAsAnon);
           }
         );
@@ -107,7 +110,7 @@ define([
             
         // Setting password2 so that it must match password1. I cannot do this within the
         // template as I cannot think of a way to write it in the definition
-        this.password1.mustMatch = this.password0;
+        //this.password1.mustMatch = this.password0;
 
         this.loginForm.onLogin = function(res){
           that.loginForm.login.focus()
@@ -135,7 +138,7 @@ define([
 
               // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              window.location = '/pages/ws/'+res.workspaceId;
+              window.location = '/pages/ws/' + res.data.workspaceId;
 
             }
           ); // stores.workspacesAnon.put(data).then
@@ -156,11 +159,11 @@ define([
             ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, that.alertBarAsUser , true ),
             ds.UIMsg('error', that.formAsUser, that.buttonAsUser, that.alertBarAsUser, true )
           ).then(
-             function(res){
+            function(res){
 
               // Log the event, go to the workspace straight away!
               Logger("Jsonrest put(data) returned OK: " + json.toJson(res) );
-              window.location = '/pages/ws/'+res.workspaceId;
+              window.location = '/pages/ws/'+res.data.workspaceId;
 
             },
              function(err){

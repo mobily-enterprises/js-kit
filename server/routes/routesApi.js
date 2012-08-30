@@ -7,11 +7,10 @@ eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validat
 
 
 
-
 exports.postUsersApi1 = function(req, res, next){
   
   var Workspace = mongoose.model('Workspace');
-  next( new g.errors.ForbiddenError403() );
-   
-  // res.json( [{name:'ppp'}] );
+  next( new g.errors.ValidationError422('Message', [{ field: 'name', message: 'ppp' }]) );
+  
+  // utils.sendResponse( res, { data: { name: 'ppp' } } );
 }

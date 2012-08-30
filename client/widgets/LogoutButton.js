@@ -12,6 +12,7 @@ define([
   "app/lib/globals",
   "app/lib/stores",
   "app/lib/Logger",
+  "app/lib/utils",
 
   "app/widgets/BusyButton",
 
@@ -29,6 +30,7 @@ define([
      , g
      , stores
      , Logger
+     , utils
 
      , BusyButton
  ){

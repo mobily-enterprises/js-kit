@@ -20,6 +20,7 @@ define([
   "app/lib/defaultSubmit",
   "app/lib/stores",
   "app/lib/Logger",
+  "app/lib/utils",
 
   "app/widgets/ValidationPassword",
   "app/widgets/ValidationEmail",
@@ -50,6 +51,7 @@ define([
      , ds
      , stores
      , Logger
+     , utils
 
      , ValidationPassword
      , ValidationEmail

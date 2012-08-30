@@ -42,9 +42,9 @@ exports.getWorkspacesAnon = function(req, res, next){
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
         if(doc){
-          res.json( [{name:name}] );
+          utils.sendResponse( res, { data: [ { name: name } ]  } ); 
         } else {
-          res.json( [] );
+          utils.sendResponse( res, { data: []  } ); 
        }
       }
     });
@@ -62,6 +62,7 @@ exports.getWorkspacesAnon = function(req, res, next){
 exports.getUsersAnon = function(req, res, next){
 
   var login = req.query.login;
+  console.log("Login is: " + login);
 
   // Looks for a workspace. If it's there, answers without errors. If not,
   // answers with a very short error
@@ -76,9 +77,9 @@ exports.getUsersAnon = function(req, res, next){
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
         if(doc){
-          res.json( [{user:user}] );
+          utils.sendResponse( res, { data: [ { login:login } ]  } ); 
         } else {
-          res.json( [] );
+          utils.sendResponse( res, { data: []  } ); 
        }
       }
     });
@@ -108,7 +109,7 @@ exports.postWorkspacesAnon = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    next( new g.errors.ValidationError422('Validation error in some fields', errors));
     return;
   }
 
@@ -201,7 +202,7 @@ exports.postWorkspacesAnon = function(req, res, next){
                         req.session.loggedIn = true;
                         req.session.login = req.body.login;
 
-                        res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+                        utils.sendResponse( res, { data: { workspaceId: w._id } } );
                       }
                     }) // w.save()
                   } 
@@ -268,7 +269,7 @@ exports.postRecoverAnon = function(req, res, next){
         console.log("Sending email for " + doc.email);
         // TODO: SEND EMAIL USING NEW EMAIL INFRASTRUCTURE
       }
-      res.json( { response: 'OK' } , 200);
+      utils.sendResponse( res, { } );
     }
   }); // User.findOne()
 
@@ -328,7 +329,7 @@ exports.postLoginAnon = function(req, res, next){
     } else {
       // Password is incorrect: return errors
       if(! docUser || docUser.password != req.body.password){
-          errors.push({ field:'password', message: 'Password incorrect', mustChange: true } );
+          errors.push({ field:'password', message: 'Password incorrect', mustChange: false } );
           errors.push({ field:'', message: 'Login failed' });
           next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
       } else {
@@ -350,7 +351,7 @@ exports.postLoginAnon = function(req, res, next){
                 if(docWorkspace){
                   forWorkspaceId = docWorkspace._id;
                 }
-                res.json( { response: 'OK', forWorkspaceId:forWorkspaceId } , 200);
+                utils.sendResponse( res, { data: { forWorkspaceId: forWorkspaceId } } );
               }
             });
           } // if( req.body.workspaceName != ''){
@@ -360,7 +361,7 @@ exports.postLoginAnon = function(req, res, next){
           else {
 
             // Finally send the OK response, which might or might not have forWorkspace set
-            res.json( { response: 'OK', forWorkspaceId:'' } , 200);
+            utils.sendResponse( res, { data: { forWorkspaceId: '' } } );
 
           } // ELSE ( if( req.body.workspaceName != ''){ )
 

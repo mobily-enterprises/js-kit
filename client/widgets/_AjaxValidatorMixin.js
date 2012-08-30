@@ -2,10 +2,15 @@ define([
   'dojo/_base/declare',
   'dojo/_base/lang',
 
+  "app/lib/utils",
+
   'app/lib/globals', // TODO: FIND OUT WHY ADDING THIS BREAKS _EVERYTHING_
   ], function(
     declare
   , lang
+
+  , utils
+
   , g
 
   ){
@@ -26,6 +31,8 @@ define([
 
       // Overloads the validator, adding extra stuff
       ajaxValidate: function(value, options){
+
+        var goodRes;
 
         // Set some defaults
         options.ajaxInvalidMessage = options.ajaxInvalidMessage || "Value not allowed";
@@ -48,9 +55,15 @@ define([
         if(! this.ajaxSaidYes[value] ){
           var filterObject = {};
           filterObject[options.ajaxFilterField] = value;
+
+          // Actually runs the query
           options.ajaxStore.query( filterObject ).then(
             lang.hitch(this, function(res){
-              if(res && res.length ){
+
+              // Makes sure the result is good
+              goodRes = utils.goodify(res);
+
+              if( goodRes.data.length ){
                 this.ajaxSaidNo[value] = true;
                 //console.log("Added to Ajaxfailed: " + value);
                 this.validate();

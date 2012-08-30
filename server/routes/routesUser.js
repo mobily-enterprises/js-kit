@@ -71,7 +71,7 @@ exports.postWorkspacesUser = function(req, res, next){
               } else{
 
                 // Register the workspace, and return the worksapce Id in as an option (to allow redirect)
-                res.json( { response: 'OK', workspaceId: w._id } , 200); // OOOOKKKKKKKKKK!!!!!!!!!!
+                utils.sendResponse( res, { data: { workspaceId: w._id } } ); 
 
               }
             }); // w.save
@@ -102,7 +102,7 @@ exports.postLogoutUser = function(req, res, next){
     req.session.login = null;
 
     // Send an OK response. It's up to the client to redirect/etc.
-    res.json( { response: 'OK' } , 200);
+    utils.sendResponse( res, { } );
 
   //
   } , 500); // Artificial timeout

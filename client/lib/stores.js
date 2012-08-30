@@ -26,6 +26,7 @@ define([
 
     // Data calls
     'workspacesAnon',   //
+    'usersAnon',   //
     'workspacesUser',   //
     'workspaceSettings',//
     'users',           //
