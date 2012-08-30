@@ -31,7 +31,7 @@ exports.errors.NotFoundError404 = NotFoundError404;
 function ValidationError422( message , errors ){
   this.httpError = 422;
   this.message = message  || "Parameters validation error";
-  this.errors = errors;
+  this.errors = errors || [];
   this.name = this.constructor.name;
 }
 util.inherits(ValidationError422, Error);

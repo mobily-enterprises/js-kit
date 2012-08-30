@@ -13,7 +13,7 @@ exports.makeToken = function( callback ){
     var token = hat();
     Workspace.findOne( { 'access.token':token } , function(err, doc){
 
-      // There is an error: throw it straight away
+      // There is an error: call the callback returning an error
       if(err){
         callback(err, null);
       } else {
@@ -69,3 +69,7 @@ exports.sendResponse = function(res, params){
 
 
 
+exports.ObjectIdCheck = function(s){
+  return new RegExp("^[0-9a-fA-F]{24}$").test(s);
+}
+  

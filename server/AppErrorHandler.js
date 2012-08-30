@@ -6,8 +6,6 @@ utils = require('./utils.js');
 
 exports.AppErrorHandler = function( err, req, res, next){
 
-  // Set the basic variables for logging. FIXME: to be completed. This info is
-  // not alwaysavailable
   var logLevel;
 
   switch(err.name){

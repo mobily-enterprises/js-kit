@@ -1,8 +1,9 @@
 
 var express = require('express'),
     mongoose = require('mongoose'),
-    g = require('./globals.js'),
-    ObjectId = mongoose.Types.ObjectId;
+    ObjectId = mongoose.Types.ObjectId,
+    utils = require('./utils.js');
+    g = require('./globals.js');
 
 exports.workspaceNamePages = function( req, res, next, workspaceName ){
 
@@ -11,21 +12,20 @@ exports.workspaceNamePages = function( req, res, next, workspaceName ){
 
   Workspace.findOne({ name: workspaceName}, function(err, doc){
     if(err){
-      req.application.dbDown = true;
-      next();
+       res.status = 500;
+       res.render('error',  { layout: false } );
     } else {
       if(doc){
-
         req.application.workspaceId = doc._id;
         req.application.workspaceName = doc.name;
         req.application.token = '';
-        req.application.login = '';
+        req.application.login = req.session.login;
         req.application.workspace = doc; // Contains all of the settings!
 
         next();
       } else {
-        req.application.noWorkspace = true;
-        next();
+        res.status = 404;
+        res.render('notFound',  { layout: false } );
       }
     }
   });
@@ -37,18 +37,20 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
   var Workspace = mongoose.model('Workspace');
   req.application = {};
 
-  if(! req.session.loggedIn){
-    next();
+  // FIXME http://stackoverflow.com/questions/12192463/error-handler-when-throwing-in-express
+  // Check that the workspaceId is in a valid format
+  if(  ! utils.ObjectIdCheck(workspaceId)){
+    res.status = 404;
+    res.render('notFound',  { layout: false } );
     return;
   }
 
   Workspace.findOne({ _id: mongoose.Types.ObjectId(workspaceId), 'access.login':req.session.login }, function(err, doc){
     if(err){
-      req.application.dbDown = true;
-      next();
+       res.status = 500;
+       res.render('error',  { layout: false } );
     } else {
       if(doc){
-
         req.application.workspaceId = doc._id;
         req.application.workspaceName = doc.name;
         req.application.token = doc.access.filter(function(entry){ return entry.login == req.session.login;  } )[0].token;
@@ -57,12 +59,12 @@ exports.workspaceIdPages = function( req, res, next, workspaceId ){
 
         next();
       } else {
-        req.application.noWorkspace = true;
-        next();
+        res.redirect('/pages/login') ;
       }
     }
   });
 };
+
 
 
 exports.workspaceIdCall = function( req, res, next, workspaceId ){
@@ -73,6 +75,12 @@ exports.workspaceIdCall = function( req, res, next, workspaceId ){
   if(! req.session.loggedIn){
     next( new g.errors.ForbiddenError403() );
     return;
+  }
+  
+  // Check that the workspaceId is in a valid format
+  if( ! utils.ObjectIdCheck(workspaceId) ) {
+      next( new g.errors.ValidationError422( "Workspace id not valid" ) );
+      return;
   }
 
   // Attempts to set the required variables

@@ -7,7 +7,7 @@
     "express": "3.x",
     "mongodb": "*",
     "mongoose": "*",
-    "jade": "*"
-    "node-uuid": "*"
+    "jade": "*",
+    "hat": "*"
   }
 }

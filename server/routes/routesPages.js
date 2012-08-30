@@ -2,7 +2,8 @@
 var util = require('util'),
 fs = require('fs'),
 g = require('../globals.js'),
-mongoose = require('mongoose');
+mongoose = require('mongoose'),
+utils = require('../utils.js');
 eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
 
 // *****************************************
@@ -12,20 +13,6 @@ eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validat
 
 
 exports.ws = function(req, res){
-
-  // The DB is down: return a nice "we are down" page
-  if(req.application.dbDown){
-    res.status = 500;
-    res.render('error',  { layout:false } );
-    return;
-  }
-
-  // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.application.noWorkspace){
-    res.status = 404;
-    res.render('notFound',  { layout:false } );
-    return;
-  }
 
   // User is not logged in (?!?): redirect to the login page
   if(! req.session.loggedIn ){
@@ -39,7 +26,6 @@ exports.ws = function(req, res){
     login: req.session.login,
     workspaceId: req.application.workspaceId,
     workspaceName: req.application.workspaceName,
-    // token: req.application.token,
   });
 };
 
@@ -48,55 +34,33 @@ exports.login = function(req, res){
 
   var Workspace = mongoose.model("Workspace");
 
-  // The middleware workspaceNamePages in not guaranteed to have been called,
-  // since the login page might get called with or without it. So, just in case,
-  // set the req.application variable
-  req.application = req.application || {};
-
-  // The DB is down: return a nice "we are down" page
-  if(req.application.dbDown){
-    res.status = 500;
-    res.render('error',  { layout:false } );
-    return;
-  }
-
-  // The workspace doesn't exist: return the "Workspace not found" page
-  if(req.application.noWorkspace){
-    res.status = 404;
-    res.render('notFound',  { layout:false } );
-    return;
-  }
-  
   // User is not logged in: show the login page.
   if(! req.session.loggedIn ){
-    res.render('login',  { layout:false } );
-
-  // User IS logged in: do the right redirect
-  } else {
-      
-    // If they are trying to access a specific workspace, and have
-    // access to it, then simply redirect there
-    if( req.application.workspaceId ){
-
-      Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
-        if(err ){
-          next(new g.errors.RuntimeError503( err ) );
-        } else {
-          if(doc){
-            res.redirect('/pages/ws/' + req.workspaceId);
-          } else {
-            res.redirect('/pages/pick');
-          }
-        }
-
-      }); // Workspace.findOne()
-
-    // No speicfic worskspace: just go and pick
-    } else {
-      res.redirect('/pages/pick');
-    }
+    res.render('login',  { layout: false } );
+    return;
   }
 
+  // If they are trying to access a specific workspace, and have
+  // access to it, then simply redirect there
+  if( req.application && req.application.workspaceId ){
+
+    Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
+      if(err ){
+        res.render('error',  { layout: false } );
+      } else {
+        if(doc){
+          res.redirect('/pages/ws/' + req.workspaceId);
+        } else {
+          res.redirect('/pages/pick');
+        }
+      }
+
+    }); // Workspace.findOne()
+
+  // No speicfic worskspace: just go and pick
+  } else {
+    res.redirect('/pages/pick');
+  }
 
 };
 

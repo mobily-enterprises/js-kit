@@ -1,10 +1,5 @@
-
-
-  * SERVER: Make the session scoped to the workspace, so that logging out of workspace A doesn't log a user out of workspace B
-  * SERVER: Make sure it won't break if ObjectId is the wrong size (workspaceId), check its format first
-
   "THE ROLES"
-`
+
   * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
             is the first "real" API/backend call. 
   * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
@@ -26,6 +21,7 @@
   * CLENT:  Comment each function, client and server, using node's standard
   * C/S   : Comment CSS nicely
 
+  " NOW ADMIRE IT -- THEN RELEASE IT"
 
 +++ MESSAGES AND INVITES
   * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
@@ -165,3 +161,6 @@
   * SERVER: Change the login scheme completely. The client mustn't send the token for each call, but simply "session" (as an option). On
             the server, the "session" needs to go by workspace. So, when token is "session", setting of variables will depend on
             the session rather than the passed token. (the "login" request makes sense)
+  * SERVER: Make a middleware that requires the person to be logged in  (silly idea)
+  * SERVER: Understand how the error management works, discovered that throw(err) is the very same as next(err) for the catch{} there
+  * SERVER: Change page middleware so that it redirects automatically, without getting the actual routes methods to do it
