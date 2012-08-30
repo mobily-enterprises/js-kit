@@ -7,9 +7,6 @@
             *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
             to specified roles. Delete the isOwner flag in DB
 
-  * SERVER: Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
-
-
   "THE LAST TOUCHES"
 
   * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
@@ -27,6 +24,7 @@
 +++ MESSAGES AND INVITES
   * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
             status
+  * CLIENT: Write configuration for messenging infrastructure. Each subsystem can be able to send, receive or both. 
   * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
             link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
             which in turns should output the list of workspaces (since the user is already logged in)
@@ -167,3 +165,4 @@
   * SERVER: Change page middleware so that it redirects automatically, without getting the actual routes methods to do it
   * SERVER: Write a middleware for the ID
   * SERVER: Implement logging in case of server problems when delivering pages (add logging calls manually where needed?)
+  * SERVER: [NOT DONE] Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
