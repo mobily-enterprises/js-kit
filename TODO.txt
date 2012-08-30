@@ -1,3 +1,4 @@
+
   "THE ROLES"
 
   * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
@@ -164,3 +165,5 @@
   * SERVER: Make a middleware that requires the person to be logged in  (silly idea)
   * SERVER: Understand how the error management works, discovered that throw(err) is the very same as next(err) for the catch{} there
   * SERVER: Change page middleware so that it redirects automatically, without getting the actual routes methods to do it
+  * SERVER: Write a middleware for the ID
+  * SERVER: Implement logging in case of server problems when delivering pages (add logging calls manually where needed?)

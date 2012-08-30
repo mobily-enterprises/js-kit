@@ -103,6 +103,16 @@ exports.workspaceIdCall = function( req, res, next, workspaceId ){
   });
 };
 
+exports.idCall = function( req, res, next, id ){
+
+  // Check that the workspaceId is in a valid format
+  if( ! utils.ObjectIdCheck(id) ) {
+      next( new g.errors.ValidationError422( "ID not valid:" + id) );
+      return;
+  }
+  next();
+}
+
 exports.tokenCall = function( req, res, next, token ){
 
   Workspace = mongoose.model('Workspace');

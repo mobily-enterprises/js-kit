@@ -56,10 +56,12 @@ app.configure('production', function(){
 
 
 // Set parameter functions for middlewares
-app.param('workspaceNamePages', middleware.workspaceNamePages);   // Used by /pages/login
-app.param('workspaceIdPages',   middleware.workspaceIdPages);     // Used by /pages/ws
+app.param('workspaceNamePages', middleware.workspaceNamePages);   // Used by /pages/login/WORKSPACENAME
+app.param('workspaceIdPages',   middleware.workspaceIdPages);     // Used by /pages/ws/WORKSPACEID
+
 app.param('tokenCall',          middleware.tokenCall);            // Used by API calls
-app.param('workspaceIdCall',    middleware.workspaceIdCall);            // Used by API calls
+app.param('workspaceIdCall',    middleware.workspaceIdCall);      // Used by API calls
+app.param('idCall',             middleware.idCall);               // Used by API calls (generic ID)
 
 /* 
  ****************************************************************
@@ -100,10 +102,10 @@ app.post('/user/logoutUser',     routesUser.postLogoutUser);   // NONDATA
 
 /* 
  ****************************************************************
- * DATA AJAX CALLS -- API
+ * DATA AJAX CALLS -- API CALLS
  ****************************************************************
 */
-app.post( '/api/1/:tokenCall/users'     , routesApi.postUsersApi1 );
+app.post(      '/api/1/:tokenCall/users', routesApi.postUsersApi1 );
 app.post( '/call/:workspaceIdCall/users', routesApi.postUsersApi1 );
 
 

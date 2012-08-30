@@ -45,7 +45,8 @@ exports.login = function(req, res){
   if( req.application && req.application.workspaceId ){
 
     Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
-      if(err ){
+      if( err ){
+        g.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
         res.render('error',  { layout: false } );
       } else {
         if(doc){
@@ -78,7 +79,8 @@ exports.pick = function(req, res){
   var Workspace = mongoose.model('Workspace');
   Workspace.find( { 'access.login': req.session.login }, function(err, docs){
     if( err ){
-      next(new g.errors.RuntimeError503( err ) );
+      g.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
+      res.render('error',  { layout: false } );
     } else {
       docs.forEach( function(workspace){
         list.push( { name: workspace.name, description: workspace.description, id: workspace._id } );
