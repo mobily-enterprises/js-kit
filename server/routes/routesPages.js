@@ -6,10 +6,10 @@ mongoose = require('mongoose'),
 utils = require('../utils.js');
 eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
 
-// *****************************************
-// The four^H^H^H^Hfive pages in the whole
+// ****************************************************
+// The four^H^H^H^Hfive^H^H^H^Hfour pages in the whole
 // application
-// *****************************************
+// ****************************************************
 
 
 exports.ws = function(req, res){
@@ -96,14 +96,9 @@ exports.pick = function(req, res){
   });
 }
 
-
-exports.recover = function(req, res){
-  res.render('recover',  { layout:false, login: req.session.login } );
-};
-
-// If you are already logged in, you cannot register a workspace from here
-// and you are redirected to the login page (which in turn will show the
-// list of workspaces)
+// The register page. The javasript will check if the user is logged in
+// -- if they are, they will be able to register without enterting all
+// details (or they can chose to logout)
 exports.register = function(req, res){
   res.render('register',  { layout:false, login: req.session.login } );
 };

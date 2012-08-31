@@ -70,7 +70,6 @@ app.param('idCall',             middleware.idCall);               // Used by API
 */
 app.get('/pages/ws',                        function(req, res, next){ res.redirect('/pages/login'); } );
 app.get('/pages/ws/:workspaceIdPages',      routesPages.ws);
-app.get('/pages/recover',                   routesPages.recover);
 app.get('/pages/login',                     routesPages.login);
 app.get('/pages/login/:workspaceNamePages', routesPages.login);
 app.get('/pages/register',                  routesPages.register);

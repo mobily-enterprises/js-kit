@@ -1,7 +1,6 @@
 
   "THE ROLES"
 
-  * Chiara
   * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
             is the first "real" API/backend call. 
   * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
