@@ -20,7 +20,7 @@ var express = require('express'),
 var app = express();
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/bookings5');
+mongoose.connect('mongodb://localhost/hotplate');
 
 // Configuration
 

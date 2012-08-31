@@ -2,9 +2,9 @@
 var utils = require('../utils.js'),
 fs = require('fs'),
 g = require('../globals.js'),
-mongoose = require('mongoose');
+mongoose = require('mongoose'),
+e = require('../errors.js');
 eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
-
 
 
 function parametersAreThere(obj, attributes, errors){
@@ -33,11 +33,11 @@ exports.getWorkspacesAnon = function(req, res, next){
   // answers with a very short error
   Workspace = mongoose.model('Workspace');
   if( ! name){
-    next(new g.errors.ValidationError422("'name' filter not passed", { name: 'parameter required'}) );
+    next(new e.ValidationError422("'name' filter not passed", { name: 'parameter required'}) );
   } else {
     Workspace.findOne({ name: name }, function(err, doc){
       if(err ){
-        next(new g.errors.RuntimeError503( err ) );
+        next(new e.RuntimeError503( err ) );
       } else {
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
@@ -68,11 +68,11 @@ exports.getUsersAnon = function(req, res, next){
   // answers with a very short error
   User = mongoose.model('User');
   if( ! login){
-    next(new g.errors.ValidationError422("'login' filter not passed", { name: 'parameter required'}) );
+    next(new e.ValidationError422("'login' filter not passed", { name: 'parameter required'}) );
   } else {
     User.findOne({ login: login }, function(err, doc){
       if(err ){
-        next(new g.errors.RuntimeError503( err ) );
+        next(new e.RuntimeError503( err ) );
       } else {
         // Note: returns a simplified version of the record as
         // this is asked from an anonymous source
@@ -109,7 +109,7 @@ exports.postWorkspacesAnon = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Validation error in some fields', errors));
+    next( new e.ValidationError422('Validation error in some fields', errors));
     return;
   }
 
@@ -140,7 +140,7 @@ exports.postWorkspacesAnon = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    next( new e.ValidationError422('Soft validation of parameters failed', errors));
     return;
   }
     
@@ -151,7 +151,7 @@ exports.postWorkspacesAnon = function(req, res, next){
   User.findOne( { login: req.body.login}, function(err, doc){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.RuntimeError503( err ) );
+      next(new e.RuntimeError503( err ) );
     } else {
       // If the user exists, add it to the error vector BUT keep going
       if(doc){
@@ -159,7 +159,7 @@ exports.postWorkspacesAnon = function(req, res, next){
       }
       Workspace.findOne({ name: req.body.workspace }, function(err, doc){
         if(err ){
-          next(new g.errors.RuntimeError503( err ) );
+          next(new e.RuntimeError503( err ) );
         } else {
           if(doc){
             errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
@@ -167,7 +167,7 @@ exports.postWorkspacesAnon = function(req, res, next){
 
           // Check if there are any errors -- if so, return them and that's it
           if( errors.length ){
-            next( new g.errors.ValidationError422('Db-oriented validation of parameters failed', errors));
+            next( new e.ValidationError422('Db-oriented validation of parameters failed', errors));
           } else { 
 
             //
@@ -183,7 +183,7 @@ exports.postWorkspacesAnon = function(req, res, next){
  
             u.save( function(err) {
               if(err){
-                next( new g.errors.RuntimeError503( err ) );
+                next( new e.RuntimeError503( err ) );
               } else {
                 var w = new Workspace();
                 w.name = req.body.workspace;
@@ -191,16 +191,17 @@ exports.postWorkspacesAnon = function(req, res, next){
 
                 utils.makeToken( function(err, token) {
                   if(err){
-                    next(new g.errors.RuntimeError503( err ) );
+                    next(new e.RuntimeError503( err ) );
                   } else {
-                    w.access = {  login: u.login, token:token, isOwner: true };
+                    w.access = {  userId: u._id, token:token, isOwner: true };
                     w.save( function(err){
                       if(err ){
-                        next( new g.errors.RuntimeError503( err ) );
+                        next( new e.RuntimeError503( err ) );
                       } else{
                         // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
                         req.session.loggedIn = true;
                         req.session.login = req.body.login;
+                        req.session.userId = u._id;
 
                         utils.sendResponse( res, { data: { workspaceId: w._id } } );
                       }
@@ -251,7 +252,7 @@ exports.postRecoverAnon = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    next( new e.ValidationError422('Soft validation of parameters failed', errors));
     return;
   }
     
@@ -262,7 +263,7 @@ exports.postRecoverAnon = function(req, res, next){
   User.findOne( { login: req.body.email }, function(err, doc){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.RuntimeError503( err ) );
+      next(new e.RuntimeError503( err ) );
     } else {
       // If the user exists, add it to the error vector BUT keep going
       if(doc){
@@ -285,9 +286,9 @@ exports.postLoginAnon = function(req, res, next){
   setTimeout(function(){
   // *****
 
-  var errors = [];
-  var User = mongoose.model("User");
-  var Workspace = mongoose.model("Workspace");
+  var errors = [],
+      User = mongoose.model("User"),
+      Workspace = mongoose.model("Workspace");
 
 
   // **************************************************************
@@ -311,7 +312,7 @@ exports.postLoginAnon = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    next( new e.ValidationError422('Soft validation of parameters failed', errors));
     return;
   }
     
@@ -325,13 +326,13 @@ exports.postLoginAnon = function(req, res, next){
   User.findOne( { login: req.body.login}, function(err, docUser){
     // Log database error if it's there
     if(err ){
-      next(new g.errors.RuntimeError503( err ) );
+      next(new e.RuntimeError503( err ) );
     } else {
       // Password is incorrect: return errors
       if(! docUser || docUser.password != req.body.password){
           errors.push({ field:'password', message: 'Password incorrect', mustChange: false } );
           errors.push({ field:'', message: 'Login failed' });
-          next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+          next( new e.ValidationError422('Soft validation of parameters failed', errors));
       } else {
         if( docUser.password == req.body.password ) {
 
@@ -339,21 +340,31 @@ exports.postLoginAnon = function(req, res, next){
           // Login and password correct: user is logged in, regardless of what workspace they were requesting access for.
           req.session.loggedIn = true;
           req.session.login = req.body.login;
+          req.session.userId = docUser._id;
 
           // The client requested a login for a specific workspace name: attempt to set forWorkspaceId (if they have
           // access to that specific workspace)
           if( req.body.workspaceName != ''){
 
-            Workspace.findOne( { 'name': req.body.workspaceName, 'access.login' : req.body.login }, function(err, docWorkspace){
-              if(err ){
-                next(new g.errors.RuntimeError503( err ) );
+            User.findOne( { login: req.body.login } , function( err, docUser){
+              if(err){
+                 next(new e.RuntimeError503( err ) );
               } else {
-                if(docWorkspace){
-                  forWorkspaceId = docWorkspace._id;
-                }
-                utils.sendResponse( res, { data: { forWorkspaceId: forWorkspaceId } } );
+                
+
+                Workspace.findOne( { 'name': req.body.workspaceName, 'access.userId' : docUser._id }, function(err, docWorkspace){
+                  if(err ){
+                    next(new e.RuntimeError503( err ) );
+                  } else {
+                    if(docWorkspace){
+                      forWorkspaceId = docWorkspace._id;
+                    }
+                    utils.sendResponse( res, { data: { forWorkspaceId: forWorkspaceId } } );
+                  }
+                }); // Workspace.findOne(
               }
-            });
+            }); //  User.findOne( 
+
           } // if( req.body.workspaceName != ''){
 
 

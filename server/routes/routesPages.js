@@ -44,9 +44,9 @@ exports.login = function(req, res){
   // access to it, then simply redirect there
   if( req.application && req.application.workspaceId ){
 
-    Workspace.findOne( { '_id': req.workspaceId, 'access.login' : req.session.login }, function(err, doc){
+    Workspace.findOne( { '_id': req.workspaceId, 'access.userId' : req.session.userId }, function(err, doc){
       if( err ){
-        g.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
+        utils.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
         res.render('error',  { layout: false } );
       } else {
         if(doc){
@@ -77,9 +77,9 @@ exports.pick = function(req, res){
   // Make up a list of workspaces user has access to, and pass it to the jade template
   var list = [];
   var Workspace = mongoose.model('Workspace');
-  Workspace.find( { 'access.login': req.session.login }, function(err, docs){
+  Workspace.find( { 'access.userId': req.session.userId }, function(err, docs){
     if( err ){
-      g.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
+      utils.Logger({ logLevel: 4, errorName: err.name, message: err.message, req: req });
       res.render('error',  { layout: false } );
     } else {
       docs.forEach( function(workspace){

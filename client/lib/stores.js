@@ -45,7 +45,7 @@ define([
 
       // Set the path depending on the store's name, to keep URL namespace clean
 			// path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/api/1/' + tokenValue + '/') ;
-      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : ('/call/' + workspaceIdValue + '/') ) ;
+      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : ('/call/' + workspaceIdValue + 'e/') ) ;
 
       console.log("Creating store " + path + i + '/');
 

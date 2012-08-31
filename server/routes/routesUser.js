@@ -2,9 +2,10 @@
 var utils = require('../utils.js'),
 fs = require('fs'),
 g = require('../globals.js'),
-mongoose = require('mongoose');
-eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
+mongoose = require('mongoose'),
+e = require('../errors.js');
 
+eval(fs.readFileSync('../client/validators.js').toString()); // Creates "Validators
 
 
 function parametersAreThere(obj, attributes, errors){
@@ -14,7 +15,6 @@ function parametersAreThere(obj, attributes, errors){
     }
   }); 
 }
-
 
 
 exports.postWorkspacesUser = function(req, res, next){
@@ -31,7 +31,7 @@ exports.postWorkspacesUser = function(req, res, next){
   // Chuck user out if he's not logged in.
   // TODO: Move this into a middleware
   if(! req.session.loggedIn ){
-    next( new g.errors.ForbiddenError403('Not logged in'));
+    next( new e.ForbiddenError403('Not logged in'));
     return; 
   }
 
@@ -40,7 +40,7 @@ exports.postWorkspacesUser = function(req, res, next){
 
   // There were errors: end of story, don't even bother the database
   if(errors.length){
-    next( new g.errors.ValidationError422('Soft validation of parameters failed', errors));
+    next( new e.ValidationError422('Soft validation of parameters failed', errors));
     return;
   }
 
@@ -48,11 +48,11 @@ exports.postWorkspacesUser = function(req, res, next){
   // Step 1: Check that the workspace is not already taken
   Workspace.findOne({ name:req.body.workspace }, function(err, doc){
     if(err){
-      next(new g.errors.RuntimeError503( err ) );
+      next(new e.RuntimeError503( err ) );
     } else {
       if(doc){
         errors.push( {field: "workspace", message: "Workspace taken, sorry!", mustChange: true} );
-        next( new g.errors.ValidationError422('Db-oriented validation of parameters failed', errors));
+        next( new e.ValidationError422('Db-oriented validation of parameters failed', errors));
       } else {
 
         // Assign values
@@ -61,12 +61,12 @@ exports.postWorkspacesUser = function(req, res, next){
         w.activeFlag = true;
         utils.makeToken( function(err, token) {
           if(err){
-             next(new g.errors.RuntimeError503( err ) );
+             next(new e.RuntimeError503( err ) );
           } else {
-            w.access = {  login: req.session.login, token:token, isOwner: true }; 
+            w.access = {  userId: req.session.userId, token:token, isOwner: true }; 
             w.save( function(err){
               if(err){
-                 next(new g.errors.RuntimeError503( err ) );
+                 next(new e.RuntimeError503( err ) );
                  console.log(err);
               } else{
 

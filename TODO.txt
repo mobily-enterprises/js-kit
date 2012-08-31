@@ -166,3 +166,5 @@
   * SERVER: Write a middleware for the ID
   * SERVER: Implement logging in case of server problems when delivering pages (add logging calls manually where needed?)
   * SERVER: [NOT DONE] Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
+  * SERVER: Fixed IDIOTIC way I used to give access to workspaces, based on used name rather than ids.
+  * SERVER: Major, major reorganisation of the code, errors are now in their own little files, etc.

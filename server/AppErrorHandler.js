@@ -1,8 +1,7 @@
 
 var util = require('util'),
 fs = require('fs'),
-Logger = require('./globals.js').Logger,
-utils = require('./utils.js'); 
+utils = require('./utils.js');
 
 exports.AppErrorHandler = function( err, req, res, next){
 
@@ -37,7 +36,7 @@ exports.AppErrorHandler = function( err, req, res, next){
   } 
 
   // Log the event (as an error, obviously)
-  Logger({
+  utils.Logger({
     logLevel     : logLevel,
     errorName    : err.originalError ? err.originalError.name    : err.name,
     message      : err.originalError ? err.originalError.message : err.message,

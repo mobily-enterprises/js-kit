@@ -18,11 +18,12 @@ var ObjectId = Schema.ObjectId;
 // LOGGER
 // *************************
 var Log = new Schema({
-  workspaceId    : { type: String, index: true },
+  workspaceId    : { type: ObjectId, index: true },
   workspaceName  : { type: String, index: true },
+  userId         : { type: ObjectId, index: true },
   login          : { type: String, index: true },
   token          : { type: String, index: true },
-  logLevel       : { type: Number, enum:[0,1] },
+  logLevel       : { type: Number, enum:[1,5] },
   errorName      : { type: String, index: true },
   message        : { type: String, index: true },
   reqInfo        : { type: String },
@@ -42,7 +43,7 @@ mongoose.model('Country', Country);
 
 
 var Access = new Schema({
-  login          : { type: String },
+  userId         : { type: ObjectId, index: true },
   token          : { type: String, index: true },
   isOwner        : { type: Boolean, index: true }, 
 });
