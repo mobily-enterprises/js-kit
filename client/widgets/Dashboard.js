@@ -58,7 +58,7 @@ define([
         // SUbmit form
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
 
-          stores.users.put( {} ).then(
+          stores.roles.query({} ).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),
             ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(

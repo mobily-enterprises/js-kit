@@ -178,3 +178,5 @@
   * SERVER: Major, major reorganisation of the code, errors are now in their own little files, etc.
   * Fixed order of things, so that it makes more sense. This framework is bigger than I expected, will I ever get to write
     the _actual_ booking system I wanted to write? I am amazed something like this didn't exist already
+  * SERVER: Made sessions persistent using connect-mongod, fixed a silly bug in the creation of the stores client-side (left from testing)
+  * SERVER: Added the first query call

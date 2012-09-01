@@ -9,5 +9,6 @@
     "mongoose": "*",
     "jade": "*",
     "hat": "*"
+    "connect-mongodb": "*"
   }
 }

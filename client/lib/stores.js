@@ -32,6 +32,7 @@ define([
 
     // API calls (need a token ID to work)
     'users',
+    'roles',
   ].forEach( function(i){
 
     // Check if the call is anonymous
@@ -45,7 +46,7 @@ define([
 
       // Set the path depending on the store's name, to keep URL namespace clean
 			// path = isAnon ? '/anon/' : ( isUser ?  '/user/' : '/api/1/' + tokenValue + '/') ;
-      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : ('/call/' + workspaceIdValue + 'e/') ) ;
+      path = isAnon ? '/anon/' : ( isUser ?  '/user/' : ('/call/' + workspaceIdValue + '/') ) ;
 
       console.log("Creating store " + path + i + '/');
 

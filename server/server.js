@@ -4,6 +4,14 @@
 var express = require('express'),
     http = require('http'),
     mongoose = require('mongoose'),
+
+    // Mongodb for sessions
+    mongoStore = require('connect-mongodb'),
+    mongoSessionDb = new require('mongodb').Db(
+     'sessions',
+     new require('mongodb').Server('localhost', 27017, {auto_reconnect: true, native_parser: true})
+    ),
+
     db = require('./db.js'),
     middleware = require('./middleware.js'),
 
@@ -22,6 +30,7 @@ var app = express();
 // Connect to DB
 mongoose.connect('mongodb://localhost/hotplate');
 
+
 // Configuration
 
 app.configure(function(){
@@ -38,7 +47,12 @@ app.configure(function(){
 
   // Sessions
   app.use(express.cookieParser('woodchucks are nasty animals'));
-  app.use(express.session({  secret: 'woodchucks are nasty animals', key: 'sid', cookie: { secure: false }   }));
+  app.use(express.session({
+    secret: 'woodchucks are nasty animals',
+    key: 'sid',
+    cookie: { secure: false }, // MAYBE add:  {maxAge: 60000 * 20}
+    store: new mongoStore({db: mongoSessionDb})
+  }));
 
   //
   app.use(express.static(path.join(__dirname, 'public')));
@@ -104,8 +118,19 @@ app.post('/user/logoutUser',     routesUser.postLogoutUser);   // NONDATA
  * DATA AJAX CALLS -- API CALLS
  ****************************************************************
 */
+
+
+// /users
 app.post(      '/api/1/:tokenCall/users', routesApi.postUsersApi1 );
 app.post( '/call/:workspaceIdCall/users', routesApi.postUsersApi1 );
+
+
+// /roles
+app.get(       '/api/1/:tokenCall/roles', routesApi.queryRolesApi1 );
+app.get(  '/call/:workspaceIdCall/roles', routesApi.queryRolesApi1 );
+
+
+
 
 
 // Create the actual server
