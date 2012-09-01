@@ -332,7 +332,7 @@ exports.postLoginAnon = function(req, res, next){
       if(! docUser || docUser.password != req.body.password){
           errors.push({ field:'password', message: 'Password incorrect', mustChange: false } );
           errors.push({ field:'', message: 'Login failed' });
-          next( new e.ValidationError422('Soft validation of parameters failed', errors));
+          next( new e.ValidationError422('Password incorrect', errors));
       } else {
         if( docUser.password == req.body.password ) {
 

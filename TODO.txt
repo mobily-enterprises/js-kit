@@ -1,13 +1,14 @@
 
-  "THE ROLES"
+  "ROLES"
 
   * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
             is the first "real" API/backend call. 
   * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
             *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
-            to specified roles. Delete the isOwner flag in DB
+            to specified roles. Delete the isOwner flag in DB. ADD role in list of variables at login time, so that client knows what
+            to display in the interface
 
-  "THE LAST TOUCHES"
+  "LAST TOUCHES"
 
   * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
@@ -19,20 +20,8 @@
   * CLENT:  Comment each function, client and server, using node's standard
   * C/S   : Comment CSS nicely
 
-  " NOW ADMIRE IT -- THEN RELEASE IT"
+  "BROWSING DATA + PERMISSIONS"
 
-+++ MESSAGES AND INVITES
-  * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-            status
-  * CLIENT: Write configuration for messenging infrastructure. Each subsystem can be able to send, receive or both. 
-  * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
-            link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
-            which in turns should output the list of workspaces (since the user is already logged in)
-  * C/S   : Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
-            which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
-            write a bit of a wizard.
-
-+++ BROWSING DATA + PERMISSIONS
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
             reload if there are network issues. 
@@ -44,29 +33,48 @@
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly
 
-+++ SETTINGS
+  "SETTINGS "
+
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
-+++ USE CASE
+  "A WORKING USE CASE"
+
   * Add a "customer" form, and a customers browser. In order to test the system, also add the ability to have
     "private" customers
 
+
+  "MESSAGES AND INVITES"
+
+  * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
+            status
+  * CLIENT: Write configuration for messenging infrastructure. Each subsystem can be able to send, receive or both. 
+  * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
+            link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
+            which in turns should output the list of workspaces (since the user is already logged in)
+  * C/S   : Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
+            which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
+            write a bit of a wizard.
+  * CLIENT: Write a "message browser" system for the workspace admin so that they can see exactly what was sent, when, and see the logs
+
                           ----------------------------
-                          !!  BOILERPLATE FINISHED  !!
+                          !!  HOTPLATE IS FINISHED  !!
                           ----------------------------
 
-  * Add messages *receiving* infrastructure (smtp, pop, sms), with configuration and setting of default for sending
-  * View messages widget under customers with ability to send messages
-  * Inbox: ability to see the inbox, and match a "from" to a contact (messages will obviously appear under contact)
-  * 
+  The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
+  side tracked by writing a "container"...)
+
+  * Add messages *receiving* infrastructure (smtp mx, pop, sms), with configuration and setting of default for receiving email
+  * "View messages" widget under customers with ability to send messages using one of the subsystems
+  * Inbox: ability to see the inbox, and match a "from" to a contact (note: maybe make this "soft": contacts have several email addresses,
+    and viewing messages will include seeing email from and to any one of their email addresses)
   * Ability to create bookings
-  * Ability to send invoices AND store invoices
+  * Ability to match incoming (and outgoing) messages to bookings
+  * Ability to send invoices and _store_ received invoices
   * Basic accounting
-  * First version finished
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -168,3 +176,5 @@
   * SERVER: [NOT DONE] Write a function to check if a user has access to a specific workspace, use that instead of current find() in 3 spots
   * SERVER: Fixed IDIOTIC way I used to give access to workspaces, based on used name rather than ids.
   * SERVER: Major, major reorganisation of the code, errors are now in their own little files, etc.
+  * Fixed order of things, so that it makes more sense. This framework is bigger than I expected, will I ever get to write
+    the _actual_ booking system I wanted to write? I am amazed something like this didn't exist already
