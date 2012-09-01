@@ -4,7 +4,7 @@ define([
 
   "app/lib/utils",
 
-  'app/lib/globals', // TODO: FIND OUT WHY ADDING THIS BREAKS _EVERYTHING_
+  'app/lib/globals',
   ], function(
     declare
   , lang
@@ -16,17 +16,13 @@ define([
   ){
     return  declare(null, {
 
-      ajaxSaidNo: {},
-      ajaxSaidYes: {},
-      ajaxRequested: {},
+      ajaxResponse: {},
 
       constructor: function(){
 
         // Declaring object variable in constructor to make sure that
         // they are not class-wide (since they will be in the prototype)
-        this.ajaxSaidNo = {};
-        this.ajaxSaidYes = {};
-        this.ajaxRequested = {};
+        this.ajaxResponse = {};
       },
 
       // Overloads the validator, adding extra stuff
@@ -35,24 +31,34 @@ define([
         var goodRes;
 
         // Set some defaults
-        options.ajaxInvalidMessage = options.ajaxInvalidMessage || "Value not allowed";
+        options.ajaxInvalidMessage = options.ajaxInvalidMessage || "Ajax check failed (2)";
         options.ajaxStore = options.ajaxStore || null;
         options.ajaxFilterField = options.ajaxFilterField  || 'name';
+        options.ajaxOkIfPresent = options.ajaxOkIfPresent  || false;
 
-        // No ajaxStore query available, return true
+        options.ajaxOkIfAbsent = ! options.ajaxOkIfPresent; // This is for code redability
+
+        // No ajaxStore query available, return true  regardless
         if( ! options.ajaxStore ){
           return true;
         }
 
-        // console.log("Started validation for " + value);
-        // Ajax has already said no -- returning false straight away
-        if(this.ajaxSaidNo[value] ){
+        if( options.ajaxOkIfAbsent && this.ajaxResponse[value] == 'present' ) {
           this.invalidMessage = options.ajaxInvalidMessage;
           return false;
         }
 
-        // console.log("OK, ajasSaidYes for " + value + " is " +  this.ajaxSaidYes[value]); 
-        if(! this.ajaxSaidYes[value] ){
+        if( options.ajaxOkIfPresent && this.ajaxResponse[value] == 'absent' ) {
+          this.invalidMessage = options.ajaxInvalidMessage;
+          return false;
+        }
+
+        // If the value isn't cached, then cache it. Then, once Ajax has returned,
+        // run this.validate() which will re-run this check -- which at that point
+        // will have its value in the cache
+        if( typeof( this.ajaxResponse[value]) == 'undefined' ){
+
+          // Make up the filter object, which will be passed to .query() shortly
           var filterObject = {};
           filterObject[options.ajaxFilterField] = value;
 
@@ -60,16 +66,17 @@ define([
           options.ajaxStore.query( filterObject ).then(
             lang.hitch(this, function(res){
 
-              // Makes sure the result is good
+              // Makes sure the result is 'good' (following
+              // the standard)
               goodRes = utils.goodify(res);
 
               if( goodRes.data.length ){
-                this.ajaxSaidNo[value] = true;
+                this.ajaxResponse[value] = 'present';
                 //console.log("Added to Ajaxfailed: " + value);
                 this.validate();
               } else {
                 //console.log("Added to Ajaxsuccess: " + value);
-                this.ajaxSaidYes[value] = true;
+                this.ajaxResponse[value] = 'absent';
                 this.validate();
               }
             })

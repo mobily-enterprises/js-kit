@@ -17,6 +17,9 @@ define([
   ){
     return declare('app.ValidationUsername',  [ ValidationTextBox, _AjaxValidatorMixin ], {
 
+      okIfPresent: true,
+      ajaxInvalidMessage: 'Ajax check failed',
+
       validator: function(value){
 
         // Run the normal field validators -- if they fail,
@@ -27,17 +30,17 @@ define([
           return false;
         }
 
-        // 
         return this.ajaxValidate(value, {
-           ajaxInvalidMessage: "Login name taken",
+           ajaxInvalidMessage: this.ajaxInvalidMessage,
            ajaxStore: stores.usersAnon,
            ajaxFilterField: 'login',
+           ajaxOkIfPresent: this.okIfPresent,
         });
 
       },
 
       invalidMessage: "Username not valid",
-      missingMessage: "Username is a mandatory field",
+      missingMessage: "Username cannot be empty",
 
     });
   }

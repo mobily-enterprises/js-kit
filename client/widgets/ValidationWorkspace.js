@@ -11,13 +11,14 @@ define([
     declare
 
   , ValidationTextBox
-
   , _AjaxValidatorMixin
-
   , g
   , stores
   ){
     return declare('app.ValidationWorkspace', [ ValidationTextBox, _AjaxValidatorMixin ], {
+
+      okIfPresent: true,
+      ajaxInvalidMessage: 'Ajax check failed',
 
       validator: function(value){
 
@@ -29,17 +30,17 @@ define([
           return false;
         }
 
-        // 
         return this.ajaxValidate(value, {
-           ajaxInvalidMessage: "Workspace taken",
+           ajaxInvalidMessage: this.ajaxInvalidMessage,
            ajaxStore: stores.workspacesAnon,
            ajaxFilterField: 'name',
+           ajaxOkIfPresent: this.okIfPresent,
         });
 
       },
 
       invalidMessage: "Workspace name not valid",
-      missingMessage: "Workspace name cannot be empty",
+      missingMessage: "Workspace cannot be empty",
 
     });
   }

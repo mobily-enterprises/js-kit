@@ -6,7 +6,7 @@
   * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
             *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
             to specified roles. Delete the isOwner flag in DB. ADD role in list of variables at login time, so that client knows what
-            to display in the interface
+            to display in the interface. Probably make new error for this (so that it won't ask for login again)
 
   "LAST TOUCHES"
 
@@ -25,11 +25,12 @@
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
             reload if there are network issues. 
-  * SERVER: Put down foundations for a function(user_id, 'role', 'collection') which will manufacture a where() statement so that
+  * SERVER: Put down foundations for a function(user_id, 'role', 'store') which will manufacture a where() statement so that
             permissions are fulfilled.
-  * SERVER: Put down foundations for a function(user_id, 'role', 'collection', [{object}] ) returns an object where keys 'get', 'put',
-            'post' are defined).
-  * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined.
+  * SERVER: Put down foundations for a function(user_id, 'role', 'store', [{object}] ) returns an object where keys 'get', 'put',
+            'post', 'delete'  are defined).
+  * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined. This
+            is so that clients know what they can and cannot do on results.
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly
 
@@ -180,3 +181,4 @@
     the _actual_ booking system I wanted to write? I am amazed something like this didn't exist already
   * SERVER: Made sessions persistent using connect-mongod, fixed a silly bug in the creation of the stores client-side (left from testing)
   * SERVER: Added the first query call
+  * CLIENT: Improved the code in _AjaxValidatorMixin.js so that it can work both if the search is good or not, improved that code in the meantime

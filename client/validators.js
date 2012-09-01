@@ -38,6 +38,7 @@ Validators.onlyLetters = function(str, emptyOk){
 
 Validators.login = function(str, emptyOk){
   // Check if it's empty
+  console.log("Testing: " + str);
   if(str == '' && ! emptyOk){
    return { result: false, message: "Login name cannot be empty" };
   }

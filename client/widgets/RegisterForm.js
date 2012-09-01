@@ -89,7 +89,7 @@ define([
        var that = this;
 
         // Runs the logout and select the right tab (the one with the new registration form)
-        stores.logoutAnon.put({}).then(
+        stores.logoutUser.put({}).then(
           ds.UIMsg('ok', that.formAsUser, that.buttonAsUser, null, true),
           ds.UIMsg('error', that.formAsUser, that.buttonAsUser, null, true )
         ).then(

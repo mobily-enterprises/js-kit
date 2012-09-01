@@ -16,6 +16,7 @@ define([
   "app/widgets/AlertBar",
   "app/widgets/BusyButton",
   "app/widgets/ValidationWorkspace",
+  "app/widgets/ValidationUsername",
 
    ], function(
      declare
@@ -35,6 +36,7 @@ define([
      , AlertBar
      , BusyButton
      , ValidationWorkspace
+     , ValidationUsername
  ){
     // Create the "login" pane, based on a normal ContentPane
     return declare('app.Dashboard', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin ], {
@@ -46,7 +48,7 @@ define([
         '<div>' +
         '  <div data-dojo-type="app.AlertBar" data-dojo-attach-point="alertBar"></div>' +
         '  <form data-dojo-type="dijit.form.Form" data-dojo-attach-point="form" method="POST"> ' +
-        '    <input id="${id}_workspace" data-dojo-type="app.ValidationWorkspace" name="workspace" />' +
+        '    <input id="${id}_user" data-dojo-type="app.ValidationUsername" name="login" data-dojo-props="ajaxInvalidMessage:\'User not found!\'" />' +
         '    <input type="submit" data-dojo-attach-point="button" data-dojo-type="app.BusyButton" label="Create!" />' +
         '  </form>' +
         '</div>',
