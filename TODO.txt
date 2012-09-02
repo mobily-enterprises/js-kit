@@ -1,12 +1,25 @@
+  "MODULARISATION"
+
+  * Write code server-side which will create an array in the main page, which will then be used by Dojo to create stores
+  * Create system so that modules have a public directory
+  * Move existing dojo widgets into the "system" module, dealing with paths in Dojo.
+  * Write code so that each module defines a Mongoose model
+  * Make sure that the application runs some init() method javascript-side as well, so that modules can add their widgets to the app
 
   "ROLES"
 
-  * CLIENT: Write a quick form/call to add a user to a workspace (use existing simple form), make sure logging in as them works. This
-            is the first "real" API/backend call. 
-  * C/S   : Implement a role system to see if users have access to a specific functionality. This requires adding users specifying
-            *roles* (in simple form and in DB), where roles can be "owner", "admin", "internal", "external". Each call will be available
-            to specified roles. Delete the isOwner flag in DB. ADD role in list of variables at login time, so that client knows what
-            to display in the interface. Probably make new error for this (so that it won't ask for login again)
+  * Write a system where modules can be enabled for a specific workspace (being in ./modules means "installed")
+  * Write a system where each module will export a list of permissions
+  * Write a system where each "admin" can assign specific permissions (taken from modules) to users, and a function for a module to check
+    if that user has a specific permission
+  * Write that function client-side as well (will need to create a permission matrix javascript-side)
+
+  "HOOKS"
+
+  * Write a topic/publish system, server and client side, where things can happen
+  * Write a hook system, server and client side, where other modules can listen and "enrich" each other's objects, forms, etc.
+  * See if it's feasible for a module to modify another module's Mongoose model, or maybe have a specified field?
+  * Write a system where a moduke can change query objects that are run by another widget. This could be basically automatic
 
   "LAST TOUCHES"
 
@@ -25,16 +38,12 @@
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
             reload if there are network issues. 
-  * SERVER: Put down foundations for a function(user_id, 'role', 'store') which will manufacture a where() statement so that
-            permissions are fulfilled.
-  * SERVER: Put down foundations for a function(user_id, 'role', 'store', [{object}] ) returns an object where keys 'get', 'put',
-            'post', 'delete'  are defined).
   * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined. This
             is so that clients know what they can and cannot do on results.
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly
 
-  "SETTINGS "
+  "SETTINGS" (module)
 
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
@@ -42,13 +51,13 @@
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
-  "A WORKING USE CASE"
+  "A WORKING USE CASE" (module)
 
   * Add a "customer" form, and a customers browser. In order to test the system, also add the ability to have
     "private" customers
 
 
-  "MESSAGES AND INVITES"
+  "MESSAGES AND INVITES" (module)
 
   * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
             status
@@ -181,4 +190,8 @@
     the _actual_ booking system I wanted to write? I am amazed something like this didn't exist already
   * SERVER: Made sessions persistent using connect-mongod, fixed a silly bug in the creation of the stores client-side (left from testing)
   * SERVER: Added the first query call
-  * CLIENT: Improved the code in _AjaxValidatorMixin.js so that it can work both if the search is good or not, improved that code in the meantime
+  * CLIENT: Improved the code in _AjaxValidatorMixin.js so that it can work both if search is good or not, improved that code in the meantime
+  * Write a module loader which will load all modules in a specific directory and run init(), as well as create a list of
+    loaded modules
+  * Move the existing calls into a module called "system"
+  * 

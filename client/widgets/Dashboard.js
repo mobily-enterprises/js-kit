@@ -1,3 +1,6 @@
+
+
+
 define([
   "dojo/_base/declare",
   "dojo/_base/json",
@@ -12,6 +15,8 @@ define([
   "app/lib/defaultSubmit",
   "app/lib/Logger",
   "app/lib/stores",
+  'app/JsonRest',
+
 
   "app/widgets/AlertBar",
   "app/widgets/BusyButton",
@@ -32,6 +37,7 @@ define([
      , ds
      , Logger
      , stores
+     , JsonRest
 
      , AlertBar
      , BusyButton
@@ -60,7 +66,16 @@ define([
         // SUbmit form
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
 
-          stores.roles.query({} ).then(
+          /* 
+          stores.testing = new JsonRest({
+            target: '/call/' + workspaceIdValue + '/module/contacts/list/something',
+            idProperty: '_id',
+            sortParam: 'sortBy',
+          });
+          */
+
+
+          stores.users.query({} ).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),
             ds.UIMsg('error', that.form, that.button, that.alertBar )
           ).then(

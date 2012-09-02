@@ -34,6 +34,9 @@ define([
   r.goodify = function(response){
     var r = {};
 
+    // The ack needs to be a string
+    r.ack = typeof( response.ack ) == 'string' ? response.ack : '';
+
     // First of all, if response isn't an object, turn it into one
     // so that the rest of the function works fine regardless
     response = response && ( typeof( response ) == 'object' ? response : { } );
@@ -49,6 +52,7 @@ define([
 
     // Emit needs to be an array
     r.emit = typeof( response.emit ) == 'object' &&  response.emit.length ? response.emit : [];
+
 
     return r;
   }

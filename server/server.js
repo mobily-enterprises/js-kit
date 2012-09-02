@@ -16,20 +16,17 @@ var express = require('express'),
     middleware = require('./middleware.js'),
 
     // Pages and routes
-    routesApi = require('./routes/routesApi.js'),
-    routesAnon = require('./routes/routesAnon.js'),
-    routesUser = require('./routes/routesUser.js'),
-    routesPages = require('./routes/routesPages.js'),
+    routesPages = require('./routesPages.js'),
 
     AppErrorHandler = require('./AppErrorHandler.js').AppErrorHandler,
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    modules = require('./modules');
 
 var app = express();
 
 // Connect to DB
 mongoose.connect('mongodb://localhost/hotplate');
-
 
 // Configuration
 
@@ -77,6 +74,7 @@ app.param('tokenCall',          middleware.tokenCall);            // Used by API
 app.param('workspaceIdCall',    middleware.workspaceIdCall);      // Used by API calls
 app.param('idCall',             middleware.idCall);               // Used by API calls (generic ID)
 
+
 /* 
  ****************************************************************
  * PAGES
@@ -90,48 +88,8 @@ app.get('/pages/register',                  routesPages.register);
 app.get('/pages/pick',                      routesPages.pick);
 
 
-/* 
- ****************************************************************
- * DATA AJAX CALLS -- ANONYMOUS
- ****************************************************************
-*/
-
-app.post('/anon/recoverAnon',    routesAnon.postRecoverAnon );   // NONDATA
-app.post('/anon/loginAnon',      routesAnon.postLoginAnon);      // NONDATA
-app.get( '/anon/workspacesAnon', routesAnon.getWorkspacesAnon );
-app.get( '/anon/usersAnon'     , routesAnon.getUsersAnon );
-app.post('/anon/workspacesAnon', routesAnon.postWorkspacesAnon );
-
-
-/* 
- ****************************************************************
- * DATA AJAX CALLS -- USERS
- ****************************************************************
-*/
-
-app.post('/user/workspacesUser', routesUser.postWorkspacesUser);
-app.post('/user/logoutUser',     routesUser.postLogoutUser);   // NONDATA
-
-
-/* 
- ****************************************************************
- * DATA AJAX CALLS -- API CALLS
- ****************************************************************
-*/
-
-
-// /users
-app.post(      '/api/1/:tokenCall/users', routesApi.postUsersApi1 );
-app.post( '/call/:workspaceIdCall/users', routesApi.postUsersApi1 );
-
-
-// /roles
-app.get(       '/api/1/:tokenCall/roles', routesApi.queryRolesApi1 );
-app.get(  '/call/:workspaceIdCall/roles', routesApi.queryRolesApi1 );
-
-
-
-
+// Load installed modules
+modules.loader(app);
 
 // Create the actual server
 http.createServer(app).listen(app.get('port'), function(){

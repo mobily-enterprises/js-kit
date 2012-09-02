@@ -61,7 +61,7 @@ exports.sendResponse = function(res, params){
   // Assign default parameters
   if( params.message ) response.message = params.message;
   if( params.errors )  response.errors  = params.errors;
-  if( params.data )    response.data    = params.data;
+  if( params.data )    { console.log("DATA " + params.data); response.data    = params.data; } 
   if( params.emit )    response.emit    = params.emit;
 
   res.json(response, status);
