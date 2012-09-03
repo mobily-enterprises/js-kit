@@ -10,6 +10,7 @@
     "jade": "*",
     "hat": "*",
     "connect-mongodb": "*",
-    "send": "*"
+    "send": "*",
+    "hotplate": "*"
   }
 }

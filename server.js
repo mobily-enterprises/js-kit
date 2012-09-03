@@ -14,12 +14,18 @@ var express = require('express'),
 
     fs = require('fs'),
     path = require('path'),
-    modules = require('./hotloader/hotloader.js');
+
+
+    hotplate = require('./hotplate/hotplate.js');
 
 var app = express();
 
 // Connect to DB
 mongoose.connect('mongodb://localhost/hotplate');
+
+// Load hotplate's modules
+hotplate.setApp(app);
+hotplate.loadModules('modules/node_modules');
 
 // Configuration
 
@@ -43,12 +49,17 @@ app.configure(function(){
     store: new mongoStore({db: mongoSessionDb})
   }));
 
-  //
+  // Static routes
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use(app.router);
-  // app.use(AppErrorHandler);
+  app.use( hotplate.clientPages() ); // Static routes for hotplate
 
+  // The application router
+  app.use(app.router);
+
+  // app.use(AppErrorHandler);
 });
+
+// Load modules 
 
 app.configure('development', function(){
   // app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -59,8 +70,7 @@ app.configure('production', function(){
 });
 
 
-// Load installed modules
-modules.loader(app);
+// Load installed
 
 // Create the actual server
 http.createServer(app).listen(app.get('port'), function(){
