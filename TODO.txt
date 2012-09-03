@@ -1,10 +1,10 @@
   "MODULARISATION"
 
-  * Write code server-side which will create an array in the main page, which will then be used by Dojo to create stores
   * Create system so that modules have a public directory
-  * Move existing dojo widgets into the "system" module, dealing with paths in Dojo.
-  * Write code so that each module defines a Mongoose model
+  * Move existing dojo widgets into the "system" module, dealing with paths in Dojo. Try to get each widget to define its stores
+  * Write code so that each module defines its own a Mongoose model  (get rid of "db.js" completely)
   * Make sure that the application runs some init() method javascript-side as well, so that modules can add their widgets to the app
+  * Empty root directory completely (including errors.js etc.), turn it into a straight Express server with modules
 
   "ROLES"
 
@@ -19,7 +19,7 @@
   * Write a topic/publish system, server and client side, where things can happen
   * Write a hook system, server and client side, where other modules can listen and "enrich" each other's objects, forms, etc.
   * See if it's feasible for a module to modify another module's Mongoose model, or maybe have a specified field?
-  * Write a system where a moduke can change query objects that are run by another widget. This could be basically automatic
+  * Write a system where a module can change query objects that are run by another widget. This could be basically automatic
 
   "LAST TOUCHES"
 
