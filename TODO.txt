@@ -1,15 +1,16 @@
   "MODULARISATION"
 
-  * Create system so that modules have a public directory
-  * Move existing dojo widgets into the "system" module, dealing with paths in Dojo. Try to get each widget to define its stores
-  * Write code so that each module defines its own a Mongoose model  (get rid of "db.js" completely)
-  * Make sure that the application runs some init() method javascript-side as well, so that modules can add their widgets to the app
-  * Empty root directory completely (including errors.js etc.), turn it into a straight Express server with modules
+  * Finish picking up the rubble and make things work. This includes:
+    - Rename all widgets with new namespace standards
+    - Get things to actually work again
+    - Automatic definition of stores via a hotplate call
+    - Allow each module to define a Mongoose model it will use (decide how to interact)
+    - Allow each module to add CSS files defined/needed to those widgets
+    - Make things work again
 
   "ROLES"
 
-  * Write a system where modules can be enabled for a specific workspace (being in ./modules means "installed")
-  * Write a system where each module will export a list of permissions
+  * Write a permission module (separate to "users"?), 100% inspired to Drupal
   * Write a system where each "admin" can assign specific permissions (taken from modules) to users, and a function for a module to check
     if that user has a specific permission
   * Write that function client-side as well (will need to create a permission matrix javascript-side)
@@ -29,11 +30,9 @@
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
-  * CLENT:  Comment each function, client and server, using Dojo's new standard (client) 
-  * CLENT:  Comment each function, client and server, using node's standard
-  * C/S   : Comment CSS nicely
+  * CLENT:  Comment each function, client and server, decide on a standard (probably node's)
 
-  "BROWSING DATA + PERMISSIONS"
+  "BROWSING DATA + LOGS"
 
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
@@ -55,7 +54,6 @@
 
   * Add a "customer" form, and a customers browser. In order to test the system, also add the ability to have
     "private" customers
-
 
   "MESSAGES AND INVITES" (module)
 
@@ -194,4 +192,6 @@
   * Write a module loader which will load all modules in a specific directory and run init(), as well as create a list of
     loaded modules
   * Move the existing calls into a module called "system"
-  * 
+  * Create system so that modules have a public directory
+  * Make sure that the application runs some init() method javascript-side as well, so that modules can add their widgets to the app
+  * Empty root directory completely (including errors.js etc.), turn it into a straight Express server with modules
