@@ -1,29 +1,37 @@
 hotplate
 ========
 
-Framework to create multi-homed SaaS with [NodeJs](http://nodejs.org), Express, MongoDB, Dojo
+_PLEASE NOTE: The module is going through major restrucuring and it's not currently functional._
 
-Alright, here it is. Hotplate is a framework to create SaaS. It's still very much under heavy development. If you have a look at the TODO now, you will see what I mean.
+Framework to create client/server applications using Node.js, by creating modules which provide both client and server code.
+It started as a boilerplate to create SaaS, and evolved into a framework.
 
-These are the features that are already there:
+The module system includes:
 
-Server
-======
+* Possibility to create modules
+* Modules are loaded automatically by a loader (conditionally if needed)
+* Modules have a "public" directory, which will be accessible from the outside as SETTABLE-PATH/module-name
+* The system provides a template page, which will be enriched by CSS and JS files added by the modules
+* If present, main.css and main.js will be added automatically
+* Each application exports a list of (placeable) client and server-side widgets
+* Centralised logging function
+* Simple way for modules to emit "events" and have "hooks" to act upon events (client-side _and_ server-side)
 
-* Workspace creation. Each workspace is a world in its own right
-* User creation, user login, session
-* Ability to define a route as an API call (to be called with a token) or via the created session
-* Single login to all workspaces
-* Unified error management
+Already existing modules:
 
-Client
-======
-* Centralised interaction with the server
-* Self-managing form handling (it will display the right error message for the right field)
-* Self-managing app-wide and form-wide alert bar
-* Neat organisation of files, widgets, etc
+* Good HTTP-oriented errors
+* Generic, simple error handling
+* Basic protocol definition, ideal for Ajax-intensive applications
+* Nice dojo widgets for your application
+* Login/logout/register module
+* Validators functions which are common client-side and server-side
+* Roles applicable to users
 
-Much more to come now.
-What's _urgent_ at the moment is the completion of version 1 of the code (see "finishing touches" in the TODO), code format improvement, and full documentation of each function.
+Coming up:
+* Module to manage users
+* Module to manage email sending
+* Module to manage email receiving
 
+Maybe in the future:
+It would be _great_ to create a module that allows users to *place* widgets wherever in the application.
 
