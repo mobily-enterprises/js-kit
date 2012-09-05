@@ -1,11 +1,7 @@
   "MODULARISATION"
 
   * Finish picking up the rubble and make things work. This includes:
-    - Rename all widgets with new namespace standards
-    - Get things to actually work again
-    - Automatic definition of stores via a hotplate call
-    - Allow each module to define a Mongoose model it will use (decide how to interact)
-    - Allow each module to add CSS files defined/needed to those widgets
+    - Automatic definition of stores via a hotplate call (make module)
     - Make things work again
 
   "ROLES"
@@ -73,7 +69,7 @@
                           ----------------------------
 
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
-  side tracked by writing a "container"...)
+  side tracked by writing a "boilerplate"... err...)
 
   * Add messages *receiving* infrastructure (smtp mx, pop, sms), with configuration and setting of default for receiving email
   * "View messages" widget under customers with ability to send messages using one of the subsystems
