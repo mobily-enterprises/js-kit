@@ -1,9 +1,20 @@
 
 /* TODO:
 
- * Server-side hook invoke
- * Fix logging (make extra module that works with hooks)
- * 
+ * Add function to add fields that will be logged by the logger, defining them as "indexes" or not. (This will be used to
+   make up the schema on the spot by the mongologger)
+
+ * Add ability to register a module later (change the load function so that it calls register, and then
+   make sure that the template is recalculated after the registration for that particular module so that
+   JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
+   one middleware call per module).
+
+ * Add functions to use() routes allowing definition of stores at the same time (add stores use existing function)
+
+ * write a baseDojoStore module which just creates stores on the client side. This is urgent, as otherwise absolutely nothing
+   I wrote will work (!)
+
+ * Get all of the existing code fixed up so that if fits the new system
 
 */
 
@@ -20,7 +31,6 @@ var util = require('util')
 , Csses = require('./Csses.js')
 , Jses = require('./Jses.js')
 ;
-
 
 /**
  * Hotplate constructor.
@@ -132,6 +142,21 @@ Hotplate.prototype.setApp = function(app){
   this.app = app;
 }
 
+/**
+ * Load all modules that are marked as "enabled"
+ *
+ * This function will require all modules located in
+ * `this.options.modulesLocalPath` (which defaults to
+ * `modules/node_modules`). Once they are all loaded,
+ * it will run the `module.init()` method for each one
+ * (if present). Finally, it will process the page template
+ * so that the page has all of the required css, js and variable
+ * definitions there.
+ * 
+ * @param {Express} The express object used in the application
+ * 
+ * @api public
+ */
 
 Hotplate.prototype.loadModules = function() {
 
@@ -141,7 +166,7 @@ Hotplate.prototype.loadModules = function() {
   if( this.modulesAreLoaded ) return;
   this.modulesAreLoaded = true;
 
-  // Load the installed modules.
+  // Load the installed modules (if they are enabled)
   fs.readdirSync( path.join( __dirname, this.options.modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
       console.log( "Skipping self stub..." );
@@ -197,6 +222,31 @@ Hotplate.prototype.loadModules = function() {
 }
 
 
+// Function to load a single module
+Hotplate.prototype.loadModule = function() {
+}
+
+
+/**
+ * Middleware to serve the client pages with normalised paths.
+ *
+ * This is the middleware which will serve the client
+ * pages. The local path will be: `this.options.modulesLocalPath/moduleName/client`
+ * and the remote path will be this.options.staticUrlPath/moduleName/
+ * Basically, the module someModule will have two directories, `client` and `server`,
+ * and if `this.options.staticUrlPath` is `/lib/dojo/hotplate`, the module's `client`
+ * drectory will be available under `/lib/dojo/hotplate/someModule`
+ *
+ * ####Example:
+ *    app.configure(function(){
+ *      // ...
+ *      app.use( hotplate.clientPages() ); // Static routes for hotplate
+ *
+ * @param {Object} Options which will be passed to send() (e.g. `maxAge`, `hidden`, etc.)
+ * 
+ * @api public
+ */
+
 Hotplate.prototype.clientPages = function(options){
   that = this;
 
@@ -245,6 +295,7 @@ Hotplate.prototype.processPageTemplate = function( elements, leavePlaceholders )
   if ( elements.csses ) r = r.replace(/(\[\[HEAD\]\])/,  elements.csses.render() + '$1' );
   if ( elements.jses )  r = r.replace(/(\[\[HEAD\]\])/,  elements.jses.render() + '$1' );
   if ( elements.vars)   r = r.replace(/(\[\[HEAD\]\])/,  elements.vars.render() + '$1' );
+  if ( elements.stores) r = r.replace(/(\[\[HEAD\]\])/,  elements.stores.render() + '$1' );
   if ( elements.title ) r = r.replace(/(\[\[TITLE\]\])/, elements.title + '$1' ); 
   if ( elements.body )  r = r.replace(/(\[\[BODY\]\])/,  elements.body + '$1' ); 
   
@@ -257,67 +308,42 @@ Hotplate.prototype.processPageTemplate = function( elements, leavePlaceholders )
   return r;
 }
 
-Hotplate.prototype.Logger = function(entry){
-  // FIXME: this will call the right function to do the logging
 
-  // This will need to:
-  // Get other registered modules to modify "entry" (in particular, auth will add workspaceName, etc.)
-  // Get other registered modules to store the entry (in particular, the module that will offer browsing and filtering options)
+Hotplate.prototype.invokeAll = function(){
+  var hook, module, results = [];
 
-// Save a log entry onto the Log table, with the current timestamp. Workspace and userId can be empty
-var originalLogger = function(logEntry){
+  hook = arguments[0];
+  for(var moduleName in this.modules){
+    module = this.modules[moduleName].module;
 
+    if( typeof( module.hooks ) === 'object' && typeof( module.hooks[hook] ) === 'function' ){
+      results.push( module.hooks[hook].apply( module, arguments ) );
+    }
 
-  var Log = mongoose.model("Log"),
-      req = logEntry.req;
-
-  log = new Log();
-
-  // Sorts out log.reqInfo
-  if ( logEntry.req){
-    log.reqInfo = JSON.stringify({
-      info   : req.info,
-      headers: req.headers,
-      method : req.method,
-      body   : req.body,
-      route  : req.route,
-      params : req.params 
-    });
-  } else {
-    logEntry.reqInfo = {};
   }
- 
-  // req.application.login is always set if the user has logged in
+  return results;
+}
 
-    
-  // Set other variables if they are defined (or default to '')
-  if( req.application) {
-    log.workspaceId   = req.application.workspaceId   ? req.application.workspaceId   : null;
-    log.workspaceName = req.application.workspaceName ? req.application.workspaceName : '';
-    log.userId        = req.application.userId        ? req.application.userId        : null;
-    log.login         = req.application.login         ? req.application.login         : '';
-    log.token         = req.application.token         ? req.application.token         : '';
-  } else {
-    log.workspaceId   = null;
-    log.workspaceName = '';
-    log.userId        = null;
-    log.login         = '';
-    log.token         = '';
-  }
 
-  // Sorts out all of the other fields with sane defaults.
+Hotplate.prototype.log = function(req, entry){
+
+  // Assign sane defaults to the log object
+  //
   // FIXME: improve this code, it's grown into something ugly and repetitive
   // http://stackoverflow.com/questions/12171336/saving-an-object-with-defaults-in-mongoose-node
-  log.logLevel   = logEntry.logLevel  ? logEntry.logLevel  : 0;
-  log.errorName  = logEntry.errorName ? logEntry.errorName : '';
-  log.message    = logEntry.message   ? logEntry.message   : '';
-  log.data       = logEntry.data      ? logEntry.data      : {};
+  entry.logLevel   = entry.logLevel  ? entry.logLevel  : 0;
+  entry.errorName  = entry.errorName ? entry.errorName : '';
+  entry.message    = entry.message   ? entry.message   : '';
+  entry.data       = entry.data      ? entry.data      : {};
 
-  // Sorts out log.loggedOn
-  log.loggedOn = new Date();
-  log.save();
-} 
+  entry.loggedOn = new Date();
 
+  // Allow modules to manipulate the blog entry
+  this.invokeAll('aboutToLog', req, entry);
 
-
+  // Allow modules to actually log this. Note that this module
+  // doesn't actually do any logging itself
+  this.invokeAll('log' , req, entry);
 }
+
+
