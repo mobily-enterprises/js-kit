@@ -5,19 +5,25 @@
    * Add ability to register a module later (change the load function so that it calls register, and then
      make sure that the template is recalculated after the registration for that particular module so that
      JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
-     one middleware call per module). This way, people can use *any* module to integrate with hotplate -- they just need
-     to provide the right hooks
+     one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
+     just need to provide the right hooks
+   * Test the stores variables functionality
    * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
    * write a baseDojoStore module which just creates stores on the client side. This is urgent, as otherwise absolutely nothing
      I wrote will work (!)
    * Get all of the existing code fixed up so that if fits the new system
-   * See if it's feasible/possible to split the login code so that it becomes widget/db agnostic, maybe integrating with Passport
+   * See if it's feasible/possible to split the login code so that it becomes widget/db agnostic, maybe integrating with Passport. We
+     will still need userId and workspaceId somehow (?)
 
    "VANITY"
 
    * Add counter again: cat `find . -type f | grep -v \.git | grep -v \.sw ` | wc
 
   "PERMISSIONS"
+
+  * Before starting, check how feasible it is to create hook-driven "gets" and "sets" so that the application
+    can query *every* available module for a determined list (roles? defined widgets?). How could this work, staying
+    simple and generic? Could this work both for roles, and for widget registration and location?
 
   * Write a permission system Ways to go about this:
      - Hook to define roles (each module can define some)

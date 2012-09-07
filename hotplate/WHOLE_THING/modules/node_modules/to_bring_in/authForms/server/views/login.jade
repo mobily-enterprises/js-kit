@@ -1,0 +1,18 @@
+!!!
+head#head
+  title Booking Dojo
+  script(type='text/javascript', src='/libs/dojo/dojo/dojo.js',data-dojo-config="parseOnLoad: false, async:true,isDebug:false, cacheBust:false")
+  link(type='text/css', rel='stylesheet', href="/app/rrl.css")
+  link(type='text/css', rel='stylesheet', href="/app/widgets/css/AlertBar.css")
+  script(type='text/javascript', src='/app/login.js')
+  link(type='text/css', rel='stylesheet', href='/libs/dojo/dojox/form/resources/BusyButton.css')
+  script(type='text/javascript', src='/app/validators.js')
+  link(type='text/css', rel='stylesheet', href='/libs/dojo/dijit/themes/claro/claro.css', media='screen')
+body.claro
+  #network-alert-bar
+  #app-alert-bar
+  #loadingOverlay.pageOverlay
+    .loadingMessage Loading...
+  h1 Login to Booking Dojo
+  #loginForm
+    

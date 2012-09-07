@@ -9,7 +9,7 @@ var express = require('express'),
     mongoStore = require('connect-mongodb'),
     mongoSessionDb = new require('mongodb').Db(
      'sessions',
-     new require('mongodb').Server('localhost', 27017, {auto_reconnect: true, native_parser: true})
+     new require('mongodb').Server('localhost', 27017, { auto_reconnect: true, native_parser: true } )
     ),
 
     fs = require('fs'),
@@ -25,7 +25,14 @@ mongoose.connect('mongodb://localhost/hotplate');
 
 // Load hotplate's modules
 hotplate.setApp(app);
-hotplate.loadModules('modules/node_modules');
+hotplate.registerAllEnabledModules('node_modules');
+require('testing');
+hotplate.registerModule('testingModule', 'testing');
+
+
+hotplate.initModules();
+
+
 
 // Configuration
 
@@ -51,12 +58,13 @@ app.configure(function(){
 
   // Static routes
   app.use(express.static(path.join(__dirname, 'public')));
-  app.use( hotplate.clientPages() ); // Static routes for hotplate
+  // app.use( hotplate.clientPages() ); // Static routes for hotplate
 
   // The application router
   app.use(app.router);
 
-  // app.use(AppErrorHandler);
+  app.use( hotplate.getModule('hotClientFiles').serve() );
+
 });
 
 // Load modules 
