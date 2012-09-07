@@ -3,35 +3,34 @@ hotplate
 
 _PLEASE NOTE: The module is going through major restrucuring and it's not currently functional._
 
-Framework to create client/server applications using Node.js, by creating modules which provide both client and server code.
-It started as a boilerplate to create SaaS, and evolved into a framework.
+Framework to create node client/server applications using a hook system. The initial plugins allow you to:
 
-The module system includes:
+* Emit "events" and have "hooks" to act upon events (client-side _and_ server-side)
 
-* Possibility to create modules
-* Modules are loaded automatically by a loader (conditionally if needed)
-* Modules have a "public" directory, which will be accessible from the outside as SETTABLE-PATH/module-name
-* The system provides a template page, which will be enriched by CSS and JS files added by the modules
-* If present, main.css and main.js will be added automatically
-* Each application exports a list of (placeable) client and server-side widgets
-* Centralised logging function
-* Simple way for modules to emit "events" and have "hooks" to act upon events (client-side _and_ server-side)
+* Define a standard sub-directory within your module's directory that will be available to the client. This is perfect for the side-client part of the story for your modules
 
-Already existing modules:
+* Define a list of JS/CSS files, as well as variables, which will be rendered onto a page. Each module can add files to the application via hooks. This means that if your module serves javascript widgets that need a specific css, you will be able to serve them, easy
 
-* Good HTTP-oriented errors
-* Generic, simple error handling
-* Basic protocol definition, ideal for Ajax-intensive applications
+* Centralised logging function (the logging module simply emits a "log" event, it's up to individual plugins to have hooks to define extra fields and to log things in the right spots. Example logging plugins that write data onto mongoDB are here)
+
+The beauty of this is in the easy in which you can write modules. Basic modules include:
+
+* Good HTTP-oriented errors server-side
+
+* Basic protocol definition, client and server side, ideal for Ajax-intensive applications
+
+* Generic, simple error handling with calls
+
 * Nice dojo widgets for your application
+
 * Login/logout/register module
+
 * Validators functions which are common client-side and server-side
+
 * Roles applicable to users
 
-Coming up:
-* Module to manage users
-* Module to manage email sending
-* Module to manage email receiving
+* Sending and receiving emails
 
-Maybe in the future:
-It would be _great_ to create a module that allows users to *place* widgets wherever in the application.
+* Manage email inbox
 
+Stay tuned!
