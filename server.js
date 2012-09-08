@@ -26,8 +26,10 @@ mongoose.connect('mongodb://localhost/hotplate');
 // Load hotplate's modules
 hotplate.setApp(app);
 hotplate.registerAllEnabledModules('node_modules');
-require('testing');
-hotplate.registerModule('testingModule', 'testing');
+
+// You can also do this
+// require('anotherModule');
+// hotplate.registerModule('another', 'anotherModule');
 
 
 hotplate.initModules();

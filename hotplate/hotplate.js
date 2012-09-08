@@ -190,7 +190,7 @@ Hotplate.prototype.initModules = function(){
   if( this.modulesAreInitialised ) return;
   this.modulesAreInitialised = true;
 
-  this.invokeAll('init');      // No invokeall() safely here
+  this.invokeAll('init');     // No invokeall() safely here
   this.invokeAll('postInit'); // At this point, modules will be able to invokeAll() safely
 }
 

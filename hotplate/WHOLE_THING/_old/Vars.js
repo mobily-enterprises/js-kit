@@ -5,13 +5,12 @@
 
 var util = require('util')
   , path = require('path')
-  , hotplate = require('hotplate')
 ;
 
 /**
  * Csses constructor.
  *
- * An object to which you can add variables to, and render them
+ * An object to which you can add 
  *
  * @api public
  */
@@ -20,6 +19,7 @@ function Vars( ){
   this.vars = {};
   this.Vars = Vars;
 }
+
 
 /**
  * The exports object is the object's constructor
@@ -43,15 +43,15 @@ module.exports = exports = Vars;
 Vars.prototype.render = function(){
   var r = '';
 
-  r += '<script type="text/javascript">vars = typeof(vars) !== \'undefined\' || {};</script>' + "\n";
+  r += '<script type="text/javascript">vars = vars || {};</script>' + "\n";
   r += '<script type="text/javascript">';
   for(var module in this.vars){
     var vm = 'vars[\'' + module + '\']';
     r += vm + ' = ' + vm + ' || {};';
-    this.vars[module].forEach( function(v) {
-      var vn = vm + '[\'' + v.name + '\']';
-      r += vn + ' = ' + JSON.stringify(v.value) + ';';
-    });
+    for(var name in this.vars[module]){
+      var vn = vm + '[\'name\']';
+      r += vn + ' = ' + JSON.stringify(this.vars[module][name]) + ';';
+    }
   };
 
   r += '</script>' + "\n";
@@ -59,7 +59,7 @@ Vars.prototype.render = function(){
 }
 
 /**
- * Add a variable
+ * Add a variable file
  *
  * @param {String} The module's name
  * @param {String} A variable's name
@@ -69,8 +69,8 @@ Vars.prototype.render = function(){
  */
 
 Vars.prototype.add = function(module, name, value  ){
-  this.vars[module] = this.vars[module] || [];
-  this.vars[module].push( { name: name, value: value } );
+  this.vars[module] = this.vars.module || {};
+  this.vars[module][name] = value;
 
   return this;
 }
