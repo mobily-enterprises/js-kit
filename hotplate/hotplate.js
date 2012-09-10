@@ -27,6 +27,8 @@ function Hotplate() {
   this.modules = {};
   this.app = {}; // A link to the express App, as submodules might need it
 
+  console.log("OK< modules is %j" , this.modules );
+
 };
 
 
@@ -111,6 +113,11 @@ Hotplate.prototype.setApp = function(app){
   this.app = app;
 }
 
+
+
+Hotplate.prototype.registerCoreModules = function() {
+  this.registerAllEnabledModules('node_modules/core/node_modules');
+}
 /**
  * Load all modules that are marked as "enabled"
  *
@@ -139,6 +146,8 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
   fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
       console.log( "Skipping self stub..." );
+    } else if( moduleName == 'core' ){
+      console.log( "Skipping 'core'..." );
     } else {
       var moduleFullPath = path.join( __dirname, modulesLocalPath,  moduleName );
       var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );
@@ -169,7 +178,6 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
  */
 
 Hotplate.prototype.registerModule = function(moduleName, moduleLocation){
-  console.log("Registering " + moduleName + ' from location ' + moduleLocation );
   this.modules[ moduleName ] = require( moduleLocation );
 }
 

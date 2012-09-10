@@ -1,19 +1,16 @@
-  "MODULARISATION"
 
-   * Add function to add fields that will be logged by the logger, defining them as "indexes" or not. (This will be used to
-     make up the schema on the spot by the mongologger)
-   * Add ability to register a module later (change the load function so that it calls register, and then
-     make sure that the template is recalculated after the registration for that particular module so that
-     JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
-     one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
-     just need to provide the right hooks
-   * Test the stores variables functionality
-   * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
-   * write a baseDojoStore module which just creates stores on the client side. This is urgent, as otherwise absolutely nothing
-     I wrote will work (!)
-   * Get all of the existing code fixed up so that if fits the new system
-   * See if it's feasible/possible to split the login code so that it becomes widget/db agnostic, maybe integrating with Passport. We
-     will still need userId and workspaceId somehow (?)
+  "MODULARISATION" (ACTUAL TODO)
+
+   * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
+   * Port the Dojo widgets "as they are", make application work "as is" (including making the stores)
+   ROUTES:
+     * Add function to add per-module routes
+     * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
+     * Add function to add per-module routes that only work on authentication with session or API token
+   * Move the "auth" side of the story into core in the sanest possible way for hotplate
+   * Check that coreAuth can be used for other systems (like passport, for example)
+   * Add function to log to console if turned on (add it to logger), put log messages using that from now on
+   * Comment each function, client and server, decide on a standard (probably node's)
 
    "VANITY"
 
@@ -37,7 +34,7 @@
        function defined which will return permissions on the client-side (no widgets etc.). THIS MIGHT WELL MEAN that I will need
        a widget-agnostic topic/subscription system similar to what I did for the server.
 
-  "HOOKS"
+  "DOJO HOOKS"
 
   * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
@@ -50,7 +47,6 @@
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
-  * CLENT:  Comment each function, client and server, decide on a standard (probably node's)
 
   "BROWSING DATA + LOGS"
 
@@ -104,6 +100,7 @@
   * Ability to create bookings
   * Ability to match incoming (and outgoing) messages to bookings
   * Ability to send invoices and _store_ received invoices
+  * Ability to set templates for messages of different types
   * Basic accounting
 
   DONE:
@@ -219,3 +216,10 @@
   * Empty root directory completely (including errors.js etc.), turn it into a straight Express server with modules
   * Write a hook system, server and client side, where other modules can listen and "enrich" each other's objects, forms, etc.
   * Write a topic/publish system, server side, where things can happen
+  * Add function to add fields that will be logged by the logger, defining them as "indexes" or not. (This will be used to
+    make up the schema on the spot by the mongologger)
+   * Add ability to register a module later (change the load function so that it calls register, and then
+     make sure that the template is recalculated after the registration for that particular module so that
+     JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
+     one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
+     just need to provide the right hooks
