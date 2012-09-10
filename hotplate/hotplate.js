@@ -193,6 +193,7 @@ Hotplate.prototype.initModules = function(){
   this.invokeAll('preInit');
   this.invokeAll('init');
   this.invokeAll('postInit');
+  this.invokeAll('run');
 }
 
 

@@ -41,9 +41,6 @@
 
   * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
-  * See if it's feasible for a module to modify another module's Mongoose model, or maybe have a specified field? Or maybe something
-    else. Maybe hook mongoose's events with hooks? Do something so that each module 'knows' what mongoose data other modules
-    dea with.
 
   "LAST TOUCHES"
 

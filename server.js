@@ -34,8 +34,6 @@ hotplate.registerAllEnabledModules('node_modules');
 
 hotplate.initModules();
 
-
-
 // Configuration
 
 app.configure(function(){
@@ -66,6 +64,7 @@ app.configure(function(){
   app.use(app.router);
 
   app.use( hotplate.getModule('hotClientFiles').serve() );
+  app.use( hotplate.getModule('hotError').hotErrorHandler );
 
 });
 
