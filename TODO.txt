@@ -1,13 +1,12 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
    * Port the Dojo widgets "as they are", make application work "as is" (including making the stores)
    ROUTES:
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
-     * Add function to add per-module routes that only work on authentication with session or API token
    * Move the "auth" side of the story into core in the sanest possible way for hotplate
+     * Add function to add per-module routes that only work on authentication with session or API token
    * Check that coreAuth can be used for other systems (like passport, for example)
    * Add function to log to console if turned on (add it to logger), put log messages using that from now on
    * Comment each function, client and server, decide on a standard (probably node's)
@@ -223,3 +222,4 @@
      JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
      one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
      just need to provide the right hooks
+   * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
