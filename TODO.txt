@@ -1,7 +1,7 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Port the Dojo widgets "as they are", make application work "as is" (including making the stores)
+   * Port the Dojo widgets "as they are", make application work "as is" (including making the stores) [IN PROGRESS, dealing with stores]
    ROUTES:
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
@@ -60,7 +60,7 @@
   "SETTINGS" (module)
 
   * Think about for a moment if we need a good way to allow modules to have "settings". Probably not, as this could well become
-    _extremely_ complicated if we are to keep database and widget agnostic. 
+    _extremely_ complicated if we are to keep database and widget agnostic. -- UPDATE: It doesn't have to be agnostic at all
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings

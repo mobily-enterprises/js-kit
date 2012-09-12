@@ -22,12 +22,10 @@ var util = require('util')
 function Hotplate() {
 
   this.options = {};
-  this.options.staticUrlPath = '/hotplateDir'; // REMEMBER '/' at the beginning
+  this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
 
   this.modules = {};
   this.app = {}; // A link to the express App, as submodules might need it
-
-  console.log("OK< modules is %j" , this.modules );
 
 };
 
@@ -43,10 +41,24 @@ function Hotplate() {
  * @param {String} value
  * @api public
  */
-Hotplate.prototype.set = function (key, value) {
-  if (arguments.length == 1)
-    return this.options [ key];
-  this.options [ key] = value;
+Hotplate.prototype.set = function( key, value ) {
+
+  // It's a get
+  if (arguments.length == 1) return this.options[ key ];
+
+
+  // It's a set
+
+  // First of all check that `key` isn't `staticUrlPath`. If it is,
+  // concat "hotplate" at the end (it's mandatory)
+  if( key == 'staticUrlPath' ){
+    value = path.join( value, 'hotplate' );
+  }
+
+  // Set the relevant key
+  this.options[ key ] = value;
+
+
   return this;
 };
 
@@ -139,8 +151,8 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
   var that = this;
 
   // Can't do this twice
-  if( this.modulesAreLoaded ) return;
-  this.modulesAreLoaded = true;
+  //if( this.modulesAreLoaded ) return;
+  //this.modulesAreLoaded = true;
 
   // Load the installed modules (if they are enabled)
   fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
