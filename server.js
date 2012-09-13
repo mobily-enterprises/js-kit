@@ -26,7 +26,7 @@ mongoose.connect('mongodb://localhost/hotplate');
 // Load hotplate's modules
 hotplate.setApp(app);
 
-hotplate.set( 'staticUrlPath', '/some/weird/path/dojo' );
+hotplate.set( 'staticUrlPath', '/dojo' );
 
 // Register core modules
 hotplate.registerCoreModules();
