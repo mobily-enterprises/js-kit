@@ -221,7 +221,7 @@ Hotplate.prototype.initModules = function(){
     if( typeof( modules[ m ].hotHooks.init ) == 'function' ){
       console.log( "Adding %s to the full list of modules to initialise", m );
       fullList.push( m );
-      loadStatus[m] = 'NOT_INITIALISED';
+      loadStatus[ m ] = 'NOT_INITIALISED';
     } else {
       console.log( "Skipping %s as it does not have an init() method, skipping", m );
     }
@@ -230,6 +230,9 @@ Hotplate.prototype.initModules = function(){
 
   // Let the recursive dance begin...  
   initModules(fullList, 2 );
+
+  // Invoke "run" in all modules (run MUST be order-agnostic)
+  this.invokeAll('run');
 
   // Quick indent function
   function i(spaces){
@@ -246,10 +249,12 @@ Hotplate.prototype.initModules = function(){
   function initialise(moduleName, indent ){
 
     console.log( i(indent) + "Called initialise() on %s", moduleName );
+    // console.log( i(indent) + "loadStatus is: ", loadStatus );
     if( loadStatus[ moduleName ] == 'NOT_INITIALISED'  ){
       console.log( i(indent) + "Initialising module %s, since it hadn't been initialised yet", moduleName );
       modules[ moduleName ].hotHooks.init.call( modules[ moduleName ] );
       loadStatus[ moduleName ] = 'INITIALISED';
+      console.log( i(indent) + "Module %s set as 'INITIALISED'", moduleName );
     } else {
       console.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
     }
@@ -274,6 +279,12 @@ Hotplate.prototype.initModules = function(){
 
       // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
       // and load them first
+      } else if( loadStatus[ moduleName ] != 'NOT_INITIALISED' ) { 
+
+        console.log( i(indent) + "Module %s's not initialised as it's status is already %s", moduleName, loadStatus[ moduleName ] );
+  
+
+
       } else { 
 
         // The module is now formally being initialised

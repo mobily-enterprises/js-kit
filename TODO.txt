@@ -225,3 +225,4 @@
      one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
      just need to provide the right hooks
    * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
+  * Write dependency system so that init() methods are called in the right order
