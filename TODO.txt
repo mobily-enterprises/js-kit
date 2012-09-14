@@ -1,7 +1,7 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Port the Dojo widgets "as they are", make application work "as is" (including making the stores) [IN PROGRESS, dealing with stores]
+   * Port the Dojo widgets "as they are", make application work "as is"
    ROUTES:
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
