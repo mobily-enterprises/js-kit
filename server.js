@@ -26,13 +26,14 @@ mongoose.connect('mongodb://localhost/hotplate');
 // Load hotplate's modules
 hotplate.setApp(app);
 
-hotplate.set( 'staticUrlPath', '/dojo' );
+hotplate.set( 'staticUrlPath', '/lib/dojo' );
 
 // Register core modules
 hotplate.registerCoreModules();
 
 // Register non-core modules
 hotplate.registerAllEnabledModules('node_modules');
+
 
 // You can also do this
 // require('anotherModule');

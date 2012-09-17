@@ -1,7 +1,8 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Port the Dojo widgets "as they are", make application work "as is"
+   * Port "hotDojoError" so that it uses the new globalAlertBar
+   * Make application work "as is" (making it use the new hotDojoError and stores etc. )
    ROUTES:
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)

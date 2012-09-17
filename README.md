@@ -33,4 +33,9 @@ The beauty of this is in the easy in which you can write modules. Basic modules 
 
 * Manage email inbox
 
+# Project's history
+
+I discovered Dojo and the world of SaaS while working on [project management software](http://www.apollohq.com). My dislike towars PHP grew very quickly, to the point that I considered server programming as enjoyable as losing weight. Then, [Nodejs](http://www.nodejs.org/) came along, and things changed... although I was still very bothered by the idea that a widget couldn't possibly be client or server. I started looking into it more and more, and decided to use my Drupal experience to create the web's Next Big Thing in terms of software development: a system where you can develop self contained, modular widgets which include server and client code. Hotplate was born!
+
+
 Stay tuned!
