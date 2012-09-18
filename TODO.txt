@@ -7,12 +7,15 @@
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
 
+   * Move hotplate's defined stuff into its own namespace
+   * 
 
    * Move the "auth" side of the story into core in the sanest possible way for hotplate
      * Add function to add per-module routes that only work on authentication with session or API token
    * Check that coreAuth can be used for other systems (like passport, for example)
    * Add function to log to console if turned on (add it to logger), put log messages using that from now on
    * Comment each function, client and server, decide on a standard (probably node's)
+
 
    "VANITY"
 

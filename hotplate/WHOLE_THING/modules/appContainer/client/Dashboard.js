@@ -10,13 +10,9 @@ define([
   "dijit/_WidgetsInTemplateMixin",
   "dijit/form/Form",
 
-  "app/lib/globals",
-  "app/lib/globalWidgets",
   "app/lib/defaultSubmit",
   "app/lib/Logger",
   "app/lib/stores",
-  'app/JsonRest',
-
 
   "app/widgets/AlertBar",
   "app/widgets/BusyButton",
@@ -32,12 +28,9 @@ define([
      , _WidgetsInTemplateMixin
      , Form
 
-     , g
-     , gw
      , ds
      , Logger
      , stores
-     , JsonRest
 
      , AlertBar
      , BusyButton
@@ -65,15 +58,6 @@ define([
 
         // SUbmit form
         this.form.onSubmit = ds.defaultSubmit(this.form, this.button, function(){
-
-          /* 
-          stores.testing = new JsonRest({
-            target: '/call/' + workspaceIdValue + '/module/contacts/list/something',
-            idProperty: '_id',
-            sortParam: 'sortBy',
-          });
-          */
-
 
           stores.users.query({} ).then(
             ds.UIMsg('ok', that.form, that.button, that.alertBar ),

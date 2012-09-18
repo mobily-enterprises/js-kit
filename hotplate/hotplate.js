@@ -175,6 +175,10 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
       }
     }
   });
+  
+  // Registering hotplage itself as hook provider  
+  this.modules[ 'hotplate' ] = this;
+
 }
 
 /**
@@ -363,6 +367,19 @@ Hotplate.prototype.invokeAll = function(){
   return results;
 }
 
+
+var hooks = Hotplate.prototype.hotHooks = {}
+
+// ...or like this (elements in page)
+hooks.pageElements = function(){
+  return {
+  }
+}
+
+// ...or like this (client paths)
+hooks.clientPaths = function(){
+  return [ path.join(__dirname, 'client') ];
+}
 
 
 
