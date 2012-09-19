@@ -176,8 +176,8 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
     }
   });
   
-  // Registering hotplage itself as hook provider  
-  this.modules[ 'hotplate' ] = this;
+  // Registering hotplage itself as hook provider
+  // this.modules[ 'hotplate' ] = this;
 
 }
 
@@ -368,9 +368,11 @@ Hotplate.prototype.invokeAll = function(){
 }
 
 
+
+/*
+// Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
 var hooks = Hotplate.prototype.hotHooks = {}
 
-// ...or like this (elements in page)
 hooks.pageElements = function(){
   return {
   }
@@ -380,6 +382,6 @@ hooks.pageElements = function(){
 hooks.clientPaths = function(){
   return [ path.join(__dirname, 'client') ];
 }
-
+*/
 
 

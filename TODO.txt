@@ -1,7 +1,8 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Port "hotDojoError" so that it uses the new globalAlertBar
+   * Move "hotPage" back into hotplate, add hooks to change page template at startup (Dojo needs it), move logger back into hotplate too.
+
    * Make application work "as is" (making it use the new hotDojoError and stores etc. )
    ROUTES:
      * Add function to add per-module routes
@@ -230,3 +231,4 @@
      just need to provide the right hooks
    * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
   * Write dependency system so that init() methods are called in the right order
+   * Port "hotDojoError" so that it uses the new globalAlertBar
