@@ -7,44 +7,34 @@ var express = require('express'),
 
     // Mongodb for sessions
     mongoStore = require('connect-mongodb'),
-    mongoSessionDb = new require('mongodb').Db(
+    mongodb = require('mongodb'),
+    mongoSessionDb = new mongodb.Db(
      'sessions',
-     new require('mongodb').Server('localhost', 27017, { auto_reconnect: true, native_parser: true } )
+     new mongodb.Server('localhost', 27017, { auto_reconnect: true, native_parser: true } )
     ),
 
     fs = require('fs'),
-    path = require('path'),
+    path = require('path');
 
-
-    hotplate = require('./hotplate/hotplate.js');
+  var   hotplate = require('./hotplate/hotplate.js');
 
 var app = express();
 
 // Connect to DB
 mongoose.connect('mongodb://localhost/hotplate');
 
-// Load hotplate's modules
-hotplate.setApp(app);
+hotplate.setApp(app); // Associate "app" to hotplate
+hotplate.set( 'staticUrlPath', '/lib/dojo' ); // Set the static URL path for all modules
 
-hotplate.set( 'staticUrlPath', '/lib/dojo' );
-
-// Register core modules
-hotplate.registerCoreModules();
-
-// Register non-core modules
-hotplate.registerAllEnabledModules('node_modules');
+hotplate.registerCoreModules(); // Register core modules
+hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
+// require('anotherModule'); hotplate.registerModule('another', 'anotherModule'); 
 
 
-// You can also do this
-// require('anotherModule');
-// hotplate.registerModule('another', 'anotherModule');
-
-
-hotplate.initModules();
-
-// Configuration
+hotplate.initModules(); // Initialise and run modules
 
 app.configure(function(){
+
   app.set('port', process.env.PORT || 3000);
   app.set('views', __dirname + '/views');
   app.set('view engine', 'jade');
@@ -66,17 +56,13 @@ app.configure(function(){
 
   // Static routes
   app.use(express.static(path.join(__dirname, 'public')));
-  // app.use( hotplate.clientPages() ); // Static routes for hotplate
 
-  // The application router
   app.use(app.router);
 
   app.use( hotplate.getModule('hotClientFiles').serve() );
   app.use( hotplate.getModule('hotError').hotErrorHandler );
-
 });
 
-// Load modules 
 
 app.configure('development', function(){
   // app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
@@ -87,7 +73,7 @@ app.configure('production', function(){
 });
 
 
-// Load installed
+hotplate.runModules(); // Modules at this point will define their own routes etc
 
 // Create the actual server
 http.createServer(app).listen(app.get('port'), function(){

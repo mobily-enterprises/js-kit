@@ -1,8 +1,6 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-   * Move "hotPage" back into hotplate, add hooks to change page template at startup (Dojo needs it), move logger back into hotplate too.
-
    * Make application work "as is" (making it use the new hotDojoError and stores etc. )
    ROUTES:
      * Add function to add per-module routes

@@ -23,6 +23,7 @@ function Hotplate() {
 
   this.options = {};
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
+  this.options.errorPage = function(req, req, next){ next(); }
 
   this.modules = {};
   this.app = {}; // A link to the express App, as submodules might need it
@@ -208,6 +209,13 @@ Hotplate.prototype.registerModule = function(moduleName, moduleLocation){
  * @api public
  */
 
+Hotplate.prototype.runModules = function(){
+
+  // Invoke "run" in all modules (run MUST be order-agnostic)
+  this.invokeAll('run');
+
+}
+
 Hotplate.prototype.initModules = function(){
 
   var that = this,
@@ -235,8 +243,6 @@ Hotplate.prototype.initModules = function(){
   // Let the recursive dance begin...  
   initModules(fullList, 2 );
 
-  // Invoke "run" in all modules (run MUST be order-agnostic)
-  this.invokeAll('run');
 
   // Quick indent function
   function i(spaces){
@@ -255,7 +261,7 @@ Hotplate.prototype.initModules = function(){
     console.log( i(indent) + "Called initialise() on %s", moduleName );
     // console.log( i(indent) + "loadStatus is: ", loadStatus );
     if( loadStatus[ moduleName ] == 'NOT_INITIALISED'  ){
-      console.log( i(indent) + "Initialising module %s, since it hadn't been initialised yet", moduleName );
+      console.log( i(indent) + "===========================================Initialising module %s, since it hadn't been initialised yet", moduleName );
       modules[ moduleName ].hotHooks.init.call( modules[ moduleName ] );
       loadStatus[ moduleName ] = 'INITIALISED';
       console.log( i(indent) + "Module %s set as 'INITIALISED'", moduleName );
