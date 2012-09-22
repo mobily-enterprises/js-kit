@@ -1,12 +1,19 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
+  * Fix LogoutButton so that it has the right includes and it works (in hotDojoAuth)
+  * Check existing hotDojoAuth code for workspaceIdValue (and anythingValue really) to see if I need to set some variables
+    at login/pick (check original jade files)
+  * Change workspaceIdValue into the newly created local variable in the app.
+  * See if the bloody thing actually works!
+ 
+
    * Make application work "as is" (making it use the new hotDojoError and stores etc. )
    ROUTES:
      * Add function to add per-module routes
      * Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
 
-   * Move hotplate's defined stuff into its own namespace
+   * Move hotplate's defined stuff into its own namespace?
    * 
 
    * Move the "auth" side of the story into core in the sanest possible way for hotplate

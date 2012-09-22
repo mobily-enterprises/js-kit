@@ -24,6 +24,7 @@ function Hotplate() {
   this.options = {};
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
   this.options.errorPage = function(req, req, next){ next(); }
+  this.options.afterLoginPage = '/ws/';
 
   this.modules = {};
   this.app = {}; // A link to the express App, as submodules might need it
@@ -178,7 +179,7 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
   });
   
   // Registering hotplage itself as hook provider
-  // this.modules[ 'hotplate' ] = this;
+  this.modules[ 'hotplate' ] = this;
 
 }
 
@@ -375,10 +376,33 @@ Hotplate.prototype.invokeAll = function(){
 
 
 
-/*
+
+// This is temporarily here, as I have no idea where to place it for now
+Hotplate.prototype.objectIdCheck = function(s){
+  return new RegExp("^[0-9a-fA-F]{24}$").test(s);
+}
+
+
+
+
 // Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
 var hooks = Hotplate.prototype.hotHooks = {}
 
+
+/*
+  Variables that will need to be available to the client as well
+  (e.g. afterLoginPage will be used by the Javascript to redirect)
+ 
+*/
+hooks.pageElements = function(){
+  return {
+    vars:  [ { name: 'afterLoginPage', value: hotplate.get('afterLoginPage') },
+           ],
+  }
+}
+
+
+/*
 hooks.pageElements = function(){
   return {
   }

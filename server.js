@@ -25,6 +25,7 @@ mongoose.connect('mongodb://localhost/hotplate');
 
 hotplate.setApp(app); // Associate "app" to hotplate
 hotplate.set( 'staticUrlPath', '/lib/dojo' ); // Set the static URL path for all modules
+hotplate.set( 'afterLoginPage', '/ws/' ); // Page to go after logging in. Remember / at the end!
 
 hotplate.registerCoreModules(); // Register core modules
 hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
