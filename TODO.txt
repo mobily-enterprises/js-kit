@@ -1,7 +1,6 @@
 
   "MODULARISATION" (ACTUAL TODO)
 
-  * Fix LogoutButton so that it has the right includes and it works (in hotDojoAuth)
   * Check existing hotDojoAuth code for workspaceIdValue (and anythingValue really) to see if I need to set some variables
     at login/pick (check original jade files)
   * Change workspaceIdValue into the newly created local variable in the app.
