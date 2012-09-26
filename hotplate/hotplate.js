@@ -234,7 +234,7 @@ Hotplate.prototype.initModules = function(){
     if( typeof( modules[ m ].hotHooks.init ) == 'function' ){
       console.log( "Adding %s to the full list of modules to initialise", m );
       fullList.push( m );
-      loadStatus[ m ] = 'NOT_INITIALISED';
+      loadStatus[ m ] = 'NOT_ADDED';
     } else {
       console.log( "Skipping %s as it does not have an init() method, skipping", m );
     }
@@ -255,17 +255,17 @@ Hotplate.prototype.initModules = function(){
   }
 
   // Simple function to initialise a module.
-  // It will only initialise it if the status is NOT_INITIALISED.
+  // It will only initialise it if the status is NOT_ADDED.
   // `indent` is ther only so that the output has the right indentation
   function initialise(moduleName, indent ){
 
     console.log( i(indent) + "Called initialise() on %s", moduleName );
     // console.log( i(indent) + "loadStatus is: ", loadStatus );
-    if( loadStatus[ moduleName ] == 'NOT_INITIALISED'  ){
+    if( loadStatus[ moduleName ] == 'NOT_ADDED'  ){
       console.log( i(indent) + "===========================================Initialising module %s, since it hadn't been initialised yet", moduleName );
       modules[ moduleName ].hotHooks.init.call( modules[ moduleName ] );
-      loadStatus[ moduleName ] = 'INITIALISED';
-      console.log( i(indent) + "Module %s set as 'INITIALISED'", moduleName );
+      loadStatus[ moduleName ] = 'ADDED';
+      console.log( i(indent) + "Module %s set as 'ADDED'", moduleName );
     } else {
       console.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
     }
@@ -290,7 +290,7 @@ Hotplate.prototype.initModules = function(){
 
       // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
       // and load them first
-      } else if( loadStatus[ moduleName ] != 'NOT_INITIALISED' ) { 
+      } else if( loadStatus[ moduleName ] != 'NOT_ADDED' ) { 
 
         console.log( i(indent) + "Module %s's not initialised as it's status is already %s", moduleName, loadStatus[ moduleName ] );
   
@@ -299,7 +299,7 @@ Hotplate.prototype.initModules = function(){
       } else { 
 
         // The module is now formally being initialised
-        loadStatus[ moduleName ] = 'INITIALISING';
+        loadStatus[ moduleName ] = 'ADDING';
 
         // Reset the "subList" array...
         subList = {};
@@ -322,7 +322,7 @@ Hotplate.prototype.initModules = function(){
                 console.log( i(indent) + "Module %s DOES need to init(), adding to the sub list of modules to initialise first", m );
  
                 // The module has an init(), but it could be initialising as we speak...
-                if( loadStatus[ m ] == 'INITIALISING' ){
+                if( loadStatus[ m ] == 'ADDING' ){
                   // FIXME: Add warning about circular dependencies if the name if the module being initialised
                   // is different to the one found in m. MAYBE.
                   console.log( i(indent) + "Module %s (for %s) in dependency list BUT it's being initialised as we speak, skipping..." , m, moduleName );
@@ -346,8 +346,8 @@ Hotplate.prototype.initModules = function(){
           console.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage" , moduleName);
 
           // At this point, this module is ready to be initialised. Set its status
-          // to NOT_INITIALISED and then initialised it
-          loadStatus[ moduleName ] = 'NOT_INITIALISED';
+          // to NOT_ADDED and then initialised it
+          loadStatus[ moduleName ] = 'NOT_ADDED';
           initialise( moduleName, indent );
         });
 
