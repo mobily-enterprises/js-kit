@@ -5,10 +5,6 @@
 
   "PERMISSIONS"
 
-  * Before starting, check how feasible it is to create hook-driven "gets" and "sets" so that the application
-    can query *every* available module for a determined list (roles? defined widgets?). How could this work, staying
-    simple and generic? Could this work both for roles, and for widget registration and location?
-
   * Write a permission system Ways to go about this:
      - Hooks to define roles (each module can define some)
      - Hooks to define permission (each module can define some)
@@ -228,3 +224,5 @@
    * Make application work "as is" (making it use the new hotDojoError and stores etc. )
    * Make sure hooks are called asynchronously so that hooks can be used within callbacks
    * Add function to log to console if turned on (add it to logger), put log messages using that from now on
+   * Add function invokeAllFlattened, which gets all results from an invokeAll and flattens them onto an array, to be used for thinks
+     like roles etc.

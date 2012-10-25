@@ -416,16 +416,23 @@ Hotplate.prototype.invokeAll = function( ){
   callback,
   hookArguments;
 
-  // Dissect `arguments`
-  args = Array.prototype.splice.call(arguments, 0);
-  callback = args.pop();   // The last parameter, always the callback
-  hook = args.splice(0,1); // The first parameter, always the hook's name
-  hookArguments = args;    // The leftovers, the hook's parameters
 
-  hotplate.log("invokeAll(%s) called!" , hook);
-  //hotplate.log(args);
-  //hotplate.log(hook);
-  //hotplate.log(hookArguments);
+  args = Array.prototype.splice.call(arguments, 0);
+  
+  hook = args.splice(0,1)[0]; // The first parameter, always the hook's name
+  hookArguments = args;       // The leftovers, the hook's parameters
+
+  // If the last parameter is a function, it's assumed
+  // to be the callback
+  if( typeof( hookArguments[ hookArguments.length-1 ] ) === 'function' ){
+    callback = hookArguments.pop();   // The last parameter, always the callback
+  }
+
+  /* hotplate.log("invokeAll(%s) called!" , hook);
+  hotplate.log(args);
+  hotplate.log(hook);
+  hotplate.log(hookArguments);
+  */
 
   var modules = this.modules;
  
@@ -433,22 +440,54 @@ Hotplate.prototype.invokeAll = function( ){
     // var module = modules[moduleName];
 
     if( typeof( modules[moduleName].hotHooks ) === 'object' && typeof( modules[moduleName].hotHooks[hook] ) === 'function' ){
-      // hotplate.log(modules[moduleName].hotHooks[hook]);     
-
  
       // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
       // bound to the function's scope
       functionList.push( function(){
         var mn = moduleName;
         return function( done ) {
-          hotplate.log("Running hook %s for %s", hook, mn);
+          hotplate.log("Running hook %j for %s", hook, mn);
           modules[mn].hotHooks[hook].apply( modules[mn], Array.prototype.concat( done, hookArguments ) );
-         } }()   );
-        
-      // results.push( { moduleName: moduleName, result: module.hotHooks[hook].apply( module, Array.prototype.splice.call(arguments, 1) ) } );
+         }
+      }() );
     }
   }
   callback ? async.series( functionList, callback ) : async.series( functionList );
+}
+
+Hotplate.prototype.invokeAllFlattened = function( ){
+  var hook,
+  args,
+  callback,
+  toReturn = [];
+
+  hotplate.log("invokeAllFlattened(%s) called!" , hook);
+
+  // "Stealing" the final arguments, replacing it with a different callback
+  args = Array.prototype.splice.call(arguments, 0);
+  callback = args.pop();   // The last parameter, always the callback
+  args.push( flatten );
+
+  // Call invokeAll, with the new callback
+  Hotplate.prototype.invokeAll.apply( this, args );
+
+  // Callback that will flatten the results, and then call
+  // the callback that was originally passed
+  function flatten( err, results ){
+    hotplate.log("Received results from invokeAll: %j", results );
+
+    hotplate.log("Flattening the result...");
+    results.forEach( function( item ){
+      item.forEach( function( item ){
+        toReturn.push( item );
+      })
+    });
+
+    // Call the original callback
+    hotplate.log("Now calling the callback...");
+    callback( null, toReturn );
+  }
+
 }
 
 
