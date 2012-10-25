@@ -5,7 +5,8 @@
 
   "PERMISSIONS"
 
-  * Write a permission system Ways to go about this:
+
+  * Write a permission system ways to go about this:
      - Hooks to define roles (each module can define some)
      - Hooks to define permission (each module can define some)
      - Hooks to return, for each role, an associative array of module-defined permissions to which the role has access AND
