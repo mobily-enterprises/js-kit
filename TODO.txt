@@ -1,10 +1,4 @@
 
-  "MODULARISATION" (ACTUAL TODO)
-
-   * Make application work "as is" (making it use the new hotDojoError and stores etc. )
-   * Add function to log to console if turned on (add it to logger), put log messages using that from now on
-   * Comment each function, client and server, decide on a standard (probably node's)
-
    "VANITY"
 
    * Add counter again: cat `find . -type f | grep -v \.git | grep -v \.sw ` | wc
@@ -16,21 +10,26 @@
     simple and generic? Could this work both for roles, and for widget registration and location?
 
   * Write a permission system Ways to go about this:
-     - Hook to define roles (each module can define some)
-     - Hooks to define permission lists for each module
+     - Hooks to define roles (each module can define some)
+     - Hooks to define permission (each module can define some)
      - Hooks to return, for each role, an associative array of module-defined permissions to which the role has access AND
        function to return all module-defined permissions for a specified role. NOTE: initially, this could well be a static
        module, which will define both roles and module-defined permissions for that role. However, hopefully in the future there
        might well be a user interface to do that too
      - Export the permission matrix to Javascript (for that particular user). Permissions are basically another variable (like "stores"
        and "vars"). It's up to the framework to use it. Since this is _very_ widget-agnostic, ideally there will be a javascript
-       function defined which will return permissions on the client-side (no widgets etc.). THIS MIGHT WELL MEAN that I will need
-       a widget-agnostic topic/subscription system similar to what I did for the server.
+       function defined which will return permissions on the client-side (no widgets etc.).
 
   "DOJO HOOKS"
 
   * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
+
+
+  "DOCUMENTATION"
+  * Comment each function, client and server, decide on a standard (probably node's)
+
+  (And while doing documentation...)
 
   "LAST TOUCHES"
 
@@ -224,5 +223,8 @@
      one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
      just need to provide the right hooks
    * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
-  * Write dependency system so that init() methods are called in the right order
+   * Write dependency system so that init() methods are called in the right order
    * Port "hotDojoError" so that it uses the new globalAlertBar
+   * Make application work "as is" (making it use the new hotDojoError and stores etc. )
+   * Make sure hooks are called asynchronously so that hooks can be used within callbacks
+   * Add function to log to console if turned on (add it to logger), put log messages using that from now on

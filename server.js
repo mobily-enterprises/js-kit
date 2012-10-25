@@ -16,7 +16,7 @@ var express = require('express'),
     fs = require('fs'),
     path = require('path');
 
-  var   hotplate = require('./hotplate/hotplate.js');
+  var hotplate = require('./hotplate/hotplate.js');
 
 var app = express();
 
@@ -24,6 +24,7 @@ var app = express();
 mongoose.connect('mongodb://localhost/hotplate');
 
 hotplate.setApp(app); // Associate "app" to hotplate
+hotplate.set( 'logToScreen' , true );
 hotplate.set( 'staticUrlPath', '/lib/dojo' ); // Set the static URL path for all modules
 hotplate.set( 'afterLoginPage', '/ws/' ); // Page to go after logging in. Remember / at the end!
 

@@ -26,6 +26,7 @@ function Hotplate() {
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
   this.options.errorPage = function(req, req, next){ next(); }
   this.options.afterLoginPage = '/ws/';
+  this.options.logToScreen = true;
 
   this.modules = {};
   this.app = {}; // A link to the express App, as submodules might need it
@@ -61,7 +62,6 @@ Hotplate.prototype.set = function( key, value ) {
   // Set the relevant key
   this.options[ key ] = value;
 
-
   return this;
 };
 
@@ -81,6 +81,9 @@ Hotplate.prototype.set = function( key, value ) {
 Hotplate.prototype.get = Hotplate.prototype.set;
 
 Hotplate.prototype.getModule = function(moduleName){
+  if( typeof(this.modules[moduleName]) === 'undefined' ){
+    hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded");
+  }
   return this.modules[moduleName];
 }
 
@@ -99,7 +102,7 @@ var hotplate = module.exports;
 /**
  * The Hotplate constructor
  *
- * The exports of the mongoose module is an instance of this class.
+ * The exports of the hotplate module is an instance of this class.
  *
  * ####Example:
  *
@@ -116,7 +119,7 @@ hotplate.Hotplate = Hotplate;
  * Set the "app" attribute of the hotplate object
  *
  * This is important as the hotplate object
- * has functions to add routes
+ * has functions to add routes, which need the 'app' object
  * 
  * @param {Express} The express object used in the application
  * 
@@ -126,6 +129,24 @@ hotplate.Hotplate = Hotplate;
 
 Hotplate.prototype.setApp = function(app){
   this.app = app;
+}
+
+
+/**
+ * Hotplate-wide Log function
+ *
+ * The parameter "logToScreen" will define whether it will actually print things or not
+ * 
+ * @param {message} The message to print out
+ * 
+ * @api public
+ */
+
+
+Hotplate.prototype.log = function(){
+  if( hotplate.get('logToScreen') ){
+    console.log.apply(this, arguments);
+  }
 }
 
 
@@ -160,9 +181,9 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
   // Load the installed modules (if they are enabled)
   fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
-      console.log( "Skipping self stub..." );
+      hotplate.log( "Skipping self stub..." );
     } else if( moduleName == 'core' ){
-      console.log( "Skipping 'core'..." );
+      hotplate.log( "Skipping 'core'..." );
     } else {
       var moduleFullPath = path.join( __dirname, modulesLocalPath,  moduleName );
       var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );
@@ -171,10 +192,10 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
 
       // If the module is enabled (it has a file called 'enabled'), load it
       if( fs.existsSync( moduleEnabledLocation ) ){
-        console.log( "Registering module " + moduleName + ' from ' + moduleRelativePath );
+        hotplate.log( "Registering module " + moduleName + ' from ' + moduleRelativePath );
         that.registerModule( moduleName, moduleRelativePath );
       } else {
-        console.log( "Skipping " + moduleName + " as it's not enabled" );
+        hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
       }
     }
   });
@@ -235,11 +256,11 @@ Hotplate.prototype.initModules = function(){
   // Make up the initial list of modules to initialise
   for( var m in modules ){
     if( typeof( modules[ m ].hotHooks.init ) == 'function' ){
-      console.log( "Adding %s to the full list of modules to initialise", m );
+      hotplate.log( "Adding %s to the full list of modules to initialise", m );
       fullList.push( m );
       loadStatus[ m ] = 'NOT_ADDED'; // Initial status
     } else {
-      console.log( "Skipping %s as it does not have an init() method, skipping", m );
+      hotplate.log( "Skipping %s as it does not have an init() method, skipping", m );
     }
   };
      
@@ -250,7 +271,7 @@ Hotplate.prototype.initModules = function(){
 
   // ASYNC THIS
   
-  // console.log(fullList);  
+  // hotplate.log(fullList);  
  
   // Invokes init() for each module, in the right order!
   orderedList.forEach( function(moduleName){
@@ -284,19 +305,19 @@ Hotplate.prototype.initModules = function(){
     var invokeList, subList = {};
 
     list.forEach( function(moduleName){
-      console.log( "\n" + i(indent) + "Adding %s", moduleName);
+      hotplate.log( "\n" + i(indent) + "Adding %s", moduleName);
 
       // The module's init doesn't invokeAll(), all good: just initialise it
       // unless it has already been initialised
       if( typeof( modules[ moduleName ].hotHooks.init.invokes) == 'undefined' ){
-        console.log( i(indent) + "Module %s's init() doesn't invoke anything, it can be added right away", moduleName );
+        hotplate.log( i(indent) + "Module %s's init() doesn't invoke anything, it can be added right away", moduleName );
         actuallyAdd( moduleName, indent );
 
       // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
       // and load them first
       } else if( loadStatus[ moduleName ] != 'NOT_ADDED' ) { 
 
-        console.log( i(indent) + "Module %s's not initialised as it's status is already %s, doing nothing", moduleName, loadStatus[ moduleName ] );
+        hotplate.log( i(indent) + "Module %s's not initialised as it's status is already %s, doing nothing", moduleName, loadStatus[ moduleName ] );
   
       } else { 
 
@@ -308,40 +329,40 @@ Hotplate.prototype.initModules = function(){
 
         // Get an array with the invoke list (hooks from other modules that WILL get called)
         invokeList = modules[ moduleName ].hotHooks.init.invokes;
-        console.log( i(indent) + "Module %s calls invokeAll(%s), checking which modules provide it, adding them first", moduleName, invokeList );
+        hotplate.log( i(indent) + "Module %s calls invokeAll(%s), checking which modules provide it, adding them first", moduleName, invokeList );
 
         // For each module in the invoke list, add it to the sub-list of modules to initialise
         invokeList.forEach( function(invokedFunction ){
-          console.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
+          hotplate.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
           for( var m in modules){
 
             if( modules[ m ].hotHooks[ invokedFunction ] ){
-              console.log( i(indent) + "Module %s provides the hook, checking if it has an init() function...", m );
+              hotplate.log( i(indent) + "Module %s provides the hook, checking if it has an init() function...", m );
              
               if( typeof( modules[ m ].hotHooks.init ) == 'undefined' ){
-                console.log( i(indent) + "Module %s doesn't need to init(), ignoring...", m );
+                hotplate.log( i(indent) + "Module %s doesn't need to init(), ignoring...", m );
               } else {
-                console.log( i(indent) + "Module %s DOES need to init(), considering adding it to the list of modules to load", m );
+                hotplate.log( i(indent) + "Module %s DOES need to init(), considering adding it to the list of modules to load", m );
  
                 // The module has an init(), but it could be initialising as we speak...
                 switch( loadStatus[m]){
                   case 'ADDING':
                     // FIXME: Add warning about circular dependencies if the name if the module being initialised
                     // is different to the one found in m. MAYBE.
-                    console.log( i(indent) + "Module %s (for %s) in dependency list BUT it's being initialised as we speak, skipping..." , m, moduleName );
+                    hotplate.log( i(indent) + "Module %s (for %s) in dependency list BUT it's being initialised as we speak, skipping..." , m, moduleName );
                     // The only case when this is OK is when a module provide the hooks it needs the init() for (which might well happen). 
                     // In any other case, it's the symptom of a circular dependency
                     if( m != moduleName ){
-                      console.log( i(indent) + "!!! WARNING! It looks like you might be experiencing circular dependencies!" );
+                      hotplate.log( i(indent) + "!!! WARNING! It looks like you might be experiencing circular dependencies!" );
                     }
                   break;
 
                   case 'ADDED':
-                    console.log( i(indent) + "Skipping module %s as its status was already %s", m, loadStatus[m] );
+                    hotplate.log( i(indent) + "Skipping module %s as its status was already %s", m, loadStatus[m] );
                   break;
 
                   case 'NOT_ADDED':
-                    console.log( i(indent) + "Adding module %s to the sublist, its status was %s", m, loadStatus[m] );
+                    hotplate.log( i(indent) + "Adding module %s to the sublist, its status was %s", m, loadStatus[m] );
                     subList[ m ] = true;
                   break;
                 } // switch
@@ -350,10 +371,10 @@ Hotplate.prototype.initModules = function(){
           }    
           // Init the sub-modules (if needed)
 
-          console.log( i(indent) + "LIST of dependencies for %s is: [%s]. Reiterating self if necessary (intending in)", moduleName, Object.keys(subList) );
+          hotplate.log( i(indent) + "LIST of dependencies for %s is: [%s]. Reiterating self if necessary (intending in)", moduleName, Object.keys(subList) );
           addModules( Object.keys( subList ), indent + 2 );
 
-          console.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage" , moduleName);
+          hotplate.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage" , moduleName);
 
           // At this point, this module is ready to be initialised. Set its status
           // to NOT_ADDED and then initialised it
@@ -371,15 +392,15 @@ Hotplate.prototype.initModules = function(){
   // `indent` is ther only so that the output has the right indentation
   function actuallyAdd(moduleName, indent ){
 
-    console.log( i(indent) + "Called actuallyAdd() on %s", moduleName );
-    // console.log( i(indent) + "loadStatus is: ", loadStatus );
+    hotplate.log( i(indent) + "Called actuallyAdd() on %s", moduleName );
+    // hotplate.log( i(indent) + "loadStatus is: ", loadStatus );
     if( loadStatus[ moduleName ] == 'NOT_ADDED'  ){
-      console.log( i(indent) + "Initialising module %s, since it hadn't been initialised yet", moduleName );
+      hotplate.log( i(indent) + "Initialising module %s, since it hadn't been initialised yet", moduleName );
       loadStatus[ moduleName ] = 'ADDED';
-      console.log( i(indent) + "Module %s set as 'ADDED'", moduleName );
+      hotplate.log( i(indent) + "Module %s set as 'ADDED'", moduleName );
       orderedList.push(moduleName);
     } else {
-      console.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
+      hotplate.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
     }
   }
 
@@ -401,10 +422,10 @@ Hotplate.prototype.invokeAll = function( ){
   hook = args.splice(0,1); // The first parameter, always the hook's name
   hookArguments = args;    // The leftovers, the hook's parameters
 
-   console.log("invokeAll called!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-   console.log(args);
-   console.log(hook);
-   console.log(hookArguments);
+  hotplate.log("invokeAll(%s) called!" , hook);
+  //hotplate.log(args);
+  //hotplate.log(hook);
+  //hotplate.log(hookArguments);
 
   var modules = this.modules;
  
@@ -412,18 +433,15 @@ Hotplate.prototype.invokeAll = function( ){
     // var module = modules[moduleName];
 
     if( typeof( modules[moduleName].hotHooks ) === 'object' && typeof( modules[moduleName].hotHooks[hook] ) === 'function' ){
-      // console.log(modules[moduleName].hotHooks[hook]);     
+      // hotplate.log(modules[moduleName].hotHooks[hook]);     
 
  
-      // ASYNC THIS
-
       // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
       // bound to the function's scope
       functionList.push( function(){
         var mn = moduleName;
-        console.log("Added moduleName: %s", moduleName );
         return function( done ) {
-          console.log("Running hook for moduleName: %s", mn);
+          hotplate.log("Running hook %s for %s", hook, mn);
           modules[mn].hotHooks[hook].apply( modules[mn], Array.prototype.concat( done, hookArguments ) );
          } }()   );
         
@@ -441,8 +459,6 @@ Hotplate.prototype.objectIdCheck = function(s){
 }
 
 
-
-
 // Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
 var hooks = Hotplate.prototype.hotHooks = {}
 
@@ -453,11 +469,12 @@ var hooks = Hotplate.prototype.hotHooks = {}
  
 */
 hooks.pageElements = function( done ){
-  done( null, { moduleName: 'hotPlate', result:  {
+  done( null, { moduleName: 'hotplate', result:  {
     vars:  [ { name: 'afterLoginPage', value: hotplate.get('afterLoginPage') },
            ],
   } } );
 }
+
 
 
 /*
