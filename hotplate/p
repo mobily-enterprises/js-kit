@@ -1,8 +1,0 @@
-./node_modules/hotMongooseLogger/lib/hotMongooseLogger.js
-./node_modules/core/node_modules/hotClientFiles/lib/hotClientFiles.js
-./node_modules/core/node_modules/hotPage/lib/hotPage.js
-./node_modules/core/node_modules/hotServerLogger/lib/hotServerLogger.js
-./node_modules/core/node_modules/hotError/lib/hotError.js
-./node_modules/core/node_modules/hotSharedCode/lib/hotSharedCode.js
-./node_modules/core/node_modules/hotStoresVars/lib/hotStoresVars.js
-./hotplate.js
