@@ -1,13 +1,9 @@
   "DOJO HOOKS"
 
-  * STARTED: Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
-    sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
-
   "LAST TOUCHES"
 
-  * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
-  * SERVER: Set an expiration time to the login, check that it can be "since last communication"
+  * SERVER: Set an expiration time to the login, check that it can be "since last communication" (add flag?)
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
@@ -196,16 +192,19 @@
   * Write a topic/publish system, server side, where things can happen
   * Add function to add fields that will be logged by the logger, defining them as "indexes" or not. (This will be used to
     make up the schema on the spot by the mongologger)
-   * Add ability to register a module later (change the load function so that it calls register, and then
-     make sure that the template is recalculated after the registration for that particular module so that
-     JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
-     one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
-     just need to provide the right hooks
-   * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
-   * Write dependency system so that init() methods are called in the right order
-   * Port "hotDojoError" so that it uses the new globalAlertBar
-   * Make application work "as is" (making it use the new hotDojoError and stores etc. )
-   * Make sure hooks are called asynchronously so that hooks can be used within callbacks
-   * Add function to log to console if turned on (add it to logger), put log messages using that from now on
-   * Add function invokeAllFlattened, which gets all results from an invokeAll and flattens them onto an array, to be used for thinks
-     like roles etc.
+  * Add ability to register a module later (change the load function so that it calls register, and then
+    make sure that the template is recalculated after the registration for that particular module so that
+    JS and CSSes are added). Also, see if it's possible to make file loading work as well (!), this will require
+    one middleware call per module). This way, people can use *any* module to integrate with hotplate -- the modules will
+    just need to provide the right hooks
+  * Put core modules into a "core" directory somehow (revise the way modules are loaded, allow two stage loading and THEN init() )
+  * Write dependency system so that init() methods are called in the right order
+  * Port "hotDojoError" so that it uses the new globalAlertBar
+  * Make application work "as is" (making it use the new hotDojoError and stores etc. )
+  * Make sure hooks are called asynchronously so that hooks can be used within callbacks
+  * Add function to log to console if turned on (add it to logger), put log messages using that from now on
+  * Add function invokeAllFlattened, which gets all results from an invokeAll and flattens them onto an array, to be used for thinks
+    like roles etc.
+  * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
+    sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
+  * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
