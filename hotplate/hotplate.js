@@ -174,10 +174,6 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
 
   var that = this;
 
-  // Can't do this twice
-  //if( this.modulesAreLoaded ) return;
-  //this.modulesAreLoaded = true;
-
   // Load the installed modules (if they are enabled)
   fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
@@ -232,14 +228,14 @@ Hotplate.prototype.registerModule = function(moduleName, moduleLocation){
  * @api public
  */
 
-Hotplate.prototype.runModules = function(){
+Hotplate.prototype.runModules = function( callback ){
 
   // Invoke "run" in all modules (run MUST be order-agnostic)
-  this.invokeAll('run', null );
+  this.invokeAll('run', callback );
 
 }
 
-Hotplate.prototype.initModules = function(){
+Hotplate.prototype.initModules = function( callback ){
 
   var that = this,
       fullList = [], 
@@ -248,6 +244,7 @@ Hotplate.prototype.initModules = function(){
       modules = this.modules,
       loadStatus = {},
       functionList = [];
+
 
   // Can't do this twice
   if( this.modulesAreInitialised ) return;
@@ -276,16 +273,19 @@ Hotplate.prototype.initModules = function(){
   // Invokes init() for each module, in the right order!
   orderedList.forEach( function(moduleName){
 
+
      functionList.push( function(done){
+       console.log("Calling init call for module %s", moduleName);
        modules[ moduleName ].hotHooks.init.call( modules[ moduleName ], done );
      });
 
      // modules[ moduleName ].hotHooks.init.call( modules[ moduleName ] );
   });
-  
-  async.series( functionList ); 
+ 
 
   // THAT's IT!
+  async.series( functionList, callback ); 
+
 
   // Quick indent function
   function i(spaces){
@@ -387,7 +387,7 @@ Hotplate.prototype.initModules = function(){
     
   }
 
-  // Simple function to initialise a module.
+  // Simple function to add a module to the list of the ones to initialise
   // It will only initialise it if the status is NOT_ADDED.
   // `indent` is ther only so that the output has the right indentation
   function actuallyAdd(moduleName, indent ){
@@ -403,6 +403,7 @@ Hotplate.prototype.initModules = function(){
       hotplate.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
     }
   }
+
 
 
 }
@@ -461,8 +462,6 @@ Hotplate.prototype.invokeAllFlattened = function( ){
   callback,
   toReturn = [];
 
-  hotplate.log("invokeAllFlattened(%s) called!" , hook);
-
   // "Stealing" the final arguments, replacing it with a different callback
   args = Array.prototype.splice.call(arguments, 0);
   callback = args.pop();   // The last parameter, always the callback
@@ -474,9 +473,7 @@ Hotplate.prototype.invokeAllFlattened = function( ){
   // Callback that will flatten the results, and then call
   // the callback that was originally passed
   function flatten( err, results ){
-    hotplate.log("Received results from invokeAll: %j", results );
 
-    hotplate.log("Flattening the result...");
     results.forEach( function( item ){
       item.forEach( function( item ){
         toReturn.push( item );
@@ -484,7 +481,6 @@ Hotplate.prototype.invokeAllFlattened = function( ){
     });
 
     // Call the original callback
-    hotplate.log("Now calling the callback...");
     callback( null, toReturn );
   }
 

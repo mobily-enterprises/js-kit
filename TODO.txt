@@ -1,32 +1,7 @@
-
-   "VANITY"
-
-   * Add counter again: cat `find . -type f | grep -v \.git | grep -v \.sw ` | wc
-
-  "PERMISSIONS"
-
-
-  * Write a permission system ways to go about this:
-     - Hooks to define roles (each module can define some)
-     - Hooks to define permission (each module can define some)
-     - Hooks to return, for each role, an associative array of module-defined permissions to which the role has access AND
-       function to return all module-defined permissions for a specified role. NOTE: initially, this could well be a static
-       module, which will define both roles and module-defined permissions for that role. However, hopefully in the future there
-       might well be a user interface to do that too
-     - Export the permission matrix to Javascript (for that particular user). Permissions are basically another variable (like "stores"
-       and "vars"). It's up to the framework to use it. Since this is _very_ widget-agnostic, ideally there will be a javascript
-       function defined which will return permissions on the client-side (no widgets etc.).
-
   "DOJO HOOKS"
 
-  * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
+  * STARTED: Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
-
-
-  "DOCUMENTATION"
-  * Comment each function, client and server, decide on a standard (probably node's)
-
-  (And while doing documentation...)
 
   "LAST TOUCHES"
 
@@ -36,6 +11,13 @@
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
+
+  "DOCUMENTATION"
+  * Comment each function, client and server, decide on a standard (probably node's)
+
+
+  * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
+
 
   "BROWSING DATA + LOGS"
 
@@ -77,9 +59,9 @@
 
   LATER MAYBE:
 
-   * Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
-   * Check that coreAuth can be used for other systems (like passport, for example)
-   * Add function to add per-module routes
+   * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
+   * MAYBE Check if coreAuth can be used for other systems (like passport, for example)
+   * MAYBE Add function to add per-module routes
    * MAYBE Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
 
                           ----------------------------
