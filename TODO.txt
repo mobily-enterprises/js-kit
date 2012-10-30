@@ -1,8 +1,6 @@
   "DOJO HOOKS"
 
   "LAST TOUCHES"
-
-  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
   * SERVER: Set an expiration time to the login, check that it can be "since last communication" (add flag?)
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
@@ -11,9 +9,8 @@
   "DOCUMENTATION"
   * Comment each function, client and server, decide on a standard (probably node's)
 
-
   * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
-
+    Simply a container that sends a signal out?
 
   "BROWSING DATA + LOGS"
 
@@ -23,7 +20,7 @@
   * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined. This
             is so that clients know what they can and cannot do on results.
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
-            Improve logging accordingly
+            Improve logging accordingly (now that you can see them...)
 
   "SETTINGS" (module)
 
@@ -34,6 +31,8 @@
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
+
+===========================================================
 
   "A WORKING USE CASE" (module)
 
@@ -208,3 +207,4 @@
   * Write a topic/publish system, client side, where clients can change other client's forms, templates etc. before they get
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
   * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
+  * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
