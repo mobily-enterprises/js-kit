@@ -1,7 +1,6 @@
   "DOJO HOOKS"
 
   "LAST TOUCHES"
-  * SERVER: Set an expiration time to the login, check that it can be "since last communication" (add flag?)
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords (!)
   * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
@@ -208,3 +207,4 @@
     sent to the client. For example, another mixin to _templatedMixin which calls hotplate's hooks?
   * C/S   : Make sure that workspace names are registered as lowercase, AND that searching them is case insensitive!
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
+  * SERVER: Set an expiration time to the login, check that it can be "since last communication" (add flag?)
