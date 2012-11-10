@@ -11,6 +11,7 @@
     "hat": "*",
     "connect-mongodb": "*",
     "send": "*",
+    "bcrypt": "*",
     "hotplate": "*"
   }
 }

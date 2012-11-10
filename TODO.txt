@@ -1,14 +1,9 @@
-  "DOJO HOOKS"
-
-  "LAST TOUCHES"
-  * C/S   : Encrypt passwords (!)
-  * CLIENT: Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
-
-  "DOCUMENTATION"
-  * Comment each function, client and server, decide on a standard (probably node's)
 
   * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
     Simply a container that sends a signal out?
+
+  "DOCUMENTATION"
+  * Comment each function, client and server, decide on a standard (probably node's)
 
   "BROWSING DATA + LOGS"
 
@@ -208,3 +203,5 @@
   * SERVER: Make sure that all servers calls don't BOMB if parameters are not passed (use custom function)
   * SERVER: Set an expiration time to the login, check that it can be "since last communication" (add flag?)
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
+  * C/S   : Encrypt passwords using strong encryption
+  * Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
