@@ -1,11 +1,11 @@
 hotplate
 ========
 
-_PLEASE NOTE: The module is going through major restrucuring and it's not currently functional._
+_PLEASE NOTE: The module is to be considered Alpha. The initial structure is ready, but it's still largely undocumented. I believe it will release a stable-release around Christmas (including a sample application that uses it). The basic structure is all there, core and non-core modules are done, but I still haven't decided on a few design issues, plus I would like others to actually check some of the things I did, to confirm that they are sane!_
 
 Framework to create node client/server applications using a hook system. The initial plugins allow you to:
 
-* Emit "events" and have "hooks" to act upon events (client-side _and_ server-side)
+* Emit "events" and have "hooks" to act upon events server-side
 
 * Define a standard sub-directory within your module's directory that will be available to the client. This is perfect for the side-client part of the story for your modules
 
