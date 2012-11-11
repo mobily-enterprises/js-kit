@@ -2,9 +2,6 @@
   * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
     Simply a container that sends a signal out?
 
-  "DOCUMENTATION"
-  * Comment each function, client and server, decide on a standard (probably node's)
-
   "BROWSING DATA + LOGS"
 
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
@@ -25,12 +22,16 @@
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
+  "DOCUMENTATION"
+  * Comment each function, client and server, decide on a standard (probably node's)
+
+  ============ GET SOMEBODY WHO KNOWS WHAT THEY ARE DOING TO LOOK AT ALL THIS ==========
+
 ===========================================================
 
   "A WORKING USE CASE" (module)
 
-  * Add a "customer" form, and a customers browser. In order to test the system, also add the ability to have
-    "private" customers
+  * Add a "contact" form, and a contacts browser.
 
   "MESSAGES AND INVITES" (module)
 
