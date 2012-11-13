@@ -275,7 +275,7 @@ Hotplate.prototype.initModules = function( callback ){
 
 
      functionList.push( function(done){
-       console.log("Calling init call for module %s", moduleName);
+       hotplate.log("Calling init call for module %s", moduleName);
        modules[ moduleName ].hotHooks.init.call( modules[ moduleName ], done );
      });
 
