@@ -1,7 +1,4 @@
 
-  * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
-    Simply a container that sends a signal out?
-
   "BROWSING DATA + LOGS"
 
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
@@ -206,3 +203,5 @@
   * CLIENT: Fix problem where field with focus lose manually added tooltip straight away. It's making "wrong password" disappear.
   * C/S   : Encrypt passwords using strong encryption
   * Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
+  * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
+    In the end, it's a generic container publishing a topic with its object, so that others can piggyback
