@@ -4,8 +4,6 @@
   * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
             reload if there are network issues. 
-  * SERVER: Write a query adding _perms to the results: _perms is an object where the keys 'get', 'put', 'post' may be defined. This
-            is so that clients know what they can and cannot do on results.
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly (now that you can see them...)
 
