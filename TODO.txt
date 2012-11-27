@@ -1,7 +1,8 @@
 
   "BROWSING DATA + LOGS"
 
-  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for invites sent
+
+  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for logs
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
             reload if there are network issues. 
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
