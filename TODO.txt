@@ -1,12 +1,4 @@
 
-  "BROWSING DATA + LOGS"
-
-
-  * SERVER: Create generic functions to parse the query launched by JsonRest queries (filter, range) use it for logs
-  * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
-            reload if there are network issues. 
-  * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
-            Improve logging accordingly (now that you can see them...)
 
   "SETTINGS" (module)
 
@@ -18,16 +10,9 @@
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
-  "DOCUMENTATION"
-  * Comment each function, client and server, decide on a standard (probably node's)
-
-  ============ GET SOMEBODY WHO KNOWS WHAT THEY ARE DOING TO LOOK AT ALL THIS ==========
-
-===========================================================
-
   "A WORKING USE CASE" (module)
 
-  * Add a "contact" form, and a contacts browser.
+  * Add a "new contact" form, and a contacts browser.
 
   "MESSAGES AND INVITES" (module)
 
@@ -40,14 +25,24 @@
   * C/S   : Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
             which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
             write a bit of a wizard.
-  * CLIENT: Write a "message browser" system for the workspace admin so that they can see exactly what was sent, when, and see the logs
+  * CLIENT: Write a "message browser" grid for the workspace admin so that they can see exactly what was sent, when, and see the logs
 
-  LATER MAYBE:
+  "PERMISSIONS" (module)
+  *         Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
+            in case user tries to access something that isn't theirs
 
-   * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
-   * MAYBE Check if coreAuth can be used for other systems (like passport, for example)
-   * MAYBE Add function to add per-module routes
-   * MAYBE Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
+  "DOCUMENTATION"
+  * Comment each function, client and server, decide on a standard (probably node's)
+
+  "GET OPINIONS"
+  * GET somebody who knows what they are doing to look at all this
+    * MAYBE Check if there is a better way to include modules, now each function needs to (because of async inits() )
+    * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
+    * MAYBE Check if coreAuth can be used for other systems (like passport, for example)
+    * MAYBE See if there is a better way to create "drivers" where "hooks" just don't cut it (see: authentication)
+    * MAYBE Check if there is a better way to "login", right now it sets a bunch of server variables
+    * MAYBE Add function to add per-module routes to make it easier to add URLs
+    * MAYBE Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
 
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
@@ -204,3 +199,8 @@
   * Check for "styles" in templates, and "height", make sure that widgets don't have useless parameters
   * DECIDE IF dojoAppContainer SHOULD BE LEFT LIKE THIS, GENERIC, OR NOT (CONTAINER Vs. BOILERPLATE)
     In the end, it's a generic container publishing a topic with its object, so that others can piggyback
+  * SERVER: Create generic function to parse the query launched by JsonRest queries (filter, range) use it for logs
+  * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
+            reload if there are network issues. 
+  * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
+            Improve logging accordingly (now that you can see them...)
