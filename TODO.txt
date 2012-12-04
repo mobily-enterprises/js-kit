@@ -12,7 +12,7 @@
 
   "A WORKING USE CASE" (module)
 
-  * Add a "new contact" form, and a contacts browser.
+  * Add a "new contact" form, and a contacts browser. Add ability to type messages underneath it.
 
   "MESSAGES AND INVITES" (module)
 
@@ -28,8 +28,12 @@
   * CLIENT: Write a "message browser" grid for the workspace admin so that they can see exactly what was sent, when, and see the logs
 
   "PERMISSIONS" (module)
-  *         Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
-            in case user tries to access something that isn't theirs
+  * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
+    in case user tries to access something that isn't theirs
+
+  "COMET" (module)
+  * Write a comet module that allows the receive "messages" from the application (using the standard protocol?)
+
 
   "DOCUMENTATION"
   * Comment each function, client and server, decide on a standard (probably node's)

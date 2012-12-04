@@ -1,0 +1,26 @@
+DOJO: Are you struggling with your widget's heights?
+====================================================
+
+Once you have learned how to master Dojo, you might end up developing a complex application that requires a lot of nested layout widgets.
+In terms of layout widgets, you have:
+
+* ContentPane. A pane containing generic contents.
+* BorderContainer, StackContainer, TabContainer
+
+The resize() method is used by a widget to do its layout. Resize needs to be called when the widget is visible: if it's not, or if any one of its children is not, resize() will not work.
+
+
+# Your own widgets
+
+* You need to define resize() for your own widgets -- and call resize() for all the top-lever widgets in them.
+
+# ContentPane
+
+* You need to set the ContentPane size via CSS. Really.
+* If a ContentPane contains a single layout widget, it will resize its single child to match its own (unless doLayout was set to false).
+
+# BorderContainer, StackContainer, TabContainer
+
+* They will call resize for their children
+
+

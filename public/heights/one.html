@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>Test 1</title>
+  
+   <link type="text/css" rel="stylesheet" href="/lib/dojo/dijit/themes/claro/claro.css" media="screen" /><!-- Added by hotDojo -->
+   <script type="text/javascript" src="/lib/dojo/dojo/dojo.js"></script>
+
+ <!-- <script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/dojo/1.8.1/dojo/dojo.js'></script>
+  <link rel="stylesheet" type="text/css" href="http://archive.dojotoolkit.org/nightly/dojotoolkit/dijit/themes/claro/claro.css">
+ -->   
+
+ 
+  <style type='text/css'>
+
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.fullHeight {
+  height: 100%;
+}
+
+#appContainer {
+    height: 100%;
+}
+
+</style>
+
+
+<script type='text/javascript'>//<![CDATA[ 
+
+require([
+   "dojo/_base/declare",
+    "dojo/on",
+    
+   "dijit/_WidgetBase",
+   "dijit/_TemplatedMixin",
+   "dijit/_WidgetsInTemplateMixin",
+    
+   "dijit/layout/_LayoutWidget",
+   "dijit/layout/BorderContainer",
+   "dijit/layout/StackContainer",
+   "dijit/layout/TabContainer",
+   "dijit/layout/ContentPane",
+   "dojo/domReady!",
+
+   ], function(
+     declare
+     , on
+     , _WidgetBase
+     , _TemplatedMixin
+     , _WidgetsInTemplateMixin
+        
+     , _LayoutWidget
+     , BorderContainer
+     , StackContainer
+     , TabContainer
+     , ContentPane){
+
+  declare('SubWidget', [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+      
+    templateString: '' +
+      '<div class="fullHeight" >' +
+      '  <div class="fullHeight" data-dojo-type="dijit.layout.ContentPane" data-dojo-attach-point="widget">' +
+      '    <div style="height:50%" data-dojo-type="dijit.layout.TabContainer" data-dojo-attach-point="settingsTab">' +
+      '      <div data-dojo-type="dijit.layout.ContentPane" class="fullHeight" data-dojo-props="title:\'One\'" data-dojo-attach-point="one">ONE</div>' +
+      '      <div data-dojo-type="dijit.layout.ContentPane" class="fullHeight" data-dojo-props="title:\'Two\'" data-dojo-attach-point="two">TWO</div>' +
+      '    </div>' +
+      '    <div style="height:20%" data-dojo-type="dijit.layout.BorderContainer">Blah</div>'+
+      '</div>',
+      
+    resize:function(){
+        this.inherited(arguments);
+        // this.settingsTab.resize();
+        this.widget.resize();
+        console.log("Resize called!");
+    },
+
+    postCreate:function(){
+      THIS = this;
+    }
+      
+  });                             
+         
+  var App = declare( [_WidgetBase, _TemplatedMixin, _WidgetsInTemplateMixin], {
+
+    templateString: '' +
+      '<div>' +
+      '  <div class="fullHeight" data-dojo-type="dijit.layout.BorderContainer" design: \'headline\'">' +
+          
+      '    <div data-dojo-type="dijit.layout.TabContainer" data-dojo-props="region: \'center\', tabPosition: \'left-h\'">' +
+
+          
+      '      <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title: \'Main One\'">Main One</div>' +
+      '      <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title: \'Main Two\'">Main Two</div>' +
+
+      '        <div data-dojo-type="dijit.layout.TabContainer" data-dojo-props="title: \'Complex\', tabPosition: \'top\'" >' +
+      '          <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title:\'Complex One\'">Complex One</div>' +
+      '          <div data-dojo-type="dijit.layout.ContentPane" data-dojo-props="title:\'Complex Two\'">Complex Two</div>' +
+      '        </div>' +
+
+      '      <div data-dojo-type="SubWidget" data-dojo-props="title: \'Sub Widget\'" data-dojo-attach-point="subWidget"></div>' +
+
+      '  </div>'+
+      '</div>'
+  });                             
+
+  p = new App({}, 'appContainer');
+    p.startup();
+    console.log('worked');
+  });
+       
+
+//]]>  
+
+</script>
+
+
+</head>
+<body>
+  <body class="claro">
+    <div id="appContainer"></div> 
+</body>
+
+
+
+  
+</body>
+
+
+</html>
+
