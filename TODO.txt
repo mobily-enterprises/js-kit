@@ -1,17 +1,18 @@
 
   "INFRASTRUCUTRE"
-  * Write an overlay widget which will be placed over a form if initialisation goes wrong. Allow user to click to try again
-  * Write utility functions to copy data taken from a JsonRest query into a form
+
   * Add the overlay widget to Dgrids as well, allowing users to re-load the dgrid if connection goes down
 
-  "SETTINGS" (module)
+  "SETTINGS"
+
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
   * Write basic "User settings" screen where people can update their info (Name, Photo, others).
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use the messages mixin for this
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
-  "COMET" (module)
+  "COMET"
+
   * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
     made from another tab (through comet). Try this with settings (name)
 
@@ -19,25 +20,27 @@
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
 
-  "A WORKING USE CASE" (module)
+  "A WORKING USE CASE"
 
-  * Add a "new contact" form, and a contacts browser. Add ability to type messages underneath it. It all needs to work with
+  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
     comet/etc.
 
-  "MESSAGES AND INVITES" (module)
+  "MESSAGES AND INVITES"
 
-  * SERVER: Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-            status
-  * CLIENT: Write configuration for messenging infrastructure. Each subsystem can be able to send, receive or both. 
-  * SERVER: Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
-            link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
-            which in turns should output the list of workspaces (since the user is already logged in)
-  * C/S   : Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
-            which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
-            write a bit of a wizard.
-  * CLIENT: Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
+  * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
+    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
+  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
+  * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
+    link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
+    which in turns should output the list of workspaces (since the user is already logged in)
+  * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
+    which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
+    write a bit of a wizard.
+  * Change "contact browser" so that it uses one of the sending subsystems to send messages, and an "inbox" system to match
+    incoming messages to contacts
+ 
 
-  "PERMISSIONS" (module)
+  "PERMISSIONS"
   * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
     in case user tries to access something that isn't theirs
 
@@ -62,15 +65,11 @@
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
   side tracked by writing a "boilerplate"... err...)
 
-  * Add messages *receiving* infrastructure (smtp mx, pop, sms), with configuration and setting of default for receiving email
-  * "View messages" widget under customers with ability to send messages using one of the subsystems
-  * Inbox: ability to see the inbox, and match a "from" to a contact (note: maybe make this "soft": contacts have several email addresses,
-    and viewing messages will include seeing email from and to any one of their email addresses)
   * Ability to create bookings
   * Ability to match incoming (and outgoing) messages to bookings
   * Ability to send invoices and _store_ received invoices
   * Ability to set templates for messages of different types
-  * Basic accounting
+  * Basic accounting for payments
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -215,3 +214,5 @@
             reload if there are network issues. 
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly (now that you can see them...)
+  * Write utility functions to copy data taken from a JsonRest query into a form -- UNNECESSARY!
+  * Write an overlay widget which will be placed over a form if initialisation goes wrong. Allow user to click to try again
