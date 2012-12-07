@@ -1,12 +1,9 @@
 
-
   "SETTINGS" (module)
 
-  * Think about for a moment if we need a good way to allow modules to have "settings". Probably not, as this could well become
-    _extremely_ complicated if we are to keep database and widget agnostic. -- UPDATE: It doesn't have to be agnostic at all
-  * Write basic "User settings" screen where people can update their info (Name, Photo, others).
-  * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces
   * Write basic "settings" screen with sub-tabs where people can set things for their workspace. Decide on a few, generic, basic settings
+  * Write basic "User settings" screen where people can update their info (Name, Photo, others).
+  * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use the messages mixin for this
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on)
   * CLIENT: Make app look a little nicer (login button, small avatar, at the top, etc.)
 
@@ -40,6 +37,7 @@
 
   "GET OPINIONS"
   * GET somebody who knows what they are doing to look at all this
+    * MAYBE Have a "settings" infrastructure, where modules can define settings widgets which then get added to settings
     * MAYBE Check if there is a better way to include modules, now each function needs to (because of async inits() )
     * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
     * MAYBE Check if coreAuth can be used for other systems (like passport, for example)
