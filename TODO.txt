@@ -1,7 +1,6 @@
 
   "INFRASTRUCTURE"
 
-  * Add the overlay widget to Dgrids as well, allowing users to re-load the dgrid if connection goes down
 
   "SETTINGS AND DATA MANAGEMENT"
 
@@ -227,3 +226,5 @@
   * Write utility functions to copy data taken from a JsonRest query into a form -- UNNECESSARY!
   * Write an overlay widget which will be placed over a form if initialisation goes wrong. Allow user to click to try again
   * Make app look a little nicer (login button, small avatar, at the top, etc.)
+  * Add the overlay widget to Dgrids as well, allowing users to re-load the dgrid if connection goes down. That was fun, discovering that
+    dgrid isn't _actually_ a widget and adapting the hell out of _OvelayMixin...
