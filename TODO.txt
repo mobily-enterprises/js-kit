@@ -2,8 +2,8 @@
   "SETTINGS AND DATA MANAGEMENT"
 
   * Write basic "Workspace settings" (generic Workspace Settings table)
-  * Write basic "Workspace-User settings" (user's settings for that specific workspace)
-  * Write basic "User settings" (General user-wide settings)
+  * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
+  * Write basic "User settings" (General user-wide settings). DojoAuth? (Hooks for that)
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use the messages mixin for this
 
@@ -11,7 +11,7 @@
   * Make sure users can save line-records both on the spot, or with a "save" button. Not sure which one we will use.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
 
-  "COMET"
+  "COMET AND CHANGES"
 
   * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
     made from another tab (through comet). Try this with settings (name)
@@ -32,25 +32,31 @@
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
     comet/etc.
 
-  "EMAIL, SMSes, INVITES, INBOX"
+  "MESSENGING"
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
-  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
     link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
     which in turns should output the list of workspaces (since the user is already logged in)
+  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
     write a bit of a wizard.
+
+  " THE INBOX"
+
   * Change contact screen so that it uses one of the sending subsystems to send messages, and an "inbox" system to match
     incoming messages to contacts
+  * Make a "case": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a case
 
 
   "DOCUMENTATION"
+
   * Comment each function, client and server, decide on a standard (probably node's)
 
   "GET OPINIONS"
+
   * GET somebody who knows what they are doing to look at all this:
 
     * MAYBE Check if there is a better way to include modules, now each function needs to (because of async inits() )
