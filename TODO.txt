@@ -1,7 +1,4 @@
 
-  "INFRASTRUCTURE"
-
-
   "SETTINGS AND DATA MANAGEMENT"
 
   * Write basic "Workspace settings" (generic Workspace Settings table)
@@ -12,12 +9,19 @@
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Make sure users can save line-records both on the spot, or with a "save" button. Not sure which one we will use.
-  * Add a form to Settings with the ability to pick one amongst one of the allowed line-record.
+  * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
 
   "COMET"
 
   * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
     made from another tab (through comet). Try this with settings (name)
+
+  "PERMISSIONS"
+  * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
+    in case user tries to access something that isn't theirs
+
+  "LOOK"
+  * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
 
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
@@ -28,7 +32,7 @@
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
     comet/etc.
 
-  "EMAIL, SMSes, INVITES"
+  "EMAIL, SMSes, INVITES, INBOX"
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
@@ -41,11 +45,7 @@
     write a bit of a wizard.
   * Change contact screen so that it uses one of the sending subsystems to send messages, and an "inbox" system to match
     incoming messages to contacts
- 
 
-  "PERMISSIONS"
-  * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
-    in case user tries to access something that isn't theirs
 
   "DOCUMENTATION"
   * Comment each function, client and server, decide on a standard (probably node's)
@@ -74,11 +74,18 @@
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
   side tracked by writing a "boilerplate"... err...)
 
-  * Ability to create bookings
-  * Ability to match incoming (and outgoing) messages to bookings
+  PHASE 1: Information
+  * Ability to set products for each contact (hourly rate, once-off, commission-only allowed, restrict who can buy/offer it,
+    money range: from/to booking owner, from/to person, that's it )
+  * Ability to create bookings. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person ]
+  * Ability to match incoming (and outgoing) messages to bookings from inbox
+
+  PHASE 2: Money/billing
+  * Accounting entries for products for each booking (with system-calculated ones)
+  * Interface with payment system
   * Ability to send invoices and _store_ received invoices
-  * Ability to set templates for messages of different types
-  * Basic accounting for payments
+  * Ability to set templates for messages of different types, with previews
+
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
