@@ -266,13 +266,11 @@ Hotplate.prototype.initModules = function( callback ){
   // which will contain the modules in the right init order depending on dependencies
   addModules(fullList, 2 );
 
-  // ASYNC THIS
   
-  // hotplate.log(fullList);  
+  hotplate.log("ORDERED LIST: " + orderedList);  
  
   // Invokes init() for each module, in the right order!
   orderedList.forEach( function(moduleName){
-
 
      functionList.push( function(done){
        hotplate.log("Calling init call for module %s", moduleName);
@@ -330,7 +328,6 @@ Hotplate.prototype.initModules = function( callback ){
         // Get an array with the invoke list (hooks from other modules that WILL get called)
         invokeList = modules[ moduleName ].hotHooks.init.invokes;
         hotplate.log( i(indent) + "Module %s calls invokeAll(%s), checking which modules provide it, adding them first", moduleName, invokeList );
-
         // For each module in the invoke list, add it to the sub-list of modules to initialise
         invokeList.forEach( function(invokedFunction ){
           hotplate.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
@@ -374,13 +371,14 @@ Hotplate.prototype.initModules = function( callback ){
           hotplate.log( i(indent) + "LIST of dependencies for %s is: [%s]. Reiterating self if necessary (intending in)", moduleName, Object.keys(subList) );
           addModules( Object.keys( subList ), indent + 2 );
 
-          hotplate.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage" , moduleName);
+          hotplate.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage for %s" , moduleName, invokedFunction);
 
           // At this point, this module is ready to be initialised. Set its status
           // to NOT_ADDED and then initialised it
           loadStatus[ moduleName ] = 'NOT_ADDED';
-          actuallyAdd( moduleName, indent );
         });
+        console.log("ADDING: " + moduleName );
+        actuallyAdd( moduleName, indent );
 
       }
     });
