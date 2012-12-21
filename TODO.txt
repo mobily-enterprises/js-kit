@@ -1,19 +1,20 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  12/12/2012
+  16/12/2012
   * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
   * Write basic "User settings" (General user-wide settings) and show name at the top. DojoAuth? (Hooks for that)
+  * Add a way to set a gravatar link (make a gravatar widget!)
 
-  13/12/2012
+  17/12/2012
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
 
-  14/12/2012, 15/12/2012, 16/12/2012
+  18/12/2012, 19/12/2012, 20/12/2012
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
     Make sure users can save line-records both on the spot, or with a "save" button. Not sure which one we will use.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
 
-  17/12/2012
+  21/12/2012
   * Make sure that changing a list in point A will also change the select box in point B immediately.
 
   "COMET AND CHANGES"
@@ -100,12 +101,12 @@
     money range: from/to booking owner, from/to person, tangible/intangible, that's it )
   * Ability to create events. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from, to ]
   * Ability to match incoming (and outgoing) messages to bookings from inbox
+  * Ability to set templates for messages of different types, with previews
 
   PHASE 2: Money/billing
   * Accounting entries for products for each booking (with system-calculated ones)
   * Interface with payment system
   * Ability to send invoices and _store_ received invoices
-  * Ability to set templates for messages of different types, with previews
 
 
   DONE:
@@ -257,3 +258,4 @@
   * Add the overlay widget to Dgrids as well, allowing users to re-load the dgrid if connection goes down. That was fun, discovering that
     dgrid isn't _actually_ a widget and adapting the hell out of _OvelayMixin...
   * Write basic "Workspace settings" (generic Workspace Settings table)
+  * Write generic function to find one and save

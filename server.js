@@ -21,7 +21,8 @@ var express = require('express'),
 var app = express();
 
 // Connect to DB
-mongoose.connect('mongodb://localhost/hotplate');
+mongoose.connect('mongodb://localhost/hotplate' );
+mongoose.set('enableUpdateValidation', true );
 
 
 hotplate.setApp(app); // Associate "app" to hotplate
