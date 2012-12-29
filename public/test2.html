@@ -1,0 +1,154 @@
+
+<!DOCTYPE HTML>
+<html>
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /><title></title>
+
+
+
+<link type="text/css" rel="stylesheet" href="/lib/dojo/dijit/themes/claro/claro.css" media="screen" />
+<script type="text/javascript" src="/lib/dojo/dojo/dojo.js" data-dojo-config="parseOnLoad: false, async:true,isDebug:false, cacheBust:false"></script>
+
+<!--
+<script src="//ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dojo.js"></script>
+<link type="text/css" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/dojo/1.8.2/dojo/dijit/themes/claro/claro.css" media="screen" />
+-->
+
+<style type="text/css">
+
+
+html, body {
+    height: 100%; /* Set basic canvas to 100% */
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#appContainer {
+    height: 100%;
+}
+
+
+</style>
+
+
+</head>
+
+<body class="claro">
+  Dojo test!
+  <div id="appContainer"></div>
+</body>
+
+
+
+<script type="text/Javascript">
+
+require([
+
+ "dojo/_base/declare",
+  "dojo/_base/json",
+  "dojo/store/Observable",
+  "dojo/topic",
+  "dojo/on",
+  "dojo/dom",
+  "dojo/dom-class",
+  "dojo/when",
+  "dojo/store/Memory",
+
+  "dijit/_WidgetBase",
+  "dijit/_TemplatedMixin",
+  "dijit/_WidgetsInTemplateMixin",
+  "dijit/form/Form",
+  'dijit/layout/BorderContainer',
+  'dijit/layout/TabContainer',
+  'dijit/layout/ContentPane',
+  "dijit/Destroyable",
+
+  'dgrid/OnDemandGrid',
+  'dgrid/OnDemandList',
+  'dgrid/Keyboard',
+  'dgrid/Selection',
+  'dgrid/_StoreMixin',
+
+], function(
+       declare
+     , json
+     , Observable
+     , topic
+     , on
+     , dom
+     , domClass
+     , when
+     , Memory
+
+     , _WidgetBase
+     , _TemplatedMixin
+     , _WidgetsInTemplateMixin
+     , Form
+     , BorderContainer
+     , TabContainer
+     , ContentPane
+     , Destroyable
+
+     , OnDemandGrid
+     , OnDemandList
+     , Keyboard
+     , Selection
+     , _StoreMixin
+
+ ){
+
+  var CustomGrid = declare( 'CustomGrid', [OnDemandGrid, Keyboard, Selection ]);
+
+
+  /* ********************************** */
+  /* *****  EXECUTION STARTS HERE ***** */
+  /* ********************************** */
+
+  var App = declare( [BorderContainer], {
+    
+    postCreate: function(){
+      this.inherited(arguments);
+    },
+
+  });
+
+
+  var GridPane 
+
+  var grid = new CustomGrid({
+    columns: {
+      loggedOn: "Logged On",
+      data: "Data",
+      errorName: 'Error name',
+      logLevel: "Log level",
+      message: "Message",
+      _id: "ID",
+    },
+    // selectionMode: "extended",
+    cellNavigation: true,
+    // store: stores('logs:data', { workspaceIdCall: vars['hotDojoAppContainer']['workspaceId'] } ) ,
+    store: new Memory( { data: {} } ),
+    query: {} , //  data: 'pp' },
+    // query: {errorName: 'Refe', logLevel: 0 },
+    sort: [
+      { attribute: 'logLevel', descending: true },
+      { attribute: 'data', descending: true },
+    ],
+
+  });
+
+
+  var app = new App( {}, appContainer );
+  app.addChild(grid);
+  app.startup();
+
+
+});
+
+
+
+
+
+</script>
+
+</html>
