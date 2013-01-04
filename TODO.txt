@@ -2,8 +2,8 @@
   "SETTINGS AND DATA MANAGEMENT"
 
   16/12/2012
-  * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
-  * Write basic "User settings" (General user-wide settings) and show name at the top. DojoAuth? (Hooks for that)
+  * Strenghten existing forms in bd.js (add parametersAreThere as general functions from hotDojoAuth), validate email
+  * Write basic "User settings" (General user-wide settings) and show name of logged in user at the top
   * Add a way to set a gravatar link (make a gravatar widget!)
 
   17/12/2012
@@ -11,7 +11,6 @@
 
   18/12/2012, 19/12/2012, 20/12/2012
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
-    Make sure users can save line-records both on the spot, or with a "save" button. Not sure which one we will use.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
 
   21/12/2012
@@ -31,7 +30,6 @@
   21/12/2012
   * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
     in case user tries to access something that isn't theirs
-
 
   "LOOK"
 
@@ -96,12 +94,12 @@
   side tracked by writing a "boilerplate"... err...)
 
   PHASE 1: Information
-  * Ability to set, for each booking type, a "guest type" (dancer, security, paying guest)
+  * Ability to set "presence types" (dancer, security, paying guest)
   * Ability to set products for each contact (hourly rate, once-off, commission-only allowed, restrict who can buy/offer it,
-    money range: from/to booking owner, from/to person, tangible/intangible, that's it )
+    money range: from/to booking owner, from/to person, tangible/intangible, tax rate, that's it )
   * Ability to create events. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from, to ]
   * Ability to match incoming (and outgoing) messages to bookings from inbox
-  * Ability to set templates for messages of different types, with previews
+  * Ability to set templates for messages of different types, with previews <--- possibly nasty one!
 
   PHASE 2: Money/billing
   * Accounting entries for products for each booking (with system-calculated ones)
@@ -259,3 +257,4 @@
     dgrid isn't _actually_ a widget and adapting the hell out of _OvelayMixin...
   * Write basic "Workspace settings" (generic Workspace Settings table)
   * Write generic function to find one and save
+  * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
