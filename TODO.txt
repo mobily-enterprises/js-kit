@@ -1,12 +1,11 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  5/1/2013, 6/1/2013
-  * Strenghten existing forms in bd.js (add parametersAreThere as general functions from hotDojoAuth), validate email
+  6/1/2013
   * Write basic "User settings" (General user-wide settings) and show name of logged in user at the top
-  * Add a way to set a gravatar link (make a gravatar widget!)
 
   7/1/2013
+  * Add a way to set a gravatar link (make a gravatar widget!)
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
 
   8/1/2013, 9/1/2013, 10/1/2013
@@ -262,3 +261,4 @@
   * Write basic "Workspace settings" (generic Workspace Settings table)
   * Write generic function to find one and save
   * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
+  * Strenghten existing forms in bd.js (add parametersAreThere as general functions from hotDojoAuth), validate email
