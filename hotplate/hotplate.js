@@ -487,7 +487,7 @@ Hotplate.prototype.invokeAllFlattened = function( ){
 
 
 // This is temporarily here, as I have no idea where to place it for now
-Hotplate.prototype.objectIdCheck = function(s){
+Hotplate.prototype.mongoIdCheck = function(s){
   return new RegExp("^[0-9a-fA-F]{24}$").test(s);
 }
 
