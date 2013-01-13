@@ -1,9 +1,8 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-
-  * Get rid of that stupid "self" in the user config. Use the proper user _id. Check permissions with quick permission module
-  * Change the protocol (sigh). Any get needs to return just the object. Maybe sendGetResponse, sendPostResponse? 
+  * Make sure AppConfig creates a updated object usable straight from the application without running `get` on the store, make sure
+    object is updated after `put`. Code to use config values right now is way too long
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
@@ -11,7 +10,8 @@
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
 
-  * Make sure that changing a list in point A will also change the select box in point B immediately.
+  * Check permissions with quick permission module
+  * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
 
   "COMET AND CHANGES"
 
@@ -20,10 +20,6 @@
 
   "PERMISSIONS"
 
-  * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
-
-  * Work on a permissions infrastructure so that users cannot just read everything. BASE it on hooks for user roles. Add error message
-    in case user tries to access something that isn't theirs
 
   "LOOK"
 
@@ -257,3 +253,8 @@
   * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
   * Strenghten existing forms in bd.js (add parametersAreThere as general functions from hotDojoAuth), validate email
   * Write basic "User settings" (General user-wide settings) and show name of logged in user at the top
+  * Change the protocol (sigh). Any get needs to return just the object or null. Maybe sendGetResponse, sendPostResponse? 
+  * (Don't) Get rid of that stupid "self" in the user config. Use the proper user _id.
+  * Make sure that changing a list in point A will also change the select box in point B immediately.
+  * Change config so that it comes in a variable at load time. Somehow shove that into the store cache if possible
+  * Make both cache and main store observable, shove things into cache at load time, and check that savings/updating works OK)
