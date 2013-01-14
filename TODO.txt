@@ -1,8 +1,6 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * Make sure AppConfig creates a updated object usable straight from the application without running `get` on the store, make sure
-    object is updated after `put`. Code to use config values right now is way too long
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
@@ -258,3 +256,5 @@
   * Make sure that changing a list in point A will also change the select box in point B immediately.
   * Change config so that it comes in a variable at load time. Somehow shove that into the store cache if possible
   * Make both cache and main store observable, shove things into cache at load time, and check that savings/updating works OK)
+  * Make sure AppConfig creates a updated object usable straight from the application without running `get` on the store, make sure
+    object is updated after `put`. Code to use config values right now is way too long
