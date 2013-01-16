@@ -1,6 +1,8 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
+  * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
+    made from another tab (through comet).
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
@@ -10,16 +12,6 @@
 
   * Check permissions with quick permission module
   * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
-
-  "COMET AND CHANGES"
-
-  * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
-    made from another tab (through comet).
-
-  "PERMISSIONS"
-
-
-  "LOOK"
 
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
 
