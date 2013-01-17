@@ -1,14 +1,17 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
-    made from another tab (through comet).
+  * Decide if I want to change that imfamous "self" in the config. If I do, broadcasts about changed models will be more unified without
+    "special cases".
+
+  * Decide if it is indeed a good idea to return the FULL object for each put() so that the client knows the full story after one change
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
+    (Note: decide on sub-models. Best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
 
   * Check permissions with quick permission module
   * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
@@ -18,6 +21,7 @@
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
+
 
   "A WORKING USE CASE"
 
@@ -250,3 +254,5 @@
   * Make both cache and main store observable, shove things into cache at load time, and check that savings/updating works OK)
   * Make sure AppConfig creates a updated object usable straight from the application without running `get` on the store, make sure
     object is updated after `put`. Code to use config values right now is way too long
+  * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
+    made from another tab (through comet).
