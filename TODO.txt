@@ -1,10 +1,16 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * Decide if I want to change that imfamous "self" in the config. If I do, broadcasts about changed models will be more unified without
-    "special cases".
+  * Change "self" in id, and write two layers: one for store changes in general, and another one which piggy backs and provides
+    real-time configuration changes.
+  * Add app-wide tabId, workspaceId, userId as they are just so often used. Maybe, I say maybe, make a namespace
+  * Add an aspect to the store's put method to add tabId, and then take it out just before writing, so that the server always knows
+    who to notify for config changes
 
-  * Decide if it is indeed a good idea to return the FULL object for each put() so that the client knows the full story after one change
+  * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
+    do load the user's config in the session (and refresh it if it gets modified).
+  * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
+
 
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
@@ -13,15 +19,12 @@
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
     (Note: decide on sub-models. Best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
 
-  * Check permissions with quick permission module
-  * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
 
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
 
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
-
 
   "A WORKING USE CASE"
 
@@ -33,22 +36,28 @@
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
 
-
   "USERS MANAGEMENT AND INVITES"
+
+  Hotplate:
+
   * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
     link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
     which in turns should output the list of workspaces (since the user is already logged in)
-  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
+
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
     write a bit of a wizard.
+
+  Use case app:
+
   * Add a "user management" section in settings for Admins only
+  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
 
   "THE INBOX"
 
   * Change contact screen so that it uses one of the sending subsystems to send messages, and an "inbox" system to match
     incoming messages to contacts
-  * Make an "event": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a case
+  * Make an "event": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to an event
 
 
   "DOCUMENTATION"
@@ -82,9 +91,9 @@
 
   PHASE 1: Information
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to set products for each contact (hourly rate, once-off, commission-only allowed, restrict who can buy/offer it,
+  * Ability to set products for each contact (once|minute|hour|day rate, commission-only allowed, restrict who can buy/offer it,
     money range: from/to booking owner, from/to person, tangible/intangible, tax rate, that's it )
-  * Ability to create events. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from, to ]
+  * Ability to create events. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from time, to time]
   * Ability to match incoming (and outgoing) messages to bookings from inbox
   * Ability to set templates for messages of different types, with previews <--- possibly nasty one!
 
