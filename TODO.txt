@@ -1,12 +1,7 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * Change "self" in id, and write two layers: one for store changes in general, and another one which piggy backs and provides
-    real-time configuration changes.
-  * Add app-wide tabId, workspaceId, userId as they are just so often used. Maybe, I say maybe, make a namespace
-  * Add an aspect to the store's put method to add tabId, and then take it out just before writing, so that the server always knows
-    who to notify for config changes
-
+  Per - ugh - missions
   * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
     do load the user's config in the session (and refresh it if it gets modified).
   * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
@@ -17,7 +12,7 @@
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
-    (Note: decide on sub-models. Best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
+    (Note: decide on sub-models. DECIDED: The best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
 
 
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
@@ -25,7 +20,6 @@
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
-
   "A WORKING USE CASE"
 
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
@@ -265,3 +259,8 @@
     object is updated after `put`. Code to use config values right now is way too long
   * Use comet/messenging to make stores observable by remote. Check that changes apply if 1) They are made within the tab 2) They are
     made from another tab (through comet).
+  * Change "self" in id, and write two layers: one for store changes in general, and another one which piggy backs and provides
+    real-time configuration changes.
+  * Add app-wide tabId, workspaceId, userId as they are just so often used. Maybe, I say maybe, make a namespace
+  * Add an aspect to the store's put method to add tabId, and then take it out just before writing, so that the server always knows
+    who to notify for config changes
