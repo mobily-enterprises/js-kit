@@ -264,3 +264,4 @@
   * Add app-wide tabId, workspaceId, userId as they are just so often used. Maybe, I say maybe, make a namespace
   * Add an aspect to the store's put method to add tabId, and then take it out just before writing, so that the server always knows
     who to notify for config changes
+  * Finalised, polished up, re-checked the whole Comet/messages infrastructure
