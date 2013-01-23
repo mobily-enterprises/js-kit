@@ -1,19 +1,12 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  Per - ugh - missions
-  * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
-    do load the user's config in the session (and refresh it if it gets modified).
-  * Make sure that non-admin users cannot edit the workspace settings. To do this, modify the table from DojoAuth (Add users by hand for now)
-
-
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
   * Add name and Last Name to the form, assign it to the settings section with the hook
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
     (Note: decide on sub-models. DECIDED: The best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
-
 
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
 
@@ -265,3 +258,7 @@
   * Add an aspect to the store's put method to add tabId, and then take it out just before writing, so that the server always knows
     who to notify for config changes
   * Finalised, polished up, re-checked the whole Comet/messages infrastructure
+  * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
+    do load the user's config in the session (and refresh it if it gets modified).
+
+
