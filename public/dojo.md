@@ -118,7 +118,7 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 - Publishes a topic `this.id+'-startup'`
 - In `this.resize()`, if it's the first time it's shown, it calls _onShow() for the child
 - In `this.addChild()`, it reruns `this.layout()` and (if it's the only child) selects it
-- In `this.removeChild()`, the first child is selected and `this.ayout()` is called
+- In `this.removeChild()`, the first child is selected and `this.layout()` is called
 
 ## _WidgetBase and events, on/emit
 
