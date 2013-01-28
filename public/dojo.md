@@ -136,6 +136,7 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
     - `target` can be:
       - An object with `this.dispatchEvent()` defined (it's a node): it will use native event emission (DOM) **OR**
       - An object with `onevent`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
+
 *** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically, onevent rather than onEvent. Is the whole 'onClick' case going to be a thing in the past with Dojo 2.0?
 
 
@@ -149,6 +150,7 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
     - Calls `this.onEvent` if it exists in the widget **AND**
     - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits on `this.domNode` (so, the event will be emitted down the DOM)
     - The event **will _not_ bubble up** (unlike synthetic events emitted with `dojo/emit()`
+
 *** QUESTION: SO widget.emit('success') WON'T BUBBLE, but it _will_ bubble if it's run with dojo/on(widget.'success')?
    
 
@@ -159,11 +161,13 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
   - `widget.emit('success')` will:
       - get `this.domNode` and emit the event `success` on it
       - run `this.onsuccess()` for the widget itself if present (QUESTION: Why not onSuccess?)
+
 *** QUESTION: DOESN'T THIS MEAN THAT THE LISTENER WILL BE CALLED TWICE, ONCE FROM THE DOM AND ONCE FROM THE DIRECT CALL?
 
 - When you use `dojo/on()` and `dojo/on.emit()` **with widgets**:
   - `dojo/on()` will simply delegate to `widget.on()` (see just above)
   - `dojo/emit()` will call `widget.onevent()` (for an event called `event`) and will bubble up (if required) to `this.parentNode`
+
 *** QUESTION: ISN'T THIS INCONSISTENT WITH WHAT HAPPENS WITH `widget.emit()`?
 
 
