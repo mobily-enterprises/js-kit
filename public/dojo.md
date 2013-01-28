@@ -61,7 +61,7 @@
 
 ### Containers (`_Container.js`) -- base for `_ContentPane` AND `_LayoutWidget`
 
-- CONTRACT: It implements `addChild()`, `removeChild()`, `hasChildren()`, `getIndexOfChild()`, AND sets `this.containerNode`
+- **CONTRACT**: It implements `addChild()`, `removeChild()`, `hasChildren()`, `getIndexOfChild()`, AND sets `this.containerNode`
 - It is a mixin for widgets that contain HTML and/or a set of widget children
 - `addChild()` adds the child to `this.containerNode` and calls `startup()` for it (if containing widget has already started). It also calls 
   `domConstruct.place()` which makes sure the widget's DOM node has the right widgetId (it will work with the registry)
@@ -73,7 +73,7 @@
 ### `ContentPane` (a `isLayoutContainer`)
 
 #### `_ContentPaneResizeMixin`
-- CONTRACT: Defines  `isLayoutContainer`: this widget will call `resize()` on its children when they become visible, + follow `doLayout`
+- **CONTRACT**: Defines  `isLayoutContainer`: this widget will call `resize()` on its children when they become visible, + follow `doLayout`
   - NOTE: Since there is no concept of "hidden" in a ContentPane, it means call `resize()` on its children when ContentPane is visible
 - Implements `_onShow()`, which is run either at startup (normal visible contentPane) or by its parent (hidden tab)
 - If it's not the child of a `isLayoutContainer`, will listen to the viewport's `resize` event and run `this.resize()`
@@ -95,7 +95,7 @@
 
 #### `_LayoutWidget`
 - It includes `Widgetbase` + `_Container` + `_Contained` + functions to honour the `isLayoutContainer` contract
-- CONTRACT: Defines `isLayoutContainer`: this widget will call `resize()` on its children when they become visible, + follow `doLayout`
+- **CONTRACT**: Defines `isLayoutContainer`: this widget will call `resize()` on its children when they become visible, + follow `doLayout`
   - NOTE: unlike `_ContentPaneMixin`, children widgets might well be invisible (see: `TabContainer` etc.).
 - If it's not the child of a `isLayoutContainer`, will listen to the viewport's `resize` event and run `this.resize()`
 - When `this.resize()`, it will call `this.layout()`. It will be up to the Widget class to implement `this.layout()` to resize children
@@ -120,15 +120,51 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 - In `this.addChild()`, it reruns `this.layout()` and (if it's the only child) selects it
 - In `this.removeChild()`, the first child is selected and `this.ayout()` is called
 
-## _WidgetBase and events, on/emit
+## Events, dojo/on, _WidgetBase, events
+
+### dojo/on
+
+- dojo/on is the one-stop system to emit and subscribe to events
+- Two main functions: `on()` and `emit()`
+  - `dojo/on(target, 'event', listener)`
+    - Target can be:
+      - An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! NOTE: **OR**
+      - An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
+      - An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
+      - Or else, it will _fail_
+  - `dojo/emit(target, 'event', listener)`
+    - `target` can be:
+      - An object with `this.dispatchEvent()` defined (it's a node): it will use native event emission (DOM) **OR**
+      - An object with `onevent`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
+*** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically, onevent rather than onEvent. Is the whole 'onClick' case going to be a thing in the past with Dojo 2.0?
 
 
-# Importamt mixins:
+### _WidgetBase
 
-* dijit/_Container -- It defines functions to add and delete widgets
-It defines:
-* this.containerNode
-* this.addChild(), this.removeChild, this.hasChildren
+- Widgets also implement `this.on()` and `this.emit()`. However, _everything is done through the DOM_
+  - `this.on(event, listener)` 
+    - Runs `dojo/on(this.domNode, 'event', listener)`. So, it listens to DOM events called "events"
+    - **TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback to `this.onClick()`
+  - `this.emit('event')`
+    - Calls `this.onEvent` if it exists in the widget **AND**
+    - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits on `this.domNode` (so, the event will be emitted down the DOM)
+    - The event **will _not_ bubble up** (unlike synthetic events emitted with `dojo/emit()`
+*** QUESTION: SO widget.emit('success') WON'T BUBBLE, but it _will_ bubble if it's run with dojo/on(widget.'success')?
+   
+
+### What this means in everyday coding practice
+
+- If you have a `widget` and use its `on()` and `emit()` methods:
+  - `widget.on('success', listener)` will get `this.domNode` and attach the event `success` to `listener`
+  - `widget.emit('success')` will:
+      - get `this.domNode` and emit the event `success` on it
+      - run `this.onsuccess()` for the widget itself if present (QUESTION: Why not onSuccess?)
+*** QUESTION: DOESN'T THIS MEAN THAT THE LISTENER WILL BE CALLED TWICE, ONCE FROM THE DOM AND ONCE FROM THE DIRECT CALL?
+
+- When you use `dojo/on()` and `dojo/on.emit()` **with widgets**:
+  - `dojo/on()` will simply delegate to `widget.on()` (see just above)
+  - `dojo/emit()` will call `widget.onevent()` (for an event called `event`) and will bubble up (if required) to `this.parentNode`
+*** QUESTION: ISN'T THIS INCONSISTENT WITH WHAT HAPPENS WITH `widget.emit()`?
 
 
 
