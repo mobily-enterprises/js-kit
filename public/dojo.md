@@ -135,9 +135,9 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 ### _WidgetBase
 
 - Widgets also implement `this.on()` and `this.emit()`. However, _everything is done through the DOM_
-    - `this.on(event, listener)` 
+    - `this.on('success', listener)` 
+        - **TEMPORARILY, before Dojo 2** IF this['on'+success] exists, will run `aspect.after(this, 'onsuccess', listener)` to piggyback on widget methods (e.g. `this.onClick()` **OR**
         - Runs `dojo/on(this.domNode, 'event', listener)`. So, it will get `this.domNode` hooked up to `event` (which will fire `listener`).
-        - **TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback on widget methods (e.g. `this.onClick()`.
     - `this.emit('event')`
         - Calls `this['on'+event]` if it exists in the widget (note the lack of capitalisation in 'event') **AND**
         - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits down to `this.domNode`, through the widget's DOM
