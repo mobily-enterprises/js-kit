@@ -5,7 +5,7 @@
 - Create a class with `declare()`.
 - Any object created with `new()` will be initialised with `preamble()`, `constructor()` and `postscript()`.
 
-- Take as an example With `SomeWidget = declare( [_WidgetBase], {} ); w = new SomeWidget( {param1: 'one', param2: 2} )`
+- Take as an example `SomeWidget = declare( [_WidgetBase], {} ); w = new SomeWidget( {param1: 'one', param2: 2} )`
     - `this.constructor( params, srcNodeRef )` is called . This will run _before_ anything else. You can do whatever you like there
     - `_WidgetBase::postscript( params, srcNodeRef )` is called
     - All `postscript()` does is call `_Widgetbase::create(params, srcNodeRef)`
@@ -20,12 +20,12 @@
     - `this.id` is created (unless it was part of params and got mixed in)
     - The variables  `this.ownerDocument` and `this.ownerDocumentBody` are set (although you can pass `ownerDocument` in params)
     - Widget is added to the registry
-    - **CALLS**: `buildRendering()`. NOTE:
+    - **CALLS**: `buildRendering()`. **NOTE**:
         - `buildRendering()` will define `this.domNode`, which will be the DOM of the widget. The "stock" `buildRendering()` from `_WidgetBase` will make sure this.domNode is indeed set by assigning it to `srcNodeRef` (if passed as parameter) or, as a last resort, create an `<div>` in `ownerDocument` (won't actually be displayed!). Most of the time, the "parent" `buildRendering()` will create `this.domNode` _before_ calling `this.inherited(arguments)`
         - `buildRendering` also assigns DOM classes to the widget according to the parameter `this.baseClass`
     - **CALLS**: `this._applyAttributes()`. Basically, if you passed { color: 'blue' } as an attribute, then `_setColorAttr()` will be called with 'blue' as a parameter. (Note: `this._setColorAttr()` is what is called when you run `this.set('color', 'blue')`)
     - If `this.domNode` is different to `this.srcNodeRef` (see above: it might be the same if none of the inherited widgets replaced `this.domNode` and `this.srcNodeRef` was set), then `this.domNode` will _replace_ outright `this.srcNodeRef`. This is when the magic begins.
-    - NOTE: if `srcNodeRef` _is_ specified, the widget will replace it immediately at create() time!
+        - **NOTE**: basically, if `srcNodeRef` _is_ specified, the widget will always replace it immediately at create() time!
     - `this.domNode` will have a VERY IMPORTANT attribute set: `widgetId`. This is the "link" between the DOM node and the Dojo widget
     - **CALLS**: `postCreate()`
 - NOTE: You must call `this.inherited(arguments)` when redefining `postMixinProperties()`, `buildRendering()`, `postCreate()` etc. but
@@ -87,7 +87,7 @@
 #### `_LayoutWidget`
 - It includes `Widgetbase` + `_Container` + `_Contained` + functions to honour the `isLayoutContainer` contract
 - **CONTRACT**: Defines `isLayoutContainer`: this widget will call `resize()` on its children when they become visible, + follow `doLayout`
-    - NOTE: unlike `_ContentPaneMixin`, children widgets might well be invisible (see: `TabContainer` etc.).
+    - **NOTE**: unlike `_ContentPaneMixin`, children widgets might well be invisible (see: `TabContainer` etc.).
 - If it's not the child of a `isLayoutContainer`, will listen to the viewport's `resize` event and run `this.resize()`
 - When `this.resize()`, it will call `this.layout()`. It will be up to the Widget class to implement `this.layout()` to resize children
 - It's basically up to `this.layout()` to work on layout and call onShow() on visible child (see CONTRACT)
