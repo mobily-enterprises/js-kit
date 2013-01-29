@@ -128,10 +128,10 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 - Two main functions: `on()` and `emit()`
  - `dojo/on(target, 'event', listener)`
   - `target` can be:
-    * An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
-    * An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
-    * An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
-    * It will _fail_
+       * An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
+       * An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
+       * An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
+       * It will _fail_
   - `dojo/emit(target, 'event', listener)` where `target` can be:
    - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
    - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
