@@ -128,14 +128,14 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 - Two main functions: `on()` and `emit()`
   - `dojo/on(target, 'event', listener)`
     - Target can be:
-      - An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
-      - An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
-      - An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
-      - It will _fail_
+     - An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
+     - An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
+     - An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
+     - It will _fail_
   - `dojo/emit(target, 'event', listener)`
     - `target` can be:
-      - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
-      - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
+     - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
+     - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
 
 *** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically for objects, onevent rather than onEvent. Didn't this use to be onEvent? Is capitalisation after "on" going away as a convention for Dojo 2.0?
 
@@ -144,13 +144,13 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 ### _WidgetBase
 
 - Widgets also implement `this.on()` and `this.emit()`. However, _everything is done through the DOM_
-  - `this.on(event, listener)` 
-    - Runs `dojo/on(this.domNode, 'event', listener)`. So, it will get `this.domNode` hooked up to `event` (which will fire `listener`)
-    - **TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback on the widget's `this.onClick()`
+  - `this.on(event, listener)`. 
+    -Runs `dojo/on(this.domNode, 'event', listener)`. So, it will get `this.domNode` hooked up to `event` (which will fire `listener`).
+    -**TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback on the widget's `this.onClick()`.
   - `this.emit('event')`
-    - Calls `this['on'+event]` if it exists in the widget (note the lack of capitalisation in 'event') **AND**
-    - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits down to `this.domNode`, through the widget's DOM
-    - The event **will _not_ bubble up synthetically** in any case (unlike synthetic events emitted with `dojo/emit()` over widgets
+    -Calls `this['on'+event]` if it exists in the widget (note the lack of capitalisation in 'event') **AND**
+    -Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits down to `this.domNode`, through the widget's DOM
+    -The event **will _not_ bubble up synthetically** in any case (unlike synthetic events emitted with `dojo/emit()` over widgets
 
 *** QUESTION: there is no logic to bubble up 'event' in _Widgetbase, I guess because the DOM will do that. But isn't this a bit inconsistent? (see question above)
 
