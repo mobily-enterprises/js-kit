@@ -146,20 +146,3 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 
 *** QUESTION: there is no logic to bubble up 'event' in _Widgetbase, I guess because the DOM will do that. But isn't this a bit inconsistent? (see question above)
 
-   
-### What this means in everyday coding practice
-
-- If you have a `widget` and use its `on()` and `emit()` methods:
-    - `widget.on('success', listener)` will get `this.domNode` and attach the event `success` to `listener`
-    - `widget.emit('success')` will:
-        - get `this.domNode` and emit the event `success` on it
-        - run `this.onsuccess()` for the widget itself if present. No manual bubbling or anything
-
-
-- When you use `dojo/on()` and `dojo/on.emit()` **with widgets** (the common scenario):
-    - `dojo/on('event', listener)` will simply delegate to `widget.on('event')` (which will connect `this.domNode` to the `event`, and (**TEMPORARILY before Dojo 2**) will call dojo/aspect the listener after `widget.onEvent()`
-    - `dojo/emit()` will NOT delegate to `widget.emit()`: it will call `widget.onevent()` (for an event called `event`) **and** will emit `event`  bubbling it up manually (if required) to `this.parentNode`
-
-
-
-
