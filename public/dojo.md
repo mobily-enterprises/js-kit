@@ -15,7 +15,7 @@
 
 - The following happens when you create `w`:
     - `this.srcNodeRef`, if present, is assigned to the DOM node with id `srcNodeRef`
-    - `params` are mixed in with the object `w`. Then, calls `this.postMixInProperties()`
+    - `params` are mixed in with the object `w`.
     - **CALLS**: `postMixinProperties()`
     - `this.id` is created (unless it was part of params and got mixed in)
     - The variables  `this.ownerDocument` and `this.ownerDocumentBody` are set (although you can pass `ownerDocument` in params)
@@ -25,7 +25,7 @@
         - `buildRendering` also assigns DOM classes to the widget according to the parameter `this.baseClass`
     - **CALLS**: `this._applyAttributes()`. Basically, if you passed { color: 'blue' } as an attribute, then `_setColorAttr()` will be called with 'blue' as a parameter. (Note: `this._setColorAttr()` is what is called when you run `this.set('color', 'blue')`)
     - If `this.domNode` is different to `this.srcNodeRef` (see above: it might be the same if none of the inherited widgets replaced `this.domNode` and `this.srcNodeRef` was set), then `this.domNode` will _replace_ outright `this.srcNodeRef`. This is when the magic begins.
-        - **NOTE**: basically, if `srcNodeRef` _is_ specified, the widget will always replace it immediately at create() time!
+        - **NOTE**: basically, if `srcNodeRef` _is_ specified, the widget will always replace it at `create()` time!
     - `this.domNode` will have a VERY IMPORTANT attribute set: `widgetId`. This is the "link" between the DOM node and the Dojo widget
     - **CALLS**: `postCreate()`
 - NOTE: You must call `this.inherited(arguments)` when redefining `postMixinProperties()`, `buildRendering()`, `postCreate()` etc. but
@@ -124,7 +124,7 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
             * An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
             * It will _fail_
     - `dojo/emit(target, 'event', listener)`
-        `target` can be:
+        - `target` can be:
             - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
             - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
 
@@ -143,6 +143,8 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
         - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits down to `this.domNode`, through the widget's DOM
         - The event **will _not_ bubble up synthetically** in any case (unlike synthetic events emitted with `dojo/emit()` over widgets
 
+*** QUESTION: with `widget.emit()`, doesn't this mean that in some cases TWO callbacks will be called when emitting 'success': one will be the listener set up with `widget.on('success', listener)` and one will be the widget's `this.onsuccess()` method? Is that the behaviour to expect?
+
 *** QUESTION: there is no logic to bubble up 'event' in _Widgetbase, I guess because the DOM will do that. But isn't this a bit inconsistent? (see question above)
 
    
@@ -154,7 +156,6 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
         - get `this.domNode` and emit the event `success` on it
         - run `this.onsuccess()` for the widget itself if present
 
-*** QUESTION: Doesn't this mean that in some cases TWO callbacks will be called when emitting 'success': one will be the listener set up with `widget.on('success', listener)` and one will be the widget's `this.onsuccess()` method? Is that the behaviour to expect?
 
 - When you use `dojo/on()` and `dojo/on.emit()` **with widgets** (the common scenario):
     - `dojo/on()` will simply delegate to `widget.on()` (which will connect `this.domNode` to the event, and (**TEMPORARILY, before Dojo 2**) will piggyback on the object's `this.onEvent()`
