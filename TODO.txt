@@ -260,5 +260,4 @@
   * Finalised, polished up, re-checked the whole Comet/messages infrastructure
   * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
     do load the user's config in the session (and refresh it if it gets modified).
-
-
+  * Get the user form to appear at the top and not on the left
