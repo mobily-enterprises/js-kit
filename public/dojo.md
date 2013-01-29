@@ -128,9 +128,9 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
             - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
             - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up. This is done 100% synthetically, by following parentNode attributes.
 
-*** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically for objects, onevent rather than onEvent. Didn't this use to be onEvent? Is capitalisation after "on" going away as a convention for Dojo 2.0?
+*** QUESTION: Why doesn't `dojo/on.emit()` get delegated to the widget just like `dojo/on()` is? It seems like the obvious thing to do -- with the object's `this.emit()` which then emits through the DOM, which will then bubble things up if requested... so that the "manual" bubbling wouldn't even be necessary?
 
-*** QUESTIOM: Why doesn't `dojo/on.emit()` get delegated to the widget just like `dojo/on()` is? It seems like the obvious thing to do -- with the object's `this.emit()` which then emits through the DOM, which will then bubble things up if requested...
+*** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically for objects, onevent rather than onEvent. Didn't this use to be onEvent? Is capitalisation after "on" going away as a convention for Dojo 2.0?
 
 ### _WidgetBase
 
