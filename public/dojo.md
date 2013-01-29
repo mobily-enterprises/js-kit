@@ -126,15 +126,16 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 
 - dojo/on is the one-stop system to emit and subscribe to events
 - Two main functions: `on()` and `emit()`
- - `dojo/on(target, 'event', listener)`
-  - `target` can be:
-       * An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
-       * An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
-       * An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
-       * It will _fail_
-  - `dojo/emit(target, 'event', listener)` where `target` can be:
-      - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
-      - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
+    - `dojo/on(target, 'event', listener)`
+        - `target` can be:
+            * An object with `this.on()` defined: `dojo/on` will delegate to that function. This is what happens in widgets! **OR**
+            * An object with `this.addEventListener()` defined: it will use it using the same API as DOM, but it might be anything. **OR**
+            * An object with `this.attachEvent()` defined (this is for retarded IE which up to v.9 didn't have `this.addEventListener`) **OR**
+            * It will _fail_
+    - `dojo/emit(target, 'event', listener)`
+        `target` can be:
+            - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
+            - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
 
 *** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically for objects, onevent rather than onEvent. Didn't this use to be onEvent? Is capitalisation after "on" going away as a convention for Dojo 2.0?
 
@@ -157,16 +158,16 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 ### What this means in everyday coding practice
 
 - If you have a `widget` and use its `on()` and `emit()` methods:
-  - `widget.on('success', listener)` will get `this.domNode` and attach the event `success` to `listener`
-  - `widget.emit('success')` will:
-      - get `this.domNode` and emit the event `success` on it
-      - run `this.onsuccess()` for the widget itself if present
+    - `widget.on('success', listener)` will get `this.domNode` and attach the event `success` to `listener`
+    - `widget.emit('success')` will:
+        - get `this.domNode` and emit the event `success` on it
+        - run `this.onsuccess()` for the widget itself if present
 
 *** QUESTION: Doesn't this mean that in some cases TWO callbacks will be called when emitting 'success': one will be the listener set up with `widget.on('success', listener)` and one will be the widget's `this.onsuccess()` method? Is that the behaviour to expect?
 
 - When you use `dojo/on()` and `dojo/on.emit()` **with widgets** (the common scenario):
-  - `dojo/on()` will simply delegate to `widget.on()` (which will connect `this.domNode` to the event, and (**TEMPORARILY, before Dojo 2**) will piggyback on the object's `this.onEvent()`
-  - `dojo/emit()` will NOT delegate to `widget.emit()`: it will call `widget.onevent()` (for an event called `event`) and will emit `event`  bubbling it up (if required) to `this.parentNode`
+    - `dojo/on()` will simply delegate to `widget.on()` (which will connect `this.domNode` to the event, and (**TEMPORARILY, before Dojo 2**) will piggyback on the object's `this.onEvent()`
+    - `dojo/emit()` will NOT delegate to `widget.emit()`: it will call `widget.onevent()` (for an event called `event`) and will emit `event`  bubbling it up (if required) to `this.parentNode`
 
 
 
