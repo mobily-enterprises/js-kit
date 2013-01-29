@@ -1,19 +1,26 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
-  * Add name and Last Name to the form, assign it to the settings section with the hook
+  TOMORROW:
+  * Fix permission of get/post UserConfig (there is no :workspaceId anymore, and it does make sense). Write a custom Auth function for it
+  * Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
+    it cannot get registered as a tab, so it won't get the Comet signals etc.
+  * Good chance to check versions in general (increment __v when editing etc.)
+  * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No.
+
+  * Add Name and Last Name to the form, assign it to the settings section with the hook
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
     (Note: decide on sub-models. DECIDED: The best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
 
-  * Improve the look of widgets: Overlay with reload icon, top bar with shade, etc.
+  * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
-  "A WORKING USE CASE"
+
+  "A WORKING USE CASE" (we finally use Hotplate)
 
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
     comet/etc. (if somebody else adds a comment, animate the "appearance" of the new comment)
@@ -80,9 +87,9 @@
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to set products for each contact (once|minute|hour|day rate, commission-only allowed, restrict who can buy/offer it,
     money range: from/to booking owner, from/to person, tangible/intangible, tax rate, that's it )
-  * Ability to create events. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from time, to time]
+  * Ability to create bookings. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from time, to time]
   * Ability to match incoming (and outgoing) messages to bookings from inbox
-  * Ability to set templates for messages of different types, with previews <--- possibly nasty one!
+  * Ability to set templates for messages of different types, with previews
 
   PHASE 2: Money/billing
   * Accounting entries for products for each booking (with system-calculated ones)
@@ -261,3 +268,4 @@
   * Check permissions with permission module. Decide on whether to leave the session minimalistic as it is now ( best way ). Or maybe
     do load the user's config in the session (and refresh it if it gets modified).
   * Get the user form to appear at the top and not on the left
+  * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
