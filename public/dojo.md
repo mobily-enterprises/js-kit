@@ -137,11 +137,11 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
 - Widgets also implement `this.on()` and `this.emit()`. However, _everything is done through the DOM_
     - `this.on(event, listener)` 
         - Runs `dojo/on(this.domNode, 'event', listener)`. So, it will get `this.domNode` hooked up to `event` (which will fire `listener`).
-        - **TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback on the widget's `this.onClick()`.
+        - **TEMPORARILY, before Dojo 2**, will run `aspect.after(this, 'onEvent', listener)` to piggyback on widget methods (e.g. `this.onClick()`.
     - `this.emit('event')`
         - Calls `this['on'+event]` if it exists in the widget (note the lack of capitalisation in 'event') **AND**
         - Runs `dojo/on.emit(this.domNode, 'event', listener)`. So, it emits down to `this.domNode`, through the widget's DOM
-        - The event **will _not_ bubble up synthetically** in any case (unlike synthetic events emitted with `dojo/emit()` over widgets
+        - The event **will _not_ bubble up synthetically** in any case (unlike synthetic events emitted with `dojo/emit()` over widgets)
 
 *** QUESTION: with `widget.emit()`, doesn't this mean that in some cases TWO callbacks will be called when emitting 'success': one will be the listener set up with `widget.on('success', listener)` and one will be the widget's `this.onsuccess()` method? Is that the behaviour to expect?
 
@@ -154,12 +154,12 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
     - `widget.on('success', listener)` will get `this.domNode` and attach the event `success` to `listener`
     - `widget.emit('success')` will:
         - get `this.domNode` and emit the event `success` on it
-        - run `this.onsuccess()` for the widget itself if present
+        - run `this.onsuccess()` for the widget itself if present. No manual bubbling or anything
 
 
 - When you use `dojo/on()` and `dojo/on.emit()` **with widgets** (the common scenario):
-    - `dojo/on()` will simply delegate to `widget.on()` (which will connect `this.domNode` to the event, and (**TEMPORARILY, before Dojo 2**) will piggyback on the object's `this.onEvent()`
-    - `dojo/emit()` will NOT delegate to `widget.emit()`: it will call `widget.onevent()` (for an event called `event`) and will emit `event`  bubbling it up (if required) to `this.parentNode`
+    - `dojo/on('event', listener)` will simply delegate to `widget.on('event')` (which will connect `this.domNode` to the `event`, and (**TEMPORARILY before Dojo 2**) will call dojo/aspect the listener after `widget.onEvent()`
+    - `dojo/emit()` will NOT delegate to `widget.emit()`: it will call `widget.onevent()` (for an event called `event`) **and** will emit `event`  bubbling it up manually (if required) to `this.parentNode`
 
 
 
