@@ -126,7 +126,7 @@ Note: this is a very simplified description of what `_StackContainer` is, to giv
     - `dojo/emit(target, 'event', listener)`
         - `target` can be:
             - An object with `this.dispatchEvent()` defined (it's a DOM node): it will use native event emission (DOM) **OR**
-            - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up
+            - An object with `this['on'+event]`: it will call that, _and_ **it will bubble up** to `parentNode` if event is meant to bubble up. This is done 100% synthetically, by following parentNode attributes.
 
 *** QUESTION: `dojo/emit(target, 'event', listener)` seems to call, synthetically for objects, onevent rather than onEvent. Didn't this use to be onEvent? Is capitalisation after "on" going away as a convention for Dojo 2.0?
 
