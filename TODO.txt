@@ -2,6 +2,9 @@
   "SETTINGS AND DATA MANAGEMENT"
 
   TODAY:
+
+  * Maybe switch away from Mongoose
+
   * Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
     it cannot get registered as a tab, so it won't get the Comet signals etc. Good chance to check versions in general 
     (increment __v when editing etc.)
