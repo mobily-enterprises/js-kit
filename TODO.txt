@@ -1,12 +1,13 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  TOMORROW:
-  * Fix permission of get/post UserConfig (there is no :workspaceId anymore, and it does make sense). Write a custom Auth function for it
+  TODAY:
   * Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
-    it cannot get registered as a tab, so it won't get the Comet signals etc.
-  * Good chance to check versions in general (increment __v when editing etc.)
-  * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No.
+    it cannot get registered as a tab, so it won't get the Comet signals etc. Good chance to check versions in general 
+    (increment __v when editing etc.)
+  * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
+
+
 
   * Add Name and Last Name to the form, assign it to the settings section with the hook
 
@@ -269,3 +270,6 @@
     do load the user's config in the session (and refresh it if it gets modified).
   * Get the user form to appear at the top and not on the left
   * Add a link to the user profile in the workspace picker if a user logs in without ANY workspaces. Use Hotplate's Dojo mixin for this
+  * Move login/userId from bd.js to hotDojo Auth, where it makes a lot more sense. Document which variables are provided for each page
+  * Fix permission of get/post UserConfig (there is no :workspaceId anymore, as it shouldn't). Write a custom Auth function for it
+  * Improve ID checking for mongoDB ids, make them one-liners as they are in every single call
