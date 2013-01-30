@@ -7,8 +7,6 @@
     (increment __v when editing etc.)
   * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
 
-
-
   * Add Name and Last Name to the form, assign it to the settings section with the hook
 
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
@@ -273,3 +271,4 @@
   * Move login/userId from bd.js to hotDojo Auth, where it makes a lot more sense. Document which variables are provided for each page
   * Fix permission of get/post UserConfig (there is no :workspaceId anymore, as it shouldn't). Write a custom Auth function for it
   * Improve ID checking for mongoDB ids, make them one-liners as they are in every single call
+  * Fixed mystery of ghost collections created by Mongoose when app started. It was old indexes. ALSO deleted Access as a global model
