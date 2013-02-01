@@ -7,15 +7,13 @@ var express = require('express'),
     mongoose = require('mongoose'),
 
     // Mongodb for sessions
-    mongoStore = require('connect-mongodb'),
+    MongoStore = require('connect-mongo')(express),
     mongodb = require('mongodb'),
-    mongoSessionDb = new mongodb.Db(
-     'sessions',
-     new mongodb.Server('localhost', 27017, { auto_reconnect: true, native_parser: true } )
-    ),
 
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    mw = require('mongoWrapper'),
+    mongojs = require('mongojs');
 
   var hotplate = require('./hotplate/hotplate.js');
 
@@ -25,66 +23,83 @@ var app = express();
 mongoose.connect('mongodb://localhost/hotplate' );
 mongoose.set('enableUpdateValidation', true );
 
-
 hotplate.setApp(app); // Associate "app" to hotplate
-hotplate.set( 'logToScreen' , true );
-hotplate.set( 'staticUrlPath', '/lib/dojo' ); // Set the static URL path for all modules
-hotplate.set( 'afterLoginPage', '/ws/' ); // Page to go after logging in. Remember / at the end!
-
-hotplate.registerCoreModules(); // Register core modules
-hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
-// require('anotherModule'); hotplate.registerModule('another', 'anotherModule'); 
 
 
-hotplate.initModules( function() {
 
-  app.configure(function(){
+mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
 
-    app.set('port', process.env.PORT || 3000);
-    app.set('views', __dirname + '/views');
-    app.set('view engine', 'jade');
+  // The connection is 100% necessary
+  if( err ){
+    console.log("Could not connect to the mongodb database. Aborting...");
+    console.log( err );
+    exit( 1 );
+  }
 
-    // Various middleware
-    app.use(express.favicon());
-    app.use(express.logger('dev'));
-    app.use(express.bodyParser());
-    app.use(express.methodOverride());
+  hotplate.set( 'logToScreen' , true );
+  hotplate.set( 'staticUrlPath', '/lib/dojo' ); // Set the static URL path for all modules
+  hotplate.set( 'afterLoginPage', '/ws/' );     // Page to go after logging in. Remember / at the end!
+  hotplate.set( 'db', mw.db );                  // The DB variable
 
-    // Sessions
-    app.use(express.cookieParser('woodchucks are nasty animals'));
-    app.use(express.session({
-      secret: 'woodchucks are nasty animals',
-      key: 'sid',
-      cookie: { secure: false }, // MAYBE add:  {maxAge: 60000 * 20}
-      store: new mongoStore({db: mongoSessionDb})
-    }));
+  hotplate.registerCoreModules(); // Register core modules
+  hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
 
-    // Static routes
-    app.use(express.static(path.join(__dirname, 'public')));
-
-    app.use(app.router);
-
-    app.use( hotplate.getModule('hotClientFiles').serve() );
-    app.use( hotplate.getModule('hotError').hotErrorHandler );
-
-    // Change this to a cute cute page, and log it with high importance (including stack trace)
-    app.use( function( err, req, res, next){ res.send("Oh dear, this should never happen!"); next(err); } );
-  });
+  // require('anotherModule'); hotplate.registerModule('another', 'anotherModule'); 
 
 
-  app.configure('development', function(){
-    // app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  });
+  hotplate.initModules( function() {
 
-  app.configure('production', function(){
-    // app.use(express.errorHandler());
-  });
+    app.configure(function(){
+
+      app.set('port', process.env.PORT || 3000);
+      app.set('views', __dirname + '/views');
+      app.set('view engine', 'jade');
+
+      // Various middleware
+      app.use(express.favicon());
+      app.use(express.logger('dev'));
+      app.use(express.bodyParser());
+      app.use(express.methodOverride());
+
+      // Sessions
+      app.use(express.cookieParser('woodchucks are nasty animals'));
+
+      app.use(express.session({
+        // secret: settings.cookie_secret,
+        secret: 'woodchucks are nasty animals',
+        store: new MongoStore({
+          // db: settings.db
+          // db: hotplate.get('db').client
+           db: db
+        })
+      }));
+
+      // Static routes
+      app.use(express.static(path.join(__dirname, 'public')));
+
+      app.use(app.router);
+
+      app.use( hotplate.getModule('hotClientFiles').serve() );
+      app.use( hotplate.getModule('hotError').hotErrorHandler );
+
+      // Change this to a cute cute page, and log it with high importance (including stack trace)
+      app.use( function( err, req, res, next){ res.send("Oh dear, this should never happen!"); next(err); } );
+    });
 
 
-  hotplate.runModules( function() { 
+    app.configure('development', function(){
+      // app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+    });
 
-    // Create the actual server
-    var server = http.createServer(app);
+    app.configure('production', function(){
+      // app.use(express.errorHandler());
+    });
+
+
+    hotplate.runModules( function() { 
+
+      // Create the actual server
+      var server = http.createServer(app);
 
 /*
     var io = socketIo.listen(server);
@@ -97,10 +112,11 @@ hotplate.initModules( function() {
 */
  
 
-    server.listen(app.get('port'), function(){
-      console.log("Express server listening on port " + app.get('port'));
-    });
-  }); // runModules
+      server.listen(app.get('port'), function(){
+        console.log("Express server listening on port " + app.get('port'));
+      });
+    }); // runModules
 
-}); // initModules
+  }); // initModules
 
+});
