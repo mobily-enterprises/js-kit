@@ -12,10 +12,9 @@ var express = require('express'),
 
     fs = require('fs'),
     path = require('path'),
-    mw = require('mongoWrapper'),
-    mongojs = require('mongojs');
+    mw = require('mongoWrapper');
 
-  var hotplate = require('./hotplate/hotplate.js');
+var hotplate = require('./hotplate/hotplate.js');
 
 var app = express();
 
@@ -24,8 +23,6 @@ mongoose.connect('mongodb://localhost/hotplate' );
 mongoose.set('enableUpdateValidation', true );
 
 hotplate.setApp(app); // Associate "app" to hotplate
-
-
 
 mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
 
