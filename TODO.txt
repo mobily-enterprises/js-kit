@@ -3,12 +3,15 @@
 
   TODAY:
 
-  * Maybe switch away from Mongoose
+  * DEFINITELY switch away from Mongoose
 
-  * Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
+  * !! Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
     it cannot get registered as a tab, so it won't get the Comet signals etc. Good chance to check versions in general 
     (increment __v when editing etc.)
+
   * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
+
+
 
   * Add Name and Last Name to the form, assign it to the settings section with the hook
 
