@@ -1,32 +1,37 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
-  * Add Name and Last Name to the form, assign it to the settings section with the hook
+  TOMORROW:
+  * Add Name and Last Name to the initial form, assign it to the settings section with the hook
 
-  * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow colour-codes.
+  AND THEN:
+  * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow custom rendering
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
-    (Note: decide on sub-Models. DECIDED: The best way is to only return things that aren't arrays, and use API calls to push/pull from arrays)
+  * Decide on arrays returned. IDEA: turn each Array into a model which is then cached? What about nested ones?
 
+  AND THEN:
+  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. Make it real-time (obviously)
+
+  AND THEN:
+  * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
+  DEADLINE: 15/2
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
 
-  "A WORKING USE CASE" (we finally use Hotplate)
+  "THE MISSING PIECES"
 
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. It all needs to work with
-    comet/etc. (if somebody else adds a comment, animate the "appearance" of the new comment)
-
-  "MESSENGING INFRASTRUCTURE"
+  Message infrastructure:
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
 
-  "USERS MANAGEMENT AND INVITES"
+  * Integrate message-sending with the current simple comment infrastructure
 
-  Hotplate:
+
+  User management and invites in Hotplate:
 
   * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
     link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
@@ -36,16 +41,12 @@
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
     write a bit of a wizard.
 
-  Use case app:
-
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
 
-  "THE INBOX"
+  The "booking inbox":
 
-  * Change contact screen so that it uses one of the sending subsystems to send messages, and an "inbox" system to match
-    incoming messages to contacts
-  * Make an "event": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to an event
+  * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
 
   "DOCUMENTATION"
@@ -272,3 +273,4 @@
     (increment __v when editing etc.)
   * DEFINITELY switch away from Mongoose
   * Write a builder function that creates get() and put() callbacks based on information <--- !!!
+  * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
