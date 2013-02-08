@@ -7,7 +7,7 @@
   AND THEN:
   * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow custom rendering
   * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
-  * Decide on arrays returned. IDEA: turn each Array into a model which is then cached? What about nested ones?
+  * Decide on arrays returned. IDEA: turn each Array into a model which is then cached? What about nested ones? Recursive call?
 
   AND THEN:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. Make it real-time (obviously)
