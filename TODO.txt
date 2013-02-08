@@ -1,25 +1,34 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  TOMORROW:
-  * Add Name and Last Name to the initial form, assign it to the settings section with the hook
+  AND THEN:
+  * Use schemas in postWorkspacesAnon and postWorkspacesUser, and call hooks to change those schemas
+  * Use schema hooks to add name and surname to workspace creation calls
 
   AND THEN:
-  * Write a widget that allows users to create line-records and edit them (account types, booking types, and so on). Allow custom rendering
-  * Add a form to Settings with the ability to pick one amongst one of the allowed line-record -- PLUS the current one!
-  * Decide on arrays returned. IDEA: turn each Array into a model which is then cached? What about nested ones? Recursive call?
+  * Make a general widget to edit fields out of the ones currently used in Settings, so that most of the default stuff is done
+  * See how dgrid works for rendering lists and provide a custom renderer widget
+  * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
+    editing, etc.), and make it render/edit a bunch of items.
+  * Create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
+  * Use the dgrid widgets and the select widget as engines for the settings screen
+  * Decide on arrays returned by settings. IDEA: turn each Array into a model which is then cached? What about nested ones? Recursive call?
 
   AND THEN:
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it. Make it real-time (obviously)
+  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it.
 
   AND THEN:
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
-  DEADLINE: 15/2
+  DEADLINE: 28/2
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
+
+  **************************************************************************************************************************
+  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 20 minutes.
+  **************************************************************************************************************************
 
   "THE MISSING PIECES"
 
@@ -36,13 +45,16 @@
   * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
     link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
     which in turns should output the list of workspaces (since the user is already logged in)
+    This is part of hotDojoAuth
 
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
     write a bit of a wizard.
+    This is part of hotDojoAuth
 
   * Add a "user management" section in settings for Admins only
-  * Write a "message browser" dgrid for the workspace admin so that they can see exactly what was sent, when, and see the logs
+  * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
+
 
   The "booking inbox":
 
@@ -274,3 +286,5 @@
   * DEFINITELY switch away from Mongoose
   * Write a builder function that creates get() and put() callbacks based on information <--- !!!
   * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
+  * Created the SyncPublish widget to make sure that no call is lost
+  * Changed the register form to include name and last name
