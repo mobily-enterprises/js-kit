@@ -2,8 +2,6 @@
   "SETTINGS AND DATA MANAGEMENT"
 
   AND THEN:
-  * Use schemas in postWorkspacesAnon and postWorkspacesUser, and call hooks to change those schemas
-  * Use schema hooks to add name and surname to workspace creation calls
 
   AND THEN:
   * Make a general widget to edit fields out of the ones currently used in Settings, so that most of the default stuff is done
@@ -288,3 +286,6 @@
   * GET RID OF THOSE GLOBAL VARIABLES in BookingDojo.js. They seemed a good idea at the time... No No No. Maybe make module that works them out
   * Created the SyncPublish widget to make sure that no call is lost
   * Changed the register form to include name and last name
+  * Use schemas in postWorkspacesAnon and postWorkspacesUser, and call hooks to change those schemas
+  * Use schema anywhere with post/soft validation in hotDojoAuth
+  * Use schema hooks to add name and surname to workspace creation calls
