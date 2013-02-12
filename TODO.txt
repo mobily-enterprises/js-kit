@@ -1,22 +1,31 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-  AND THEN:
 
   AND THEN:
   * Make a general widget to edit fields out of the ones currently used in Settings, so that most of the default stuff is done
+    - Add alertBar manually to the widget so that users don't have to worry about it
+    - See if I can use Jade as the template engine instead of ugly HTML.
+    - Convert all forms to new system, make them a _loooot_ shorter!
+
+
+
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
     editing, etc.), and make it render/edit a bunch of items.
-  * Create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
+
+  * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
   * Use the dgrid widgets and the select widget as engines for the settings screen
   * Decide on arrays returned by settings. IDEA: turn each Array into a model which is then cached? What about nested ones? Recursive call?
+
 
   AND THEN:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it.
 
   AND THEN:
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
+  * Make sure that code always follows the same standards everywhere, dojo.widget is dojo/widget, and require() only requires the necessary
+  * Reorganise code so that all of the Dojo calls are in one spot, and hotDojoAuth is decoupled from Dojo.
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
   DEADLINE: 28/2
@@ -25,7 +34,7 @@
                           ----------------------------
 
   **************************************************************************************************************************
-  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 20 minutes.
+  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 16 minutes.
   **************************************************************************************************************************
 
   "THE MISSING PIECES"
@@ -53,13 +62,12 @@
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
 
-
   The "booking inbox":
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
 
-  "DOCUMENTATION"
+  "STRUCTURE AND DOCUMENTATION"
 
   * Comment each function, client and server, decide on a standard (probably node's)
 

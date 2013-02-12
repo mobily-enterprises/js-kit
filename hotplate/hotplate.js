@@ -178,8 +178,8 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
   fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
       hotplate.log( "Skipping self stub..." );
-    } else if( moduleName == 'core' ){
-      hotplate.log( "Skipping 'core'..." );
+    //} else if( moduleName == 'core' ){
+    //  hotplate.log( "Skipping 'core'..." );
     } else {
       var moduleFullPath = path.join( __dirname, modulesLocalPath,  moduleName );
       var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );

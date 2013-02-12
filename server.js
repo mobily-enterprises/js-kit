@@ -4,7 +4,6 @@
 var express = require('express'),
 //    socketIo = require('socket.io'),
     http = require('http'),
-    mongoose = require('mongoose'),
 
     // Mongodb for sessions
     MongoStore = require('connect-mongo')(express),
@@ -17,10 +16,6 @@ var express = require('express'),
 var hotplate = require('./hotplate/hotplate.js');
 
 var app = express();
-
-// Connect to DB
-mongoose.connect('mongodb://localhost/hotplate' );
-mongoose.set('enableUpdateValidation', true );
 
 hotplate.setApp(app); // Associate "app" to hotplate
 
@@ -38,8 +33,15 @@ mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
   hotplate.set( 'afterLoginPage', '/ws/' );     // Page to go after logging in. Remember / at the end!
   hotplate.set( 'db', mw.db );                  // The DB variable
 
+  hotplate.set( 'dbCheckObjectId', mw.checkObjectId );
+  hotplate.set( 'dbObjectId', mw.ObjectId );
+
+   
+
   hotplate.registerCoreModules(); // Register core modules
   hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
+  hotplate.registerAllEnabledModules('node_modules/dojo/node_modules'); // Register non-core modules requiring dojo
+  hotplate.registerAllEnabledModules('node_modules/mongo/node_modules'); // Register non-core modules requiring mongoDb
 
   // require('anotherModule'); hotplate.registerModule('another', 'anotherModule'); 
 

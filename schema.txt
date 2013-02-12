@@ -71,7 +71,7 @@ INDEX: settings.name, settings.lastName, settings.email
 logs
 ----
 
-# SCHEMA BY hotMessages
+# SCHEMA BY hotMongoMessages
 
 tabs
 ----
