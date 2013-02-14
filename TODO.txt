@@ -1,15 +1,6 @@
 
   "SETTINGS AND DATA MANAGEMENT"
 
-
-  AND THEN:
-  * Make a general widget to edit fields out of the ones currently used in Settings, so that most of the default stuff is done
-    - Add alertBar manually to the widget so that users don't have to worry about it
-    - See if I can use Jade as the template engine instead of ugly HTML.
-    - Convert all forms to new system, make them a _loooot_ shorter!
-
-
-
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
     editing, etc.), and make it render/edit a bunch of items.
@@ -297,3 +288,7 @@
   * Use schemas in postWorkspacesAnon and postWorkspacesUser, and call hooks to change those schemas
   * Use schema anywhere with post/soft validation in hotDojoAuth
   * Use schema hooks to add name and surname to workspace creation calls
+  * Make a general widget to edit fields out of the ones currently used in Settings, so that most of the default stuff is done
+    - Add alertBar manually to the widget so that users don't have to worry about it
+    - See if I can use Jade as the template engine instead of ugly HTML.
+    - Convert all forms to new system, make them a _loooot_ shorter!
