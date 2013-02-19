@@ -1,0 +1,94 @@
+****************************
+***** PUT {target}/id  *****
+****************************
+NAME:
+ * "STRAIGHT PUT"
+WHEN
+ * store.put(), with ID (object/options) and options.incremental is FALSE
+GOAL:
+ * Update a specific object
+ * Create an object with a specific ID
+OPTIONS:
+ * overwrite : Overwrite object (header: If-Match: *)
+ * !overwrite: Do not overwrite object (header: If-None-Match: *)
+RETURN:
+  202 Accepted - on success
+
+*****************************
+***** POST {target}/id  *****
+*****************************
+NAME:
+ * "APPEND PUT"
+WHEN
+ * store.put(), with ID (object/options), and options.incremental is TRUE
+NOTE:
+ * The parameter `overwrite` here cannot mean much, as it's an append operation
+ * There needs to be logic to handle the "append" operation -- the submitted data will "change"
+    {target}/id adding information to it
+RETURN:
+  202 Accepted - on success
+
+*****************************
+***** POST {target}     *****
+*****************************
+NAME:
+ * "STRAIGHT POST"
+WHEN:
+ * store.put(), no ID (object/options), and options.incremental is FALSE
+NOTE:
+ * The parameter `overwrite` here cannot mean much, as it's an append operation
+ * The call should include, as a response header, something like "Location: http://www.example.com/users/4/"
+RETURN:
+  201 Created - on success
+ 
+
+*****************************
+***** GET {target}/id   *****
+*****************************
+NAME:
+ * "STRAIGHT GET"
+WHEN:
+ * store.get(id)
+NOTE:
+ * This is a 100% clean "get"
+RETURN:
+  200 OK - if there is content
+  204 No content - if there is no content 
+ 
+*****************************
+***** GET {target}      *****
+*****************************
+NAME:
+ * "QUERY GET"
+WHEN:
+ * store.query(query, options)
+NOTE:
+ * This needs to return an array of objects
+ * OPTION: WHEN options.start >= 0 || options.count >= 0
+   * `Range` header might be specified by client: Range: items=0-24. Server should respond: Content-Range: items 0-24/66
+ * OPTION: WHEN options.sort: [ {attribute: "one", descending: true }, { attribute: "two", descending: false} ]
+   * `http://url/?sort(+one,-two)` IF sortParam wasn't defined when creating the store
+   * `http://url/?sortParamValue=+one,-two` if sortParam was set as `sortParamValue` 
+RETURN:
+  200 OK - if there is content. Note: there should always be contents, even if it's just []
+
+
+ERROR RETURNS:
+--------------
+400 - Bad request. Maybe some of the IDs are malformed
+401 - Unautorized. Need to login to see the URL
+403 - Forbidden. You are logged in but cannot access this URL
+
+404 - Not found.
+405 - Method not allowed
+
+422 - Validation error. 
+
+406 - Method not acceptable (same as 405)
+
+Rarely used:
+406 - Method not acceptable (same as 405)
+409 - Conflict. POST and PUT didn't work because of a conflict
+501 - Not implemented (same as 405)
+
+

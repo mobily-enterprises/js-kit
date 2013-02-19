@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DnD test dragging tree children</title>
+<style type="text/css">
+@import "lib/dojos/dojo/resources/dojo.css";
+/* need a theme for some dnd styles (e.g. before/after indicators).
+   Using tundra because claro has a silly dojoDndItemBefore/After bug
+*/
+@import "lib/dojos/dijit/themes/tundra/tundra.css";
+@import "lib/dojos/dgrid/css/skins/tundra.css";
+
+.clear { clear: both; }
+.dojoDndItem { padding: 0; } /* override dijit.css */
+#sourcegrid, #targetgrid {
+    float: left;
+    height: 10em;
+    width: 200px;
+    margin-left: 20px;
+}
+</style>
+<script src="lib/dojos/dojo/dojo.js" data-dojo-config="async: true"></script>
+<script>
+require([
+  "dojo/_base/declare","dgrid/OnDemandGrid","dgrid/OnDemandList",
+  "dgrid/Selection","dgrid/extensions/DnD","put-selector/put",
+  "dojo/store/Memory","dojo/store/Observable","dojo/store/Cache",
+  "dojo/store/JsonRest","dojo/aspect","dojo/domReady!"
+], function(
+  declare,	DemandGrid,	DemandList,
+  Selection,	DnD,		put,
+  Memory,	Observable,	Cache,
+  JsonRest,	aspect
+){
+       	var DnDGrid = declare([DemandGrid, /* Keyboard, */ Selection, DnD]);
+	var DnDList = declare([DemandList, Selection, DnD]);
+// Create src list
+    window.mysrcJson = new JsonRest({
+// load initial memory
+	target:             'http://www.bizsystems.net/jsonpage/',
+	idProperty:         'id'
+    });  
+    window.mysrcMemory = new Memory();
+    window.mysrcStore = new Observable(new Cache(mysrcJson, mysrcMemory));
+    window.sourcegrid = new DnDGrid({
+	columns: [
+	      { label:          'id',
+	        field:          'id',
+	        sortable:       false
+	      }
+	],
+	store: mysrcStore,
+// get initial contents
+	query: {
+	    id: 'rootroot00000000'
+	},
+	dndParams: {
+	    copyOnly: true,
+	    checkAcceptance: function(source, nodes) {
+		return source !== this; // Don't self-accept.
+	    }
+	}
+    }, "sourcegrid");
+				
+// Create the target list.
+    window.myTJson = new JsonRest({
+	target:             'http://www.bizsystems.net/jsonpage/',
+	idProperty:         'id',
+    });  
+    window.myXmemory = new Observable(new Memory());
+    window.myTmemory = new Memory();
+    window.myTStore = new Observable(new Cache(myTJson, myTmemory));
+
+
+
+//var mem = myTStore;
+//aspect.around(mem,'notify',function(orgNotify) {
+//	return function(obj,options) {
+//		console.log('NOTIFY');
+//		return orgNotify.call(mem,obj,options);
+//	}
+//});
+
+//    var targetstore = myXmemory;
+    var targetstore = myTStore;
+
+//    window.targetgrid = new DnDGrid({
+    window.targetgrid = new  DnDList({
+//	columns: [
+//	      { label:          'id',
+//	        field:          'id',
+//	        sortable:       false
+//	      }
+//	],
+
+
+	
+	query: {
+	    id: 'rootroot00000000'
+	},
+
+	store: targetstore,
+	renderRow: function(obj) {
+console.log(typeof obj);
+	    return put("div", obj.id);
+	},
+// INITIAL QUERY for root container
+	xquery: {
+	    id: 'dropzone00000000'
+	},
+	dndParams: {
+	    isSource: false
+	}
+    }, "targetgrid");
+});
+</script>
+</head>
+<body class="tundra">
+<p>drop test</p>
+<div id="sourcegrid"></div>
+<div id="targetgrid"></div>
+</body>
+</html>

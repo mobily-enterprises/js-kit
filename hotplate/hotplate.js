@@ -82,7 +82,7 @@ Hotplate.prototype.get = Hotplate.prototype.set;
 
 Hotplate.prototype.getModule = function(moduleName){
   if( typeof(this.modules[moduleName]) === 'undefined' ){
-    hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded");
+    hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded", moduleName);
   }
   return this.modules[moduleName];
 }
