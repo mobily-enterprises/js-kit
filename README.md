@@ -1,7 +1,7 @@
 hotplate
 ========
 
-_PLEASE NOTE: The module is to be considered Alpha. The initial structure is ready, but it's still largely undocumented. I believe it will release a stable-release around Christmas (including a sample application that uses it). The basic structure is all there, core and non-core modules are done, but I still haven't decided on a few design issues, plus I would like others to actually check some of the things I did, to confirm that they are sane!_
+_PLEASE NOTE: The module is to be considered Alpha. The initial structure is ready, but it's still largely undocumented. I believe it will release a stable-release around March (including a sample application that uses it). The basic structure is all there, things are progressing well, design issues have largely been made, and it's looking good!_
 
 Framework to create node client/server applications using a hook system. The initial plugins allow you to:
 
