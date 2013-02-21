@@ -16,7 +16,6 @@
   AND THEN:
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
   * Make sure that code always follows the same standards everywhere, dojo.widget is dojo/widget, and require() only requires the necessary
-  * Reorganise code so that all of the Dojo calls are in one spot, and hotDojoAuth is decoupled from Dojo.
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
   DEADLINE: 28/2
@@ -292,3 +291,4 @@
     - Add alertBar manually to the widget so that users don't have to worry about it
     - See if I can use Jade as the template engine instead of ugly HTML.
     - Convert all forms to new system, make them a _loooot_ shorter!
+  * Reorganise code so that all of the Dojo calls are in one spot, and hotDojoAuth is decoupled from Dojo.

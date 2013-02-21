@@ -100,17 +100,6 @@ mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
       // Create the actual server
       var server = http.createServer(app);
 
-/*
-    var io = socketIo.listen(server);
-    io.sockets.on('connection', function (socket) {
-      socket.emit('news', { hello: 'world' });
-      socket.on('register', function (data) {
-        console.log("Register received: " + data );
-      });
-    });
-*/
- 
-
       server.listen(app.get('port'), function(){
         console.log("Express server listening on port " + app.get('port'));
       });
