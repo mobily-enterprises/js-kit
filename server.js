@@ -11,7 +11,7 @@ var express = require('express'),
 
     fs = require('fs'),
     path = require('path'),
-    mw = require('mongoWrapper');
+    mw = require('mongowrapper');
 
 var hotplate = require('./hotplate/hotplate.js');
 
