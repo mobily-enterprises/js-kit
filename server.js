@@ -36,7 +36,6 @@ mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
   hotplate.set( 'dbCheckObjectId', mw.checkObjectId );
   hotplate.set( 'dbObjectId', mw.ObjectId );
 
-   
 
   hotplate.registerCoreModules(); // Register core modules
   hotplate.registerAllEnabledModules('node_modules'); // Register non-core modules
