@@ -252,7 +252,7 @@ Hotplate.prototype.initModules = function( callback ){
 
   // Make up the initial list of modules to initialise
   for( var m in modules ){
-    if( typeof( modules[ m ].hotHooks.init ) == 'function' ){
+    if (typeof( modules[ m ].hotHooks) === 'object' && typeof( modules[ m ].hotHooks.init ) == 'function' ){
       hotplate.log( "Adding %s to the full list of modules to initialise", m );
       fullList.push( m );
       loadStatus[ m ] = 'NOT_ADDED'; // Initial status
@@ -333,7 +333,7 @@ Hotplate.prototype.initModules = function( callback ){
           hotplate.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
           for( var m in modules){
 
-            if( modules[ m ].hotHooks[ invokedFunction ] ){
+            if( typeof( modules[ m ].hotHooks) === 'object' && modules[ m ].hotHooks[ invokedFunction ] ){
               hotplate.log( i(indent) + "Module %s provides the hook, checking if it has an init() function...", m );
              
               if( typeof( modules[ m ].hotHooks.init ) == 'undefined' ){
