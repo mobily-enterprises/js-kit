@@ -1,14 +1,19 @@
 
-  "SETTINGS AND DATA MANAGEMENT"
+  "CLOSING OFF THE SERVER SIDE WITH A BANG"
+  * Take out EVERY ServiceUnavailable errors, just throw the normal errors, and let the error manage deal with it
+  * Change JsonRestStore so that it can pass through 'all', 'http', 'none'
+  * Fine-tune the error manager so that it handles Json _and_ HTML the right way
+  * Document the public modules, remember to document "db" in jsonreststore
 
+  * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
+
+  "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
     editing, etc.), and make it render/edit a bunch of items.
 
   * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
   * Use the dgrid widgets and the select widget as engines for the settings screen
-  * Decide on arrays returned by settings. IDEA: turn each Array into a model which is then cached? What about nested ones? Recursive call?
-
 
   AND THEN:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it.
@@ -18,13 +23,13 @@
   * Make sure that code always follows the same standards everywhere, dojo.widget is dojo/widget, and require() only requires the necessary
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
-  DEADLINE: 28/2
+  DEADLINE: 15/3
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
                           ----------------------------
 
   **************************************************************************************************************************
-  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 16 minutes.
+  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
   **************************************************************************************************************************
 
   "THE MISSING PIECES"
@@ -32,10 +37,10 @@
   Message infrastructure:
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
+    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages. Note: this is simply a very fancy
+    JsonRest store.
 
-  * Integrate message-sending with the current simple comment infrastructure
-
+  * Integrate message-sending with the current simple comment infrastructure (!)
 
   User management and invites in Hotplate:
 
@@ -51,6 +56,7 @@
 
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
+  * Write a "log browser" for workspace owners and for ME to see what happened
 
   The "booking inbox":
 
