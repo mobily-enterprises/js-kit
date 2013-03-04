@@ -1,8 +1,8 @@
 
   "CLOSING OFF THE SERVER SIDE WITH A BANG"
-  * Take out EVERY ServiceUnavailable errors, just throw the normal errors, and let the error manage deal with it
-  * Change JsonRestStore so that it can pass through 'all', 'http', 'none'
-  * Fine-tune the error manager so that it handles Json _and_ HTML the right way
+  * Make validation work on hotDojoAuth, with Validator functions (make extra validation function). Create a schema for hotplate based on
+    mongoSchema for this
+
   * Document the public modules, remember to document "db" in jsonreststore
 
   * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
@@ -298,3 +298,6 @@
     - See if I can use Jade as the template engine instead of ugly HTML.
     - Convert all forms to new system, make them a _loooot_ shorter!
   * Reorganise code so that all of the Dojo calls are in one spot, and hotDojoAuth is decoupled from Dojo.
+  * Take out EVERY ServiceUnavailable errors, just throw the normal errors, and let the error manage deal with it
+  * Change JsonRestStore so that it can pass through 'all', 'http', 'none'
+  * Fine-tune the error manager so that it handles Json _and_ HTML the right way

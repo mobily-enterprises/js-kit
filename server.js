@@ -77,8 +77,8 @@ mw.connect('mongodb://localhost/hotplate', {}, function( err, db ){
 
       app.use(app.router);
 
-      app.use( hotplate.getModule('hotClientFiles').serve() );
-      app.use( hotplate.getModule('hotError').hotErrorHandler );
+      app.use( hotplate.getModule('hotCoreClientFiles').serve() );
+      app.use( hotplate.getModule('hotCoreError').hotCoreErrorHandler );
 
       // Change this to a cute cute page, and log it with high importance (including stack trace)
       app.use( function( err, req, res, next){ res.send("Oh dear, this should never happen!"); next(err); } );
