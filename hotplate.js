@@ -7,7 +7,6 @@ var util = require('util')
 , fs = require('fs')
 , path = require('path')
 , express = require('express')
-, send = require('send')
 , async = require('async')
 ;
 

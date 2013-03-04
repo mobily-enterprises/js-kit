@@ -3,9 +3,8 @@
   * Make validation work on hotDojoAuth, with Validator functions (make extra validation function). Create a schema for hotplate based on
     mongoSchema for this
 
-  * Document the public modules, remember to document "db" in jsonreststore
+  * Document the public modules, remember to document "db" in jsonreststore-mongo
 
-  * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
 
   "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
@@ -52,7 +51,7 @@
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
     write a bit of a wizard.
-    This is part of hotDojoAuth
+    This is part of hot*****Auth
 
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
@@ -301,3 +300,4 @@
   * Take out EVERY ServiceUnavailable errors, just throw the normal errors, and let the error manage deal with it
   * Change JsonRestStore so that it can pass through 'all', 'http', 'none'
   * Fine-tune the error manager so that it handles Json _and_ HTML the right way
+  * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
