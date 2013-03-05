@@ -79,7 +79,8 @@ Hotplate.prototype.set = function( key, value ) {
 
 Hotplate.prototype.get = Hotplate.prototype.set;
 
-Hotplate.prototype.getModule = function(moduleName){
+Hotplate.prototype.getModule = function( moduleName ){
+
   if( typeof(this.modules[moduleName]) === 'undefined' ){
     hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded", moduleName);
   }
@@ -150,9 +151,10 @@ Hotplate.prototype.log = function(){
 
 
 
-Hotplate.prototype.registerCoreModules = function() {
-  this.registerAllEnabledModules('node_modules/core/node_modules');
-}
+//Hotplate.prototype.registerCoreModules = function() {
+//  this.registerAllEnabledModules('node_modules/core/node_modules');
+//}
+
 /**
  * Load all modules that are marked as "enabled"
  *
@@ -169,28 +171,38 @@ Hotplate.prototype.registerCoreModules = function() {
  * @api public
  */
 
-Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
+Hotplate.prototype.registerAllEnabledModules = function( modulesLocalPath, filter, dirname ) {
 
-  var that = this;
+  var self = this;
+
+  // The root directory defaults to __dirname (which is hotplate's directory)
+  if( ! dirname ){
+    dirname = __dirname;
+  }
 
   // Load the installed modules (if they are enabled)
-  fs.readdirSync( path.join( __dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
+  fs.readdirSync( path.join( dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
     if( moduleName == 'hotplate' ){
       hotplate.log( "Skipping self stub..." );
     //} else if( moduleName == 'core' ){
     //  hotplate.log( "Skipping 'core'..." );
     } else {
-      var moduleFullPath = path.join( __dirname, modulesLocalPath,  moduleName );
-      var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );
 
-      var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
+      if( !filter || moduleName.match( filter ) ){
 
-      // If the module is enabled (it has a file called 'enabled'), load it
-      if( fs.existsSync( moduleEnabledLocation ) ){
-        hotplate.log( "Registering module " + moduleName + ' from ' + moduleRelativePath );
-        that.registerModule( moduleName, moduleRelativePath );
-      } else {
-        hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
+        var moduleFullPath = path.join( dirname, modulesLocalPath,  moduleName );
+        var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );
+
+        var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
+
+        // If the module is enabled (it has a file called 'enabled'), load it
+        if( fs.existsSync( moduleEnabledLocation ) ){
+          hotplate.log( "Requiring and registering module " + moduleName + ' from ' + moduleFullPath );
+          var m = require( moduleFullPath );
+          self.registerModule( moduleName, m );
+        } else {
+          hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
+        }
       }
     }
   });
@@ -207,13 +219,13 @@ Hotplate.prototype.registerAllEnabledModules = function(modulesLocalPath) {
  * the module will be require()d
  * 
  * @param {String} The module's path
- * @param {String} The module's client file location, defaults to 'client'
+ * @param {String} The module to register
  * 
  * @api public
  */
 
-Hotplate.prototype.registerModule = function(moduleName, moduleLocation){
-  this.modules[ moduleName ] = require( moduleLocation );
+Hotplate.prototype.registerModule = function( moduleName, m ){
+  this.modules[ moduleName ] = m ;
 }
 
 
@@ -310,12 +322,13 @@ Hotplate.prototype.initModules = function( callback ){
         hotplate.log( i(indent) + "Module %s's init() doesn't invoke anything, it can be added right away", moduleName );
         actuallyAdd( moduleName, indent );
 
-      // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
-      // and load them first
+      // This module's is already being initialised, do nothing!
       } else if( loadStatus[ moduleName ] != 'NOT_ADDED' ) { 
 
         hotplate.log( i(indent) + "Module %s's not initialised as it's status is already %s, doing nothing", moduleName, loadStatus[ moduleName ] );
   
+      // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
+      // and load them first
       } else { 
 
         // The module is now formally being initialised
