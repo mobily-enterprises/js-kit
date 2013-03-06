@@ -3,9 +3,6 @@
   * Make validation work on hotDojoAuth, with Validator functions (make extra validation function). Create a schema for hotplate based on
     mongoSchema for this
 
-  * Document the public modules, remember to document "db" in jsonreststore-mongo
-
-
   "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
