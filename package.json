@@ -1,14 +1,13 @@
 {
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
-  "main" : "./hotplate.js",
-  "version": "0.0.19",
+  "main": "./hotplate.js",
+  "version": "0.0.20",
   "private": false,
   "dependencies": {
     "express": "3.x",
     "async": "*",
     "send": "*",
-
     "hotCoreClientFiles": "*",
     "hotCoreCommonValidators": "*",
     "hotCoreError": "*",
@@ -32,7 +31,6 @@
     "hotMongoAuth": "*",
     "hotMongoCometMessages": "*",
     "hotMongoLogger": "*"
-
   },
   "bundleDependencies": [
     "hotCoreClientFiles",
