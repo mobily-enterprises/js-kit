@@ -1,8 +1,4 @@
 
-  "CLOSING OFF THE SERVER SIDE WITH A BANG"
-  * Make validation work on hotDojoAuth, with Validator functions (make extra validation function). Create a schema for hotplate based on
-    mongoSchema for this
-
   "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
@@ -298,3 +294,4 @@
   * Change JsonRestStore so that it can pass through 'all', 'http', 'none'
   * Fine-tune the error manager so that it handles Json _and_ HTML the right way
   * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
+  * Shared validators made available easily through SimpleSchema
