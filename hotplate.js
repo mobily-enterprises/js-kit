@@ -54,9 +54,9 @@ Hotplate.prototype.set = function( key, value ) {
 
   // First of all check that `key` isn't `staticUrlPath`. If it is,
   // concat "hotplate" at the end (it's mandatory)
-  if( key == 'staticUrlPath' ){
-    value = path.join( value, 'hotplate' );
-  }
+  //if( key == 'staticUrlPath' ){
+  //  value = path.join( value, 'hotplate' );
+  //}
 
   // Set the relevant key
   this.options[ key ] = value;
