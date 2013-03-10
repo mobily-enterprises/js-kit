@@ -1,3 +1,7 @@
+  "STORES ETC. (STILL SERVER)"
+  * Change update so that values in schema but NOT in update object are case/set (doesn't this already happen?!?)
+  * Make a note: PUT is not partial, it is complete
+
 
   "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
@@ -295,3 +299,5 @@
   * Fine-tune the error manager so that it handles Json _and_ HTML the right way
   * Rename all core modules hotSomething -> hotCoreSomethig and put ALL modules under node_modules. Test that a clean install works 100%
   * Shared validators made available easily through SimpleSchema
+  * Make a local, patched copy of cache.js
+  * Take out that rubbish about partial update from Cache.js
