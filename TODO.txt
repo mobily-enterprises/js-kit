@@ -1,8 +1,3 @@
-  "STORES ETC. (STILL SERVER)"
-  * Change update so that values in schema but NOT in update object are case/set (doesn't this already happen?!?)
-  * Make a note: PUT is not partial, it is complete
-
-
   "SETTINGS AND DATA MANAGEMENT"
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
@@ -301,3 +296,5 @@
   * Shared validators made available easily through SimpleSchema
   * Make a local, patched copy of cache.js
   * Take out that rubbish about partial update from Cache.js
+  * Change update so that values in schema but NOT in update object are case/set (doesn't this already happen?!?)
+  * Make a note: PUT is not partial, it is complete
