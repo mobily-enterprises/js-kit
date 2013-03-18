@@ -3,8 +3,16 @@
   * Make a widget that accepts one store, an editing widget, a displaying widget per item  and a "style" (+button at the bottom, in-line
     editing, etc.), and make it render/edit a bunch of items.
 
+
+TODO THIS WEEK:
+ * Option to edit inline or not
+ * Fix CSS for forms
+ * Add visual (configurable) HTML element to edit or delete an entry
+ * Add option for deletion confirmation or not
+ * Add option to add the *adding* widget (inplace before, inplace after, button before, button after)
+
   * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
-  * Use the dgrid widgets and the select widget as engines for the settings screen
+  * Use the dgrid widgets and the select widget as engines for the settings screen, check that dynamic updating all works
 
   AND THEN:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it.
