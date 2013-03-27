@@ -1,0 +1,15 @@
+[submodule "node_modules/hotDojoDgridWidgets/client/dgrid"]
+	path = node_modules/hotDojoDgridWidgets/client/dgrid
+	url = https://github.com/SitePen/dgrid.git
+[submodule "node_modules/hotDojoDgridWidgets/xstyle"]
+	path = node_modules/hotDojoDgridWidgets/xstyle
+	url = https://github.com/kriszyp/xstyle.git
+[submodule "node_modules/hotDojoDgridWidgets/put-selector"]
+	path = node_modules/hotDojoDgridWidgets/put-selector
+	url = https://github.com/kriszyp/put-selector.git
+[submodule "node_modules/hotDojoDgridWidgets/client/xstyle"]
+	path = node_modules/hotDojoDgridWidgets/client/xstyle
+	url = https://github.com/kriszyp/xstyle.git
+[submodule "node_modules/hotDojoDgridWidgets/client/put-selector"]
+	path = node_modules/hotDojoDgridWidgets/client/put-selector
+	url = https://github.com/kriszyp/put-selector.git
