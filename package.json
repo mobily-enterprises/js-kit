@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.1.35",
+  "version": "0.1.41",
   "private": false,
   "dependencies": {
     "express": "3.x",
@@ -22,6 +22,7 @@
     "hotDojoAppContainer": "*",
     "hotDojoAuth": "*",
     "hotDojoCometMessages": "*",
+    "hotDojoDgridWidgets": "*",
     "hotDojoGlobalAlertBar": "*",
     "hotDojoLogger": "*",
     "hotDojoStores": "*",
@@ -47,6 +48,7 @@
     "hotDojoAppContainer",
     "hotDojoAuth",
     "hotDojoCometMessages",
+    "hotDojoDgridWidgets",
     "hotDojoGlobalAlertBar",
     "hotDojoLogger",
     "hotDojoStores",
@@ -56,5 +58,12 @@
     "hotMongoAuth",
     "hotMongoCometMessages",
     "hotMongoLogger"
-  ]
+  ],
+  "subdomain": "mercmobily-hotplate",
+  "scripts": {
+    "start": ""
+  },
+  "engines": {
+    "node": "0.8.x"
+  }
 }
