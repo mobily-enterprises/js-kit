@@ -1,33 +1,19 @@
   "SETTINGS AND DATA MANAGEMENT"
 
 
-  TODO THIS WEEK:
-  * Make a widget that accepts one store, an editing widget, a displaying widget per item and a "style" (+button at the bottom, in-line
-    editing, etc.), and make it render/edit a bunch of items.
-
-    REMAINING TASKS:
-  * Fix the "submit message" issue (change spot where it appears, or give the option of getting it to appear underneath so that 
-    tiny inline forms will still work)
-  * Take "ds" out of the equation for EditableList, emit a signal instead and display the global error thing in case of problems
-  * See if it's OK to pass just the store as a whole, rather than the two parameters, BOTH for EditingWidget and EditableList
-  * Move the widget to an external file, including CSSes (don't forget the overlay one)
-  * Make the "add" form reset after adding
-  * Add option to add the *adding* widget (inplace before, inplace after, button before, button after)
-  * Add option for deletion confirmation via alert (on by default)
-
-
-  NEXT WEEK:
+  THIS WEEK:
   * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
-  * Use the dgrid widgets and the select widget as engines for the settings screen, check that dynamic updating all works
+  * Use Use the dgrid widgets and the select widget as engines for the settings screen, finally finally use it!
 
   AND THEN:
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath it.
+  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
 
   AND THEN:
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
-  * Make sure that code always follows the same standards everywhere, dojo.widget is dojo/widget, and require() only requires the necessary
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
 
+
+  (Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html)
   DEADLINE: 30/3
                           ----------------------------
                           !!  READY FOR A USE CASE  !!
@@ -316,3 +302,15 @@
   * See how dgrid works for rendering lists and provide a custom renderer widget
   * Fix issue where if entries get out of visible area and list is reloaded, it stops adding them to the grid when added! Geeee, I had to
     write my own JsonObserver for this.
+  * See if it's OK to pass just the store to EditingWidget as a whole, rather than the two parameters, BOTH for EditingWidget and EditableList
+  * Make the "add" form reset after adding in EditingList
+  * Move widget to external file, into its own module (the same module that includes dgrid)
+  * Take "ds" out of the equation for EditableList, emit a signal instead and display the global error thing in case of problems (not done)
+  * Add option to add the *adding* widget (before, after, none)
+  * Make a widget to ask for confirmation -- incredibly, Dojo didn't have one
+  * Add option for deletion confirmation via alert (on by default)
+  * Fix the "submit message" issue (change spot where it appears, or give the option of getting it to appear underneath so that 
+    tiny inline forms will still work)
+  * Fix the problem with EditingWidget if there is an error -- escape at EditableList must close all editing widgets
+  * Make a widget that accepts one store, an editing widget, a displaying widget per item and a "style" (+button at the bottom, in-line
+    editing, etc.), and make it render/edit a bunch of items.
