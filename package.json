@@ -13,6 +13,7 @@
     "hotCoreError": "*",
     "hotCoreHandyCss": "*",
     "hotCorePage": "*",
+    "hotCoreJsonRestStores": "*",
     "hotCoreProtocol": "*",
     "hotCoreResUtils": "*",
     "hotCoreServerLogger": "*",
