@@ -1,5 +1,12 @@
 
   THIS WEEK
+
+
+  * Make it possible to place the buttons underneath the widget, aligned to the top, or aligned to the bottom
+
+  * Make it easier to notify multiple stores if a mongoDB table changes, as it's very possible that one different stores will use
+    the same table (e.g. users seen by admins and by normal users)
+
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
 
@@ -23,7 +30,7 @@
     JsonRest store that uses an API
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
-    The sending/editing widget will have to change accordingly
+    The sending/editing widget will have to change accordingly (SMSes are given less space)
 
   User management and invites in Hotplate:
 
@@ -307,3 +314,5 @@
     editing, etc.), and make it render/edit a bunch of items.
   * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
   * Use Use the dgrid widgets and the select widget as engines for the settings screen, finally finally use it!
+  * Fix the veeeery broken system that adds tabId to each request. Now it adds it to the body, which makes it impossible to
+    use for deletions. Use an X-header instead. Move the part about adding tabId to the dojo messages module.
