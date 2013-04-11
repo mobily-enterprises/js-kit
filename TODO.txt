@@ -1,7 +1,7 @@
 
   TODAY:
   * Move the buttonsConstructor somewhere where it makes more sense
-  * Change jsonreststores-mongo to provide several classes, one for each typology of mongoDb access, so that the app stays 100% query-free
+  * Change jsonreststores-mongo so that it deals with sub-stores properly
 
   THIS WEEK:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
@@ -10,6 +10,8 @@
   AND THEN:
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
 
   (Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html)
   DEADLINE: 15/4
