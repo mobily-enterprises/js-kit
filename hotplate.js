@@ -253,7 +253,7 @@ Hotplate.prototype.initModules = function( callback ){
       orderedList = [], 
 
       modules = this.modules,
-      loadStatus = {},
+      initStatus = {},
       functionList = [];
 
 
@@ -266,17 +266,23 @@ Hotplate.prototype.initModules = function( callback ){
     if (typeof( modules[ m ].hotHooks) === 'object' && typeof( modules[ m ].hotHooks.init ) == 'function' ){
       hotplate.log( "Adding %s to the full list of modules to initialise", m );
       fullList.push( m );
-      loadStatus[ m ] = 'NOT_ADDED'; // Initial status
+      initStatus[ m ] = 'NOT_ADDED'; // Initial status
     } else {
       hotplate.log( "Skipping %s as it does not have an init() method, skipping", m );
     }
   };
      
+  hotplate.log( "FULL LIST OF MODULES TO INITIALISE IS: %s\n\n", fullList );
 
+  // Set the default initStatus for all the modules to initialise
+  fullList.forEach( function( item ) {
+    initStatus[ m ] = "NOT_ADDED";
+  });
+
+ 
   // Let the recursive dance begin... This will end up setting the orderedList variable,
   // which will contain the modules in the right init order depending on dependencies
   addModules(fullList, 2 );
-
   
   hotplate.log("ORDERED LIST: " + orderedList);  
  
@@ -311,90 +317,114 @@ Hotplate.prototype.initModules = function( callback ){
   // if there need be)
   function addModules( list, indent ){
 
-    var invokeList, subList = {};
+    var subList = {};
+    var moduleName, kk;
 
-    list.forEach( function(moduleName){
+    for( kk in list ) {
+      moduleName = list[ kk ];
+
       hotplate.log( "\n" + i(indent) + "Adding %s", moduleName);
 
       // The module's init doesn't invokeAll(), all good: just initialise it
       // unless it has already been initialised
-      if( typeof( modules[ moduleName ].hotHooks.init.invokes) == 'undefined' ){
-        hotplate.log( i(indent) + "Module %s's init() doesn't invoke anything, it can be added right away", moduleName );
+      
+      if( typeof( modules[ moduleName ].hotHooks.init.invokes) == 'undefined' && typeof( modules[ moduleName ].hotHooks.init.after) == 'undefined' ){
+        hotplate.log( i(indent) + "Module %s's init() doesn't invoke anything and doesn't have any `after` list, it can be added right away", moduleName );
         actuallyAdd( moduleName, indent );
 
       // This module's is already being initialised, do nothing!
-      } else if( loadStatus[ moduleName ] != 'NOT_ADDED' ) { 
+      } else if( initStatus[ moduleName ] != 'NOT_ADDED' ) { 
 
-        hotplate.log( i(indent) + "Module %s's not initialised as it's status is already %s, doing nothing", moduleName, loadStatus[ moduleName ] );
+        hotplate.log( i(indent) + "Module %s's not initialised as it's status is already %s, doing nothing", moduleName, initStatus[ moduleName ] );
   
-      // This module's init DOES invokeAll()! Find out which modules provide the invokeAll required,
+      // This module's init DOES need care! Find out which modules provide the invokeAll required,
       // and load them first
       } else { 
 
         // The module is now formally being initialised
-        loadStatus[ moduleName ] = 'ADDING';
+        initStatus[ moduleName ] = 'ADDING';
 
-        // Reset the "subList" array...
+        // Reset the "subList" assoc array...
+        // It's not a straight array so that it's easy to avoid reps
         subList = {};
 
-        // Get an array with the invoke list (hooks from other modules that WILL get called)
-        invokeList = modules[ moduleName ].hotHooks.init.invokes;
-        hotplate.log( i(indent) + "Module %s calls invokeAll(%s), checking which modules provide it, adding them first", moduleName, invokeList );
-        // For each module in the invoke list, add it to the sub-list of modules to initialise
-        invokeList.forEach( function(invokedFunction ){
-          hotplate.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
-          for( var m in modules){
+        // First of all, check for the init.after array to see which modules should be
+        // called first
+        var after = modules[ moduleName ].hotHooks.init.after;
+        if( Array.isArray( after ) ){
+          hotplate.log( i(indent) + "Module %s has a init.after list, honouring it:", moduleName, after );
+          for( var ii =0, ll = after.length; ii < ll; ii++ ){
+            addToSubListIfNecessary( after[ ii ] );
+          }
+        }
 
-            if( typeof( modules[ m ].hotHooks) === 'object' && modules[ m ].hotHooks[ invokedFunction ] ){
-              hotplate.log( i(indent) + "Module %s provides the hook, checking if it has an init() function...", m );
-             
-              if( typeof( modules[ m ].hotHooks.init ) == 'undefined' ){
-                hotplate.log( i(indent) + "Module %s doesn't need to init(), ignoring...", m );
-              } else {
-                hotplate.log( i(indent) + "Module %s DOES need to init(), considering adding it to the list of modules to load", m );
- 
-                // The module has an init(), but it could be initialising as we speak...
-                switch( loadStatus[m]){
-                  case 'ADDING':
-                    // FIXME: Add warning about circular dependencies if the name if the module being initialised
-                    // is different to the one found in m. MAYBE.
-                    hotplate.log( i(indent) + "Module %s (for %s) in dependency list BUT it's being initialised as we speak, skipping..." , m, moduleName );
-                    // The only case when this is OK is when a module provide the hooks it needs the init() for (which might well happen). 
-                    // In any other case, it's the symptom of a circular dependency
-                    if( m != moduleName ){
-                      hotplate.log( i(indent) + "!!! WARNING! It looks like you might be experiencing circular dependencies!" );
-                    }
-                  break;
+        // Check the init.invokes array, which will contain a list of hooks: modules
+        // providing those hooks will need to be initialised first 
+        var invokeList = modules[ moduleName ].hotHooks.init.invokes;
+        if( Array.isArray( invokeList )) {
+          hotplate.log( i(indent) + "Module %s calls invokeAll(%s), checking which modules provide it, adding them first", moduleName, invokeList );
+          // For each module in the invoke list, add it to the sub-list of modules to initialise
+          invokeList.forEach( function(invokedFunction ){
+            hotplate.log( i(indent) + "----Looking for modules that provide %s...", invokedFunction );
+            for( var m in modules){
+              if( typeof( modules[ m ].hotHooks) === 'object' && modules[ m ].hotHooks[ invokedFunction ] ){
+                addToSubListIfNecessary( m );
+              }
+            }    
+          });
+        }
 
-                  case 'ADDED':
-                    hotplate.log( i(indent) + "Skipping module %s as its status was already %s", m, loadStatus[m] );
-                  break;
+        // At this point, the variable subList has a list of modules
+        // that will need to be loaded first
 
-                  case 'NOT_ADDED':
-                    hotplate.log( i(indent) + "Adding module %s to the sublist, its status was %s", m, loadStatus[m] );
-                    subList[ m ] = true;
-                  break;
-                } // switch
-              } // if( typeof( modules[ m ].hotHooks.init ) == 'undefined' )
-            }
-          }    
-          // Init the sub-modules (if needed)
+        // Init the sub-modules (if needed)
+        hotplate.log( i(indent) + "LIST of dependencies for %s is: [%s]. Reiterating self if necessary (intending in)", moduleName, Object.keys(subList) );
+        addModules( Object.keys( subList ), indent + 2 );
 
-          hotplate.log( i(indent) + "LIST of dependencies for %s is: [%s]. Reiterating self if necessary (intending in)", moduleName, Object.keys(subList) );
-          addModules( Object.keys( subList ), indent + 2 );
+        hotplate.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage" , moduleName);
 
-          hotplate.log( i(indent) + "THERE should be no un-init()ialised dependencies for %s at this stage for %s" , moduleName, invokedFunction);
-
-          // At this point, this module is ready to be initialised. Set its status
-          // to NOT_ADDED and then initialised it
-          loadStatus[ moduleName ] = 'NOT_ADDED';
-        });
-        console.log("ADDING: " + moduleName );
+        // At this point, this module is ready to be initialised.
+        // Set its status to NOT_ADDED first, so that actuallyAdd actually adds it,
+        // and that's it!
+        initStatus[ moduleName ] = 'NOT_ADDED';
         actuallyAdd( moduleName, indent );
-
       }
-    });
+
+    };
     
+    function addToSubListIfNecessary( m ){
+      hotplate.log( i(indent) + "Module %s first then, checking if it has an init() function...", m );
+      if( typeof( modules[ m ].hotHooks.init ) == 'undefined' ){
+         hotplate.log( i(indent) + "Module %s doesn't need to init(), ignoring...", m );
+      } else {
+        hotplate.log( i(indent) + "Module %s DOES need to init(), considering adding it to the list of modules to load", m );
+
+        // The module has an init(), but it could be initialising as we speak...
+        switch( initStatus[m]){
+          case 'ADDING':
+            // FIXME: Add warning about circular dependencies if the name if the module being initialised
+            // is different to the one found in m. MAYBE.
+            hotplate.log( i(indent) + "Module %s (for %s) in dependency list BUT it's being initialised as we speak, skipping..." , m, moduleName );
+            // The only case when this is OK is when a module provide the hooks it needs the init() for (which might well happen). 
+            // In any other case, it's the symptom of a circular dependency
+            if( m != moduleName ){
+              hotplate.log( i(indent) + "!!!!!!!!!!!! WARNING! It looks like you might be experiencing circular dependencies!" );
+            }
+          break;
+
+          case 'ADDED':
+            hotplate.log( i(indent) + "Skipping module %s as its status was already %s", m, initStatus[m] );
+          break;
+
+          case 'NOT_ADDED':
+            hotplate.log( i(indent) + "ADDED!!! Adding module %s to the sublist, its status was %s", m, initStatus[m] );
+            subList[ m ] = true;
+         break;
+        } // switch
+      } // if( typeof( modules[ m ].hotHooks.init ) == 'undefined' )
+    }
+
+
   }
 
   // Simple function to add a module to the list of the ones to initialise
@@ -403,18 +433,16 @@ Hotplate.prototype.initModules = function( callback ){
   function actuallyAdd(moduleName, indent ){
 
     hotplate.log( i(indent) + "Called actuallyAdd() on %s", moduleName );
-    // hotplate.log( i(indent) + "loadStatus is: ", loadStatus );
-    if( loadStatus[ moduleName ] == 'NOT_ADDED'  ){
+    hotplate.log( i(indent) + "initStatus on %s is: %s", moduleName, initStatus[moduleName] );
+    if( initStatus[ moduleName ] == 'NOT_ADDED'  ){
       hotplate.log( i(indent) + "Initialising module %s, since it hadn't been initialised yet", moduleName );
-      loadStatus[ moduleName ] = 'ADDED';
+      initStatus[ moduleName ] = 'ADDED';
       hotplate.log( i(indent) + "Module %s set as 'ADDED'", moduleName );
       orderedList.push(moduleName);
     } else {
-      hotplate.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, loadStatus[ moduleName ]);
+      hotplate.log( i(indent) + "Module %s not initialised, as its status was %s, nothing to do!", moduleName, initStatus[ moduleName ]);
     }
   }
-
-
 
 }
 
