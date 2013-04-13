@@ -1,7 +1,7 @@
 
   TODAY:
   * Move the buttonsConstructor somewhere where it makes more sense
-  * Change jsonreststores-mongo so that it deals with sub-stores properly
+  * Change things so that the app itself can create the stores directly
 
   THIS WEEK:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
@@ -319,3 +319,7 @@
   * Make it possible to place the buttons underneath the widget, aligned to the top, or aligned to the bottom
   * Make it easier to notify multiple stores if a mongoDB table changes, as it's very possible that one different stores will use
     the same table (e.g. users seen by admins and by normal users). MOVE IT to a different hotplate module
+  * Redo the function that loads modules in hotplate.js, it's a giant mess right now. Use it for hotCoreJsonRestStores.js
+  * Get rid of the "error" variable in hotError, use allhttperrors instead (like you should)
+  * Change that workspaceIdCall into workspaceId
+  * Change jsonreststores-mongo so that it deals with sub-stores properly
