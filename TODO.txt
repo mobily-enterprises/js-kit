@@ -1,7 +1,10 @@
 
+  UNEXPECTED:
+  * Redo authentication system (!!!)
+  * Redo messaging system (!!!)
+
   TODAY:
   * Move the buttonsConstructor somewhere where it makes more sense
-  * Change things so that the app itself can create the stores directly
 
   THIS WEEK:
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
