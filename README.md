@@ -1,41 +1,30 @@
 hotplate
 ========
 
-_PLEASE NOTE: The module is to be considered Alpha. The initial structure is ready, but it's still largely undocumented. I believe it will release a stable-release around March (including a sample application that uses it). The basic structure is all there, things are progressing well, design issues have largely been made, and it's looking good!_
+Hotplate is a framework that allows you to create 201X software in no time.
+By 201X software I mean software that:
 
-Framework to create node client/server applications using a hook system. The initial plugins allow you to:
+* allows you to log in using Facebook, Google, Twotter, Oauth1/2, or... well, login/password pair if you like
+* available anywhere with a Javascript runtime (see: any modern browser)
+* _feels like_ software, and not like a bunch of web pages
+* uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data-store that are JSON-REST compatible
+* handles errors (including, and in fact _especially_, network errors) properly. If anything really bad happens, the application must not stop -- and tell the user
+* has the ability to communicate to your users in different ways: email, SMS, and whatever the world throws at us
+* whos information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well
 
-* Emit "events" and have "hooks" to act upon events server-side
+I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted. Or maybe Javascript will be dead. I don't know, and I frankly don't care. I wrote Hotplate because I felt that this is what software _should_ be in 201X -- which is now.
 
-* Define a standard sub-directory within your module's directory that will be available to the client. This is perfect for the side-client part of the story for your modules
+## Status:
 
-* Define a list of JS/CSS files, as well as variables, which will be rendered onto a page. Each module can add files to the application via hooks. This means that if your module serves javascript widgets that need a specific css, you will be able to serve them, easy
+* Authentication: IN PROGRESS
+* General code cleanup, and hotCoreMessags: UPCOMING
+* Write a sample, small application: UPCOMING
+* Writing the messenging framework: UPCOMING
 
-* Centralised logging function (the logging module simply emits a "log" event, it's up to individual plugins to have hooks to define extra fields and to log things in the right spots. Example logging plugins that write data onto mongoDB are here)
+# Basic concepts
 
-The beauty of this is in the easy in which you can write modules. Basic modules include:
-
-* Good HTTP-oriented errors server-side
-
-* Basic protocol definition, client and server side, ideal for Ajax-intensive applications
-
-* Generic, simple error handling with calls
-
-* Nice dojo widgets for your application
-
-* Login/logout/register module
-
-* Validators functions which are common client-side and server-side
-
-* Roles applicable to users
-
-* Sending and receiving emails
-
-* Manage email inbox
-
-# Project's history
-
-I discovered Dojo and the world of SaaS while working on [project management software](http://www.apollohq.com). My dislike towars PHP grew very quickly, to the point that I considered server programming as enjoyable as losing weight. Then, [Nodejs](http://www.nodejs.org/) came along, and things changed... although I was still very bothered by the idea that a widget couldn't possibly be client or server. I started looking into it more and more, and decided to use my Drupal experience to create the web's Next Big Thing in terms of software development: a system where you can develop self contained, modular widgets which include server and client code. Hotplate was born!
+Hotplate itself is essentially a module loader and a system to invoke (or emit) and listen to messages.
+It's then up to you to use Hotpate to load Hotplate modules in your application.
+Some of the modules are considered "core" -- they all start with `hotCoreXXX`. 
 
 
-Stay tuned!
