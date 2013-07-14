@@ -1,23 +1,35 @@
 
   * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
+    *
+    * Get hotplate to ONLY use hotCoreAuth by writing a new module to deliver a page (both multihome version, and "straight" one)
+    * Make the application work again (!)
+    * --
+    * Complete missing bits (client/server) in the Local strategy
+    * --
+    * Figure out how to handle the recovery process, maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
+      IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
+
 
   * Make Comet messenging work again (it's currently completely broken)
     * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    * Decide if JsonRestStores should include generic methods, to make messenging db-independent
+    * Use JsonRestStores API method, to make messenging fully db-independent
 
-
+  ------
   * Move the buttonsConstructor somewhere where it makes more sense
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
-  * Improve the look of widgets: Overlay with reload icon, top bar with shade, pick form, nothingToPick form, etc.
-
+  * Improve the look of widgets: Overlay with reload icon, top bar with shade, nothingToPick form, etc.
+  ----
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
 
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  * DOCUMENT THE LOT: Fully document Hotplate: all modules, all Javacript modules, the lot
+  * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three representing modules, to have a starting point for all docs
 
+  --------------------------
+  DEADLINE: 15th August 2013
+  --------------------------
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
@@ -42,23 +54,29 @@
     This is part of hotDojoAuth
 
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
-    which allows them to register a new user (if available, etc.) or link the workspace to their existing user. Good chance to
-    write a bit of a wizard.
-    This is part of hot*****Auth
+    which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
+    TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
+    normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
+    added to that workspace (UsersWorkspaces store)
+
 
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened
 
+  * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
+
+  ------------------------------
+  DEADLINE: 15th September 2013
+  ------------------------------
+
   The "booking inbox":
 
-  * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
   "GET OPINIONS"
 
   * MAYBE Check if there is a better way to include modules, now each function needs to (because of async inits() )
   * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
-
     
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
@@ -315,3 +333,6 @@
   * NO, NOT DONE Add function to add per-module routes to make it easier to add URLs
   * NO, NOT DONE Have a "settings" infrastructure, where modules can define settings widgets which then get added to settings
   * NO, NOT DONE Add functions to hotplate.use() routes allowing definition of stores at the same time (add stores use existing function)
+  * REALLY decide on capital letters in collection names, in JsonRestStore docs and in actual code
+  * Add a hook so that when a workspace is added, the creating user is also added immediately to that workspace
+  * Rewrite "pick" (in hotCoreMultiHome) so that it allows user to pick an existing one and go there immediately

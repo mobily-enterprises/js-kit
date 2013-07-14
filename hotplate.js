@@ -530,27 +530,6 @@ Hotplate.prototype.invokeAllFlattened = function( ){
 var hooks = Hotplate.prototype.hotHooks = {}
 
 
-/*
-  Variables that will need to be available to the client as well
-  (e.g. afterLoginPage will be used by the Javascript to redirect)
- 
-*/
-/* FIXME: This is _terrible_. Right now it's hard-encoded that hotDojoAuth will go to afterLoginPage/workspaceId which
-          is pathetic. But, how else could this be done? If a module should be able to decide what the "landing" page is
-          after login, that should be hotDojoAppContainer (or whichever container the developer wants to use).
-          So, a module should have a hook like "defineMeAsLandingPage. But then again, there is the whole "what if
-          the user clicks on a page, and needs to login to access it, and we want her to go straight to the right
-          page after logging in?" This needs more thought to be fixed, I don't want to end up with something
-          that allows me to decide the landing page, and then redo the lot when I want users to click on a link and
-          open the right page straight away...*/
-hooks.pageElements = function( done ){
-  done( null, { moduleName: 'hotplate', result:  {
-    vars:  [ { name: 'afterLoginPage', value: hotplate.get('afterLoginPage') },
-           ],
-  } } );
-}
-
-
 
 /*
 hooks.pageElements = function(){
