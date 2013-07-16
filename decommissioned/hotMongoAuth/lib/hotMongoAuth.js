@@ -112,6 +112,7 @@ hooks.stores = function( done ){
  * **************************************************
 */
 
+/*
 paramWorkspaceIdPages = function( req, res, next, workspaceId ){
 
   req.application = {};
@@ -211,6 +212,8 @@ paramWorkspaceIdCall = function( req, res, next, workspaceId ){
     }
   });
 };
+
+
 
 
 /*
