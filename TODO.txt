@@ -1,9 +1,12 @@
 
   * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
     *
+    * Get CONFIG stores to be marked automatically as such
     * Get hotplate to ONLY use hotCoreAuth by writing a new module to deliver a page (both multihome version, and "straight" one)
+    *
     * Make the application work again (!)
     * --
+    * Check why login/password no longer works
     * Complete missing bits (client/server) in the Local strategy
     * --
     * Figure out how to handle the recovery process, maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
