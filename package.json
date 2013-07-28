@@ -32,8 +32,8 @@
     "hotDojoWidgetHooks": "*",
     "hotDojoWidgets": "*",
     "hotMongoAuth": "*",
-    "hotMongoCometMessages": "*",
-    "hotMongoLogger": "*",
+    "hotCoreCometMessages": "*",
+    "hotCoreStoreLogger": "*",
     "hotCoreMultiHome": "*"
   },
   "bundleDependencies": [
@@ -59,8 +59,8 @@
     "hotDojoWidgetHooks",
     "hotDojoWidgets",
     "hotMongoAuth",
-    "hotMongoCometMessages",
-    "hotMongoLogger",
+    "hotCoreCometMessages",
+    "hotCoreStoreLogger",
     "hotCoreMultiHome"
   ],
   "subdomain": "mercmobily-hotplate",
