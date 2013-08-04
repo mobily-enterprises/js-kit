@@ -1,37 +1,33 @@
 
   * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
-    *
-    * Get CONFIG stores to be marked automatically as such
-    * Get hotplate to ONLY use hotCoreAuth by writing a new module to deliver a page (both multihome version, and "straight" one)
-    *
-    * Make the application work again (!)
+    * Make the application's ability to refresh itself work again (config and normal)
     * --
-    * Check why login/password no longer works
+    * Check why login/password in manager (client side) no longer works
     * Complete missing bits (client/server) in the Local strategy
     * --
     * Figure out how to handle the recovery process, maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
       IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
 
 
-  * Make Comet messenging work again (it's currently completely broken)
+  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
     * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    * Use JsonRestStores API method, to make messenging fully db-independent
 
   ------
   * Move the buttonsConstructor somewhere where it makes more sense
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
-  * Improve the look of widgets: Overlay with reload icon, top bar with shade, nothingToPick form, etc.
   ----
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
+
+  * Improve the look of widgets: Overlay with reload icon, top bar with shade, nothingToPick form, etc.
 
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three representing modules, to have a starting point for all docs
 
   --------------------------
-  DEADLINE: 15th August 2013
+  DEADLINE: 25th August 2013
   --------------------------
 
   **************************************************************************************************************************
@@ -339,3 +335,6 @@
   * REALLY decide on capital letters in collection names, in JsonRestStore docs and in actual code
   * Add a hook so that when a workspace is added, the creating user is also added immediately to that workspace
   * Rewrite "pick" (in hotCoreMultiHome) so that it allows user to pick an existing one and go there immediately
+  * Get CONFIG stores to be marked automatically as such
+  * Get hotplate to ONLY use hotCoreAuth by writing a new module to deliver a page (both multihome version, and "straight" one)
+  * Make the application work again (!)
