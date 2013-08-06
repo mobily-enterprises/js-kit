@@ -1,15 +1,17 @@
 
+  "THE BASICS"
+
   * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
-    * Make the application's ability to refresh itself work again (config and normal)
     * --
-    * Check why login/password in manager (client side) no longer works
     * Complete missing bits (client/server) in the Local strategy
     * --
     * Figure out how to handle the recovery process, maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
       IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
 
+  ----
 
   * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
+    * Add ability to filter for ranges as part of the JsonRestStore if necessary
     * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
 
@@ -65,18 +67,14 @@
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
+  * Develop the "booking inbox"
+
+
   ------------------------------
   DEADLINE: 15th September 2013
   ------------------------------
 
-  The "booking inbox":
 
-
-  "GET OPINIONS"
-
-  * MAYBE Check if there is a better way to include modules, now each function needs to (because of async inits() )
-  * MAYBE Move hotplate's defined stuff (`vars`, etc.) into its own namespace?
-    
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
                           ----------------------------
@@ -338,3 +336,7 @@
   * Get CONFIG stores to be marked automatically as such
   * Get hotplate to ONLY use hotCoreAuth by writing a new module to deliver a page (both multihome version, and "straight" one)
   * Make the application work again (!)
+  * NO, DONE Check if there is a better way to include modules, now each function needs to (because of async inits() ). THere isn't
+  * NO, DONE Move hotplate's defined stuff (`vars`, etc.) into its own namespace? Bad idea. using "vars" as a global will work fine
+  * Make the application's ability to refresh itself work again (config and normal)
+  * Check why login/password in manager (client side) no longer works
