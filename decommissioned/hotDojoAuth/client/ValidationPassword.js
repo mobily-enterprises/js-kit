@@ -7,7 +7,7 @@ define([
   ){
     var Validators = sharedFunctions.hotCoreCommonValidators;
 
-    return declare('hotplate.hotDojoAuth.ValidationPassword', [ ValidationTextBox], {
+    return declare('hotplate/hotDojoAuth2/ValidationPassword', [ ValidationTextBox], {
       mustMatch: null, 
       validator:function(value){
 
