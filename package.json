@@ -22,7 +22,6 @@
     "hotDojo": "*",
     "hotDojoAppContainer": "*",
     "hotDojoAuth": "*",
-    "hotDojoAuth2": "*",
     "hotDojoCometMessages": "*",
     "hotDojoDgridWidgets": "*",
     "hotDojoGlobalAlertBar": "*",
