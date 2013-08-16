@@ -1,37 +1,51 @@
 
   "THE BASICS"
 
-  * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
-    * Complete missing bits (client/server) in the Local strategy (signin DONE, register, recover, resume DONE)
-      * For recovery, for now just create a hash/expiry in login info 
-
+  1 DAY:
   ----
+  * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
+    * Finish RESUME properly (make widget to show resume buttons, write resume part in Facebook's strategy)
+    * Complete missing bits (client/server) in the Local strategy (signin DONE, register DONE, recover )
+      * For recovery, for now just create a hash/expiry in login info 
+    * Document hotDojoAuth and hotCoreAuth
 
+  3-5 DAYS:
+  ----
   * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
     * STORES: Add ability to filter for ranges as part of the JsonRestStore if necessary. YES do this one, it's necessary. Make it work
               from URLs as well with searchSchema specific fields
-    * STPRES: Add ability to scan through GetQuery by calling a function rather than returning an Array
+    * STORES: Add ability to scan through GetQuery by calling a function rather than returning an Array
     * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    * Figure out how to handle the recovery process, maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
-      IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
 
-  ------
+  1 DAY
+  -----
   * Move the buttonsConstructor somewhere where it makes more sense
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
-  ----
+
+  1 DAY
+  -----
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
 
+  1 DAY
+  -----
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, nothingToPick form, etc.
-
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
+  1 DAY
+  -----
   * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three representing modules, to have a starting point for all docs
 
   --------------------------
   DEADLINE: 25th August 2013
   --------------------------
+
+  NOTE: TO be added to JsonRestStores:
+  * Ability to have a default "order" field, which will be influenced by "placeBefore" in options
+  * Ability to have range fields
+  * Ability to have getQuery that returns a function rather than an array
+  This will be enough for the messaging infrastructure, as well as the Comet infrastructure
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
@@ -48,12 +62,17 @@
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
 
+
   User management and invites in Hotplate:
 
   * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
     link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
     which in turns should output the list of workspaces (since the user is already logged in)
     This is part of hotDojoAuth
+    ...
+    Maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
+    IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
+
 
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
