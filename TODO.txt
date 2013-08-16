@@ -4,10 +4,14 @@
   1 DAY:
   ----
   * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
-    * Finish RESUME properly (make widget to show resume buttons, write resume part in Facebook's strategy)
-    * Complete missing bits (client/server) in the Local strategy (signin DONE, register DONE, recover )
-      * For recovery, for now just create a hash/expiry in login info 
-    * Document hotDojoAuth and hotCoreAuth
+    * Make auth widgets independent of where they are used, put required variables in hotCoreAuth
+      ~/Synced/Development/node/dev/node_modules/hotplate/node_modules/hotDojoAuth$ grep -i vars `find .`
+    * Take "store" out of the constructor of Manager and Resume because it's silly
+    * Implement recovery: for now just create a hash/expiry in login info for future use
+
+  1 DAY
+  -----
+    * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten
 
   3-5 DAYS:
   ----
@@ -363,3 +367,6 @@
   * Add "resume" as an option (resume once logged in)
   * Fortify things a little (pages/ws/undefined works?!?, login widget mustnt come out if redirect vars isn't set, page mustn't be served if
     logged in user ID doesn't exist, pick mustn't work if userId doesn't exist, ...more? )
+  * Finish RESUME properly (make widget to show resume buttons, write resume part in Facebook's strategy)
+  * Complete missing bits (client/server) in the Local strategy (signin DONE, register DONE, recover )
+  * Make resume appear if there is an auth error in the example app
