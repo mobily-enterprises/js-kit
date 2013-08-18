@@ -2,11 +2,8 @@
   "THE BASICS"
 
   1 DAY:
-  ----
-  * Make the new authentication fully work (add user when workspace is created, actually login when login is successful)
-    * Make auth widgets independent of where they are used, put required variables in hotCoreAuth
-      ~/Synced/Development/node/dev/node_modules/hotplate/node_modules/hotDojoAuth$ grep -i vars `find .`
-    * Take "store" out of the constructor of Manager and Resume because it's silly
+  ------
+  * Complete authentication
     * Implement recovery: for now just create a hash/expiry in login info for future use
 
   1 DAY
@@ -370,3 +367,8 @@
   * Finish RESUME properly (make widget to show resume buttons, write resume part in Facebook's strategy)
   * Complete missing bits (client/server) in the Local strategy (signin DONE, register DONE, recover )
   * Make resume appear if there is an auth error in the example app
+  * Do something so that resuming using ANY method can give the application a visual cue that it happened
+  * Fix problem where users cannot change just their password
+  * Add password confirmation in management (it's only in register right now)
+  * Make auth widgets independent of where they are used, put required variables in hotCoreAuth
+  * Take "store" out of the constructor of Manager and Resume because it's silly
