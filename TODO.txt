@@ -1,13 +1,10 @@
 
   "THE BASICS"
 
-  1 DAY:
-  ------
-  * Complete authentication
-    * Implement recovery: for now just create a hash/expiry in login info for future use
-
   1 DAY
   -----
+    * search for errorPage, change served pages so that they do next(err) rather than calling errorPage, sort out custom error
+      page in case token is broken (not sure how to do it)
     * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten
 
   3-5 DAYS:
@@ -23,6 +20,10 @@
   -----
   * Move the buttonsConstructor somewhere where it makes more sense
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
+
+  2 DAYS
+  ------
+  * Fix DnD in stores, so that 
 
   1 DAY
   -----
@@ -372,3 +373,6 @@
   * Add password confirmation in management (it's only in register right now)
   * Make auth widgets independent of where they are used, put required variables in hotCoreAuth
   * Take "store" out of the constructor of Manager and Resume because it's silly
+  * Implement recovery: for now just create a hash/expiry in login info for future use
+  * Fixed JsonRestStores so that unset fields are deleted from the collections (otherwise old data would stay)
+  * OMG I COMPLETED AUTHENTICATION...

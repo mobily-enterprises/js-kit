@@ -24,7 +24,6 @@ function Hotplate() {
   this.options = {};
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
   this.options.errorPage = function(req, res, next){ res.send( "ERROR: " ); } //  + req.application.error.message ); }
-  this.options.afterLoginPage = '/ws/';
   this.options.logToScreen = true;
 
   this.modules = {};
