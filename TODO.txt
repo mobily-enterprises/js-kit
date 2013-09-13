@@ -3,13 +3,23 @@
 
   1 DAY
   -----
-    * search for errorPage, change served pages so that they do next(err) rather than calling errorPage, sort out custom error
-      page in case token is broken (not sure how to do it)
-    * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten
+    * Check the way messages are returned in case of not-strictly-auth functions: facebook for example should be able to
+      return something better than what it is now (it's silent). Probably redirecting popup to a "thanks" page, or making
+      the popup NOT close and display something set server-side?
+
+
+  1 DAY
+  -----
+    * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten. This is ALSO the first documented module in hotplate
+
+
+  AUTHENTICATION DONE
+  ===================
 
   3-5 DAYS:
   ----
   * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
+    ./hotCoreCometMessages/lib/hotCoreCometMessages.js <--- Check store permissions
     * STORES: Add ability to filter for ranges as part of the JsonRestStore if necessary. YES do this one, it's necessary. Make it work
               from URLs as well with searchSchema specific fields
     * STORES: Add ability to scan through GetQuery by calling a function rather than returning an Array
@@ -21,26 +31,27 @@
   * Move the buttonsConstructor somewhere where it makes more sense
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
 
-  2 DAYS
-  ------
-  * Fix DnD in stores, so that 
-
   1 DAY
   -----
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
 
+  2 DAYS
+  ------
+  * Fix DnD in stores, so that placement is kept (see nabble thread about it)
+
   1 DAY
   -----
-  * Improve the look of widgets: Overlay with reload icon, top bar with shade, nothingToPick form, etc.
+  * Improve the look of widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   1 DAY
   -----
-  * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three representing modules, to have a starting point for all docs
+  * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three important core modules. Begin "master tutorial".
+    Important: hotDojoWidgets, hotDojoDgrid, hotCorePage, hotCoreFiles
 
   --------------------------
-  DEADLINE: 25th August 2013
+  DEADLINE: 4th October 2013
   --------------------------
 
   NOTE: TO be added to JsonRestStores:
@@ -67,15 +78,6 @@
 
   User management and invites in Hotplate:
 
-  * Write the password recovery script: work out accounts linked, sets a hash for each one, sends email out with a change password
-    link and a list of workspaces attached. NOTE: the change password link should be a simple form, which then redirects to /login
-    which in turns should output the list of workspaces (since the user is already logged in)
-    This is part of hotDojoAuth
-    ...
-    Maybe 2 fields in the login info, a hash and an expiry, AND an URL to reset them?
-    IDEA. They all create a URL, with a temporary hash. Going to that URL makes the user logged in. Only lasts 30 minutes.
-
-
   * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
@@ -85,17 +87,18 @@
 
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
-  * Write a "log browser" for workspace owners and for ME to see what happened
+  * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
+
+
 
   * Develop the "booking inbox"
 
 
   ------------------------------
-  DEADLINE: 15th September 2013
+  DEADLINE: 30th October 2013
   ------------------------------
-
 
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
@@ -375,4 +378,9 @@
   * Take "store" out of the constructor of Manager and Resume because it's silly
   * Implement recovery: for now just create a hash/expiry in login info for future use
   * Fixed JsonRestStores so that unset fields are deleted from the collections (otherwise old data would stay)
-  * OMG I COMPLETED AUTHENTICATION...
+  * search for errorPage, change served pages so that they do next(err) rather than calling errorPage
+  * sort out custom error page in case token is broken (not sure how to do it)
+  * Add permission checks to auth stores, which are all completely open right now
+  * Check the WHOLE authentication kaboodle to make sure it's all good
+  * Add option so that if there is only one workspace for the user, Pick doesn't show a list but jumps STRAIGHT to the workspace.
+
