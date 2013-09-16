@@ -3,18 +3,11 @@
 
   1 DAY
   -----
-    * Check the way messages are returned in case of not-strictly-auth functions: facebook for example should be able to
-      return something better than what it is now (it's silent). Probably redirecting popup to a "thanks" page, or making
-      the popup NOT close and display something set server-side?
-
-
-  1 DAY
-  -----
     * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten. This is ALSO the first documented module in hotplate
 
 
-  AUTHENTICATION DONE
-  ===================
+  AUTHENTICATION AND BASIC DOCUMENTATION DONE
+  ===========================================
 
   3-5 DAYS:
   ----
@@ -383,4 +376,5 @@
   * Add permission checks to auth stores, which are all completely open right now
   * Check the WHOLE authentication kaboodle to make sure it's all good
   * Add option so that if there is only one workspace for the user, Pick doesn't show a list but jumps STRAIGHT to the workspace.
+  * Add a responseType to hotCoreAuth other than close, redirect etc. so that the window can stay open and actually show customisable contents
 
