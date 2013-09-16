@@ -3,8 +3,7 @@
 
   1 DAY
   -----
-    * Document hotDojoAuth and hotCoreAuth before it's all sadly forgotten. This is ALSO the first documented module in hotplate
-
+    * Document hotplate, hotDojoAuth and hotCoreAuth before it's all sadly forgotten. This is ALSO the first documented module in hotplate
 
   AUTHENTICATION AND BASIC DOCUMENTATION DONE
   ===========================================

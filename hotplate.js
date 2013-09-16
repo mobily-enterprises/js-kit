@@ -21,6 +21,8 @@ var util = require('util')
 
 function Hotplate() {
 
+
+  // Set some sane defaults
   this.options = {};
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
   this.options.errorPage = function(req, res, next){ res.send( "ERROR: " ); } //  + req.application.error.message ); }
@@ -48,16 +50,7 @@ Hotplate.prototype.set = function( key, value ) {
   // It's a get
   if (arguments.length == 1) return this.options[ key ];
 
-
-  // It's a set
-
-  // First of all check that `key` isn't `staticUrlPath`. If it is,
-  // concat "hotplate" at the end (it's mandatory)
-  //if( key == 'staticUrlPath' ){
-  //  value = path.join( value, 'hotplate' );
-  //}
-
-  // Set the relevant key
+  // It's a set -- Set the relevant key
   this.options[ key ] = value;
 
   return this;
@@ -150,10 +143,6 @@ Hotplate.prototype.log = function(){
 
 
 
-//Hotplate.prototype.registerCoreModules = function() {
-//  this.registerAllEnabledModules('node_modules/core/node_modules');
-//}
-
 /**
  * Load all modules that are marked as "enabled"
  *
@@ -214,11 +203,10 @@ Hotplate.prototype.registerAllEnabledModules = function( modulesLocalPath, filte
 /**
  * Register a module
  *
- * Register  a module into Hotplate's module registry. Note that
- * the module will be require()d
+ * Register  a module into Hotplate's module registry.
  * 
- * @param {String} The module's path
- * @param {String} The module to register
+ * @param {String} The module's name
+ * @param {Object} The module to register
  * 
  * @api public
  */
@@ -271,7 +259,7 @@ Hotplate.prototype.initModules = function( callback ){
     }
   };
      
-  hotplate.log( "FULL LIST OF MODULES TO INITIALISE IS: %s\n\n", fullList );
+  hotplate.log( "FULL LIST OF MODULES TO INITIALISE IS: %s", fullList );
 
   // Set the default initStatus for all the modules to initialise
   fullList.forEach( function( item ) {
@@ -485,7 +473,7 @@ Hotplate.prototype.invokeAll = function( ){
         var mn = moduleName;
         return function( done ) {
           hotplate.log("Running hook %j for %s", hook, mn);
-          modules[mn].hotHooks[hook].apply( modules[mn], Array.prototype.concat( done, hookArguments ) );
+          modules[mn].hotHooks[hook].apply( modules[mn], Array.prototype.concat( hookArguments, done ) );
          }
       }() );
     }
@@ -499,9 +487,9 @@ Hotplate.prototype.invokeAllFlattened = function( ){
   callback,
   toReturn = [];
 
-  // "Stealing" the final arguments, replacing it with a different callback
+  // "Steal" the final argument, replace it with a different callback
   args = Array.prototype.splice.call(arguments, 0);
-  callback = args.pop();   // The last parameter, always the callback
+  callback = args.pop();
   args.push( flatten );
 
   // Call invokeAll, with the new callback
@@ -528,18 +516,5 @@ Hotplate.prototype.invokeAllFlattened = function( ){
 // Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
 var hooks = Hotplate.prototype.hotHooks = {}
 
-
-
-/*
-hooks.pageElements = function(){
-  return {
-  }
-}
-
-// ...or like this (client paths)
-hooks.clientPaths = function(){
-  return [ path.join(__dirname, 'client') ];
-}
-*/
 
 
