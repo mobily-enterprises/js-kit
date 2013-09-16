@@ -454,7 +454,8 @@ Hotplate.prototype.invokeAll = function( ){
     callback = hookArguments.pop();   // The last parameter, always the callback
   }
 
-  /* hotplate.log("invokeAll(%s) called!" , hook);
+  /*
+  hotplate.log("invokeAll(%s) called!" , hook);
   hotplate.log(args);
   hotplate.log(hook);
   hotplate.log(hookArguments);
@@ -473,6 +474,7 @@ Hotplate.prototype.invokeAll = function( ){
         var mn = moduleName;
         return function( done ) {
           hotplate.log("Running hook %j for %s", hook, mn);
+          // if( typeof( hookArguments ) === 'undefined' ) hookArguments = [];
           modules[mn].hotHooks[hook].apply( modules[mn], Array.prototype.concat( hookArguments, done ) );
          }
       }() );
