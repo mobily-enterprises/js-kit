@@ -20,6 +20,7 @@ I realise that in 202X (that is, 2020 to 2030) writing software will be differen
 * General code cleanup, and hotCoreMessags: UPCOMING
 * Write a sample, small application: UPCOMING
 * Writing the messenging framework: UPCOMING
+* Wire up the messenging framework with sample application: UPCOMING
 
 # Hotplate: a practical introduction
 
@@ -30,6 +31,16 @@ For example if a module calls the hook `someHook`, Hotplate will make sure that 
 At a very basic level, Hotplate is a system to define configuration variables, register modules, work out their initialisation order, allow those modules to call other module's hooks and get their results as an array. Every module on top of Hotplate follows these concepts.
 
 Some of the modules are considered "core" -- they all start with `hotCoreXXX`. They provide basic functionality for any "software as a service". Other modules are not part of core: for example the hotDojoXXX modules offer functionalities to use Dojo within Hotplate.
+
+## A note on the shown examples
+
+My main aim is to always show fully working applications every time I show something. So, when you see something like **[starting_point]**, what I actually mean is the branch named `starting_point` of the repository [hotplate-examples](https://github.com/mercmobily/hotplate-examples). You can easily checkout that branch using Git, or browse it from GitHub.
+
+Once you've downloaded the code, you will need to do the usual:
+
+    npm install
+
+And everything should work fine.
 
 ## Getting started with Hotplate
 
@@ -371,6 +382,10 @@ Here is what happens when you run the code:
 The log line `Module module3 has a init.after list, honouring it: [ 'module2' ]` shows that `init.after` does what it advertises: it makes sure that `module3` is initialised _before_ `module2`. Then, `module2` itself calls the hook `something` which means that all modules implementing the hok `something` will need to be initialised first -- that is, `module1`.
 
 ## More Hotplate features
+
+* Set/get -- Set/get variables
+* registerAllEnabledModules -- Mass enabling modules
+* invokeAllFlattened -- Difference between invokeAll and invokeAllFlattened
 
 
 
