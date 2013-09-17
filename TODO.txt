@@ -2,15 +2,15 @@
   "THE BASICS"
 
   1 DAY
-  -----
-    * Document hotplate, hotDojoAuth and hotCoreAuth before it's all sadly forgotten. This is ALSO the first documented module in hotplate
-
-  AUTHENTICATION AND BASIC DOCUMENTATION DONE
-  ===========================================
+  ----
+  * Put `done` callback as first parameter in hooks, so that parameters can be optional without disasters
+  * Convert Hotplate back to a normal module (no silly instantiated object); if everything works, do the same for the
+    other modules that unfortunately follow the retarded convention of the singleton object as module's exports
+  * Document hotplate.js properly, ask in StackOverflow what' a good way to create documentation from files. Needs to be EASY.
 
   3-5 DAYS:
   ----
-  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
+  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken, it even has a circular dependency?!?)
     ./hotCoreCometMessages/lib/hotCoreCometMessages.js <--- Check store permissions
     * STORES: Add ability to filter for ranges as part of the JsonRestStore if necessary. YES do this one, it's necessary. Make it work
               from URLs as well with searchSchema specific fields
@@ -36,11 +36,6 @@
   -----
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
-  1 DAY
-  -----
-  * DOCUMENTATION BASICS: Document Hotplate itself, as well as two or three important core modules. Begin "master tutorial".
-    Important: hotDojoWidgets, hotDojoDgrid, hotCorePage, hotCoreFiles
 
   --------------------------
   DEADLINE: 4th October 2013
@@ -85,7 +80,7 @@
 
 
 
-  * Develop the "booking inbox"
+  * Develop the "booking inbox" for incoming emails
 
 
   ------------------------------

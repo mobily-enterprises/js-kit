@@ -21,7 +21,6 @@ var util = require('util')
 
 function Hotplate() {
 
-
   // Set some sane defaults
   this.options = {};
   this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
@@ -142,55 +141,46 @@ Hotplate.prototype.log = function(){
 }
 
 
-
 /**
  * Load all modules that are marked as "enabled"
  *
- * This function will require all modules located in
- * `this.options.modulesLocalPath` (which defaults to
- * `modules/node_modules`). Once they are all loaded,
- * it will run the `module.init()` method for each one
- * (if present). Finally, it will process the page template
- * so that the page has all of the required css, js and variable
- * definitions there.
+ * This function will require and register all modules in modulesFullPath
+ * that satisfy the `filter` regexp.
  * 
- * @param {Express} The express object used in the application
+ * modulesFullPath is actually optional: when not there, it defaults
+ * to the node_modules directory belonging to the current instante of Hotplate
+ * 
+ * @param {filter} The regexp which will filter the modules to load
+ * @param {modulesFullPath} (optional) The full path of the modules to load
  * 
  * @api public
  */
 
-Hotplate.prototype.registerAllEnabledModules = function( modulesLocalPath, filter, dirname ) {
+Hotplate.prototype.registerAllEnabledModules = function( filter, modulesFullPath ) {
 
   var self = this;
 
-  // The root directory defaults to __dirname (which is hotplate's directory)
-  if( ! dirname ){
-    dirname = __dirname;
+  // If modulesFullPath is empty, default to hotplate's default module location
+  // (here __dirname will be hotplate's full path, to which we simply add 'node_modules')
+  if( modulesFullPath == '' || ! modulesFullPath ){
+     modulesFullPath = path.join( __dirname, 'node_modules' );
   }
 
   // Load the installed modules (if they are enabled)
-  fs.readdirSync( path.join( dirname, modulesLocalPath ) ).forEach( function( moduleName ) {
-    if( moduleName == 'hotplate' ){
-      hotplate.log( "Skipping self stub..." );
-    //} else if( moduleName == 'core' ){
-    //  hotplate.log( "Skipping 'core'..." );
-    } else {
+  fs.readdirSync( modulesFullPath ).forEach( function( moduleName ) {
 
-      if( !filter || moduleName.match( filter ) ){
+    if( !filter || moduleName.match( filter ) ){
 
-        var moduleFullPath = path.join( dirname, modulesLocalPath,  moduleName );
-        var moduleRelativePath = './' + path.join(  modulesLocalPath,  moduleName );
-
-        var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
+      var moduleFullPath = path.join( modulesFullPath,  moduleName );
+      var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
 
         // If the module is enabled (it has a file called 'enabled'), load it
-        if( fs.existsSync( moduleEnabledLocation ) ){
-          hotplate.log( "Requiring and registering module " + moduleName + ' from ' + moduleFullPath );
-          var m = require( moduleFullPath );
-          self.registerModule( moduleName, m );
-        } else {
-          hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
-        }
+      if( fs.existsSync( moduleEnabledLocation ) ){
+        hotplate.log( "Requiring and registering module " + moduleName + ' from ' + moduleFullPath );
+        var m = require( moduleFullPath );
+        self.registerModule( moduleName, m );
+      } else {
+        hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
       }
     }
   });
@@ -483,6 +473,9 @@ Hotplate.prototype.invokeAll = function( ){
   callback ? async.series( functionList, callback ) : async.series( functionList );
 }
 
+
+/*
+// Obsolete, not used in the end. Seemed like a good idea at the time...
 Hotplate.prototype.invokeAllFlattened = function( ){
   var hook,
   args,
@@ -510,9 +503,8 @@ Hotplate.prototype.invokeAllFlattened = function( ){
     // Call the original callback
     callback( null, toReturn );
   }
-
 }
-
+*/
 
 
 // Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
