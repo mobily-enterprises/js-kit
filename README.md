@@ -101,9 +101,13 @@ The most important bit to add to your app.js file is the code that registers, in
     // Associate "app" to hotplate
     hotplate.setApp( app );
     
-    // Register two Hotplate modules
+    // Register Hotplate modules
+    // Uncomment the following two lines to add the two extra example modules
+
+    //hotplate.registerModule( 'module3', require('module3') );
+    //hotplate.registerModule( 'module2', require('module2') );
     hotplate.registerModule( 'module1', require('module1') );
-    
+ 
     // Initialise the modules. Once done, continue with node's usual rock&roll
     hotplate.initModules( function() {
 
@@ -131,15 +135,17 @@ The most important bit to add to your app.js file is the code that registers, in
     }) // End of the rock&roll
 
 
-There are four extra lines underneath `var app = express();`.
+There are five extra lines underneath `var app = express();`.
 
 The first line (`setApp`) will store Express' `app` variable into Hotplate. This way, any module requiring Hotplate will also have access to `app` -- which means that they can do things like set routes etc.
 
-The second line registers `module1` as a Hotplate module.
+The second line sets a Hotplate-wide variable, which will be available to any hotplate modules. I will explain this more in depth shortly.
 
-The third line calls `hotplate.initModules()` which will run `init()` for every registered module. Since `init()` functions are asynchronous, a callback is called once all modules are initialised: that function will actually be the one continuing Express' initialisation (the usual bunch of `app.use()` etc.).
+The third line registers `module1` as a Hotplate module. For now, leave `module2` and `module2` out of the equation. They will be explained shortly.
 
-Once all of the Express setting is out of the way, it's time to run `hotplate.runModules()` which will call the `run()` function in all registered modules.
+The fourth line calls `hotplate.initModules()` which will run `init()` for every registered module. Since `init()` functions are asynchronous, a callback is called once all modules are initialised: that function will actually be the one continuing Express' initialisation (the usual bunch of `app.use()` etc.).
+
+Fifth line: once all of the Express setting is out of the way, it's time to run `hotplate.runModules()` which will call the `run()` function in all registered modules.
 
 The output from the server is interesting; it will look like this:
 
@@ -191,10 +197,8 @@ The lines `The module 'module1' was initialised` and `The module 'module1' was r
 
 The main strength of Hotplate is the ability to register modules and define hooks. For example, you probably noticed that `module1` defines a hook called `something`, but no other module actually makes use of it at all. The hook is not very useful, but it will definitely help understand how Hotplate works.
 
-The code is in **[second_hotplate]**.
+In app.js, uncomment the line requiring and registering `module2`, which has the following code:
 
-Define a second module with the following code:
-    
     // ** module2.js
 
     // Require hotplate
@@ -206,7 +210,9 @@ Define a second module with the following code:
     hooks.init = function( done ){
       console.log("The module 'module2' was initialised");
     
-      hotplate.invokeAll( 'something', 10, function( err, results ){
+      var passedNumber = exports.passedNumber = 10;
+    
+      hotplate.invokeAll( 'something', passedNumber, function( err, results ){
     
         console.log( "The variable results is: " );
         console.log( results );
@@ -221,11 +227,6 @@ Define a second module with the following code:
       done( null );
     }
 
-Also, make sure you have this in your app.js file:
-
-    hotplate.registerModule( 'module2', require('module2') );
-
-Make sure you register `module2` *before* registering `module1`.
 
 As you can see, a lot of interesting things are happening here. The second module has a more complex `init()` function, which will run `hotplate.invokeAll()` for the hook `something`. Also, the array `init.invokes` is defined as it's assigned an array containing `something` (the name of the hook). The `invokes` array is crucial to let Hotplate know that it will need to initialise all modules implementing the hook `something` _beforehand_  This will ensure that by the time `hook.something()` is called, every module is effectively fully initialised.
 
@@ -267,7 +268,7 @@ The output of `node app.js` is now very interesting:
     Calling init call for module module2
     The module 'module2' was initialised
     Running hook "something" for module1
-    The variable results is: 
+    The result of invokeAll('something') is:
     [ { returned: 11 } ]
     Running hook "run" for module2
     The module 'module2' was run
@@ -282,7 +283,7 @@ Using `init.invokes` is very handy, as you don't have to worry much: you will kn
 
 There is another way to set priorities: just define a `init.after` array, listing the list of modules that should be initialised before running your module's `init()` function.
 
-Here is a practical example (see **[third_hotplate]** for the code):
+Uncomment the line that requires and registers `module3` in your app.js file. Here is the code for `module3`:
 
     // Require hotplate
     var hotplate = require('hotplate');
@@ -365,7 +366,7 @@ Here is what happens when you run the code:
     Calling init call for module module2
     The module 'module2' was initialised
     Running hook "something" for module1
-    The variable results is: 
+    The result of invokeAll('something') is: 
     [ { returned: 11 } ]
     Calling init call for module module3
     The module 'module3' was initialised
@@ -383,10 +384,43 @@ The log line `Module module3 has a init.after list, honouring it: [ 'module2' ]`
 
 ## More Hotplate features
 
-* Set/get -- Set/get variables
-* registerAllEnabledModules -- Mass enabling modules
-* invokeAllFlattened -- Difference between invokeAll and invokeAllFlattened
+### Setting Hotplate-wide variables
 
+You can set Hotplate-wide variables in your app.js file (or anywhere, really) and read those values from your modules. In the example `app.js` file, there is the following line:
+
+
+In the example module `module4` you have:
+
+    // Require hotplate
+    var hotplate = require('hotplate');
+
+    // The `hooks` object defines this module's hooks
+    var hooks = exports.hotHooks = {};
+
+    hooks.init = function( done ){
+      console.log("The module 'module4' was initialised");
+      console.log("The variable globalSetting is:");
+      console.log( hotplate.get( 'globalSetting' ) );
+    
+      done( null );
+    };
+
+This is probably the smallest module ever written! It shows how the module can access `globalSettings` with `hotplate.get()`. Note that modules will tend to create variables with a namespace. So, a Hotplate-wide variable would be called, in this case, `module1/globalSetting`. This is just a naming convention, not necessarily forced upon you.
+
+### Mass-registering of modules
+
+Normally, you would end up registering a lot of modules rather than just a couple. Hotplate's core for example is made up of a number of highly specialised, small modules. Requiring and registering each one of them would me inconvenient at best. That's why you can just do this:
+
+
+    hotplate.registerAllEnabledModules( /^module/, __dirname + '/node_modules' );
+
+The first parameter `/^module/` is a regexp which will filter which modules you actually want to load. The second parameter, `__dirname + '/node_modules'`, is the _full_ path of the modules you want to load. It's important that you do pass the module's full path here, which is why I used `__dirname` (which is `app.js`'s full path).
+
+In actual fact, a more common scenario would be requiring all of Hotplate's core modules:
+
+    hotplate.registerAllEnabledModules( /^hotCore/ );
+
+In this case, the second parameter is optional (it defaults to Hotplate's `node_modules` directory).
 
 
 
