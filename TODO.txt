@@ -1,13 +1,6 @@
 
   "THE BASICS"
 
-  1 DAY
-  ----
-  * Put `done` callback as first parameter in hooks, so that parameters can be optional without disasters
-  * Convert Hotplate back to a normal module (no silly instantiated object); if everything works, do the same for the
-    other modules that unfortunately follow the retarded convention of the singleton object as module's exports
-  * Document hotplate.js properly, ask in StackOverflow what' a good way to create documentation from files. Needs to be EASY.
-
   3-5 DAYS:
   ----
   * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken, it even has a circular dependency?!?)
@@ -371,4 +364,5 @@
   * Check the WHOLE authentication kaboodle to make sure it's all good
   * Add option so that if there is only one workspace for the user, Pick doesn't show a list but jumps STRAIGHT to the workspace.
   * Add a responseType to hotCoreAuth other than close, redirect etc. so that the window can stay open and actually show customisable contents
-
+  * Convert Hotplate and any other module following the ritard "one singleton per module" pattern to a sane, simple Nodejs module.
+  * Document hotplate.js properly, ask in StackOverflow what' a good way to create documentation from files. Needs to be EASY.

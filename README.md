@@ -10,9 +10,9 @@ By 201X software I mean software that:
 * uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data-store that are JSON-REST compatible
 * handles errors (including, and in fact _especially_, network errors) properly. If anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong
 * has the ability to communicate to your users in different ways: email, SMS, and whatever the world throws at us
-* whos information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well
+* shows information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well
 
-I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted. Or maybe Javascript will be dead. I don't know, and I frankly don't care. I wrote Hotplate because I felt that this is what software _should_ be in 201X -- which is now.
+I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don't know, and I frankly don't care. I wrote Hotplate because I felt that this is what software _should_ be in 201X -- which is now.
 
 ## Status:
 
@@ -30,7 +30,7 @@ For example if a module calls the hook `someHook`, Hotplate will make sure that 
 
 At a very basic level, Hotplate is a system to define configuration variables, register modules, work out their initialisation order, allow those modules to call other module's hooks and get their results as an array. Every module on top of Hotplate follows these concepts.
 
-Some of the modules are considered "core" -- they all start with `hotCoreXXX`. They provide basic functionality for any "software as a service". Other modules are not part of core: for example the hotDojoXXX modules offer functionalities to use Dojo within Hotplate.
+Some of the modules are considered "core" -- they all start with `hotCoreXXX`. They provide basic functionality for any "software as a service". Other modules are not part of core: for example the `hotDojoXXX` modules offer functionalities to use Dojo within Hotplate.
 
 ## A note on the shown examples
 

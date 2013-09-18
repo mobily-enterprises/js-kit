@@ -1,5 +1,5 @@
 
-/*!
+/*
  * Module dependencies.
  */
 
@@ -10,153 +10,69 @@ var util = require('util')
 , async = require('async')
 ;
 
-/**
- * Hotplate constructor.
- *
- * The exports object of the `Hotplate` module is an instance of this class.
- * Most apps will only use this one instance.
- *
- * @api public
- */
 
-function Hotplate() {
-
-  // Set some sane defaults
-  this.options = {};
-  this.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
-  this.options.errorPage = function(req, res, next){ res.send( "ERROR: " ); } //  + req.application.error.message ); }
-  this.options.logToScreen = true;
-
-  this.modules = {};
-  this.app = {}; // A link to the express App, as submodules might need it
-
-};
+var hotplate = exports;
 
 
-/**
- * Sets hotplate options
- *
- * ####Example:
- *
- *     hotplate.set('test', value) // sets the 'test' option to `value`
- *
- * @param {String} key
- * @param {String} value
- * @api public
- */
-Hotplate.prototype.set = function( key, value ) {
+// Set basic options to start with
+exports.options = {};
+exports.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
+exports.options.errorPage = function(req, res, next){ res.send( "ERROR: " ); } //  + req.application.error.message ); }
+exports.options.logToScreen = true;
+
+// Initialise the list of registered modules
+exports.modules = {};
+
+// Initialise app to an empty object
+exports.app = {}; // A link to the express App, as submodules might need it
+
+
+// Set the module's `options` variable
+exports.set = function( key, value ) {
 
   // It's a get
-  if (arguments.length == 1) return this.options[ key ];
+  if (arguments.length == 1) return exports.options[ key ];
 
   // It's a set -- Set the relevant key
-  this.options[ key ] = value;
+  exports.options[ key ] = value;
 
   return this;
 };
 
+// Get the value of the options variable.
+// Note that this is the same function as `set()`, which will
+// check the signatures and will act as a `get()` or as a `set()`
+// accordingly
+exports.get = exports.set;
 
-/**
- * Gets hotplate options
- *
- * ####Example:
- *
- *     hotplate.get('test') // returns the 'test' value
- *
- * @param {String} key
- * @method get
- * @api public
- */
+// Fetch a module
+exports.getModule = function( moduleName ){
 
-Hotplate.prototype.get = Hotplate.prototype.set;
-
-Hotplate.prototype.getModule = function( moduleName ){
-
-  if( typeof(this.modules[moduleName]) === 'undefined' ){
+  if( typeof(exports.modules[moduleName]) === 'undefined' ){
     hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded", moduleName);
   }
-  return this.modules[moduleName];
+  return exports.modules[moduleName];
+}
+
+// Sets the module-wide `app` variable, used by a lot of modules
+// to set routes etc.
+exports.setApp = function(app){
+  exports.app = app;
 }
 
 
-
-/**
- * The exports object is an instance of Hotplate.
- *
- * @api public
- */
-
-module.exports = exports = new Hotplate;
-var hotplate = module.exports;
-
-
-/**
- * The Hotplate constructor
- *
- * The exports of the hotplate module is an instance of this class.
- *
- * ####Example:
- *
- *     var hotplate= require('hotplate');
- *     var hotplate2 = new hotplate.Hotplate();
- *
- * @api public
- */
-
-hotplate.Hotplate = Hotplate;
-
-
-/**
- * Set the "app" attribute of the hotplate object
- *
- * This is important as the hotplate object
- * has functions to add routes, which need the 'app' object
- * 
- * @param {Express} The express object used in the application
- * 
- * @api public
- */
-
-
-Hotplate.prototype.setApp = function(app){
-  this.app = app;
-}
-
-
-/**
- * Hotplate-wide Log function
- *
- * The parameter "logToScreen" will define whether it will actually print things or not
- * 
- * @param {message} The message to print out
- * 
- * @api public
- */
-
-
-Hotplate.prototype.log = function(){
+// Logs something to the screen if `logToScreen` is true
+exports.log = function(){
   if( hotplate.get('logToScreen') ){
     console.log.apply(this, arguments);
   }
 }
 
 
-/**
- * Load all modules that are marked as "enabled"
- *
- * This function will require and register all modules in modulesFullPath
- * that satisfy the `filter` regexp.
- * 
- * modulesFullPath is actually optional: when not there, it defaults
- * to the node_modules directory belonging to the current instante of Hotplate
- * 
- * @param {filter} The regexp which will filter the modules to load
- * @param {modulesFullPath} (optional) The full path of the modules to load
- * 
- * @api public
- */
-
-Hotplate.prototype.registerAllEnabledModules = function( filter, modulesFullPath ) {
+// Register all modules matching the regexp `filter`. You can also
+// provide the module's full path (otherwise, Hotplate's node_modules directory
+// is assumed)
+exports.registerAllEnabledModules = function( filter, modulesFullPath ) {
 
   var self = this;
 
@@ -186,57 +102,38 @@ Hotplate.prototype.registerAllEnabledModules = function( filter, modulesFullPath
   });
   
   // Registering hotplage itself as hook provider
-  this.modules[ 'hotplate' ] = this;
+  exports.modules[ 'hotplate' ] = this;
 
 }
 
-/**
- * Register a module
- *
- * Register  a module into Hotplate's module registry.
- * 
- * @param {String} The module's name
- * @param {Object} The module to register
- * 
- * @api public
- */
-
-Hotplate.prototype.registerModule = function( moduleName, m ){
-  this.modules[ moduleName ] = m ;
+// Register a specific module
+exports.registerModule = function( moduleName, m ){
+  exports.modules[ moduleName ] = m ;
 }
 
-
-/**
- * Invoke the "init" hook of all loaded module.
- *
- * This function must be called only when all modules are loaded and registered, and it
- * can only be called once. This is because all modules must expect every other module
- * to be loaded and answering hooks at this point.
- * 
- * @api public
- */
-
-Hotplate.prototype.runModules = function( callback ){
+// Call the `run()` hook for all modules
+exports.runModules = function( callback ){
 
   // Invoke "run" in all modules (run MUST be order-agnostic)
-  this.invokeAll('run', callback );
+  exports.invokeAll('run', callback );
 
 }
 
-Hotplate.prototype.initModules = function( callback ){
+// Initialise all modules in the right order
+exports.initModules = function( callback ){
 
   var that = this,
       fullList = [], 
       orderedList = [], 
 
-      modules = this.modules,
+      modules = exports.modules,
       initStatus = {},
       functionList = [];
 
 
   // Can't do this twice
-  if( this.modulesAreInitialised ) return;
-  this.modulesAreInitialised = true;
+  if( exports.modulesAreInitialised ) return;
+  exports.modulesAreInitialised = true;
 
   // Make up the initial list of modules to initialise
   for( var m in modules ){
@@ -423,7 +320,11 @@ Hotplate.prototype.initModules = function( callback ){
 
 }
 
-Hotplate.prototype.invokeAll = function( ){
+// Invoke a specific hook. The first parameter is always the hook's name,
+// the last parameter is always a callback. In between, there can be
+// zero or more parameters (which will be passed to the hook)
+
+exports.invokeAll = function( ){
   var hook,
   module,
   results = [],
@@ -451,7 +352,7 @@ Hotplate.prototype.invokeAll = function( ){
   hotplate.log(hookArguments);
   */
 
-  var modules = this.modules;
+  var modules = exports.modules;
  
   for(var moduleName in modules){
     // var module = modules[moduleName];
@@ -472,43 +373,6 @@ Hotplate.prototype.invokeAll = function( ){
   }
   callback ? async.series( functionList, callback ) : async.series( functionList );
 }
-
-
-/*
-// Obsolete, not used in the end. Seemed like a good idea at the time...
-Hotplate.prototype.invokeAllFlattened = function( ){
-  var hook,
-  args,
-  callback,
-  toReturn = [];
-
-  // "Steal" the final argument, replace it with a different callback
-  args = Array.prototype.splice.call(arguments, 0);
-  callback = args.pop();
-  args.push( flatten );
-
-  // Call invokeAll, with the new callback
-  Hotplate.prototype.invokeAll.apply( this, args );
-
-  // Callback that will flatten the results, and then call
-  // the callback that was originally passed
-  function flatten( err, results ){
-
-    results.forEach( function( item ){
-      item.forEach( function( item ){
-        toReturn.push( item );
-      })
-    });
-
-    // Call the original callback
-    callback( null, toReturn );
-  }
-}
-*/
-
-
-// Undecided if this module itself should become a hook provider. Placing hooks here feels dirty
-var hooks = Hotplate.prototype.hotHooks = {}
 
 
 
