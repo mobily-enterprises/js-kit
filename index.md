@@ -2,8 +2,8 @@
 layout: page
 ---
 
-hotplate
-========
+Welcome to Hotplate
+===================
 
 Hotplate is a framework that allows you to create 201X software in no time.
 By 201X software I mean software that:
