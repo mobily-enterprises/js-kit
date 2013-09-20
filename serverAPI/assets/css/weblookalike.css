@@ -64,6 +64,10 @@ h1 {
 }
 
 
+#main_menu #li {
+  display: inline;
+
+}
 
 #header_wrap {
   background: #212121;
