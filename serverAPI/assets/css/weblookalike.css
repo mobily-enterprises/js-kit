@@ -65,7 +65,7 @@ h1 {
 
 
 #main_menu li {
-  display: inline;
+  display: inline-block;
 
 }
 
