@@ -290,7 +290,7 @@ Full-Width Styles
 
 .main_menu {
   display: block;
-  position: absolute;
+  position: fixed;
   top:0;
   left: 0px;
   z-index: 10;
