@@ -56,28 +56,11 @@ h1 {
   z-index: 10;
   padding: 10px 80px 10px 80px;
   color: #fff;
-  /* background: url('../../../images/blacktocat.png') #0090ff no-repeat 95% 50%; */
+  background-color #0090ff;
   font-weight: 700;
   box-shadow: 0 0 10px rgba(0,0,0,.5);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
-}
-
-.main_menu span a {
-  text-decoration: none;
-  color: #007edf;
-  text-shadow: none;
-
-  transition: color 0.5s ease;
-  transition: text-shadow 0.5s ease;
-  -webkit-transition: color 0.5s ease;
-  -webkit-transition: text-shadow 0.5s ease;
-  -moz-transition: color 0.5s ease;
-  -moz-transition: text-shadow 0.5s ease;
-  -o-transition: color 0.5s ease;
-  -o-transition: text-shadow 0.5s ease;
-  -ms-transition: color 0.5s ease;
-  -ms-transition: text-shadow 0.5s ease;
 }
 
 
