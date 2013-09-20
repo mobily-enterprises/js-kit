@@ -7,7 +7,7 @@ By 201X software I mean software that:
 * allows you to log in using Facebook, Google, Twitter, Oauth1/2, or... well, login/password pair if you like
 * available anywhere with a Javascript runtime (see: any modern browser)
 * _feels like_ software, and not like a bunch of web pages
-* uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data-store that are JSON-REST compatible
+* uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data stores that are JSON-REST compatible
 * handles errors (including, and in fact _especially_, network errors) properly. If anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong
 * has the ability to communicate to your users in different ways: email, SMS, and whatever the world throws at us
 * shows information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well
@@ -33,7 +33,7 @@ Hotplate is written for Node. It's a normal, no-frills Node-based framework. So,
 
 * [SimpleDeclare](https://github.com/mercmobily/simpleDeclare). Javascript is a great language, but it lacks a simple way to declare object constructors and inheriting. A lot of node programmers actually do it by hand, writing `Class.prototype.someMethod = function(){ ... }`. I personally find that absolutely insane. SimpleDeclare solves this problem: it handles (multiple) inheritance, constructor methods, calling of inherited methods, and inheritance of constructor-wide methods. [SimpleDeclare is really small](https://github.com/mercmobily/simpleDeclare/blob/master/declare.js), but it does everything for you.
 
-* [JsonRestStores](https://github.com/mercmobily/JsonRestStores) (which uses [SimpleSchema](https://github.com/mercmobily/SimpleSchema). Hotplate is all about stores -- really. JsonRestStores is a fundamental piece here: it allows you to create Json REST stores in no time, dealing with permissions, queries, error management, inherited stores, and so on. You should make yourself comfortable with JsonRestStores _while_ studying Hotplate.
+* [JsonRestStores](https://github.com/mercmobily/JsonRestStores) (which uses [SimpleSchema](https://github.com/mercmobily/SimpleSchema)). Hotplate is all about stores -- really. JsonRestStores is a fundamental piece here: it allows you to create Json REST stores in no time, dealing with permissions, queries, error management, inherited stores, and so on. You should make yourself comfortable with JsonRestStores _while_ studying Hotplate.
 
 
 ## Hotplate's documentation
