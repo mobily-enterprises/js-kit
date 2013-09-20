@@ -63,6 +63,9 @@ h1 {
   border-bottom-right-radius: 2px;
 }
 
+.main_menu span a {
+  color: #fff;
+}
 
 #header_wrap {
   background: #212121;
