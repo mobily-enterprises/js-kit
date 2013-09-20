@@ -21,4 +21,4 @@ gnome-open _site/index.html
 echo Submitting site to GitHut pages...
 git add *;
 git commit -m "Automatic build done"
-git push
+git push origin gh-pages
