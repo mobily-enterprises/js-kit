@@ -48,7 +48,7 @@ h1 {
   border-bottom-right-radius: 2px;
 }
 
-#main_menu {
+.main_menu {
   display: block;
   position: absolute;
   top:0;
