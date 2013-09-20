@@ -63,7 +63,7 @@ h1 {
   border-bottom-right-radius: 2px;
 }
 
-.main_menu a {
+.main_menu span a {
   text-decoration: none;
   color: #007edf;
   text-shadow: none;
