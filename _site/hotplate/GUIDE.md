@@ -1,7 +1,5 @@
-hotplate: a practical guide
+Hotplate: a practical guide
 ===========================
-
-
 
 Welcome to Hotplate! If you are reading this guide, it means that you are egar to get started and see "something" happen.
 
