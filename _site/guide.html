@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Hotplate - documentation : Framework to create multi-homed SaaS with NodeJs, Express, MongoDB, Dojo" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Hotplate -- documentation</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mercmobily/hotplate">View on GitHub</a>
+
+          <h1 id="project_title">Hotplate -- documentation</h1>
+          <h2 id="project_tagline">Multi-homed SaaS with NodeJs, Express, (any)DB, Dojo</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mercmobily/hotplate/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mercmobily/hotplate/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+      <h1 id='hotplate_a_practical_guide'>hotplate: a practical guide</h1>
+
+<p>Welcome to Hotplate! If you are reading this guide, it means that you are egar to get started and see &#8220;something&#8221; happen.</p>
+
+<p>This guide will do exactly that. By the end of it, you will have a good understanding of Hotplate and will be able to write modern, cutting-edge, network-resiliant software.</p>
+
+<h1 id='the_basics'>The basics</h1>
+
+<p>Hotplate itself is essentially a module loader and a system to invoke (or emit) and listen to messages. In theory, this is easy, and possible, by using existing functions (EventEmitter comes to mind). However, Hotplate goes much further than this: it allows you to define <code>init()</code> and <code>run()</code> functions, and &#8211; more importantly &#8211; it allows you to define initialisation order depending on which module needs what.</p>
+
+<p>For example if a module calls the hook <code>someHook</code>, Hotplate will make sure that <em>all</em> modules which implement <code>someHook</code> will be initialised <em>before</em> the one emitting it. When <code>someHook</code> is emitted, hotplate will run <code>someHook</code> in <em>all</em> modules that implement it (which at that point have been initialised), and will return the results to the caller.</p>
+
+<p>At a very basic level, Hotplate is a system to define configuration variables, register modules, work out their initialisation order, allow those modules to call other module&#8217;s hooks and get their results as an array. Every module on top of Hotplate follows these concepts.</p>
+
+<p>Some of the modules are considered &#8220;core&#8221; &#8211; they all start with <code>hotCoreXXX</code>. They provide basic functionality for any &#8220;software as a service&#8221;. Other modules are not part of core: for example the <code>hotDojoXXX</code> modules offer functionalities to use Dojo within Hotplate.</p>
+
+<h2 id='a_note_on_the_shown_examples'>A note on the shown examples</h2>
+
+<p>My main aim is to always show fully working applications every time I show something. So, when you see something like <strong><span>starting_point</span></strong>, what I actually mean is the branch named <code>starting_point</code> of the repository <a href='https://github.com/mercmobily/hotplate-examples'>hotplate-examples</a>. You can easily checkout that branch using Git, or browse it from GitHub.</p>
+
+<p>Once you&#8217;ve downloaded the code, you will need to do the usual:</p>
+
+<pre><code>npm install</code></pre>
+
+<p>And everything should work fine.</p>
+
+<h2 id='getting_started_with_hotplate'>Getting started with Hotplate</h2>
+
+<p>First of all, checkout <strong><span>starting_point</span></strong>. That&#8217;s the basic, straight &#8220;expressJS&#8221; application that comes out of creating an application using the command <code>express</code>. The application&#8217;s source code is pretty basic:</p>
+
+<pre><code>/**
+ * Module dependencies.
+ */
+
+var express = require(&#39;express&#39;);
+var http = require(&#39;http&#39;);
+var path = require(&#39;path&#39;);
+
+var app = express();
+
+// all environments
+app.set(&#39;port&#39;, process.env.PORT || 3000);
+app.set(&#39;views&#39;, __dirname + &#39;/views&#39;);
+app.set(&#39;view engine&#39;, &#39;jade&#39;);
+app.use(express.favicon());
+app.use(express.logger(&#39;dev&#39;));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, &#39;public&#39;)));
+
+// development only
+if (&#39;development&#39; == app.get(&#39;env&#39;)) {
+  app.use(express.errorHandler());
+}
+
+http.createServer(app).listen(app.get(&#39;port&#39;), function(){
+  console.log(&#39;Express server listening on port &#39; + app.get(&#39;port&#39;));
+});</code></pre>
+
+<p>Basically, all of the template-oriented parts of Express (see: Jade) has been taken out. While you might still want to use Jade (that is, it&#8217;s not forbidden to do so), keep in mind that Hotplate aims at creating one page, rich applications. So, chances are that you won&#8217;t actually need to create &#8220;pages&#8221; as such in your application &#8211; or, at least that&#8217;s the hope.</p>
+
+<p>So, now start integrating hotplate into your world.</p>
+
+<h2 id='your_first_hotplate_module'>Your first Hotplate module</h2>
+
+<p>The most important bit to add to your app.js file is the code that registers, initialises and runs Hotplate modules. That&#8217;s easily done: (See <strong><span>first_hotplate</span></strong>)</p>
+
+<pre><code>// ** app.js
+
+/**
+ * Module dependencies.
+ */
+
+var express = require(&#39;express&#39;);
+var http = require(&#39;http&#39;);
+var path = require(&#39;path&#39;);
+var hotplate = require(&#39;hotplate&#39;);
+
+var app = express();
+
+// Associate &quot;app&quot; to hotplate
+hotplate.setApp( app );
+
+// Register Hotplate modules
+// Uncomment the following two lines to add the two extra example modules
+
+//hotplate.registerModule( &#39;module3&#39;, require(&#39;module3&#39;) );
+//hotplate.registerModule( &#39;module2&#39;, require(&#39;module2&#39;) );
+hotplate.registerModule( &#39;module1&#39;, require(&#39;module1&#39;) );
+
+// Initialise the modules. Once done, continue with node&#39;s usual rock&amp;roll
+hotplate.initModules( function() {
+
+  // all environments
+  app.set(&#39;port&#39;, process.env.PORT || 3000);
+  app.use(express.logger(&#39;dev&#39;));
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+
+  // development only
+  if (&#39;development&#39; == app.get(&#39;env&#39;)) {
+    app.use(express.errorHandler());
+  }
+
+  // Run the modules. This will call `run` of each module. `run` can do all sorts
+  // of fancy things, like setting routes etc.
+  hotplate.runModules( function() {
+
+    http.createServer(app).listen(app.get(&#39;port&#39;), function(){
+      console.log(&#39;Express server listening on port &#39; + app.get(&#39;port&#39;));
+    });
+  });
+
+}) // End of the rock&amp;roll</code></pre>
+
+<p>There are five extra lines underneath <code>var app = express();</code>.</p>
+
+<p>The first line (<code>setApp</code>) will store Express&#8217; <code>app</code> variable into Hotplate. This way, any module requiring Hotplate will also have access to <code>app</code> &#8211; which means that they can do things like set routes etc.</p>
+
+<p>The second line sets a Hotplate-wide variable, which will be available to any hotplate modules. I will explain this more in depth shortly.</p>
+
+<p>The third line registers <code>module1</code> as a Hotplate module. For now, leave <code>module2</code> and <code>module2</code> out of the equation. They will be explained shortly.</p>
+
+<p>The fourth line calls <code>hotplate.initModules()</code> which will run <code>init()</code> for every registered module. Since <code>init()</code> functions are asynchronous, a callback is called once all modules are initialised: that function will actually be the one continuing Express&#8217; initialisation (the usual bunch of <code>app.use()</code> etc.).</p>
+
+<p>Fifth line: once all of the Express setting is out of the way, it&#8217;s time to run <code>hotplate.runModules()</code> which will call the <code>run()</code> function in all registered modules.</p>
+
+<p>The output from the server is interesting; it will look like this:</p>
+
+<pre><code>$ node app.js 
+Adding module1 to the full list of modules to initialise
+FULL LIST OF MODULES TO INITIALISE IS: module1
+
+   Adding module1
+   Module module1&#39;s init() doesn&#39;t invoke anything and doesn&#39;t have any `after` list, it can be added right away
+   Called actuallyAdd() on module1
+   initStatus on module1 is: NOT_ADDED
+   Initialising module module1, since it hadn&#39;t been initialised yet
+   Module module1 set as &#39;ADDED&#39;
+ORDERED LIST: module1
+Calling init call for module module1
+The module &#39;module1&#39; was initialised
+Running hook &quot;run&quot; for module1
+The module &#39;module1&#39; was run
+Express server listening on port 3000</code></pre>
+
+<p>The lines <code>The module &#39;module1&#39; was initialised</code> and <code>The module &#39;module1&#39; was run</code> actually came from the module&#8217;s code, which is really simple:</p>
+
+<pre><code>// ** module1.js
+
+// Require hotplate
+var hotplate = require(&#39;hotplate&#39;);
+
+// The `hooks` array defines this module&#39;s hooks
+var hooks = exports.hotHooks = {};
+
+hooks.init = function( done ){
+  console.log(&quot;The module &#39;module1&#39; was initialised&quot;);
+  done( null );
+};
+
+hooks.run = function( done ){
+  console.log(&quot;The module &#39;module1&#39; was run&quot;);
+  done( null );
+}
+
+hooks.something = function( passedValue, done ){
+  done( null,  {
+    returned: passedValue + 1
+  });
+
+}</code></pre>
+
+<h2 id='making_things_more_interesting_multiple_modules'>Making things more interesting: multiple modules</h2>
+
+<p>The main strength of Hotplate is the ability to register modules and define hooks. For example, you probably noticed that <code>module1</code> defines a hook called <code>something</code>, but no other module actually makes use of it at all. The hook is not very useful, but it will definitely help understand how Hotplate works.</p>
+
+<p>In app.js, uncomment the line requiring and registering <code>module2</code>, which has the following code:</p>
+
+<pre><code>// ** module2.js
+
+// Require hotplate
+var hotplate = require(&#39;hotplate&#39;);
+
+// The `hooks` array defines this module&#39;s hooks
+var hooks = exports.hotHooks = {};
+
+hooks.init = function( done ){
+  console.log(&quot;The module &#39;module2&#39; was initialised&quot;);
+
+  var passedNumber = exports.passedNumber = 10;
+
+  hotplate.invokeAll( &#39;something&#39;, passedNumber, function( err, results ){
+
+    console.log( &quot;The variable results is: &quot; );
+    console.log( results );
+    done( null );
+  });
+};
+hooks.init.invokes = [ &#39;something&#39; ];
+
+hooks.run = function( done ){
+
+  console.log(&quot;The module &#39;module2&#39; was run&quot;);
+  done( null );
+}</code></pre>
+
+<p>As you can see, a lot of interesting things are happening here. The second module has a more complex <code>init()</code> function, which will run <code>hotplate.invokeAll()</code> for the hook <code>something</code>. Also, the array <code>init.invokes</code> is defined as it&#8217;s assigned an array containing <code>something</code> (the name of the hook). The <code>invokes</code> array is crucial to let Hotplate know that it will need to initialise all modules implementing the hook <code>something</code> <em>beforehand</em> This will ensure that by the time <code>hook.something()</code> is called, every module is effectively fully initialised.</p>
+
+<p>The output of <code>node app.js</code> is now very interesting:</p>
+
+<pre><code>$ node app.js 
+Adding module2 to the full list of modules to initialise
+Adding module1 to the full list of modules to initialise
+FULL LIST OF MODULES TO INITIALISE IS: module2,module1
+
+   Adding module2
+   Module module2 calls invokeAll(something), checking which modules provide it, adding them first
+   ----Looking for modules that provide something...
+   Module module1 first then, checking if it has an init() function...
+   Module module1 DOES need to init(), considering adding it to the list of modules to load
+   ADDED!!! Adding module module1 to the sublist, its status was NOT_ADDED
+   LIST of dependencies for module2 is: [module1]. Reiterating self if necessary (intending in)
+
+     Adding module1
+     Module module1&#39;s init() doesn&#39;t invoke anything and doesn&#39;t have any `after` list, it can be added right away
+     Called actuallyAdd() on module1
+     initStatus on module1 is: NOT_ADDED
+     Initialising module module1, since it hadn&#39;t been initialised yet
+     Module module1 set as &#39;ADDED&#39;
+   THERE should be no un-init()ialised dependencies for module2 at this stage
+   Called actuallyAdd() on module2
+   initStatus on module2 is: NOT_ADDED
+   Initialising module module2, since it hadn&#39;t been initialised yet
+   Module module2 set as &#39;ADDED&#39;
+
+   Adding module1
+   Module module1&#39;s init() doesn&#39;t invoke anything and doesn&#39;t have any `after` list, it can be added right away
+   Called actuallyAdd() on module1
+   initStatus on module1 is: ADDED
+   Module module1 not initialised, as its status was ADDED, nothing to do!
+ORDERED LIST: module1,module2
+Calling init call for module module1
+The module &#39;module1&#39; was initialised
+Calling init call for module module2
+The module &#39;module2&#39; was initialised
+Running hook &quot;something&quot; for module1
+The result of invokeAll(&#39;something&#39;) is:
+[ { returned: 11 } ]
+Running hook &quot;run&quot; for module2
+The module &#39;module2&#39; was run
+Running hook &quot;run&quot; for module1
+The module &#39;module1&#39; was run</code></pre>
+
+<p>The module <code>module2</code> was registered <em>before</em> <code>module1</code>. However, <code>module2</code>&#8217;s initialisation was delayed because of <code>init.invokes</code>, which had the hook <code>something</code>: this prompted Hotplate to load all modules implementing <code>something()</code> <em>first</em> &#8211; that is, <code>module1</code>.</p>
+
+<h2 id='one_more_way_of_setting_priorities'>One more way of setting priorities</h2>
+
+<p>Using <code>init.invokes</code> is very handy, as you don&#8217;t have to worry much: you will know that all modulesthat implement a specific hook.</p>
+
+<p>There is another way to set priorities: just define a <code>init.after</code> array, listing the list of modules that should be initialised before running your module&#8217;s <code>init()</code> function.</p>
+
+<p>Uncomment the line that requires and registers <code>module3</code> in your app.js file. Here is the code for <code>module3</code>:</p>
+
+<pre><code>// Require hotplate
+var hotplate = require(&#39;hotplate&#39;);
+
+// The `hooks` array defines this module&#39;s hooks
+var hooks = exports.hotHooks = {};
+
+hooks.init = function( done ){
+  console.log(&quot;The module &#39;module3&#39; was initialised&quot;);
+
+  var module2 = hotplate.getModule( &#39;module2&#39; );
+  console.log( &#39;The module module2 has already been initialised, and exported passedNumber: &#39; + module2.passedNumber );
+  done( null );
+
+};
+hooks.init.after = [ &#39;module2&#39; ];
+
+hooks.run = function( done ){
+
+  console.log(&quot;The module &#39;module3&#39; was run&quot;);
+  done( null );
+}</code></pre>
+
+<p>Here you can see what&#8217;s going on: <code>init.after</code> listed <code>module2</code>. So, <code>module2</code>&#8217;s <code>init()</code> function needs to be called before this module&#8217;s <code>init()</code>. This module also uses the <code> hotplate.getModule()</code> function, which is used to fetch a module previously registered in Hotplate.</p>
+
+<p>Note that the line <code>var module2 = hotplate.getModule( &#39;module2&#39; );</code> wouldn&#8217;t work reliably unless we know with <em>certainty</em> that <code>module2</code> has been initialised &#8211; and that&#8217;s what that <code>init.after</code> is for.</p>
+
+<p>Here is what happens when you run the code:</p>
+
+<pre><code>$ node app.js 
+Adding module3 to the full list of modules to initialise
+Adding module2 to the full list of modules to initialise
+Adding module1 to the full list of modules to initialise
+FULL LIST OF MODULES TO INITIALISE IS: module3,module2,module1
+
+   Adding module3
+   Module module3 has a init.after list, honouring it: [ &#39;module2&#39; ]
+   Module module2 first then, checking if it has an init() function...
+   Module module2 DOES need to init(), considering adding it to the list of modules to load
+   ADDED!!! Adding module module2 to the sublist, its status was NOT_ADDED
+   LIST of dependencies for module3 is: [module2]. Reiterating self if necessary (intending in)
+
+     Adding module2
+     Module module2 calls invokeAll(something), checking which modules provide it, adding them first
+     ----Looking for modules that provide something...
+     Module module1 first then, checking if it has an init() function...
+     Module module1 DOES need to init(), considering adding it to the list of modules to load
+     ADDED!!! Adding module module1 to the sublist, its status was NOT_ADDED
+     LIST of dependencies for module2 is: [module1]. Reiterating self if necessary (intending in)
+
+       Adding module1
+       Module module1&#39;s init() doesn&#39;t invoke anything and doesn&#39;t have any `after` list, it can be added right away
+       Called actuallyAdd() on module1
+       initStatus on module1 is: NOT_ADDED
+       Initialising module module1, since it hadn&#39;t been initialised yet
+       Module module1 set as &#39;ADDED&#39;
+     THERE should be no un-init()ialised dependencies for module2 at this stage
+     Called actuallyAdd() on module2
+     initStatus on module2 is: NOT_ADDED
+     Initialising module module2, since it hadn&#39;t been initialised yet
+     Module module2 set as &#39;ADDED&#39;
+   THERE should be no un-init()ialised dependencies for module3 at this stage
+   Called actuallyAdd() on module3
+   initStatus on module3 is: NOT_ADDED
+   Initialising module module3, since it hadn&#39;t been initialised yet
+   Module module3 set as &#39;ADDED&#39;
+
+   Adding module2
+   Module module2&#39;s not initialised as it&#39;s status is already ADDED, doing nothing
+
+   Adding module1
+   Module module1&#39;s init() doesn&#39;t invoke anything and doesn&#39;t have any `after` list, it can be added right away
+   Called actuallyAdd() on module1
+   initStatus on module1 is: ADDED
+   Module module1 not initialised, as its status was ADDED, nothing to do!
+ORDERED LIST: module1,module2,module3
+Calling init call for module module1
+The module &#39;module1&#39; was initialised
+Calling init call for module module2
+The module &#39;module2&#39; was initialised
+Running hook &quot;something&quot; for module1
+The result of invokeAll(&#39;something&#39;) is: 
+[ { returned: 11 } ]
+Calling init call for module module3
+The module &#39;module3&#39; was initialised
+The module module2 has already been initialised, and exported passedNumber: 10
+Running hook &quot;run&quot; for module3
+The module &#39;module3&#39; was run
+Running hook &quot;run&quot; for module2
+The module &#39;module2&#39; was run
+Running hook &quot;run&quot; for module1
+The module &#39;module1&#39; was run
+Express server listening on port 3000</code></pre>
+
+<p>The log line <code>Module module3 has a init.after list, honouring it: [ &#39;module2&#39; ]</code> shows that <code>init.after</code> does what it advertises: it makes sure that <code>module3</code> is initialised <em>before</em> <code>module2</code>. Then, <code>module2</code> itself calls the hook <code>something</code> which means that all modules implementing the hok <code>something</code> will need to be initialised first &#8211; that is, <code>module1</code>.</p>
+
+<h2 id='more_hotplate_features'>More Hotplate features</h2>
+
+<h3 id='setting_hotplatewide_variables'>Setting Hotplate-wide variables</h3>
+
+<p>You can set Hotplate-wide variables in your app.js file (or anywhere, really) and read those values from your modules. In the example <code>app.js</code> file, there is the following line:</p>
+
+<p>In the example module <code>module4</code> you have:</p>
+
+<pre><code>// Require hotplate
+var hotplate = require(&#39;hotplate&#39;);
+
+// The `hooks` object defines this module&#39;s hooks
+var hooks = exports.hotHooks = {};
+
+hooks.init = function( done ){
+  console.log(&quot;The module &#39;module4&#39; was initialised&quot;);
+  console.log(&quot;The variable globalSetting is:&quot;);
+  console.log( hotplate.get( &#39;globalSetting&#39; ) );
+
+  done( null );
+};</code></pre>
+
+<p>This is probably the smallest module ever written! It shows how the module can access <code>globalSettings</code> with <code>hotplate.get()</code>. Note that modules will tend to create variables with a namespace. So, a Hotplate-wide variable would be called, in this case, <code>module1/globalSetting</code>. This is just a naming convention, not necessarily forced upon you.</p>
+
+<h3 id='massregistering_of_modules'>Mass-registering of modules</h3>
+
+<p>Normally, you would end up registering a lot of modules rather than just a couple. Hotplate&#8217;s core for example is made up of a number of highly specialised, small modules. Requiring and registering each one of them would me inconvenient at best. That&#8217;s why you can just do this:</p>
+
+<pre><code>hotplate.registerAllEnabledModules( /^module/, __dirname + &#39;/node_modules&#39; );</code></pre>
+
+<p>The first parameter <code>/^module/</code> is a regexp which will filter which modules you actually want to load. The second parameter, <code>__dirname + &#39;/node_modules&#39;</code>, is the <em>full</em> path of the modules you want to load. It&#8217;s important that you do pass the module&#8217;s full path here, which is why I used <code>__dirname</code> (which is <code>app.js</code>&#8217;s full path).</p>
+
+<p>In actual fact, a more common scenario would be requiring all of Hotplate&#8217;s core modules:</p>
+
+<pre><code>hotplate.registerAllEnabledModules( /^hotCore/ );</code></pre>
+
+<p>In this case, the second parameter is optional (it defaults to Hotplate&#8217;s <code>node_modules</code> directory).</p>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Hotplate - documentation maintained by <a href="https://github.com/mercmobily">mercmobily</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
