@@ -1,537 +1,62 @@
 {
     "project": {},
     "files": {
-        "../hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js": {
-            "name": "../hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js",
-            "modules": {},
-            "classes": {
-                "hotCoreAuth.facebook": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js": {
-            "name": "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "modules": {
-                "hotCoreAuth": 1
-            },
-            "classes": {
-                "hotCoreAuth": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js": {
-            "name": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "modules": {
-                "hotCoreClientFiles": 1
-            },
-            "classes": {
-                "hotCoreClientFiles": 1
-            },
-            "fors": {},
-            "namespaces": {}
-        },
-        "../hotplate/node_modules/hotCorePage/lib/Csses.js": {
-            "name": "../hotplate/node_modules/hotCorePage/lib/Csses.js",
+        "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js": {
+            "name": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "../hotplate/node_modules/hotCorePage/lib/HeadLines.js": {
-            "name": "../hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "../hotplate/node_modules/hotCorePage/lib/Jses.js": {
-            "name": "../hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "../hotplate/node_modules/hotCorePage/lib/Vars.js": {
-            "name": "../hotplate/node_modules/hotCorePage/lib/Vars.js",
+        "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js": {
+            "name": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         }
     },
-    "modules": {
-        "hotCoreAuth": {
-            "name": "hotCoreAuth",
-            "submodules": {},
-            "classes": {
-                "hotCoreAuth.facebook": 1,
-                "hotCoreAuth": 1
-            },
-            "fors": {},
-            "namespaces": {},
-            "tag": "main",
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 21,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
-            "itemtype": "main"
-        },
-        "hotCoreClientFiles": {
-            "name": "hotCoreClientFiles",
-            "submodules": {},
-            "classes": {
-                "hotCoreClientFiles": 1
-            },
-            "fors": {},
-            "namespaces": {},
-            "tag": "main",
-            "file": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 18,
-            "description": "Module to handle the delivery of files made available by modules",
-            "itemtype": "main"
-        }
-    },
-    "classes": {
-        "hotCoreAuth.facebook": {
-            "name": "hotCoreAuth.facebook",
-            "shortname": "hotCoreAuth.facebook",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "hotCoreAuth",
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js",
-            "line": 19,
-            "static": 1
-        },
-        "hotCoreAuth": {
-            "name": "hotCoreAuth",
-            "shortname": "hotCoreAuth",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "hotCoreAuth",
-            "namespace": "",
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 21,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
-            "mainName": "hotCoreAuth",
-            "tag": "main",
-            "itemtype": "main",
-            "_main": true
-        },
-        "hotCoreClientFiles": {
-            "name": "hotCoreClientFiles",
-            "shortname": "hotCoreClientFiles",
-            "classitems": [],
-            "plugins": [],
-            "extensions": [],
-            "plugin_for": [],
-            "extension_for": [],
-            "module": "hotCoreClientFiles",
-            "namespace": "",
-            "file": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 18,
-            "description": "Module to handle the delivery of files made available by modules",
-            "mainName": "hotCoreClientFiles",
-            "tag": "main",
-            "itemtype": "main",
-            "_main": true
-        }
-    },
+    "modules": {},
+    "classes": {},
     "classitems": [
         {
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js",
-            "line": 24,
-            "description": "Implements the ExpressJs routes to make the Facebook strategy work.  \nIt implements:\n\n  * Manager: `/auth/manager/facebook`, `/auth/manager/facebook/callback`\n  * Signin: `/auth/signin/facebook`, `/auth/manager/signin/callback`\n  * Recover: `/auth/recover/facebook`, `/auth/manager/recover/callback`\n  * Register: `/auth/register/facebook`, `/auth/manager/register/callback`\n  * Resume: `/auth/resume/facebook`, `/auth/manager/resume/callback`",
-            "itemtype": "method",
-            "name": "hotCoreAuth.facebook",
-            "class": "hotCoreAuth.facebook"
+            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
+            "line": 1,
+            "description": "This includes code from https://github.com/unscriptable/cssx\nCopyright (c) 2010 unscriptable.com",
+            "class": ""
         },
         {
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 48,
-            "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UserStrategies, AuthStrategies, UserLogins)",
-            "itemtype": "event",
-            "name": "init",
-            "requires": [
-                "hotCoreJsonRestStores"
-            ],
-            "class": "hotCoreAuth",
-            "module": "hotCoreAuth"
+            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
+            "line": 142,
+            "class": ""
         },
         {
-            "file": "../hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 288,
-            "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
-            "itemtype": "event",
-            "name": "run",
-            "class": "hotCoreAuth",
-            "module": "hotCoreAuth"
+            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
+            "line": 221,
+            "class": ""
         },
         {
-            "file": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 26,
-            "description": "The list of local paths that will be handles by the module",
-            "itemtype": "attribute",
-            "name": "localLocations",
-            "class": "hotCoreClientFiles",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 35,
-            "description": "Call the hook `clientPaths`, and store the results\nin `localLocations`",
-            "itemtype": "event",
-            "name": "init",
-            "class": "hotCoreClientFiles",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 61,
-            "description": "Returns a function that will serve files that are set as\npublic by other modules by implementing the `clientPaths` hook",
-            "itemtype": "method",
-            "name": "serve",
-            "params": [
-                {
-                    "name": "options",
-                    "description": ""
-                }
-            ],
-            "class": "hotCoreClientFiles",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 11,
-            "description": "Csses constructor.\n\nAn object to which you can add CSS files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 33,
-            "description": "Css rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 49,
-            "description": "Add a CSS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Csses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 11,
-            "description": "HeadLines constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 33,
-            "description": "Javascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 49,
-            "description": "Add a JS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Jsses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 11,
-            "description": "Jses constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 33,
-            "description": "Javascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 55,
-            "description": "Add a JS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Jsses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 11,
-            "description": "Csses constructor.\n\nAn object to which you can add variables to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 33,
-            "description": "Variable rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page.\nThe returned string is javascript code which will create a global variable \"vars\"\nwith all the values assigned to it.",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
-        },
-        {
-            "file": "../hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 84,
-            "description": "Add a variable",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "A",
-                    "description": "variable's name",
-                    "type": "String"
-                },
-                {
-                    "name": "A",
-                    "description": "variable's value",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Csses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreClientFiles"
+            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js",
+            "line": 239,
+            "class": ""
         }
     ],
     "warnings": [
         {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:11"
+            "message": "Missing item type\nThis includes code from https://github.com/unscriptable/cssx\nCopyright (c) 2010 unscriptable.com",
+            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:1"
         },
         {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:24"
+            "message": "Missing item type",
+            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:142"
         },
         {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:33"
+            "message": "Missing item type",
+            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:221"
         },
         {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:49"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:49"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:55"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:84"
-        },
-        {
-            "message": "Missing item type\nCsses constructor.\n\nAn object to which you can add CSS files to, and render them",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:24"
-        },
-        {
-            "message": "Missing item type\nCss rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a CSS file",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Csses.js:49"
-        },
-        {
-            "message": "Missing item type\nHeadLines constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:24"
-        },
-        {
-            "message": "Missing item type\nJavascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a JS file",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/HeadLines.js:49"
-        },
-        {
-            "message": "Missing item type\nJses constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:24"
-        },
-        {
-            "message": "Missing item type\nJavascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a JS file",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Jses.js:55"
-        },
-        {
-            "message": "Missing item type\nCsses constructor.\n\nAn object to which you can add variables to, and render them",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:24"
-        },
-        {
-            "message": "Missing item type\nVariable rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page.\nThe returned string is javascript code which will create a global variable \"vars\"\nwith all the values assigned to it.",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a variable",
-            "line": " ../hotplate/node_modules/hotCorePage/lib/Vars.js:84"
+            "message": "Missing item type",
+            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js:239"
         }
     ]
 }
