@@ -46,6 +46,33 @@ h1 {
   box-shadow: 0 0 10px rgba(0,0,0,.5);
   border-bottom-left-radius: 2px;
   border-bottom-right-radius: 2px;
+  font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.main_menu {
+  display: block;
+  position: absolute;
+  top:0;
+  left: -316px;
+  z-index: 10;
+  padding: 10px 80px 10px 80px;
+  color: #fff;
+  background-color: #0090ff;
+  font-weight: 700;
+  box-shadow: 0 0 10px rgba(0,0,0,.5);
+  border-bottom-left-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+.main_menu span {
+  margin-left: 15px;
+  font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.main_menu span a {
+  color: #fff;
 }
 
 #header_wrap {
