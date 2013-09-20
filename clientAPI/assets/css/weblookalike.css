@@ -18,6 +18,10 @@ footer, header, hgroup, menu, nav, section {
 Full-Width Styles
 *******************************************************************************/
 
+h1 {
+  line-height: 1.5;
+}
+
 .outer {
   width: 100%;
 }
@@ -51,7 +55,6 @@ Full-Width Styles
   background: -ms-linear-gradient(top, #373737, #212121);
   background: -o-linear-gradient(top, #373737, #212121);
   background: linear-gradient(top, #373737, #212121);
-  line-height: 1.5;
 }
 
 #header_wrap .inner {
