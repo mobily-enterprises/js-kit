@@ -46,7 +46,10 @@ Hotplate comes with comprehensive documentation **[Note: not yet, documentation 
 
 * [A comprehensive guide](http://www.hotplatejs.com/guide.html). The guide takes you from absolute zero, to actually knowing what you are doing with Hotplate. It's a tutorial-style guide, where you are explained everything step by step.
 
-* [API documentation](http://www.hotplatejs.com/api.html). The API documentation is a great resource to explain what each module does and provides. It should be used as a reference once you have read the guide and you "know what you are doing".
+* [Server API documentation](http://www.hotplatejs.com/serverAPI/index.html). It documents what each Hotplate module provides, from a server point of view.
+
+* [Client API documentation](http://www.hotplatejs.com/clientAPI/index.html). It documents what each Hotplate module provides to the clients (for example Dojo widgets).
+
 
 # Current status:
 
