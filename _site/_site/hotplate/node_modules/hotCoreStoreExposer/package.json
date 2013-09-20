@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreStoreExposer",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreStoreExposer.js"
-}
