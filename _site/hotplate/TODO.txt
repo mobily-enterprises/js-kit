@@ -71,8 +71,6 @@
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
-
-
   * Develop the "booking inbox" for incoming emails
 
 
