@@ -3,7 +3,7 @@
 
   3-5 DAYS:
   ----
-  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken, it even has a circular dependency?!?)
+  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
     ./hotCoreCometMessages/lib/hotCoreCometMessages.js <--- Check store permissions
     * STORES: Add ability to filter for ranges as part of the JsonRestStore if necessary. YES do this one, it's necessary. Make it work
               from URLs as well with searchSchema specific fields
@@ -70,8 +70,6 @@
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
-
-
 
   * Develop the "booking inbox" for incoming emails
 
