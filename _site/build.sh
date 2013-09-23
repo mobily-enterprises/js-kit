@@ -23,6 +23,11 @@ jekyll serve
 
 echo Submitting site to GitHut pages...
 git add *;
+
+
+echo Press enter to commit...
+read
+
 git commit -m "Automatic build done"
 git push origin gh-pages
 
