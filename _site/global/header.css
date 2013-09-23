@@ -105,7 +105,8 @@ Full-Width Styles
   position: absolute;
   width: 210px;
   z-index: 10;
-  bottom: -40px;
+  /* bottom: -40px; */
+  top: 110px;
   right: 0;
   height: 70px;
   background: url('/global/icon_download.png') no-repeat 0% 90%;
