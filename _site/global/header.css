@@ -3,11 +3,18 @@
 Full-Width Styles
 *******************************************************************************/
 
-h1 {
+.inner h1 {
   line-height: 1.5;
   font-family: 'Trebuchet MS', sans-serif;
   letter-spacing: 0px
 }
+
+.inner h2 {
+  line-height: 1;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
 
 .outer {
   width: 100%;
