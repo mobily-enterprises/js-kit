@@ -18,7 +18,12 @@ jekyll build
 # echo Opening the site in a browser window...
 # gnome-open _site/index.html
 
+echo Serving the page out
+jekyll serve
+
 echo Submitting site to GitHut pages...
 git add *;
 git commit -m "Automatic build done"
 git push origin gh-pages
+
+
