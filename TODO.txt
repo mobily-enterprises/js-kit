@@ -1,6 +1,27 @@
 
   "THE BASICS"
 
+  NOW:
+    Fix serialize problem with JsonRestStores (2 ways... now?). Needs to return un-serialised data on GET
+    Decide on standard name of events: storeRecordRemove, storeRecordUpdate, storeRecordInsert sounds good
+    Chance client so that it uses new generic messages format
+    Finalise the tabIdHash function use -- is it really OK this way? I think so.
+    Finally, see comet actually work again in Hotplate
+
+  MONGO:
+    Add mass deletion in API
+    Add cursor (with delete option) in API
+    Add range fields
+
+  COMET:
+    hotCoreComet:
+      * Mass Deletion of tab messages when tab gets deleted
+      * Mass deletion of tab messages when tab expires (cron job too?)
+      * See if/when using cursors makes sense
+
+  BOTH:
+     Make sure that tab expiration leads to registering a new tab _and_ refresh of all app stores
+                  
   3-5 DAYS:
   ----
   * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
@@ -31,7 +52,7 @@
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   --------------------------
-  DEADLINE: 4th October 2013
+  DEADLINE: 11th October 2013
   --------------------------
 
   NOTE: TO be added to JsonRestStores:
@@ -39,6 +60,11 @@
   * Ability to have range fields
   * Ability to have getQuery that returns a function rather than an array
   This will be enough for the messaging infrastructure, as well as the Comet infrastructure
+
+
+  ------------------------------------------------
+  AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore (!)
+  ------------------------------------------------
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
