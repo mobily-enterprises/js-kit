@@ -1,18 +1,15 @@
 
   "THE BASICS"
 
-    Change hotCoreStoreConfig.js so that the function that fetches config values is generic, and
-    is used ALSO when there is a reset of tab -- in which case, the reset ALSO returns the new settings. This will
-    save several gets for the config stores. This will save at least 3 gets, and a LOT of code client-side to run the gets
-    (e.g. what on earth should happen if one of the get fails...?)
-
-    NOTE: Change AppStoreNotify so that it doesn't zap config stores too or there might be a race condition
-    
+    * Make sure that user has access to workspace when returning W configuration after reset
+    * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
+    * ACTUALLY do something with the received configuration (after all this work to actually get it). It's a matter of
+      updating the relevant stores' cache and publish a topic about them being changed
 
   MONGO:
     Add mass deletion in API
-    Add cursor (with delete option) in API
     Add range fields (from schema?)
+    Add cursor (with delete option) in API
 
   COMET:
     hotCoreComet:
