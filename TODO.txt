@@ -1,10 +1,11 @@
 
-  "THE BASICS"
-
-    * Make sure that user has access to workspace when returning W configuration after reset
+  "TODAY"
+    * Test things, see if everything still works
+    * Make sure that user has permissions to access to workspace when returning WS configuration after reset
     * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
     * ACTUALLY do something with the received configuration (after all this work to actually get it). It's a matter of
       updating the relevant stores' cache and publish a topic about them being changed
+    * Check that _all_ settings work properly
 
   MONGO:
     Add mass deletion in API
@@ -26,6 +27,11 @@
     * STORES: Add ability to scan through GetQuery by calling a function rather than returning an Array
     * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+
+
+  ------------------------------------------------
+  AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore (!)
+  ------------------------------------------------
 
   1 DAY
   -----
@@ -56,9 +62,6 @@
   * Ability to have getQuery that returns a function rather than an array
   This will be enough for the messaging infrastructure, as well as the Comet infrastructure
 
-  ------------------------------------------------
-  AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore (!)
-  ------------------------------------------------
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
