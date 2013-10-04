@@ -1,11 +1,22 @@
+  "NOW":
+    * Work out the whole storeTarget mess *properly*, see what it is, document it clearly
 
-  "TODAY"
-    * Test things, see if everything still works
+
+  "TODAY:
+    * Rewrite the whole config stores so that they allow collections rather than just static values
+    * Check that _all_ settings work properly with the new system
+    * ATTACK PLAN:
+      * [DONE] Make the stores first, the way they should be (6 stores, 3 single-ones, three collection-ones)
+      * Make the UI to manage those stores.
+      * Rewrite backend so that it figures out, based on IDs, if a store is a list of is a 1-record gig
+      * Rewrite Dojo-side so that it places things into the cache accordingly
+
+
+  "TOMORROW"
     * Make sure that user has permissions to access to workspace when returning WS configuration after reset
     * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
     * ACTUALLY do something with the received configuration (after all this work to actually get it). It's a matter of
       updating the relevant stores' cache and publish a topic about them being changed
-    * Check that _all_ settings work properly
 
   MONGO:
     Add mass deletion in API
@@ -32,11 +43,6 @@
   ------------------------------------------------
   AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore (!)
   ------------------------------------------------
-
-  1 DAY
-  -----
-  * Move the buttonsConstructor somewhere where it makes more sense
-  * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
 
   1 DAY
   -----
@@ -393,3 +399,6 @@
   * Finally, see comet actually work again in Hotplate -- it does, it does!
   * Make sure that a tab's lastSync time is updated every time there is a sync
   * Make sure that an expired tab leads to a new request for a new tab, and reset of all client-side stores.
+  * Test things, see if everything still works
+  * Move the buttonsConstructor somewhere where it makes more sense (fixed early as working on config menus)
+  * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
