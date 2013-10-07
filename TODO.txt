@@ -1,5 +1,4 @@
   "NOW":
-    * Work out the whole storeTarget mess *properly*, see what it is, document it clearly
 
 
   "TODAY:
@@ -7,7 +6,9 @@
     * Check that _all_ settings work properly with the new system
     * ATTACK PLAN:
       * [DONE] Make the stores first, the way they should be (6 stores, 3 single-ones, three collection-ones)
-      * Make the UI to manage those stores.
+      * [DONE] Make the UI to manage those stores.
+      * [DONE] Work out the whole storeTarget mess *properly*, see what it is, document it clearly
+      * Change messages so that storeTarget is out of the equation, with store(storeName) returning all stores in cache
       * Rewrite backend so that it figures out, based on IDs, if a store is a list of is a 1-record gig
       * Rewrite Dojo-side so that it places things into the cache accordingly
 
@@ -15,8 +16,6 @@
   "TOMORROW"
     * Make sure that user has permissions to access to workspace when returning WS configuration after reset
     * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
-    * ACTUALLY do something with the received configuration (after all this work to actually get it). It's a matter of
-      updating the relevant stores' cache and publish a topic about them being changed
 
   MONGO:
     Add mass deletion in API
