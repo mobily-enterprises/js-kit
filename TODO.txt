@@ -1,20 +1,6 @@
-  "NOW":
-
-
-  "TODAY:
-    * Rewrite the whole config stores so that they allow collections rather than just static values
-    * Check that _all_ settings work properly with the new system
-    * ATTACK PLAN:
-      * [DONE] Make the stores first, the way they should be (6 stores, 3 single-ones, three collection-ones)
-      * [DONE] Make the UI to manage those stores.
-      * [DONE] Work out the whole storeTarget mess *properly*, see what it is, document it clearly
-      * Change messages so that storeTarget is out of the equation, with store(storeName) returning all stores in cache
-      * Rewrite backend so that it figures out, based on IDs, if a store is a list of is a 1-record gig
-      * Rewrite Dojo-side so that it places things into the cache accordingly
-
 
   "TOMORROW"
-    * Make sure that user has permissions to access to workspace when returning WS configuration after reset
+    * make sure that user has permissions to access the workspace when returning WS configuration after reset
     * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
 
   MONGO:
@@ -39,8 +25,18 @@
       "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
 
 
-  ------------------------------------------------
-  AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore (!)
+  NOTE: Summary of things to be added to JsonRestStores:
+  * Ability to have a default "order" field, which will be influenced by "placeBefore" in options
+  * Ability to have range fields
+  * Ability to have getQuery that returns a function rather than an array
+  This will be enough for the messaging infrastructure, as well as the Comet infrastructure
+
+
+
+  REWRITE:
+    AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
+    AND THEN! Rewrite the Dojo side, so that it loads module in a much more dojo-style way
+
   ------------------------------------------------
 
   1 DAY
@@ -58,15 +54,13 @@
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   --------------------------
-  DEADLINE: 11th October 2013
+  DEADLINE: 30th October 2013
   --------------------------
 
-  NOTE: TO be added to JsonRestStores:
-  * Ability to have a default "order" field, which will be influenced by "placeBefore" in options
-  * Ability to have range fields
-  * Ability to have getQuery that returns a function rather than an array
-  This will be enough for the messaging infrastructure, as well as the Comet infrastructure
 
+  Improve StoreSelect and EditableList:
+    * With "refreshData", change "refresh" to clickable overlay 
+    * catch dgrid errors with overlay if necessary
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
@@ -82,7 +76,6 @@
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
-
 
   User management and invites in Hotplate:
 
@@ -103,7 +96,7 @@
 
 
   ------------------------------
-  DEADLINE: 30th October 2013
+  DEADLINE: 30th November 2013
   ------------------------------
 
                           ----------------------------
@@ -118,7 +111,6 @@
   * Ability to set products for each contact (once|minute|hour|day rate, commission-only allowed, restrict who can buy/offer it,
     money range: from/to booking owner, from/to person, tangible/intangible, tax rate, that's it )
   * Ability to create bookings. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from time, to time]
-  * Ability to match incoming (and outgoing) messages to bookings from inbox
   * Ability to set templates for messages of different types, with previews
 
   PHASE 2: Money/billing
@@ -401,3 +393,16 @@
   * Test things, see if everything still works
   * Move the buttonsConstructor somewhere where it makes more sense (fixed early as working on config menus)
   * Normalise all the topic.publish namespace, which is messy now. Watch out: comet events are echoed as well, put those in a different ns
+  * Rewrite from scratch the whole "configuration parameters" thing
+    * Rewrite the whole config stores so that they allow collections rather than just static values
+    * Check that _all_ settings work properly with the new system
+    * ATTACK PLAN:
+      * [DONE] Make the stores first, the way they should be (6 stores, 3 single-ones, three collection-ones)
+      * [DONE] Make the UI to manage those stores.
+      * [DONE] Work out the whole storeTarget mess *properly*, see what it is, document it clearly
+      * [DONE] Change messages so that storeTarget is out of the equation, with store(storeName) returning all stores in cache
+      * [DONE] Rewrite backend so that it figures out, based on IDs, if a store is a list of is a 1-record gig
+      * [DONE] Rewrite Dojo-side so that it places things into the cache accordingly
+
+
+
