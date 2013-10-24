@@ -1,17 +1,10 @@
 
-  CODE CHECK:
-  * Add "remove on fetch" for cursor-based queries (mongoDriver)
-  * Add extrapolateAndPrepare in _makeQuery (JsonRestStores)
-
-  * Ability to have a default "order" field, which will be influenced by "placeBefore" in options
-
-  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
-    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+  TOMORROW
+  -----
 
   AND THEN REWRITE!
     Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
     Rewrite the Dojo side, so that it loads module in a much more dojo-style way
-
     Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined
 
   ------------------------------------------------
@@ -24,20 +17,29 @@
   2 DAYS
   ------
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
+    * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
+    * Add "placeBefore" header to JsonRestStores calls
+    * Check that placeBefore is passed on and considered by Observer
+    * Make sure you can DnD freely between two boxes
 
   1 DAY
   -----
   * Improve the look of widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  --------------------------
-  DEADLINE: 30th October 2013
-  --------------------------
 
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
+ 
 
   Improve StoreSelect and EditableList:
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
+
+  --------------------------
+  DEADLINE: 30th October 2013
+  --------------------------
 
   **************************************************************************************************************************
   Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
@@ -48,8 +50,8 @@
   Message infrastructure:
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages. Note: this is simply a very fancy
-    JsonRest store
+    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
+
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
@@ -69,7 +71,7 @@
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
-  * Develop the "booking inbox" for incoming emails
+  * Develop the "booking inbox" for incoming emails/SMSes, match them against a booking
 
 
   ------------------------------
@@ -391,3 +393,7 @@
   * Made Comet messenging work again 100% using JsonRestStores API only
   * MONGO: Add cursor (with delete option) in API
   * COMET:  See if/when using cursors makes sense
+  * Add "remove on fetch" for cursor-based queries (mongoDriver)
+  * Add extrapolateAndPrepare in _makeQuery (JsonRestStores)
+  * Make sure self.post**** are always the very last step in the chain, it's been "pushed up"
+  * See if MassUpdate makes sense, it might well be as it would complete the API. Will need to allow partial updates though
