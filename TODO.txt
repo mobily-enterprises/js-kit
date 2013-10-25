@@ -1,11 +1,9 @@
 
-  TOMORROW
-  -----
-
-  AND THEN REWRITE!
-    Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
-    Rewrite the Dojo side, so that it loads module in a much more dojo-style way
-    Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined
+  1 WEEK
+  ------
+  * Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
+  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
+  * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined
 
   ------------------------------------------------
 
@@ -36,6 +34,9 @@
   Improve StoreSelect and EditableList:
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
+
+  * Document JsonRestStores and SimpleSchema better: add cursor queries, massdelete, massupdate, and what options do exactly
+    and MAYBE force the query to do a normal CastAndParams (rather than deleting search)
 
   --------------------------
   DEADLINE: 30th October 2013
