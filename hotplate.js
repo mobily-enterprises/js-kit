@@ -69,6 +69,9 @@ exports.log = function(){
 }
 
 
+exports.cachable = async.memoize;
+
+
 // Register all modules matching the regexp `filter`. You can also
 // provide the module's full path (otherwise, Hotplate's node_modules directory
 // is assumed)
