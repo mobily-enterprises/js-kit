@@ -1,10 +1,15 @@
 
   1 WEEK
   ------
-  * Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
+  * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
+  * Get rid of all the registration functions in hotplate, which are now obsolete
+  * Move AsyncCollectEvents to its own github module
+
+  * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
+
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
-  * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined
-  * Use "cachable" function for cachable hooks
+  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+  * Check that everything actually works
 
   ------------------------------------------------
 
@@ -56,7 +61,6 @@
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
-
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
@@ -402,3 +406,9 @@
   * Add extrapolateAndPrepare in _makeQuery (JsonRestStores)
   * Make sure self.post**** are always the very last step in the chain, it's been "pushed up"
   * See if MassUpdate makes sense, it might well be as it would complete the API. Will need to allow partial updates though
+  * Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
+  * Use "cachable" function for cachable hooks
+  * Write a totally custom class rather than extending eventEmitter. Write it so that registering a function requires the module's name,
+   and invokeAll groups by moduleName. 
+  * In new Invoke, write the aggregating functions and allow invoking for a specific module! 
+  * Simplify the return of moduleName in events, change hook.stores() so that it can return an object

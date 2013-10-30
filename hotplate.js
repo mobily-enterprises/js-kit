@@ -8,7 +8,7 @@ var util = require('util')
 , path = require('path')
 , express = require('express')
 , async = require('async')
-, events = require("events")
+, declare = require("simpledeclare")
 ;
 
 
@@ -131,57 +131,300 @@ exports.runModules = function( callback ){
 
 
 // Create the enhanced EventEmitter
-function AsyncEvents() {
-    events.EventEmitter.call(this);
-}
-util.inherits(AsyncEvents, events.EventEmitter);
+var AsyncCollectEvents = declare( null, {
 
-AsyncEvents.prototype.onAsync = function(){
-  return this.on.apply( this, arguments );
-}
+  _enrichArray: function( a ){
 
-AsyncEvents.prototype.emitAsync = function( ){
+    a.onlyResults = function(){
+      var ret = [];
+      this.forEach( function( i ){
+        ret.push( i.result );
+      });  
+      return ret;      
+    };
 
-  var event,
-  module,
-  results = [],
-  functionList = [],
-  args,
-  callback,
-  eventArguments;
+    a.groupByModule = function(){
+      var ret = {};
+      this.forEach( function( i ){
+        if( !Array.isArray( ret[ i.module ] ) ) ret[ i.module ] = [];
+        ret[ i.module ].push( i.result );
+      });  
+      return ret;
+      
+    };
 
-
-  // Turn `arguments` into a proper array
-  args = Array.prototype.splice.call(arguments, 0);
+    a.indexBy = function( attr ){
+      var ret = {};
+      var newItem;
+      this.forEach( function( i ){
+        if( typeof( i.result ) === 'object' && i.result !== null ){
+          ret[ i.result[ attr ] ] = newItem = i.result;
+          newItem.module = i.module;
+        }
+      });  
+      return ret;
  
-  // get the `hook` and `hookArgument` variables 
-  event = args.splice(0,1)[0]; // The first parameter, always the hook's name
-  eventArguments = args;       // The leftovers, the hook's parameters
+    };
 
-  // If the last parameter is a function, it's assumed
-  // to be the callback
-  if( typeof( eventArguments[ eventArguments.length-1 ] ) === 'function' ){
-    callback = eventArguments.pop();   // The last parameter, always the callback
+    return a;
+
+  },
+
+  constructor: function(){
+    this.listenersByModuleEvent = {}
+    this.listenersByEvent = {}
+  },
+
+  on: function(){
+    this.onAsync.apply( this, arguments );
+  },
+
+  addListener: function(){
+    this.onAsync.apply( this, arguments );
+  },
+
+  // add a callback for a specific event/module pair. If module is missing,
+  // it will default to "global"
+  onAsync: function( event, module, listener ){
+
+    // The `module` parameter is optional
+    if( typeof( module ) === 'function' ){
+      cb = module;
+      module = 'global';
+    }
+  
+    // Normalise this.listenersByModuleEvent
+    if( typeof( this.listenersByModuleEvent[ module ] ) === 'undefined' ){
+      this.listenersByModuleEvent[ module ] = {};
+    }
+    if( !Array.isArray( this.listenersByModuleEvent[ module ][ event ] ) ){
+      this.listenersByModuleEvent[ module ][ event ] = [];
+    }
+
+    // Normalise this.listenersByEvent
+    if( !Array.isArray( this.listenersByEvent[ event ] ) ){
+      this.listenersByEvent[ event ] = [];
+    }
+
+    this.listenersByModuleEvent[ module ][ event ].push( listener );
+    this.listenersByEvent[ event ].push( { module: module, listener: listener } );
+
+    console.log("\nAFTER ADD SUMMARY:");
+    console.log("--------------------------");
+    u = require('util');
+    console.log( 'this.listenersByModuleEvent:');
+    console.log( u.inspect( this.listenersByModuleEvent, { depth: 4 } ) );
+
+    console.log( 'this.listenersByEvent:');
+    console.log( u.inspect( this.listenersByEvent, { depth: 4 } ) );
+
+    console.log("--------------------------");
+  },
+
+  emitModule: function(){
+    this.emitModuleAsync.apply( this, arguments );
+  },
+
+  emitModuleAsync: function(){
+
+    var event, module,
+    functionList = [],
+    args,
+    callback,
+    listeners,
+    eventArguments;
+
+    var self = this;
+
+    // Turn `arguments` into a proper array
+    args = Array.prototype.splice.call(arguments, 0);
+     
+    // get the `hook` and `hookArgument` variables 
+    event = args.splice( 0, 1 )[ 0 ]; // The first parameter, always the hook's name
+    module = args.splice( 0, 1 )[ 0 ]; // The second parameter, always the module's name
+    eventArguments = args;           // The leftovers, the hook's parameters
+    
+    // If the last parameter is a function, it's assumed
+    // to be the callback
+    //if( typeof( eventArguments[ eventArguments.length - 1 ] ) === 'function' ){
+      callback = eventArguments.pop();   // The last parameter, always the callback
+    //}
+    
+    if(
+      typeof( this.listenersByModuleEvent[ module ] ) === 'undefined' || 
+      typeof( this.listenersByModuleEvent[ module ][ event ] ) === 'undefined'
+    ){
+      callback( null, self._enrichArray( [] ) );
+    } else {
+
+      listeners = this.listenersByModuleEvent[ module ][ event ];
+   
+      listeners.forEach( function( listener ) {
+
+        // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
+        // bound to the function's scope
+        functionList.push( function( done ){
+ 
+          listener.apply( this, Array.prototype.concat( eventArguments, function( err, res ){
+            if( err ) {
+              done( err );
+            } else {
+              done( null, { module: module, result:  res } );
+            }
+
+          }));
+        });
+      });
+
+      //callback ? async.series( functionList, callback ) : async.series( functionList );
+      async.series( functionList, function( err, res ){
+        if( err ){
+          callback( err );
+        } else {
+          callback( null,  self._enrichArray( res ) );
+        }
+      });
+    }
+  },
+
+
+  emit: function(){
+    this.emitAsync.apply( this, arguments );
+  },
+
+  emitAsync: function(){
+
+    var event,
+    functionList = [],
+    args,
+    callback,
+    listenerItems,
+    eventArguments;
+
+    var self = this;
+
+    // Turn `arguments` into a proper array
+    args = Array.prototype.splice.call(arguments, 0);
+     
+    // get the `hook` and `hookArgument` variables 
+    event = args.splice( 0, 1 )[ 0 ]; // The first parameter, always the hook's name
+    eventArguments = args;           // The leftovers, the hook's parameters
+    
+    // If the last parameter is a function, it's assumed
+    // to be the callback
+    //if( typeof( eventArguments[ eventArguments.length - 1 ] ) === 'function' ){
+      callback = eventArguments.pop();   // The last parameter, always the callback
+    //}
+    
+    if( typeof( this.listenersByEvent[ event ] ) === 'undefined' ){
+      callback( null, self._enrichArray( [] ) );
+    } else {
+
+      listenerItems = this.listenersByEvent[ event ];
+   
+      listenerItems.forEach( function( listenerItem ) {
+
+        // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
+        // bound to the function's scope
+        functionList.push( function( done ){
+ 
+          listenerItem.listener.apply( this, Array.prototype.concat( eventArguments, function( err, res ){
+            if( err ) {
+              done( err );
+            } else {
+              done( null, { module: listenerItem.module, result: res } );
+            }
+
+          }));
+        });
+      });
+
+      //callback ? async.series( functionList, callback ) : async.series( functionList );
+      async.series( functionList, function( err, res ){
+        if( err ){
+          callback( err );
+        } else {
+        
+          callback( null,  self._enrichArray( res ) );
+        }
+      }); 
+    }
   }
 
-  var listeners = this.listeners( event );
- 
-  listeners.forEach( function( listener ) {
-
-      // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
-      // bound to the function's scope
-      functionList.push( function( done ){
-
-          listener.apply( this, Array.prototype.concat( eventArguments, done ) );
-      } );
-  });
-  callback ? async.series( functionList, callback ) : async.series( functionList );
-}
-
-exports.asyncEvents = new AsyncEvents();
-exports.AsyncEvents = AsyncEvents();
+})
 
 
+
+var as = exports.hotEvents = new AsyncCollectEvents();
+exports.AsyncCollectEvents = AsyncCollectEvents();
+
+
+/*
+as.onAsync( 'event1', 'module1', function( done ){
+  console.log("Called event 'event1' for module 'module1', arguments:");
+  console.log( arguments );
+  done( null, 'event1 module1 ONE' );
+});
+
+as.onAsync( 'event1', 'module1', function( done ){
+  console.log("AGAIN Called event 'event1' for module 'module1', arguments:");
+  console.log( arguments );
+  done( null, 'event1 module1 TWO' );
+});
+
+as.onAsync( 'event2', 'module1', function( param1, param2, done ){
+  console.log("Called event 'event1' for module 'module1', arguments:");
+  console.log( arguments );
+  done( null, 'event1 module1, PARAMS:' + param1 + ',' + param2 );
+});
+
+as.onAsync( 'event2', 'module1', function( param1, param2, done ){
+  console.log("AGAIN Called event 'event1' for module 'module1', arguments:");
+  console.log( arguments );
+  done( null, 'AGAIN event1 module1, PARAMS:' + param1 + ',' + param2 );
+});
+
+as.onAsync( 'event1', 'module2', function( done ){
+  console.log("Called event 'event1' for module 'module2' (TWO!), arguments:");
+  console.log( arguments );
+  done( null, 'event1 module2' );
+});
+
+as.emitAsync( 'event1', function( err, results ){
+  console.log("------------------");
+  console.log("RESULTS FOR event1:");
+  console.log( results );
+  console.log("------------------");
+})
+
+as.emitAsync( 'event1', function( err, results ){
+  console.log("------------------");
+  console.log("RESULTS FOR event1, narrowed to module1:");
+  console.log("**************************************************************");
+  console.log( results  );
+  console.log( results.groupByModule()  );
+  console.log( results.onlyResults()  );
+  console.log("------------------");
+})
+
+
+
+
+as.emitAsync( 'event2', 'ONE', 'TWO', function( err, results ){
+  console.log("------------------");
+  console.log("RESULTS FOR event2:");
+  console.log( results );
+  console.log("------------------");
+})
+
+as.emitModuleAsync( 'event1', 'module1', function( err, results ){
+  console.log("------------------");
+  console.log("RESULTS FOR event1 for module1:");
+  console.log( results );
+  console.log("------------------");
+})
+
+*/
 
 // Invoke a specific hook. The first parameter is always the hook's name,
 // the last parameter is always a callback. In between, there can be
