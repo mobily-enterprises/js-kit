@@ -1,16 +1,14 @@
 
   1 WEEK
   ------
-  * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
-  * Check that everything actually works
-  * Get rid of all the registration functions in hotplate, which are now obsolete
-  * Move AsyncCollectEvents to its own github module
+
+  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
 
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
+  * Add a hook where modules do their initial configuration, so that server.js looks tiny and very close to the original Express server file 
 
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
-  * Check that everything actually works
 
   ------------------------------------------------
 
@@ -413,3 +411,7 @@
    and invokeAll groups by moduleName. 
   * In new Invoke, write the aggregating functions and allow invoking for a specific module! 
   * Simplify the return of moduleName in events, change hook.stores() so that it can return an object
+  * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
+  * Check that everything actually works
+  * Get rid of all the registration functions in hotplate, which are now obsolete
+  * Move AsyncCollectEvents to its own github module
