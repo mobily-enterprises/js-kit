@@ -8,6 +8,7 @@
     "express": "3.x",
     "async": "*",
     "send": "*",
+    "hotCore": "*",
     "hotCoreClientFiles": "*",
     "hotCoreCommonValidators": "*",
     "hotCoreError": "*",
@@ -19,6 +20,7 @@
     "hotCoreSharedCode": "*",
     "hotCoreStoreVars": "*",
     "hotDojo": "*",
+    "hotDojoAdd": "*",
     "hotDojoAppContainer": "*",
     "hotDojoAuth": "*",
     "hotDojoComet": "*",
@@ -35,6 +37,7 @@
     "hotCoreMultiHome": "*"
   },
   "bundleDependencies": [
+    "hotCore",
     "hotCoreClientFiles",
     "hotCoreCommonValidators",
     "hotCoreError",
@@ -45,6 +48,7 @@
     "hotCoreSharedCode",
     "hotCoreStoreVars",
     "hotDojo",
+    "hotDojoAdd",
     "hotDojoAppContainer",
     "hotDojoAuth",
     "hotDojoComet",
