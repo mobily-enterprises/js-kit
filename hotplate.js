@@ -52,15 +52,6 @@ exports.require = function( m ){
 }
 
 
-// Fetch a module
-exports.getModule = function( moduleName ){
-
-  if( typeof(exports.modules[moduleName]) === 'undefined' ){
-    hotplate.log("===== WARNING! getModule was asked for %s, which is not loaded", moduleName);
-  }
-  return exports.modules[moduleName];
-}
-
 // Sets the module-wide `app` variable, used by a lot of modules
 // to set routes etc.
 exports.setApp = function(app){
@@ -78,56 +69,6 @@ exports.log = function(){
 
 exports.cachable = async.memoize;
 
-
-// Register all modules matching the regexp `filter`. You can also
-// provide the module's full path (otherwise, Hotplate's node_modules directory
-// is assumed)
-exports.registerAllEnabledModules = function( filter, modulesFullPath ) {
-
-  var self = this;
-
-  // If modulesFullPath is empty, default to hotplate's default module location
-  // (here __dirname will be hotplate's full path, to which we simply add 'node_modules')
-  if( modulesFullPath == '' || ! modulesFullPath ){
-     modulesFullPath = path.join( __dirname, 'node_modules' );
-  }
-
-  // Load the installed modules (if they are enabled)
-  fs.readdirSync( modulesFullPath ).forEach( function( moduleName ) {
-
-    if( !filter || moduleName.match( filter ) ){
-
-      var moduleFullPath = path.join( modulesFullPath,  moduleName );
-      var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
-
-        // If the module is enabled (it has a file called 'enabled'), load it
-      if( fs.existsSync( moduleEnabledLocation ) ){
-        hotplate.log( "Requiring and registering module " + moduleName + ' from ' + moduleFullPath );
-        var m = require( moduleFullPath );
-        self.registerModule( moduleName, m );
-      } else {
-        hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
-      }
-    }
-  });
-  
-  // Registering hotplage itself as hook provider
-  exports.modules[ 'hotplate' ] = this;
-
-}
-
-// Register a specific module
-exports.registerModule = function( moduleName, m ){
-  exports.modules[ moduleName ] = m ;
-}
-
-// Call the `run()` hook for all modules
-exports.runModules = function( callback ){
-
-  // Invoke "run" in all modules (run MUST be order-agnostic)
-  exports.invokeAll('run', callback );
-
-}
 
 
 // Create the enhanced EventEmitter
@@ -163,7 +104,6 @@ var AsyncCollectEvents = declare( null, {
         }
       });  
       return ret;
- 
     };
 
     return a;
@@ -186,6 +126,11 @@ var AsyncCollectEvents = declare( null, {
   // add a callback for a specific event/module pair. If module is missing,
   // it will default to "global"
   onAsync: function( event, module, listener ){
+
+    console.log("ADDING:");
+    console.log( event );
+    console.log( module );
+    console.log( listener );
 
     // The `module` parameter is optional
     if( typeof( module ) === 'function' ){
@@ -327,7 +272,7 @@ var AsyncCollectEvents = declare( null, {
         // Pushes the async function to functionList. Note that the arguments passed to invokeAll are
         // bound to the function's scope
         functionList.push( function( done ){
- 
+
           listenerItem.listener.apply( this, Array.prototype.concat( eventArguments, function( err, res ){
             if( err ) {
               done( err );
@@ -430,6 +375,13 @@ as.emitModuleAsync( 'event1', 'module1', function( err, results ){
 // the last parameter is always a callback. In between, there can be
 // zero or more parameters (which will be passed to the hook)
 
+
+
+/* TO BE CHUCKED IN THE BIN */
+
+
+
+/*
 exports.invokeAll = function( ){
   var hook,
   module,
@@ -451,12 +403,10 @@ exports.invokeAll = function( ){
     callback = hookArguments.pop();   // The last parameter, always the callback
   }
 
-  /*
   hotplate.log("invokeAll(%s) called!" , hook);
   hotplate.log(args);
   hotplate.log(hook);
   hotplate.log(hookArguments);
-  */
 
   var modules = exports.modules;
  
@@ -480,5 +430,62 @@ exports.invokeAll = function( ){
   callback ? async.series( functionList, callback ) : async.series( functionList );
 }
 
+*/
+
+
+
+/*
+
+// Register all modules matching the regexp `filter`. You can also
+// provide the module's full path (otherwise, Hotplate's node_modules directory
+// is assumed)
+exports.registerAllEnabledModules = function( filter, modulesFullPath ) {
+
+  var self = this;
+
+  // If modulesFullPath is empty, default to hotplate's default module location
+  // (here __dirname will be hotplate's full path, to which we simply add 'node_modules')
+  if( modulesFullPath == '' || ! modulesFullPath ){
+     modulesFullPath = path.join( __dirname, 'node_modules' );
+  }
+
+  // Load the installed modules (if they are enabled)
+  fs.readdirSync( modulesFullPath ).forEach( function( moduleName ) {
+
+    if( !filter || moduleName.match( filter ) ){
+
+      var moduleFullPath = path.join( modulesFullPath,  moduleName );
+      var moduleEnabledLocation = path.join( moduleFullPath, 'enabled' );
+
+        // If the module is enabled (it has a file called 'enabled'), load it
+      if( fs.existsSync( moduleEnabledLocation ) ){
+        hotplate.log( "Requiring and registering module " + moduleName + ' from ' + moduleFullPath );
+        var m = require( moduleFullPath );
+        self.registerModule( moduleName, m );
+      } else {
+        hotplate.log( "Skipping " + moduleName + " as it's not enabled" );
+      }
+    }
+  });
+  
+  // Registering hotplage itself as hook provider
+  exports.modules[ 'hotplate' ] = this;
+
+}
+
+// Register a specific module
+exports.registerModule = function( moduleName, m ){
+  exports.modules[ moduleName ] = m ;
+}
+
+// Call the `run()` hook for all modules
+exports.runModules = function( callback ){
+
+  // Invoke "run" in all modules (run MUST be order-agnostic)
+  exports.invokeAll('run', callback );
+
+}
+
+*/
 
 

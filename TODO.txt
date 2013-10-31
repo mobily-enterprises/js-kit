@@ -2,6 +2,7 @@
   1 WEEK
   ------
   * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
+  * Check that everything actually works
   * Get rid of all the registration functions in hotplate, which are now obsolete
   * Move AsyncCollectEvents to its own github module
 
