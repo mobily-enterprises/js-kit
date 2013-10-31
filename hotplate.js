@@ -127,14 +127,14 @@ var AsyncCollectEvents = declare( null, {
   // it will default to "global"
   onAsync: function( event, module, listener ){
 
-    console.log("ADDING:");
-    console.log( event );
-    console.log( module );
-    console.log( listener );
+    // console.log("ADDING:");
+    // console.log( event );
+    // console.log( module );
+    // console.log( listener );
 
     // The `module` parameter is optional
     if( typeof( module ) === 'function' ){
-      cb = module;
+      listener = module;
       module = 'global';
     }
   
@@ -154,16 +154,16 @@ var AsyncCollectEvents = declare( null, {
     this.listenersByModuleEvent[ module ][ event ].push( listener );
     this.listenersByEvent[ event ].push( { module: module, listener: listener } );
 
-    console.log("\nAFTER ADD SUMMARY:");
-    console.log("--------------------------");
-    u = require('util');
-    console.log( 'this.listenersByModuleEvent:');
-    console.log( u.inspect( this.listenersByModuleEvent, { depth: 4 } ) );
+    //console.log("\nAFTER ADD SUMMARY:");
+    //console.log("--------------------------");
+    //u = require('util');
+    //console.log( 'this.listenersByModuleEvent:');
+    //console.log( u.inspect( this.listenersByModuleEvent, { depth: 4 } ) );
 
-    console.log( 'this.listenersByEvent:');
-    console.log( u.inspect( this.listenersByEvent, { depth: 4 } ) );
+    //console.log( 'this.listenersByEvent:');
+    //console.log( u.inspect( this.listenersByEvent, { depth: 4 } ) );
 
-    console.log("--------------------------");
+    //console.log("--------------------------");
   },
 
   emitModule: function(){
