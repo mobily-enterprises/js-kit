@@ -67,7 +67,7 @@ So, now start integrating hotplate into your world.
 
 ## Your first Hotplate module
 
-The most important bit to add to your app.js file is the code that `requires()` and runs Hotplate modules. That's easily done:
+The most important bit to add to your app.js file is the code that registers, initialises and runs Hotplate modules. That's easily done:
 (See **[first_hotplate]**)
 
 
