@@ -1,71 +1,26 @@
 
-/*
- * Module dependencies.
- */
-
 var dummy
 , async = require('async')
 , EventEmitterCollector = require("eventemittercollector")
+, DeepObject = require("deepobject")
 ;
-
 
 var hotplate = exports;
 
+hotplate.require = function( m ){ return require( m ); }
+hotplate.cachable = async.memoize;
+hotplate.hotEvents = new EventEmitterCollector();
+hotplate.config = new DeepObject();
 
-// Set basic options to start with
-exports.options = {};
-exports.options.staticUrlPath = '/hotplate'; // REMEMBER '/' at the beginning
-exports.options.errorPage = function(req, res, next){ res.send( "ERROR: " ); } //  + req.application.error.message ); }
-exports.options.logToScreen = true;
+// Sane hotplate-wide defaults
+// You can and should) over-ride them in your server.js file
+hotplate.config.set( 'hotplate.staticUrlPath', '/hotplate' ); // REMEMBER '/' at the beginning
+hotplate.config.set( 'hotplate.logToScreen', 'true' );
+hotplate.config.set( 'hotplate.db', null );
 
-// Initialise app to an empty object
-exports.app = {}; // A link to the express App, as submodules might need it
-
-// Sets the module-wide `app` variable, used by a lot of modules
-// to set routes etc.
-exports.setApp = function(app){
-  exports.app = app;
-}
-
-
-// Allows other modules to require hotplate-specific ones, located
-// under hotplate's directory tree
-exports.require = function( m ){
-  return require( m );
-}
-
-
-// Set the module's `options` variable
-exports.set = function( key, value ) {
-
-  // It's a get
-  if (arguments.length == 1) return exports.options[ key ];
-
-  // It's a set -- Set the relevant key
-  exports.options[ key ] = value;
-
-  return this;
-};
-
-// Get the value of the options variable.
-// Note that this is the same function as `set()`, which will
-// check the signatures and will act as a `get()` or as a `set()`
-// accordingly
-exports.get = exports.set;
-
-
-
-
-// Logs something to the screen if `logToScreen` is true
-exports.log = function(){
-  if( hotplate.get('logToScreen') ){
-    console.log.apply(this, arguments);
+hotplate.log = function(){
+  if( hotplate.config.get('logToScreen') ){
+    console.log.apply( this, arguments );
   }
 }
-
-
-exports.cachable = async.memoize;
-exports.hotEvents = new EventEmitterCollector();
-
-
 
