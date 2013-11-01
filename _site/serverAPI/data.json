@@ -84,7 +84,7 @@
             "namespaces": {},
             "tag": "main",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 21,
+            "line": 24,
             "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
             "itemtype": "main"
         },
@@ -128,7 +128,7 @@
             "extension_for": [],
             "module": "hotCoreAuth",
             "file": "hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js",
-            "line": 19,
+            "line": 13,
             "static": 1
         },
         "hotCoreAuth": {
@@ -142,7 +142,7 @@
             "module": "hotCoreAuth",
             "namespace": "",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 21,
+            "line": 24,
             "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
             "mainName": "hotCoreAuth",
             "tag": "main",
@@ -189,7 +189,7 @@
     "classitems": [
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/auth/facebook.js",
-            "line": 24,
+            "line": 18,
             "description": "Implements the ExpressJs routes to make the Facebook strategy work.  \nIt implements:\n\n  * Manager: `/auth/manager/facebook`, `/auth/manager/facebook/callback`\n  * Signin: `/auth/signin/facebook`, `/auth/manager/signin/callback`\n  * Recover: `/auth/recover/facebook`, `/auth/manager/recover/callback`\n  * Register: `/auth/register/facebook`, `/auth/manager/register/callback`\n  * Resume: `/auth/resume/facebook`, `/auth/manager/resume/callback`",
             "itemtype": "method",
             "name": "hotCoreAuth.facebook",
@@ -197,7 +197,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 48,
+            "line": 86,
             "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UserStrategies, AuthStrategies, UserLogins)",
             "itemtype": "event",
             "name": "init",
@@ -209,7 +209,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 288,
+            "line": 320,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "run",
@@ -227,7 +227,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 35,
+            "line": 33,
             "description": "Call the hook `clientPaths`, and store the results\nin `localLocations`",
             "itemtype": "event",
             "name": "init",
@@ -236,7 +236,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 61,
+            "line": 59,
             "description": "Returns a function that will serve files that are set as\npublic by other modules by implementing the `clientPaths` hook",
             "itemtype": "method",
             "name": "serve",

@@ -1,77 +1,61 @@
 
-  "TOMORROW"
-    * Test "reset", make sure that user has permissions to access the workspace when returning WS configuration after reset
-    * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
+  MAJOR HOTPLATE CLEANUP
+  ----------------------
 
-  MONGO:
-    Add mass deletion in API
-    Add range fields (from schema?)
-    Add cursor (with delete option) in API
+  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
+  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
 
-  COMET:
-    hotCoreComet:
-      * Mass Deletion of tab messages when tab gets deleted
-      * Mass deletion of tab messages when tab expires (cron job too?)
-      * See if/when using cursors makes sense
+  SMALL THINGS:
+  -------------
+  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
 
-  3-5 DAYS:
-  ----
-  * Make Comet messenging work again using JsonRestStores API only (it's currently completely broken)
-    ./hotCoreCometMessages/lib/hotCoreCometMessages.js <--- Check store permissions
-    * STORES: Add ability to filter for ranges as part of the JsonRestStore if necessary. YES do this one, it's necessary. Make it work
-              from URLs as well with searchSchema specific fields
-    * STORES: Add ability to scan through GetQuery by calling a function rather than returning an Array
-    * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
-      "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+  * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
+
+  * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
+    cast function from the other one (they got bundled) for code clarity
+
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
 
 
-  NOTE: Summary of things to be added to JsonRestStores:
-  * Ability to have a default "order" field, which will be influenced by "placeBefore" in options
-  * Ability to have range fields
-  * Ability to have getQuery that returns a function rather than an array
-  This will be enough for the messaging infrastructure, as well as the Comet infrastructure
-
-
-
-  REWRITE:
-    AND THEN! Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
-    AND THEN! Rewrite the Dojo side, so that it loads module in a much more dojo-style way
-
-  ------------------------------------------------
-
-  1 DAY
-  -----
+  VISIBLE STUFF:
+  --------------
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
-
-  2 DAYS
-  ------
+ 
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
+    * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
+    * Add "placeBefore" header to JsonRestStores calls
+    * Check that placeBefore is passed on and considered by Observer
+    * Make sure you can DnD freely between two boxes
 
-  1 DAY
-  -----
-  * Improve the look of widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
+  * Improve StoreSelect and EditableList:
+    * With "refreshData", change "refresh" to clickable overlay 
+    * catch dgrid errors with overlay if necessary
+
+  * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   --------------------------
-  DEADLINE: 30th October 2013
+  DEADLINE: 30th November 2013
   --------------------------
 
-
-  **************************************************************************************************************************
-  Note: at this point, I can create a store server-side in 2 minutes, _and_ a view/editing system client-side in 10 minutes.
-  **************************************************************************************************************************
+  ***************************
+  * DOCUMENT THE ABSOLUTE LOT
+  ***************************
 
   "THE MISSING PIECES"
 
   Message infrastructure:
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages. Note: this is simply a very fancy
-    JsonRest store
+    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
+
+  * Develop the "booking inbox" for incoming emails/SMSes
 
   User management and invites in Hotplate:
 
@@ -81,18 +65,15 @@
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
     added to that workspace (UsersWorkspaces store)
 
-
   * Add a "user management" section in settings for Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
-  * Develop the "booking inbox" for incoming emails
-
 
   ------------------------------
-  DEADLINE: 30th November 2013
+  DEADLINE: 30th December 2013
   ------------------------------
 
                           ----------------------------
@@ -104,14 +85,14 @@
 
   PHASE 1: Information
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to set products for each contact (once|minute|hour|day rate, commission-only allowed, restrict who can buy/offer it,
-    money range: from/to booking owner, from/to person, tangible/intangible, tax rate, that's it )
-  * Ability to create bookings. For each person added, [ product, quantity, $ from/to booking owner, $ from/to person, from time, to time]
+  * Ability to set products for each contact:
+    product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
+  * Ability to create bookings. For each person added, [ product, quantity OR from/to times, accounting entries ]
   * Ability to set templates for messages of different types, with previews
 
   PHASE 2: Money/billing
   * Accounting entries for products for each booking (with system-calculated ones)
-  * Interface with payment system
+  * Interface with payment system (Paypal?)
   * Ability to send invoices and _store_ received invoices
 
 
@@ -399,6 +380,29 @@
       * [DONE] Change messages so that storeTarget is out of the equation, with store(storeName) returning all stores in cache
       * [DONE] Rewrite backend so that it figures out, based on IDs, if a store is a list of is a 1-record gig
       * [DONE] Rewrite Dojo-side so that it places things into the cache accordingly
-
-
-
+  * make sure that user has permissions to access the workspace when returning WS configuration after reset
+  * In hotCoreStoreConfig, make sure that pageElementsPerPage uses workspaceId only if multiHome is enabled
+  * MONGO: Add range fields (from schema?)
+  * MONGO: Add mass deletion in API
+  * COMET: Mass Deletion of tab messages when tab gets deleted
+  * COMET: Mass Deletion of tab messages when tab expires (cron job too?)
+  * Restructured the whole Comet architecture so that it's all neat and nice to look at.
+  * Checked permissions for   hotCoreCometMessages/lib/hotCoreCometMessages.js
+  * Made Comet messenging work again 100% using JsonRestStores API only
+  * MONGO: Add cursor (with delete option) in API
+  * COMET:  See if/when using cursors makes sense
+  * Add "remove on fetch" for cursor-based queries (mongoDriver)
+  * Add extrapolateAndPrepare in _makeQuery (JsonRestStores)
+  * Make sure self.post**** are always the very last step in the chain, it's been "pushed up"
+  * See if MassUpdate makes sense, it might well be as it would complete the API. Will need to allow partial updates though
+  * Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
+  * Use "cachable" function for cachable hooks
+  * Write a totally custom class rather than extending eventEmitter. Write it so that registering a function requires the module's name,
+   and invokeAll groups by moduleName. 
+  * In new Invoke, write the aggregating functions and allow invoking for a specific module! 
+  * Simplify the return of moduleName in events, change hook.stores() so that it can return an object
+  * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
+  * Check that everything actually works
+  * Get rid of all the registration functions in hotplate, which are now obsolete
+  * Move AsyncCollectEvents to its own github module
+  * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
