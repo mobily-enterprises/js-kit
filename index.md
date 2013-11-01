@@ -9,13 +9,12 @@ Hotplate is a framework that allows you to create 201X software in no time.
 By 201X software I mean software that:
 
 * allows you to log in using Facebook, Google, Twitter, Oauth1/2, or... well, login/password pair if you like
-* available anywhere with a Javascript runtime (see: any modern browser)
+* shows information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well. If you change your name, other users will need to see the update right away.
 * _feels like_ software, and not like a bunch of web pages
 * uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data stores that are JSON-REST compatible
 * handles errors (including, and in fact _especially_, network errors) properly. If anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong
 * has the ability to communicate to your users in different ways: email, SMS, and whatever the world throws at us
-* shows information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well
-* is written as a bunch of small, maintainable modules
+* is written as a bunch of small, independent, maintainable modules
 
 I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don't know, and I frankly don't care. I wrote Hotplate because I felt that this is what software _should_ be in 201X -- which is now.
 
@@ -55,10 +54,9 @@ Hotplate comes with comprehensive documentation **[Note: not yet, documentation 
 
 * Authentication: DONE
 * General code cleanup: DONE
-* Fixing hotCoreCometMessages for real time comet updates: IN THE WORKS
-* Write a sample, small application: UPCOMING
+* Fixing hotCoreCometMessages for real time comet updates: DONE
+* Write a sample, small application: IN THE WORKS
 * Writing the messenging framework: UPCOMING
-* Wire up the messenging framework with sample application: UPCOMING
 
 
 
