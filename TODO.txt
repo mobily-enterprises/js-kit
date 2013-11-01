@@ -2,18 +2,19 @@
   MAJOR HOTPLATE CLEANUP
   ----------------------
 
+ 
+  --1 DAY
   * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
 
   SMALL THINGS:
   -------------
+
+  --2 DAYS
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
-
   * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
-
   * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
     cast function from the other one (they got bundled) for code clarity
-
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
@@ -21,21 +22,29 @@
 
   VISIBLE STUFF:
   --------------
+  --3 DAYS
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
     Make sure you have "contact type" in the list of configurations
- 
+
+  --2 DAYS
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
     * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
     * Add "placeBefore" header to JsonRestStores calls
     * Check that placeBefore is passed on and considered by Observer
     * Make sure you can DnD freely between two boxes
 
+  --1 DAYS
   * Improve StoreSelect and EditableList:
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
 
+  --1 DAY
+  * Make sure that indexes are created/set automatically by store library
+
+  --3 DAYS
   * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+
 
   --------------------------
   DEADLINE: 30th November 2013
