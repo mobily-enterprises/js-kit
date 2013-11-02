@@ -1,7 +1,6 @@
 
   MAJOR HOTPLATE CLEANUP
   ----------------------
-
  
   --1 DAY
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
