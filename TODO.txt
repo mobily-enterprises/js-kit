@@ -4,7 +4,6 @@
 
  
   --1 DAY
-  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
 
   SMALL THINGS:
@@ -415,3 +414,4 @@
   * Get rid of all the registration functions in hotplate, which are now obsolete
   * Move AsyncCollectEvents to its own github module
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
+  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
