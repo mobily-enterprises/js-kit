@@ -414,3 +414,4 @@
   * Move AsyncCollectEvents to its own github module
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
   * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
+  * Make sure that it all works with "use strict";

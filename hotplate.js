@@ -10,6 +10,8 @@ var hotplate = exports;
 hotplate.require = function( m ){ return require( m ); }
 hotplate.cachable = async.memoize;
 hotplate.hotEvents = new EventEmitterCollector();
+
+
 hotplate.config = new DeepObject();
 
 // Sane hotplate-wide defaults
@@ -24,3 +26,8 @@ hotplate.log = function(){
   }
 }
 
+var origEmit = hotplate.hotEvents.emit;
+hotplate.hotEvents.emit = function(){
+  hotplate.log("Emitted event: " + arguments[0] );
+  origEmit.apply( this, arguments );
+}
