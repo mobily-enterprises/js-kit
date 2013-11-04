@@ -415,3 +415,10 @@
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
   * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
   * Make sure that it all works with "use strict";
+  * Made _getTabId() more robust in case the header is not there
+  * Fixed registration with username/password, which was broken
+  * Simplified the flow of all functions in JsonRestStores. More verbose, but clearer
+  * Made sure that default error page sends the right HTTP error code
+  * Added forgotten error check, minor formatting issues and small issues fixed, indentations
+  * Now using Put instead of Post to create predefined user records (current system broken) fix "Put" which doesn't work
+  * Finally using hotplate.log, and added tracer, so that logging is much much saner
