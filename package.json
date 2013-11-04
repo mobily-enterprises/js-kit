@@ -8,6 +8,7 @@
     "express": "3.x",
     "async": "*",
     "send": "*",
+    "tracer": "*",
     "hotCore": "*",
     "hotCoreClientFiles": "*",
     "hotCoreCommonValidators": "*",

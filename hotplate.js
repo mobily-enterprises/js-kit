@@ -3,6 +3,7 @@ var dummy
 , async = require('async')
 , EventEmitterCollector = require("eventemittercollector")
 , DeepObject = require("deepobject")
+, logger = require('tracer').console()
 ;
 
 var hotplate = exports;
@@ -10,8 +11,6 @@ var hotplate = exports;
 hotplate.require = function( m ){ return require( m ); }
 hotplate.cachable = async.memoize;
 hotplate.hotEvents = new EventEmitterCollector();
-
-
 hotplate.config = new DeepObject();
 
 // Sane hotplate-wide defaults
@@ -22,7 +21,7 @@ hotplate.config.set( 'hotplate.db', null );
 
 hotplate.log = function(){
   if( hotplate.config.get('logToScreen') ){
-    console.log.apply( this, arguments );
+    logger.log.apply( this, arguments );
   }
 }
 
