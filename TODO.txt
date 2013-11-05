@@ -1,14 +1,8 @@
 
-  MAJOR HOTPLATE CLEANUP
-  ----------------------
- 
-  --1 DAY
-  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
-
   SMALL THINGS:
   -------------
 
-  --1 DAY
+  --2 DAY
   * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
   * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
     cast function from the other one (they got bundled) for code clarity
@@ -421,3 +415,4 @@
   * Added forgotten error check, minor formatting issues and small issues fixed, indentations
   * Now using Put instead of Post to create predefined user records (current system broken) fix "Put" which doesn't work
   * Finally using hotplate.log, and added tracer, so that logging is much much saner
+  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
