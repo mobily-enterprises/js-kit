@@ -8,11 +8,11 @@
   SMALL THINGS:
   -------------
 
-  --2 DAYS
-  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+  --1 DAY
   * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
   * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
     cast function from the other one (they got bundled) for code clarity
+  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
@@ -101,7 +101,6 @@
   * Accounting entries for products for each booking (with system-calculated ones)
   * Interface with payment system (Paypal?)
   * Ability to send invoices and _store_ received invoices
-
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
