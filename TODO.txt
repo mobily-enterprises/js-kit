@@ -2,7 +2,7 @@
   SMALL THINGS:
   -------------
 
-  --2 DAY
+  --2 DAYS
   * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
   * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
     cast function from the other one (they got bundled) for code clarity
