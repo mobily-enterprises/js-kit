@@ -2,15 +2,15 @@
   SMALL THINGS:
   -------------
 
-  --2 DAYS
-  * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
+  --3 DAYS
   * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
     cast function from the other one (they got bundled) for code clarity
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
-
+  * Add body preprocessing to methods other than POST in JsonRestStores
+  * Make sure that sample application has security checks when writing records, check the WHOLE of hotplate in general
 
   VISIBLE STUFF:
   --------------
@@ -416,3 +416,6 @@
   * Now using Put instead of Post to create predefined user records (current system broken) fix "Put" which doesn't work
   * Finally using hotplate.log, and added tracer, so that logging is much much saner
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
+  * Made the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
+  * Made sure things actually DO work even if no db driver is used
+  * Understood the strange 404 error, came up when tabs expire <--- this one was horrible
