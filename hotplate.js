@@ -17,7 +17,11 @@ hotplate.config = new DeepObject();
 // You can (and should) over-ride them in your server.js file
 hotplate.config.set( 'hotplate.staticUrlPath', '/hotplate' ); // REMEMBER '/' at the beginning
 hotplate.config.set( 'hotplate.logToScreen', 'true' );
+
+// Db settings
 hotplate.config.set( 'hotplate.db', null );
+hotplate.config.set( 'hotplate.DriverMixin', function(){ } );
+hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
 
 hotplate.log = function(){
   if( hotplate.config.get('logToScreen') ){
