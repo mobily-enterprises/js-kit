@@ -1,22 +1,39 @@
 
-  SMALL THINGS:
+  SERVER SIDE
   -------------
 
+  --2 DAYS
+  * Write tingoDb module with tests
+  * Write tests for SimpleDbLayer, test with mongodb and tingodb
+  * Split SimpleSchema into two
+  * Write tests for SimpleSchema and for SimpleSchemaMongo
+
+  --2 DAYS
+  * Write tests for JsonRestStores, run them against tingodb
+
+  --2 DAYS
+  * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
+  * Document and write tests for DeepObject and add class methods to work on a specific object
+  * Document and write tests for EventEmitterCollector
+
   --3 DAYS
-  * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
-    cast function from the other one (they got bundled) for code clarity
+  * Change hotplate so that it works with new JsonRestStores/SimpleSchema
+
+  --2 DAYS
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
-  * Add body preprocessing to methods other than POST in JsonRestStores
-  * Make sure that sample application has security checks when writing records, check the WHOLE of hotplate in general
+  * Make sure that sample application has security checks when writing records, check the WHOLE of hotplate in general for sanity
 
-  VISIBLE STUFF:
+  --1 DAY
+  * Make sure that indexes are created/set automatically by simpleSchema library
+
+  CLIENT SIDE
   --------------
+
   --3 DAYS
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
-    Make sure you have "contact type" in the list of configurations
+  * Add "contact type" in the list of configurations in configuration screen
 
   --2 DAYS
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
@@ -30,21 +47,20 @@
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
 
-  --1 DAY
-  * Make sure that indexes are created/set automatically by store library
-
-  --3 DAYS
+  --2 DAYS
   * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
 
   --------------------------
   DEADLINE: 30th November 2013
   --------------------------
 
-  ***************************
-  * DOCUMENT THE ABSOLUTE LOT
-  ***************************
+  AND FINALLY
+  --------------
+
+  --5 DAYS
+  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
+  * Write a quickstart guide to write a hotplate application
 
   "THE MISSING PIECES"
 
@@ -55,12 +71,11 @@
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
-
   * Develop the "booking inbox" for incoming emails/SMSes
 
   User management and invites in Hotplate:
 
-  * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
+  * Write an "invite user" mechanism where users can be invited into the system: they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
@@ -71,7 +86,6 @@
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
-
 
   ------------------------------
   DEADLINE: 30th December 2013
@@ -419,3 +433,9 @@
   * Made the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
   * Made sure things actually DO work even if no db driver is used
   * Understood the strange 404 error, came up when tabs expire <--- this one was horrible
+  * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search)
+  * Major rewriting of SimpleSchema and JsonRestStores, changing hotplate too
+  * Change _checkParamIds in JsonRestStores so that it uses a much saner approach
+  * Add body preprocessing to methods other than POST in JsonRestStores
+  * Add generic, schema-less driver
+  * Decide on the unit test library I will stick with for the next week
