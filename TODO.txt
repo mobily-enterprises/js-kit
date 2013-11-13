@@ -2,14 +2,19 @@
   SERVER SIDE
   -------------
 
-  --2 DAYS
-  * Write tingoDb module with tests
-  * Write tests for SimpleDbLayer, test with mongodb and tingodb
+  --3 DAYS
+  * Finish writing tests for SimpleDbLayer
+  * Write list of problems for TingoDb with tickets (select with regexp)
+  * Write mongoDb-specific tests, plug them in somehow
+
+  * Find way to allow case-insensitive searches, add "indexes" hash and query those instead
+
   * Split SimpleSchema into two
   * Write tests for SimpleSchema and for SimpleSchemaMongo
 
-  --2 DAYS
-  * Write tests for JsonRestStores, run them against tingodb
+
+  --4 DAYS
+  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using APOI and checking internal param functions
 
   --2 DAYS
   * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
@@ -17,7 +22,7 @@
   * Document and write tests for EventEmitterCollector
 
   --3 DAYS
-  * Change hotplate so that it works with new JsonRestStores/SimpleSchema
+  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema
 
   --2 DAYS
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
@@ -27,7 +32,7 @@
   * Make sure that sample application has security checks when writing records, check the WHOLE of hotplate in general for sanity
 
   --1 DAY
-  * Make sure that indexes are created/set automatically by simpleSchema library
+  * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
 
   CLIENT SIDE
   --------------
