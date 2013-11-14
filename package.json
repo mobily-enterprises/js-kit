@@ -5,10 +5,10 @@
   "version": "0.3.0",
   "private": false,
   "dependencies": {
-    "express": "3.x",
     "async": "0.2.x",
-    "send": "0.1.x",
     "tracer": "0.6.x",
+    "deepobject": "0.3.x",
+    "eventemittercollector": "0.3.x",
     "hotCore": "*",
     "hotCoreClientFiles": "*",
     "hotCoreCommonValidators": "*",
