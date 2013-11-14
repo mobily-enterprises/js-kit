@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "dependencies": {
     "async": "0.2.x",
