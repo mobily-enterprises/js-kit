@@ -3,18 +3,15 @@
   -------------
 
   --3 DAYS
-  * Finish writing tests for SimpleDbLayer
-  * Write list of problems for TingoDb with tickets (select with regexp)
+  * Check versions in packages.js for all recent modules
   * Write mongoDb-specific tests, plug them in somehow
-
   * Find way to allow case-insensitive searches, add "indexes" hash and query those instead
 
   * Split SimpleSchema into two
   * Write tests for SimpleSchema and for SimpleSchemaMongo
 
-
   --4 DAYS
-  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using APOI and checking internal param functions
+  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using API and checking internal param functions
 
   --2 DAYS
   * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
@@ -22,7 +19,7 @@
   * Document and write tests for EventEmitterCollector
 
   --3 DAYS
-  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema
+  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema, check ALL schemas
 
   --2 DAYS
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
@@ -54,6 +51,7 @@
 
   --2 DAYS
   * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
+  * Check all CSSes
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
   --------------------------
@@ -444,3 +442,7 @@
   * Add body preprocessing to methods other than POST in JsonRestStores
   * Add generic, schema-less driver
   * Decide on the unit test library I will stick with for the next week
+  * Finish writing tests for SimpleDbLayer
+  * Change way in which totals are returned for noncursor queries, use third parameter. UPDATE DOCUMENTATION
+  * Change queries so that they work as documented
+  * Understand seriously when/how errors are silent
