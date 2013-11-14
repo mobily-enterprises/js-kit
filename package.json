@@ -2,13 +2,13 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.1.57",
+  "version": "0.3.0",
   "private": false,
   "dependencies": {
     "express": "3.x",
-    "async": "*",
-    "send": "*",
-    "tracer": "*",
+    "async": "0.2.x",
+    "send": "0.1.x",
+    "tracer": "0.6.x",
     "hotCore": "*",
     "hotCoreClientFiles": "*",
     "hotCoreCommonValidators": "*",
@@ -62,12 +62,5 @@
     "hotCoreComet",
     "hotCoreStoreLogger",
     "hotCoreMultiHome"
-  ],
-  "subdomain": "mercmobily-hotplate",
-  "scripts": {
-    "start": ""
-  },
-  "engines": {
-    "node": "0.8.x"
-  }
+  ]
 }
