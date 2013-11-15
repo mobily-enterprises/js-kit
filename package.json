@@ -2,8 +2,12 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mercmobily/hotplate.git"
+  },
   "dependencies": {
     "async": "0.2.x",
     "tracer": "0.6.x",
@@ -43,6 +47,7 @@
     "hotCoreError",
     "hotCoreHandyCss",
     "hotCorePage",
+    "hotCoreJsonRestStores",
     "hotCoreErrorProtocol",
     "hotCoreServerLogger",
     "hotCoreSharedCode",
