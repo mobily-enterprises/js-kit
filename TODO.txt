@@ -2,68 +2,67 @@
   SERVER SIDE
   -------------
 
-  --3 DAYS
-  * Check versions in packages.js for all recent modules
-  * Write mongoDb-specific tests, plug them in somehow
-  * Find way to allow case-insensitive searches, add "indexes" hash and query those instead
+Implement TODOs in hotCoreComet (mainly mass delete)
+Understand userId breaking when registering
+Understand `required` in paramId fields (yes? No? How?)
 
-  * Split SimpleSchema into two
-  * Write tests for SimpleSchema and for SimpleSchemaMongo
 
-  --4 DAYS
-  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using API and checking internal param functions
+  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema, check ALL schemas, must have filterType/filterCondition
+  *
+  *
+  * Change all "_id" into "id", change UserStrategies into UsersStrategy & others, change storeName to capital letters
 
-  --2 DAYS
-  * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
-  * Document and write tests for DeepObject and add class methods to work on a specific object
-  * Document and write tests for EventEmitterCollector
-
-  --3 DAYS
-  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema, check ALL schemas
-
-  --2 DAYS
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
-  * Make sure that sample application has security checks when writing records, check the WHOLE of hotplate in general for sanity
 
-  --1 DAY
+  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
+  *
+
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
+  *
+  *
 
   CLIENT SIDE
   --------------
 
-  --3 DAYS
   * Add "contact type" in the list of configurations in configuration screen
+  *
 
-  --2 DAYS
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
+  *
     * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
     * Add "placeBefore" header to JsonRestStores calls
     * Check that placeBefore is passed on and considered by Observer
     * Make sure you can DnD freely between two boxes
 
-  --1 DAYS
   * Improve StoreSelect and EditableList:
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
 
-  --2 DAYS
   * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
-  * Check all CSSes
-  * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  --------------------------
-  DEADLINE: 30th November 2013
-  --------------------------
+  * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+
+  * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
+  *
 
   AND FINALLY
   --------------
 
-  --5 DAYS
   * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
+  *
+  *
+
   * Write a quickstart guide to write a hotplate application
+  *
+  *
+
+  --------------------------
+  DEADLINE: 30th December 2013
+  --------------------------
 
   "THE MISSING PIECES"
 
@@ -90,9 +89,10 @@
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
-  ------------------------------
-  DEADLINE: 30th December 2013
-  ------------------------------
+  ---------------------------
+  DEADLINE: 30th January 2013
+  ---------------------------
+
 
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
@@ -105,13 +105,14 @@
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to set products for each contact:
     product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
-  * Ability to create bookings. For each person added, [ product, quantity OR from/to times, accounting entries ]
+  * Ability to create proper bookings: For each person added, [ product, quantity OR from/to times, accounting entries ]
   * Ability to set templates for messages of different types, with previews
 
   PHASE 2: Money/billing
-  * Accounting entries for products for each booking (with system-calculated ones)
+  * Accounting summaries for each booking (with system-calculated ones)
   * Interface with payment system (Paypal?)
-  * Ability to send invoices and _store_ received invoices
+  * Ability to send invoices
+  * Ability to _store_ received invoices
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -446,3 +447,12 @@
   * Change way in which totals are returned for noncursor queries, use third parameter. UPDATE DOCUMENTATION
   * Change queries so that they work as documented
   * Understand seriously when/how errors are silent
+  * Check versions in packages.js for all recent modules
+  * Write mongoDb-specific tests, plug them in somehow
+  * Find way to allow case-insensitive searches, add "indexes" hash and query those instead
+  * Add case insensitive searches to TingoDb
+  * Split SimpleSchema into two, document SimpleSchema, write tests for SimpleSchema and for SimpleSchemaMongo, decide with serialize
+  * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
+  * Document and write tests for DeepObject and add class methods to work on a specific object
+  * Document and write tests for EventEmitterCollector
+  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using API and checking internal param functions
