@@ -2,15 +2,18 @@
   SERVER SIDE
   -------------
 
-Implement TODOs in hotCoreComet (mainly mass delete)
-Understand userId breaking when registering
-Understand `required` in paramId fields (yes? No? How?)
+ = Tune up hotplate's code:
+
+  *
+    Change all "_id" into "id", final detachment from MongoDb...
+    Check all hotplate schemas in general, check for `searchable`, take 'required' out of paramId fields
+    Change UserStrategies into UsersStrategy & others
+    Change storeName to capital letters
+
+  *
 
 
-  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema, check ALL schemas, must have filterType/filterCondition
-  *
-  *
-  * Change all "_id" into "id", change UserStrategies into UsersStrategy & others, change storeName to capital letters
+  * Change config stores so that important parameters CAN be required, use DbLayer to add them
 
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
 
@@ -28,6 +31,9 @@ Understand `required` in paramId fields (yes? No? How?)
   CLIENT SIDE
   --------------
 
+  * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
+
+
   * Add "contact type" in the list of configurations in configuration screen
   *
 
@@ -42,12 +48,7 @@ Understand `required` in paramId fields (yes? No? How?)
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
 
-  * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
-
-  * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
-  * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
-  *
+  * Understand how to make un-invasive CSSes, "get" CSSes
 
   AND FINALLY
   --------------
@@ -56,13 +57,16 @@ Understand `required` in paramId fields (yes? No? How?)
   *
   *
 
-  * Write a quickstart guide to write a hotplate application
-  *
-  *
+  * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
+
+  * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+
 
   --------------------------
   DEADLINE: 30th December 2013
   --------------------------
+
+  * Write a quickstart guide to write a hotplate application
 
   "THE MISSING PIECES"
 
@@ -92,6 +96,8 @@ Understand `required` in paramId fields (yes? No? How?)
   ---------------------------
   DEADLINE: 30th January 2013
   ---------------------------
+
+  * Document the WHOLE thing
 
 
                           ----------------------------
@@ -456,3 +462,7 @@ Understand `required` in paramId fields (yes? No? How?)
   * Document and write tests for DeepObject and add class methods to work on a specific object
   * Document and write tests for EventEmitterCollector
   * Write tests for JsonRestStores (which will be buggy as hell). Test it by using API and checking internal param functions
+  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema
+  * Implement TODOs in hotCoreComet (mainly mass delete)
+  * Make handleXXXX option FALSE by default, check that things still work
+  * Last fix to JsonRestStores -- the paramId issue for updates
