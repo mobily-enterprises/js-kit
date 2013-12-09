@@ -4,25 +4,14 @@
 
  = Tune up hotplate's code:
 
-  *
-    Change all "_id" into "id", final detachment from MongoDb...
-    Check all hotplate schemas in general, check for `searchable`, take 'required' out of paramId fields
-    Change UserStrategies into UsersStrategy & others
-    Change storeName to capital letters
+  * Make things work (again)
+    Set example application's store names to new standards
 
-  *
-
+  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
 
   * Change config stores so that important parameters CAN be required, use DbLayer to add them
 
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
-
-  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
-    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
-
-  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
-  *
 
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
   *
@@ -30,6 +19,10 @@
 
   CLIENT SIDE
   --------------
+
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
 
   * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
 
@@ -99,6 +92,11 @@
 
   * Document the WHOLE thing
 
+
+  LATER
+  -----
+  * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
+  * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
 
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
@@ -466,3 +464,7 @@
   * Implement TODOs in hotCoreComet (mainly mass delete)
   * Make handleXXXX option FALSE by default, check that things still work
   * Last fix to JsonRestStores -- the paramId issue for updates
+  * Change all "_id" into "id", final detachment from MongoDb...
+  * Check all hotplate schemas in general, check for `searchable`, take 'required' out of paramId fields
+  * Change UserStrategies into UsersStrategy & others
+  * Change storeName to capital letters
