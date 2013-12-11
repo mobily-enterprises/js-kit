@@ -2,10 +2,7 @@
   SERVER SIDE
   -------------
 
- = Tune up hotplate's code:
-
-  * Make things work (again)
-    Set example application's store names to new standards
+  * Set example application's store names to new standards
 
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
 
@@ -14,7 +11,6 @@
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
 
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
-  *
   *
 
   CLIENT SIDE
@@ -468,3 +464,5 @@
   * Check all hotplate schemas in general, check for `searchable`, take 'required' out of paramId fields
   * Change UserStrategies into UsersStrategy & others
   * Change storeName to capital letters
+  * Make things work (again)
+  * Finish rewriting hotCorePage 
