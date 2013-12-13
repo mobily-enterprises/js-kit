@@ -2,8 +2,7 @@
   SERVER SIDE
   -------------
 
-  * Make bookingdojo "simply work", publish it online
-    Set example application's store names to new standards
+  * Set example application's store names to new standards
 
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
 
@@ -467,3 +466,4 @@
   * Change storeName to capital letters
   * Make things work (again)
   * Finish rewriting hotCorePage 
+  * Make bookingdojo "simply work", publish it online
