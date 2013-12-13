@@ -2,7 +2,8 @@
   SERVER SIDE
   -------------
 
-  * Set example application's store names to new standards
+  * Make bookingdojo "simply work", publish it online
+    Set example application's store names to new standards
 
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
 
