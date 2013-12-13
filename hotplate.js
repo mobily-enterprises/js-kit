@@ -20,7 +20,7 @@ hotplate.config.set( 'hotplate.logToScreen', 'true' );
 
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
-hotplate.config.set( 'hotplate.DriverMixin', function(){ } );
+hotplate.config.set( 'hotplate.DbLayerMixin', function(){ } );
 hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
 
 hotplate.log = function(){
