@@ -1,9 +1,8 @@
-
 var dummy
 , async = require('async')
 , EventEmitterCollector = require("eventemittercollector")
 , DeepObject = require("deepobject")
-, logger = require('tracer').console()
+, tracer = require('tracer');
 ;
 
 var hotplate = exports;
@@ -16,17 +15,19 @@ hotplate.config = new DeepObject();
 // Sane hotplate-wide defaults
 // You can (and should) over-ride them in your server.js file
 hotplate.config.set( 'hotplate.staticUrlPath', '/hotplate' ); // REMEMBER '/' at the beginning
-hotplate.config.set( 'hotplate.logToScreen', 'true' );
 
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
 hotplate.config.set( 'hotplate.DbLayerMixin', function(){ } );
 hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
 
-hotplate.log = function(){
-  if( hotplate.config.get('logToScreen') ){
-    logger.log.apply( this, arguments );
-  }
+// Logger, stolen from tracer.console()
+var colorConsole = tracer.colorConsole({ transport: function( data ){ process.stderr.write( data.output + "\n" ); } } );
+hotplate.logger = colorConsole;
+hotplate.log = colorConsole.log; // Shorthand
+hotplate.error = colorConsole.error; // Shorthand
+hotplate.killLogging = function(){
+  hotplate.logger =  hotplate.log = hotplate.error = function(){};
 }
 
 var origEmit = hotplate.hotEvents.emit;
