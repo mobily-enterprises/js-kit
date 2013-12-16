@@ -2,9 +2,8 @@
   SERVER SIDE
   -------------
 
-  * Change example application to new naming standards, test permission checks just implemented
-
-  * Change config stores so that important parameters CAN be required, use DbLayer to add them
+  * staticUrlPath -> moduleFilesPrefix, dynamicUrlPrefix -> urlsPrefix, hotCoreStoreExposer.storeUrlPrefix -> hotCoreStoreExposer.storeUrlsPrefix
+    Change config stores so that important parameters CAN be required, use DbLayer to add them
 
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
 
@@ -475,3 +474,5 @@
   * Make bookingdojo "simply work", publish it online
   * Set example application's store names to new standards
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
+  * Change example application to new naming standards, test permission checks just implemented
+  * Decide on path standards: prefix for stores, module file paths, all other urls
