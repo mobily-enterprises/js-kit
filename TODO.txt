@@ -2,13 +2,13 @@
   SERVER SIDE
   -------------
 
-  * Set example application's store names to new standards
-
-  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
+  * Change example application to new naming standards, test permission checks just implemented
 
   * Change config stores so that important parameters CAN be required, use DbLayer to add them
 
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+
+  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreMultiHome)
 
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
   *
@@ -50,6 +50,12 @@
 
   * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
+
+  CLIENT WANTS:
+  -------------
+  BackboneJS
+  Angular
+  Dojo -- DONE
 
   --------------------------
   DEADLINE: 30th December 2013
@@ -467,3 +473,5 @@
   * Make things work (again)
   * Finish rewriting hotCorePage 
   * Make bookingdojo "simply work", publish it online
+  * Set example application's store names to new standards
+  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
