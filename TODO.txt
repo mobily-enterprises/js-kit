@@ -2,8 +2,7 @@
   SERVER SIDE
   -------------
 
-  * staticUrlPath -> moduleFilesPrefix, dynamicUrlPrefix -> urlsPrefix, hotCoreStoreExposer.storeUrlPrefix -> hotCoreStoreExposer.storeUrlsPrefix
-    Change config stores so that important parameters CAN be required, use DbLayer to add them
+  * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
 
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
 

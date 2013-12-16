@@ -14,8 +14,8 @@ hotplate.config = new DeepObject();
 
 // Sane hotplate-wide defaults
 // You can (and should) over-ride them in your server.js file
-hotplate.config.set( 'hotplate.staticUrlPath', '/hotplate' ); // REMEMBER '/' at the beginning
-hotplate.config.set( 'hotplate.dynamicUrlPrefix', '/pages' ); // REMEMBER '/' at the beginning
+hotplate.config.set( 'hotplate.moduleFilesPrefix', '/hotplate' ); // REMEMBER '/' at the beginning
+hotplate.config.set( 'hotplate.routeUrlsPrefix', '/pages' ); // REMEMBER '/' at the beginning
 
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
