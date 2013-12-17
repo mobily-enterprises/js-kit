@@ -2,10 +2,6 @@
   SERVER SIDE
   -------------
 
-  * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
-
-  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
-
   * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreMultiHome)
 
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
@@ -475,3 +471,5 @@
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
   * Change example application to new naming standards, test permission checks just implemented
   * Decide on path standards: prefix for stores, module file paths, all other urls
+  * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
+  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
