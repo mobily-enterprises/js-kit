@@ -2,11 +2,6 @@
   SERVER SIDE
   -------------
 
-  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreMultiHome)
-
-  * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
-  *
-
   CLIENT SIDE
   --------------
 
@@ -16,12 +11,11 @@
 
   * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
 
-
   * Add "contact type" in the list of configurations in configuration screen
   *
 
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
-  *
+  * http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
     * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
     * Add "placeBefore" header to JsonRestStores calls
     * Check that placeBefore is passed on and considered by Observer
@@ -86,17 +80,18 @@
   DEADLINE: 30th January 2013
   ---------------------------
 
-  * Document the WHOLE thing
+                          ----------------------------
+                          !!  HOTPLATE IS FINISHED  !!
+                          ----------------------------
+
+  * Document the WHOLE thing, SERVER
+  * Document the WHOLE thing, CLIENT (Dojo)
 
 
   LATER
   -----
-  * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
   * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
 
-                          ----------------------------
-                          !!  HOTPLATE IS FINISHED  !!
-                          ----------------------------
 
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
   side tracked by writing a "boilerplate"... err...)
@@ -473,3 +468,6 @@
   * Decide on path standards: prefix for stores, module file paths, all other urls
   * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+  * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
+  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreJsonRestStores)
+  * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
