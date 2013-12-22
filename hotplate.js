@@ -1,9 +1,7 @@
-var dummy
-, async = require('async')
-, EventEmitterCollector = require("eventemittercollector")
-, DeepObject = require("deepobject")
-, tracer = require('tracer');
-;
+var async = require('async')
+  , EventEmitterCollector = require("eventemittercollector")
+  , DeepObject = require("deepobject")
+  , tracer = require('tracer');
 
 var hotplate = exports;
 
@@ -28,7 +26,8 @@ hotplate.logger = colorConsole;
 hotplate.log = colorConsole.log; // Shorthand
 hotplate.error = colorConsole.error; // Shorthand
 hotplate.killLogging = function(){
-  hotplate.logger =  hotplate.log = hotplate.error = function(){};
+  hotplate.log = hotplate.error = function(){};
+  var F = function(){}; hotplate.logger = { warn: F, info: F, debug: F, trace: F };
 }
 
 var origEmit = hotplate.hotEvents.emit;
