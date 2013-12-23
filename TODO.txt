@@ -1,13 +1,5 @@
-
-  SERVER SIDE
-  -------------
-
   CLIENT SIDE
   --------------
-
-  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
-    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
 
   * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
 
@@ -471,3 +463,7 @@
   * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
   * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreJsonRestStores)
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
+  * Update docs about indexing for dbLayer, JsonRestStores
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
