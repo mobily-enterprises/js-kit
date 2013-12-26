@@ -1,7 +1,16 @@
   CLIENT SIDE
   --------------
 
-  * Fixup existing BD application: modularise most things in postCreate(), make sure overlay is automatic, modularise tab registration, etc.
+  * Fixup existing BD application: 
+   - DONE only require() actually used modules in files
+   - modularise tab registration
+   - modularise password re-ask
+   - Check that there is nothing else to modulalise
+   - check overlay logic, maybe make sure overlay is automatic
+   - Fix & standardise ID names in forms
+   - Fix & standardise file names with right plurals, they are an anomaly right now
+   - Fix indentation in all files, decide on strict standards
+   - Delete old code, examples, tests, alternatives, etc. General tidying up of code
 
   * Add "contact type" in the list of configurations in configuration screen
   *
@@ -17,7 +26,7 @@
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
 
-  * Understand how to make un-invasive CSSes, "get" CSSes
+  * !!! Understand how to make un-invasive CSSes, "get" CSSes
 
   AND FINALLY
   --------------
@@ -467,3 +476,4 @@
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
+  * Turn Jade into a proper module, with enriching Dojo mixin
