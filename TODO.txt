@@ -12,6 +12,8 @@
    - Fix indentation in all files, decide on strict standards
    - Delete old code, examples, tests, alternatives, etc. General tidying up of code
 
+  * Make sure that ALL defined widgets define a global variable if necessary, and make sure variable is in new/dojo/path/style
+
   * Add "contact type" in the list of configurations in configuration screen
   *
 
