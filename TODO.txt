@@ -3,14 +3,15 @@
 
   * Fixup existing BD application: 
    - DONE only require() actually used modules in files
-   - modularise tab registration
-   - modularise password re-ask
-   - Check that there is nothing else to modulalise
-   - check overlay logic, maybe make sure overlay is automatic
+   - DONE modularise tab registration
+   - DONE modularise password re-ask
+   - DONE check that there is nothing else to modulalise
+   - DONE check overlay logic, maybe make sure overlay is automatic
    - Fix & standardise ID names in forms
    - Fix & standardise file names with right plurals, they are an anomaly right now
    - Fix indentation in all files, decide on strict standards
    - Delete old code, examples, tests, alternatives, etc. General tidying up of code
+   - Make sure client-side widgets requiring other widgets have a require in server-side module
 
   * Make sure that ALL defined widgets define a global variable if necessary, and make sure variable is in new/dojo/path/style
 
