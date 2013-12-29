@@ -1,3 +1,7 @@
+  SERVER SIDE
+  -----------
+  * Reformat every server-side file to an agreed indentation
+
   CLIENT SIDE
   --------------
 
@@ -7,13 +11,15 @@
    - DONE modularise password re-ask
    - DONE check that there is nothing else to modulalise
    - DONE check overlay logic, maybe make sure overlay is automatic
-   - Fix & standardise ID names in forms
-   - Fix & standardise file names with right plurals, they are an anomaly right now
-   - Fix indentation in all files, decide on strict standards
-   - Delete old code, examples, tests, alternatives, etc. General tidying up of code
-   - Make sure client-side widgets requiring other widgets have a require in server-side module
-
-  * Make sure that ALL defined widgets define a global variable if necessary, and make sure variable is in new/dojo/path/style
+   - DONE Check that code uses new notation for widgets, with '/' instead of '.' for paths
+   - DONE Fix & standardise ID names in forms
+   - DONE Make sure that ALL widgets are baseless
+   - DONE Delete old code, examples, tests, alternatives, etc. General tidying up of code
+   - DONE Fix & standardise file names with right plurals, they are an anomaly right now
+   - DONE Make sure client-side widgets requiring other widgets have a require in server-side module
+   - DONE Decide on baseless in-file widgets
+   - DONE Fix indentation in all files (client side), decide on strict standards
+   - Search for 'domReady', take it out when it doesn't make sense
 
   * Add "contact type" in the list of configurations in configuration screen
   *
@@ -50,7 +56,7 @@
   Dojo -- DONE
 
   --------------------------
-  DEADLINE: 30th December 2013
+  DEADLINE: 15 January 2013
   --------------------------
 
   * Write a quickstart guide to write a hotplate application
@@ -80,9 +86,9 @@
 
   * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
-  ---------------------------
-  DEADLINE: 30th January 2013
-  ---------------------------
+  ----------------------------
+  DEADLINE: 20th February 2013
+  ----------------------------
 
                           ----------------------------
                           !!  HOTPLATE IS FINISHED  !!
