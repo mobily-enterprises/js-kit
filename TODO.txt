@@ -1,28 +1,10 @@
-  SERVER SIDE
-  -----------
-  * Reformat every server-side file to an agreed indentation
 
   CLIENT SIDE
   --------------
 
-  * Fixup existing BD application: 
-   - DONE only require() actually used modules in files
-   - DONE modularise tab registration
-   - DONE modularise password re-ask
-   - DONE check that there is nothing else to modulalise
-   - DONE check overlay logic, maybe make sure overlay is automatic
-   - DONE Check that code uses new notation for widgets, with '/' instead of '.' for paths
-   - DONE Fix & standardise ID names in forms
-   - DONE Make sure that ALL widgets are baseless
-   - DONE Delete old code, examples, tests, alternatives, etc. General tidying up of code
-   - DONE Fix & standardise file names with right plurals, they are an anomaly right now
-   - DONE Make sure client-side widgets requiring other widgets have a require in server-side module
-   - DONE Decide on baseless in-file widgets
-   - DONE Fix indentation in all files (client side), decide on strict standards
-   - Search for 'domReady', take it out when it doesn't make sense
+  * Fix problem with Jade, decide what to do (drop it?)
 
-  * Add "contact type" in the list of configurations in configuration screen
-  *
+  * Check that I actually need to load an item asynchronously in storeSelect if it's not a config item and it's not preloaded
 
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
   * http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
@@ -31,9 +13,13 @@
     * Check that placeBefore is passed on and considered by Observer
     * Make sure you can DnD freely between two boxes
 
+  * Improve overlay: "Loading", "ClickToReload" (with icons accordingly)
+
   * Improve StoreSelect and EditableList:
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
+
+  * Add "contact type" in the list of configurations in configuration screen
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes
 
@@ -486,3 +472,25 @@
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
   * Turn Jade into a proper module, with enriching Dojo mixin
+  * Fixup existing BD application: 
+   - DONE only require() actually used modules in files
+   - DONE modularise tab registration
+   - DONE modularise password re-ask
+   - DONE check that there is nothing else to modulalise
+   - DONE check overlay logic, maybe make sure overlay is automatic
+   - DONE Check that code uses new notation for widgets, with '/' instead of '.' for paths
+   - DONE Fix & standardise ID names in forms
+   - DONE Make sure that ALL widgets are baseless
+   - DONE Delete old code, examples, tests, alternatives, etc. General tidying up of code
+   - DONE Fix & standardise file names with right plurals, they are an anomaly right now
+   - DONE Make sure client-side widgets requiring other widgets have a require in server-side module
+   - DONE Decide on baseless in-file widgets
+   - DONE Fix indentation in all files (client side), decide on strict standards
+   * Search for 'domReady', take it out when it doesn't make sense
+    ./node_modules/hotDojoAdd/lib/hotDojoAdd.js
+    ./node_modules/hotDojoStores/client/AppStoreNotify.js
+    ./node_modules/hotDojoStores/client/stores.js
+    ./node_modules/hotDojoGlobalAlertBar/client/mainAlertBar.js
+    ./node_modules/hotDojoStoreConfig/client/ConfigVars.js
+ * Fix simpleDeclare, as this.inherited is very very broken
+ 
