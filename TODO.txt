@@ -2,8 +2,6 @@
   CLIENT SIDE
   --------------
 
-  * Fix problem with Jade, decide what to do (drop it?)
-
   * Check that I actually need to load an item asynchronously in storeSelect if it's not a config item and it's not preloaded
 
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
@@ -34,13 +32,6 @@
 
   * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-
-  CLIENT WANTS:
-  -------------
-  BackboneJS
-  Angular
-  Dojo -- DONE
-
   --------------------------
   DEADLINE: 15 January 2013
   --------------------------
@@ -70,7 +61,7 @@
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
-  * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
+  * Make a "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
   ----------------------------
   DEADLINE: 20th February 2013
@@ -492,5 +483,7 @@
     ./node_modules/hotDojoStores/client/stores.js
     ./node_modules/hotDojoGlobalAlertBar/client/mainAlertBar.js
     ./node_modules/hotDojoStoreConfig/client/ConfigVars.js
- * Fix simpleDeclare, as this.inherited is very very broken
- 
+  * Fix simpleDeclare, as this.inherited is very very broken
+  * Fix problem with Jade, decide what to do (drop it?)
+  * Change clientPaths hook to clientPath, only one "public" path per module
+
