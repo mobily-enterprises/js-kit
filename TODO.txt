@@ -1,8 +1,10 @@
 
-  CLIENT SIDE
-  --------------
+  CLIENT SIDE, INFRASTRUCTURE WORK
+  --------------------------------
 
-  * Check that I actually need to load an item asynchronously in storeSelect if it's not a config item and it's not preloaded
+
+  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html
+    to fix BookingDojo.js
 
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
   * http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
@@ -11,26 +13,17 @@
     * Check that placeBefore is passed on and considered by Observer
     * Make sure you can DnD freely between two boxes
 
-  * Improve overlay: "Loading", "ClickToReload" (with icons accordingly)
+  * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
+    Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  * Improve StoreSelect and EditableList:
-    * With "refreshData", change "refresh" to clickable overlay 
-    * catch dgrid errors with overlay if necessary
-
-  * Add "contact type" in the list of configurations in configuration screen
-
-  * !!! Understand how to make un-invasive CSSes, "get" CSSes
+  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer, etc.
 
   AND FINALLY
   --------------
 
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
-  *
-  *
-
-  * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
-
-  * Check all CSSes, Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+  * Add "contact type" in the list of configurations in configuration screen
+  * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
+  * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
 
   --------------------------
   DEADLINE: 15 January 2013
@@ -486,4 +479,8 @@
   * Fix simpleDeclare, as this.inherited is very very broken
   * Fix problem with Jade, decide what to do (drop it?)
   * Change clientPaths hook to clientPath, only one "public" path per module
-
+  * Select items need to be ALL preloaded beforehand, overlay goes away once dgrid is ready.
+  * Fix StoreSelect and EditableList so that they are overlayed properly. Also:
+    * With "refreshData", change "refresh" to clickable overlay 
+    * catch dgrid errors with overlay if necessary
+  * Improve overlay: "Loading", "ClickToReload" (with icons accordingly), make the dgrid widgets use it
