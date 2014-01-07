@@ -2,21 +2,19 @@
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
 
-
-  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html
-    to fix BookingDojo.js
-
   * Fix DnD in stores, so that placement is kept (see nabble thread about it)
   * http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
     * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
     * Add "placeBefore" header to JsonRestStores calls
     * Check that placeBefore is passed on and considered by Observer
-    * Make sure you can DnD freely between two boxes
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer, etc.
+  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html
+    to fix BookingDojo.js
+
+  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, etc.
 
   AND FINALLY
   --------------
@@ -71,6 +69,7 @@
   LATER
   -----
   * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
+  * Make sure that EditingWidget and StoreSelect are blind-friendly
 
 
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
