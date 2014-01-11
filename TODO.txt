@@ -2,24 +2,29 @@
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
 
-  * Fix DnD in stores, so that placement is kept (see nabble thread about it)
-  * http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
-    * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
-    * Add "placeBefore" header to JsonRestStores calls
-    * Check that placeBefore is passed on and considered by Observer
+  * Finish JsonRestStores with proper reordering and fake deletions
+    - DONE Finish fixing JsonRest.js so that placement is changed if necessary
+    - DONE Finish Observable.js properly, so that it extends notify() and actually works 100%
+    - DONE Change storeNotify.js so that notify is called with the new parameter (or a new message altogether?)
+    - DONE Change the after header, if after is null, send an empty header and not lame string 'null'
+		- DONE Change JsonRestStores so that it has a "order" field that gets set according to the passed options.before
+    - Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
+    - Change DnD.js so that it sends a FAKE EMPTY fields when reposition is true (already forked it)
+    - Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
+
+  * MAYBE Change JsonRestStores so that you can define a "deletion" field, so that "delete" sets that to true (maybe at simpledblayer level?)
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
-  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html
-    to fix BookingDojo.js
 
   * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, etc.
 
   AND FINALLY
   --------------
 
-  * Add "contact type" in the list of configurations in configuration screen
+  * Reorganise configuration, so that things are in the right spots
+  * Add (sortable) "contact type" in the list of configurations in configuration screen
+  (DRUM ROLL)
   * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
   * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
 
@@ -58,9 +63,9 @@
   DEADLINE: 20th February 2013
   ----------------------------
 
-                          ----------------------------
-                          !!  HOTPLATE IS FINISHED  !!
-                          ----------------------------
+                          -------------------------------------------
+                          !!  HOTPLATE + EXAMPLE CRM ARE FINISHED  !!
+                          -------------------------------------------
 
   * Document the WHOLE thing, SERVER
   * Document the WHOLE thing, CLIENT (Dojo)
@@ -70,6 +75,7 @@
   -----
   * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
   * Make sure that EditingWidget and StoreSelect are blind-friendly
+  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html to fix BookingDojo.js
 
 
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
@@ -483,3 +489,10 @@
     * With "refreshData", change "refresh" to clickable overlay 
     * catch dgrid errors with overlay if necessary
   * Improve overlay: "Loading", "ClickToReload" (with icons accordingly), make the dgrid widgets use it
+  * DONE Write a detailed email to the Dojo guys, explaining exactly what I did:
+     - Add options.relocation to options in put() in case it's just a relocation
+     - Change JsonRestStores (adding headers X-hotplate-relocation and X-hotplate-before)
+     - Change Observable.js so that it doesn't use a queryEngine (requires adding adding methodParams to notify() )
+     - Tell them about insanities such as http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
+
+
