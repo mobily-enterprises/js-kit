@@ -2,15 +2,19 @@
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
 
-  * Finish JsonRestStores with proper reordering and fake deletions
+  * Finish JsonRestStores with proper reordering
     - DONE Finish fixing JsonRest.js so that placement is changed if necessary
     - DONE Finish Observable.js properly, so that it extends notify() and actually works 100%
     - DONE Change storeNotify.js so that notify is called with the new parameter (or a new message altogether?)
     - DONE Change the after header, if after is null, send an empty header and not lame string 'null'
 		- DONE Change JsonRestStores so that it has a "order" field that gets set according to the passed options.before
-    - Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
-    - Change DnD.js so that it sends a FAKE EMPTY fields when reposition is true (already forked it)
-    - Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
+    - DONE Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
+    - DONE Fix MongoDb so that it uses an easier way of doing the counting
+    - DONE (Not done, useless burden on Dgrid) Change DnD.js so that it sends a FAKE EMPTY field when `reposition` is true
+    - DONE Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
+    - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
+    - Deploy onto live server
+    - Send email to Dylan with the whole writeup
 
   * MAYBE Change JsonRestStores so that you can define a "deletion" field, so that "delete" sets that to true (maybe at simpledblayer level?)
 
