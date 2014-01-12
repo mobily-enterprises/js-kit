@@ -13,13 +13,13 @@
     - DONE (Not done, useless burden on Dgrid) Change DnD.js so that it sends a FAKE EMPTY field when `reposition` is true
     - DONE Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
     - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
-    - Deploy onto live server
-    - Send email to Dylan with the whole writeup
-
-  * MAYBE Change JsonRestStores so that you can define a "deletion" field, so that "delete" sets that to true (maybe at simpledblayer level?)
+    - Deploy onto live server on nodejitsu (change dgrid reference in repo)
+    - Complete email with links
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+
+  * Send email to Dylan with the whole writeup
 
   * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, etc.
 
@@ -28,7 +28,9 @@
 
   * Reorganise configuration, so that things are in the right spots
   * Add (sortable) "contact type" in the list of configurations in configuration screen
+
   (DRUM ROLL)
+
   * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
   * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
 
@@ -38,18 +40,21 @@
 
   * Write a quickstart guide to write a hotplate application
 
+
   "THE MISSING PIECES"
 
   Message infrastructure:
-
+  -----------------------
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
 
   * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
+
   * Develop the "booking inbox" for incoming emails/SMSes
 
   User management and invites in Hotplate:
+  ----------------------------------------
 
   * Write an "invite user" mechanism where users can be invited into the system: they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
