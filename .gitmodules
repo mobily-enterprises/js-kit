@@ -1,6 +1,6 @@
 [submodule "node_modules/hotDojoDgridWidgets/client/dgrid"]
 	path = node_modules/hotDojoDgridWidgets/client/dgrid
-	url = https://github.com/SitePen/dgrid.git
+	url = https://github.com/mercmobily/dgrid.git
 [submodule "node_modules/hotDojoDgridWidgets/client/xstyle"]
 	path = node_modules/hotDojoDgridWidgets/client/xstyle
 	url = https://github.com/kriszyp/xstyle.git
