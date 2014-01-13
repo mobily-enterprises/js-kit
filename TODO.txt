@@ -2,26 +2,16 @@
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
 
-  * Finish JsonRestStores with proper reordering
-    - DONE Finish fixing JsonRest.js so that placement is changed if necessary
-    - DONE Finish Observable.js properly, so that it extends notify() and actually works 100%
-    - DONE Change storeNotify.js so that notify is called with the new parameter (or a new message altogether?)
-    - DONE Change the after header, if after is null, send an empty header and not lame string 'null'
-		- DONE Change JsonRestStores so that it has a "order" field that gets set according to the passed options.before
-    - DONE Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
-    - DONE Fix MongoDb so that it uses an easier way of doing the counting
-    - DONE (Not done, useless burden on Dgrid) Change DnD.js so that it sends a FAKE EMPTY field when `reposition` is true
-    - DONE Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
-    - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
-    - Deploy onto live server on nodejitsu (change dgrid reference in repo)
-    - Complete email with links
+  * Make timeouts longer for tab expiry (change client/server)
+  * Emit event on DnD initiations
+  * MAYBE give visual cue of DnD in hotplate (even possible?)
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-  * Send email to Dylan with the whole writeup
 
   * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, etc.
+  * Make sure that after creating a workspace there is a busybutton while creating one
 
   AND FINALLY
   --------------
@@ -503,5 +493,18 @@
      - Change JsonRestStores (adding headers X-hotplate-relocation and X-hotplate-before)
      - Change Observable.js so that it doesn't use a queryEngine (requires adding adding methodParams to notify() )
      - Tell them about insanities such as http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
+  * Finish JsonRestStores with proper reordering
+    - DONE Finish fixing JsonRest.js so that placement is changed if necessary
+    - DONE Finish Observable.js properly, so that it extends notify() and actually works 100%
+    - DONE Change storeNotify.js so that notify is called with the new parameter (or a new message altogether?)
+    - DONE Change the after header, if after is null, send an empty header and not lame string 'null'
+		- DONE Change JsonRestStores so that it has a "order" field that gets set according to the passed options.before
+    - DONE Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
+    - DONE Fix MongoDb so that it uses an easier way of doing the counting
+    - DONE (Not done, useless burden on Dgrid) Change DnD.js so that it sends a FAKE EMPTY field when `reposition` is true
+    - DONE Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
+    - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
+    - DONE Deploy onto live server on nodejitsu (change dgrid reference in repo)
+    - DONE Complete email with links
 
 
