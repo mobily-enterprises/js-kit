@@ -2,16 +2,18 @@
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
 
-  * Make timeouts longer for tab expiry (change client/server)
-  * Emit event on DnD initiations
-  * MAYBE give visual cue of DnD in hotplate (even possible?)
+  * Move everything to Dojo 1.9.x
+  * Give visual cue of DnD in hotplate
+  * Give visual cue of adding element in EditingWidget
+
+  * See if it makes sense to make overlay count number of overlays
+  * Check bug where select list doesn't get updated, dispatcher GET fails (related?)
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
 
-
-  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, etc.
-  * Make sure that after creating a workspace there is a busybutton while creating one
+  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, overlay with effect, etc.
+  * Make sure that after creating a workspace, there is an overlay if redirection is on
 
   AND FINALLY
   --------------
@@ -506,5 +508,4 @@
     - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
     - DONE Deploy onto live server on nodejitsu (change dgrid reference in repo)
     - DONE Complete email with links
-
-
+  * Make timeouts longer for tab expiry (change client/server)
