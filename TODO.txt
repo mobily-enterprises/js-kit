@@ -1,13 +1,8 @@
 
   CLIENT SIDE, INFRASTRUCTURE WORK
   --------------------------------
-
-  * Move everything to Dojo 1.9.x
-  * Give visual cue of DnD in hotplate
-  * Give visual cue of adding element in EditingWidget
-
-  * See if it makes sense to make overlay count number of overlays
-  * Check bug where select list doesn't get updated, dispatcher GET fails (related?)
+  * Check bug where select list doesn't get updated
+  * Check bug where dispatcher calls fail strangly
 
   * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
     Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
@@ -31,7 +26,6 @@
   --------------------------
 
   * Write a quickstart guide to write a hotplate application
-
 
   "THE MISSING PIECES"
 
@@ -509,3 +503,10 @@
     - DONE Deploy onto live server on nodejitsu (change dgrid reference in repo)
     - DONE Complete email with links
   * Make timeouts longer for tab expiry (change client/server)
+  * Move everything to Dojo 1.9.x
+  * Implement artificial delay in JsonRestStores
+  * Give visual cue of DnD in hotplate
+  * Rewrite _OverlayMixin so that it keeps a counter of how many reload overlays there are, rewrite code so that is uses the new Overlay
+  * Fix bug with dialog editing that doesn't work in EditingWidget
+  * Give visual cue of adding element in EditingWidget
+  * Improve code in dgrid's event emission, avoid repeating code, merge it onto the patch
