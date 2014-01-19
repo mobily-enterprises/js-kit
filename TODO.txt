@@ -1,31 +1,30 @@
-
-  CLIENT SIDE, INFRASTRUCTURE WORK
-  --------------------------------
-  * Check bug where select list doesn't get updated
-  * Check bug where dispatcher calls fail strangly
-
-  * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
-    Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
-  * Improve the look of the app and widgets: top bar with shade, welcome and pick to look nicer without abbruzzese, overlay with effect, etc.
-  * Make sure that after creating a workspace, there is an overlay if redirection is on
-
   AND FINALLY
   --------------
 
-  * Reorganise configuration, so that things are in the right spots
-  * Add (sortable) "contact type" in the list of configurations in configuration screen
+  * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
+    - Add app-wide selectable options for workspace and for user in "god" section
+    - Add app-wide fixed options for app (appname?) and for users (?)
+    - Check that I covered all cases:
+      - Save/list no wid nor uid
+      - Save/list with only wid
+      - Save/list with only uid
+      - Save/list with both uid and wid
+    - Prettify forms and application a little
+    - Test if comet does what it's meant to do when broadcasting all these cases
+    - Allow defining of focusNode automatically without using startup()
+
+    - Fix conflict between inline editing and DnD (ask Dojo guys?)
 
   (DRUM ROLL)
 
   * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
   * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
+  * Add calendar
 
   --------------------------
-  DEADLINE: 15 January 2013
+  DEADLINE: 26 January 2013
   --------------------------
 
-  * Write a quickstart guide to write a hotplate application
 
   "THE MISSING PIECES"
 
@@ -55,23 +54,24 @@
   * Make a "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
 
   ----------------------------
-  DEADLINE: 20th February 2013
+  DEADLINE: 25th February 2013
   ----------------------------
 
                           -------------------------------------------
                           !!  HOTPLATE + EXAMPLE CRM ARE FINISHED  !!
                           -------------------------------------------
 
+  * Write a quickstart guide to write a hotplate application
   * Document the WHOLE thing, SERVER
   * Document the WHOLE thing, CLIENT (Dojo)
 
 
-  LATER
-  -----
+  LATER (hopefully other contributors)
+  ------------------------------------
   * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
   * Make sure that EditingWidget and StoreSelect are blind-friendly
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html to fix BookingDojo.js
-
+  * Add effects to overlay
 
   The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
   side tracked by writing a "boilerplate"... err...)
@@ -510,3 +510,14 @@
   * Fix bug with dialog editing that doesn't work in EditingWidget
   * Give visual cue of adding element in EditingWidget
   * Improve code in dgrid's event emission, avoid repeating code, merge it onto the patch
+  * Check bug where select list doesn't get updated
+  * Check bug where dispatcher calls fail strangely
+  * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
+     - http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+     - http://stackoverflow.com/questions/21175377/css-classes-and-widgets-three-questions
+  * Improve the look of the app and widgets: welcome and pick to look nicer without abbruzzese
+  * Fix busy buttons when login/create accounts, overlay on redirect when creating workspace
+  * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
+    - Fix CSS (no inline stuff, make space) in all forms
+    - Fix overflow
+    - Add "god" tab
