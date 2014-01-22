@@ -2,29 +2,30 @@
   --------------
 
   * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
-    - Add app-wide selectable options for workspace and for user in "god" section
-    - Add app-wide fixed options for app (appname?) and for users (?)
-    - Check that I covered all cases:
-      - Save/list no wid nor uid
-      - Save/list with only wid
-      - Save/list with only uid
-      - Save/list with both uid and wid
-    - Prettify forms and application a little
-    - Test if comet does what it's meant to do when broadcasting all these cases
-    - Allow defining of focusNode automatically without using startup()
 
-    - Fix conflict between inline editing and DnD (ask Dojo guys?)
+    BUGS/CHECKS:
+    - !! Fix conflict between inline editing and DnD (ask Dojo guys?), maybe with z-index?
+    - !! Check why horizontal scrollbars appear when editing an inline textbox
+    - Test if comet does what it's meant to do when broadcasting all store cases
+
+   FEATURES:
+    - Make up a store that is NOT a config one (maybe the inbox?)
+    - Make up an example with DnD dragging, use body preprocessing, see if it does it
+    - Make up god permissions mixin, setting God, add them
+    - Have "preset" text that disappeares in textbox (Dojo should have it)
+    - Prettify forms and application a little
+    - Check for optimisations: both storeName and store, any more repeated code?
+    - Make God application separate, with separate login (only God can login)
 
   (DRUM ROLL)
 
   * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
   * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
-  * Add calendar
+  * Add calendar, rendering users' birthdays on it
 
   --------------------------
   DEADLINE: 26 January 2013
   --------------------------
-
 
   "THE MISSING PIECES"
 
@@ -33,10 +34,10 @@
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
 
-  * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
+  * Integrate message-sending with the current simple comment infrastructure (!). User picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
 
-  * Develop the "booking inbox" for incoming emails/SMSes
+  * Develop the "booking inbox" for incoming emails/SMSes, mark as read, archived, etc.
 
   User management and invites in Hotplate:
   ----------------------------------------
@@ -52,9 +53,21 @@
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
   * Make a "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
+  * A booking can be "owned" by a person
+
+  PRODUCTS:
+  * Each user has a "Provides..." tab, where you list what it can provide.
+  * There is a list of things that *everybody* provides
+  * In a booking, for each user, you can set what they will provide for that particular booking, with dates
+  * Calendar view of things that are "provided"
+
+  MESSAGES
+  * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
+  * Ability to send messages to different present types (all types in a booking)
+  * Ability to set templates for messages of different types, with instant previews
 
   ----------------------------
-  DEADLINE: 25th February 2013
+  DEADLINE: 30th March 2013
   ----------------------------
 
                           -------------------------------------------
@@ -73,15 +86,12 @@
   * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html to fix BookingDojo.js
   * Add effects to overlay
 
-  The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
-  side tracked by writing a "boilerplate"... err...)
+  THE MONEY SIDE
+  --------------
 
-  PHASE 1: Information
-  * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to set products for each contact:
-    product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
-  * Ability to create proper bookings: For each person added, [ product, quantity OR from/to times, accounting entries ]
-  * Ability to set templates for messages of different types, with previews
+  PHASE 1: Product pricing information
+  * product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
+  * Add product info for things provided: For each person added, [ product, quantity OR from/to times, accounting entries ]
 
   PHASE 2: Money/billing
   * Accounting summaries for each booking (with system-calculated ones)
@@ -517,7 +527,30 @@
      - http://stackoverflow.com/questions/21175377/css-classes-and-widgets-three-questions
   * Improve the look of the app and widgets: welcome and pick to look nicer without abbruzzese
   * Fix busy buttons when login/create accounts, overlay on redirect when creating workspace
+  * Change JsoNRestStores so that it's much much more DRY: get paramIds from URL if possible, set the ids in schema from paramIds
+    if not in schema
+  * IMPORTANT: Check that hotCoreMultiHome still makes sense (check stores.UsersWorkspaces)
   * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
     - Fix CSS (no inline stuff, make space) in all forms
     - Fix overflow
     - Add "god" tab
+    - Move EditableList's css from bdMain to EditableList
+    - Add app-wide selectable options for workspace and for user in "god" section
+    - Move login info into user config
+    - Check that I covered all cases:
+      - List no wid nor uid
+      - Save/list with only wid
+      - Save/list with only uid
+      - Save/list with both uid and wid
+    - Missing: list with both uid and wid (list of something in userConfig)
+    - Add config stores with no wid/uid (loads the lot at startup)
+    - Check that Multihome permissions work with only userId, and both in queries and fetching
+    - Take out queryParams from postCreate around the code since it's useless
+    - Check why buttons don't work in users dialog box (focus issue). Solution: add dijitPopup class to them, focus issue with dialog
+    - Automatically focus on first focusable node on startup of EditingWidget
+  * Document JsonRestStores, paramIds is now optional, publicURL is what counts, id fields are assigned automatically
+	- Check why adding an entry doesn't automatically position it at the end (reload after adding to see)
+		DECIDED: only accept to add as "last" for ordered and unsorted ones. Later we can add in specific spots easily
+						 but for unspecified it needs to be last 
+  * Fix stupid bug in JsonRestStores
+  * Check why JsonRestStores sends double headers if on line 1048, _relocation is passed null rather than 'null', bad symptom
