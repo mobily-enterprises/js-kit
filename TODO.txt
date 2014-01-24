@@ -3,19 +3,14 @@
 
   * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
 
-    BUGS/CHECKS:
-    - !! Fix conflict between inline editing and DnD (ask Dojo guys?), maybe with z-index?
-    - !! Check why horizontal scrollbars appear when editing an inline textbox
-    - Test if comet does what it's meant to do when broadcasting all store cases
-
-   FEATURES:
-    - Make up a store that is NOT a config one (maybe the inbox?)
+    - Make up a store that is NOT a config one (contacts?)
     - Make up an example with DnD dragging, use body preprocessing, see if it does it
+
     - Make up god permissions mixin, setting God, add them
-    - Have "preset" text that disappeares in textbox (Dojo should have it)
+    - Make God application separate, with separate login (only God can login)
+
     - Prettify forms and application a little
     - Check for optimisations: both storeName and store, any more repeated code?
-    - Make God application separate, with separate login (only God can login)
 
   (DRUM ROLL)
 
@@ -24,7 +19,7 @@
   * Add calendar, rendering users' birthdays on it
 
   --------------------------
-  DEADLINE: 26 January 2013
+  DEADLINE: 30 January 2013
   --------------------------
 
   "THE MISSING PIECES"
@@ -37,11 +32,10 @@
   * Integrate message-sending with the current simple comment infrastructure (!). User picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
 
-  * Develop the "booking inbox" for incoming emails/SMSes, mark as read, archived, etc.
+  * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc.
 
-  User management and invites in Hotplate:
-  ----------------------------------------
-
+  User management and invites in Hotplate
+  ---------------------------------------
   * Write an "invite user" mechanism where users can be invited into the system: they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
@@ -52,16 +46,22 @@
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
-  * Make a "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
-  * A booking can be "owned" by a person
+  Basic bookings (no accounting):
+  -------------------------------
+  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
+  * When an email or SMS comes in, ability to match it to a booking
+  * Add cascading bookings so that you can cascade bookings
 
-  PRODUCTS:
-  * Each user has a "Provides..." tab, where you list what it can provide.
-  * There is a list of things that *everybody* provides
-  * In a booking, for each user, you can set what they will provide for that particular booking, with dates
-  * Calendar view of things that are "provided"
 
-  MESSAGES
+  Advanced bookings
+  -----------------
+  * Ability to set available "activities" for a contact and all contacts, with cost
+  * product, money lines: [ booking owner | line owner | office ] OWES (min, price max) [ booking owner | line owner | office ] / qty
+    where qty can be unit, one-off, hourly, half-daily, daily
+  * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
+
+  Messages
+  --------
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
@@ -71,8 +71,9 @@
   ----------------------------
 
                           -------------------------------------------
-                          !!  HOTPLATE + EXAMPLE CRM ARE FINISHED  !!
+                          !!  HOTPLATE + HOT CRM ARE FINISHED  !!
                           -------------------------------------------
+
 
   * Write a quickstart guide to write a hotplate application
   * Document the WHOLE thing, SERVER
@@ -83,14 +84,12 @@
   ------------------------------------
   * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
   * Make sure that EditingWidget and StoreSelect are blind-friendly
-  * Check: http://dojo-toolkit.33424.n3.nabble.com/Dialog-with-children-not-calling-onShow-for-them-td4000581.html to fix BookingDojo.js
-  * Add effects to overlay
+  * Add anination effects
 
   THE MONEY SIDE
   --------------
 
   PHASE 1: Product pricing information
-  * product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
   * Add product info for things provided: For each person added, [ product, quantity OR from/to times, accounting entries ]
 
   PHASE 2: Money/billing
@@ -98,6 +97,7 @@
   * Interface with payment system (Paypal?)
   * Ability to send invoices
   * Ability to _store_ received invoices
+
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -548,9 +548,14 @@
     - Take out queryParams from postCreate around the code since it's useless
     - Check why buttons don't work in users dialog box (focus issue). Solution: add dijitPopup class to them, focus issue with dialog
     - Automatically focus on first focusable node on startup of EditingWidget
+    - Fix conflict between inline editing and DnD. Can't believe I fixed this myself, I think I am getting the whole DOM thing
+    - !! Check why horizontal scrollbars appear when editing an inline textbox
+    - Add to EditableList the ability to define an extra widget, and display the new Widget in a dialog without repeating code
+    - Have "preset" text that disappeares in textbox (Dojo should have it)
   * Document JsonRestStores, paramIds is now optional, publicURL is what counts, id fields are assigned automatically
 	- Check why adding an entry doesn't automatically position it at the end (reload after adding to see)
 		DECIDED: only accept to add as "last" for ordered and unsorted ones. Later we can add in specific spots easily
 						 but for unspecified it needs to be last 
   * Fix stupid bug in JsonRestStores
   * Check why JsonRestStores sends double headers if on line 1048, _relocation is passed null rather than 'null', bad symptom
+  * Test if comet does what it's meant to do when broadcasting all store cases
