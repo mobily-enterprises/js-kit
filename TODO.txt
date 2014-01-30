@@ -1,25 +1,60 @@
-  AND FINALLY
-  --------------
+  THE APPLICATION
+  ---------------
 
-  * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
+  "CONTACTS -- THE BASICS"
 
-    - Make up a store that is NOT a config one (contacts?)
-    - Make up an example with DnD dragging, use body preprocessing, see if it does it
+  - Prettify email widget (adding side)
+  - If application is down and a contact is open, reload button missing from email overlay (needs to preload the image)
+    http://stackoverflow.com/questions/21449635/pre-loading-images-in-a-one-page-application
 
-    - Make up god permissions mixin, setting God, add them
-    - Make God application separate, with separate login (only God can login)
+  **
+  - Check *ALL* issues regarding editing widget that must reset, writing in the field beforehand, widths, etc.
+  - Add birthday, with near date picker
 
-    - Prettify forms and application a little
-    - Check for optimisations: both storeName and store, any more repeated code?
+  * Make the contact list look better, maybe adding columns
+  * Check the ordering of the contacts widget, sort by name
 
-  (DRUM ROLL)
+  **
+    Implement postal addresses, with a neat interface like emails
 
-  * Add a "new contact" form, and a contacts browser/editor. (30 mins and 200 lines of code?)
-  * Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
-  * Add calendar, rendering users' birthdays on it
+  **
+    Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
+
+  * Prettify the rest of the application
+
+  ***
+    Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
+    Have "Tell us about you" screen when creating workspace
+
+  "CONTACTS -- IMPROVEMENTS"
+
+  * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+
+  ***
+    Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
+
+  "CONTACTS -- MESSAGES"
+
+  *****
+    Add ability to type messages underneath contacts, send a message to multiple recipients (1:n)
+    - Use https://bitbucket.org/mutopia/autobox, but maybe use others
+
+  "BOOKINGS"
+  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
+  ** 
+    Implement simple TODO list for the bookings (first complex contained widget), date/time from, date/time to
+  **
+    Add calendar (Dojox's), rendering users' birthdays and TODO items in it
+
+
+  "FINISH UP"
+  * Optimise the code, group attributes, check for optimisations: any more repeated code?
+  * Make up god permissions mixin, setting God, add them
+  **
+     Make God application separate, with separate login (only God can login)
 
   --------------------------
-  DEADLINE: 30 January 2013
+  DEADLINE: 28 February 2013
   --------------------------
 
   "THE MISSING PIECES"
@@ -32,7 +67,7 @@
   * Integrate message-sending with the current simple comment infrastructure (!). User picks if it's an SMS or if it's an email.
     The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
 
-  * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc.
+  * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
 
   User management and invites in Hotplate
   ---------------------------------------
@@ -46,12 +81,9 @@
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
-  Basic bookings (no accounting):
-  -------------------------------
-  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
-  * When an email or SMS comes in, ability to match it to a booking
-  * Add cascading bookings so that you can cascade bookings
 
+  MARKET IT
+  ---------
 
   Advanced bookings
   -----------------
@@ -559,3 +591,28 @@
   * Fix stupid bug in JsonRestStores
   * Check why JsonRestStores sends double headers if on line 1048, _relocation is passed null rather than 'null', bad symptom
   * Test if comet does what it's meant to do when broadcasting all store cases
+  * Fix the way parameters are passed in EditableList/editingWidget: not storeName and store, but storeName+storeParameters+storeExtraParameters
+  * Test that I can nest however many times without losing URL parameters <-- Geeeeeeeeeeeesus
+  * Make it possible to pass ONE widget, for editing and adding, since they are (nearly) always the same 
+  * Fix successfulsubmit, make it bubble from the editing widgets, and kill the bubbling from the main form. WAY: add "store"
+  * Check what you are meant to do when you have a prop you can pass a widget that is also defined in the prototype,
+    check that the prop-copying is in the right spot
+  * Find a way to have stores where you just add things, and it takes more space as it grows
+  * Improve interface for email addresses, make it come out after adding a new email address automatically
+  * Improve the UI for email addresses so that it's actually clear what it is
+  * Make sure non-children (placed) widgets are destroyed (including buttons!) when EditableList is destroyes
+  * Make sure the second half of the contact form is its own widget, that will appear all at once when adding has happened
+  * Decide if editable-list needs to be relative (it has an overlay!)
+  * Understand strange extra refresh in email dgrid after first email address added -- Dgrid does it, cannot fix it!
+  * Resolve issue where dgrid is calling refresh at the same time as bd.js, and in the end there are two overlays as
+    dgrid-refresh-complete is only called once. Find/make flag to see if a refresh is happening
+  * Check why email is not checked server-side (disable client-side check to see)
+  * Do not allow entering same email address twice (only server side!)
+  * Make DnD actually work for email addresses
+  * Fix JsonRestStore's "positioning", dbLayer needs to be passed a table AND a filter, or it will reorder the WHOLE TABLE!!!
+  * Document JsonRestStores with new hook, postValidate(), which is always useful. Consider changing the signatures of others as well
+  * Document skipHardLimitOnQueries for select
+  * Update tests for JsonRestStores, add TODO for new hook and fix existing hook
+  * Update TingoDb with latest code
+  * Fix ENORMOUS bug where if a contact is saved twice, there is a post rather than a put (!!!)
+  * Make sure that after a new adding, form is reset for email
