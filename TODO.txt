@@ -3,37 +3,32 @@
 
   "CONTACTS -- THE BASICS"
 
-  - Prettify email widget (adding side)
-  - If application is down and a contact is open, reload button missing from email overlay (needs to preload the image)
-    http://stackoverflow.com/questions/21449635/pre-loading-images-in-a-one-page-application
+  AFTERNOON:
 
-  **
-  - Check *ALL* issues regarding editing widget that must reset, writing in the field beforehand, widths, etc.
-  - Add birthday, with near date picker
+  - Check why dialog doesn't close when adding a new address
+  - Have a better separator for addresses
+  - Check why focus goes to top after adding an address
+  - Give more max height to email/addresses widgets (needs to match)
+  - Add Company Name or "type flag" to contacts (companies don't have middlename, lastname or DOB, so hide them)
+
+  * Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
 
   * Make the contact list look better, maybe adding columns
   * Check the ordering of the contacts widget, sort by name
 
-  **
-    Implement postal addresses, with a neat interface like emails
-
-  **
-    Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
-
-  * Prettify the rest of the application
-
-  ***
-    Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
-    Have "Tell us about you" screen when creating workspace
+  * Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
+  * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
 
   "CONTACTS -- IMPROVEMENTS"
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
-  ***
+  **
     Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
 
-  "CONTACTS -- MESSAGES"
+  * Write "contact lookup" widget that returns a contact, generic one
+
+  "MESSAGES"
 
   *****
     Add ability to type messages underneath contacts, send a message to multiple recipients (1:n)
@@ -48,10 +43,8 @@
 
 
   "FINISH UP"
-  * Optimise the code, group attributes, check for optimisations: any more repeated code?
   * Make up god permissions mixin, setting God, add them
-  **
-     Make God application separate, with separate login (only God can login)
+  * Make God application separate, with separate login (only God can login)
 
   --------------------------
   DEADLINE: 28 February 2013
@@ -81,9 +74,16 @@
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for ME to see what happened, with filters
 
+  * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
 
   MARKET IT
   ---------
+
+  --------------------------
+  DEADLINE: 30 March 2013
+  --------------------------
+
+  * Import contacts from G+ and Facebook, with ph numbers. Imported contacts are read-only
 
   Advanced bookings
   -----------------
@@ -99,13 +99,8 @@
   * Ability to set templates for messages of different types, with instant previews
 
   ----------------------------
-  DEADLINE: 30th March 2013
+  DEADLINE: 30th April 2013
   ----------------------------
-
-                          -------------------------------------------
-                          !!  HOTPLATE + HOT CRM ARE FINISHED  !!
-                          -------------------------------------------
-
 
   * Write a quickstart guide to write a hotplate application
   * Document the WHOLE thing, SERVER
@@ -616,3 +611,13 @@
   * Update TingoDb with latest code
   * Fix ENORMOUS bug where if a contact is saved twice, there is a post rather than a put (!!!)
   * Make sure that after a new adding, form is reset for email
+  * If application is down and a contact is open, reload button missing from email overlay (needs to preload the image)
+    http://stackoverflow.com/questions/21449635/pre-loading-images-in-a-one-page-application
+    (In the end, resolved creating TWO overlays and only displaying the right one)
+  * Check *ALL* issues regarding editing widget that must reset, writing in the field beforehand, widths, etc.
+  * Prettify email widget (adding side)
+  * Add birthday, with near date picker. Ths one was easy. Dealing with dates *regardless* of their timezone, however... meh.
+  * Implement postal addresses, with a neat interface like emails
+  * Make positioning of addresses actually work
+  * Check buttons positioning issue ('bottom' is not working)
+  * Render somehow an empty address so that there is at least a node
