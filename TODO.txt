@@ -4,10 +4,7 @@
   "CONTACTS -- THE BASICS"
 
   AFTERNOON:
-
-  - Check why dialog doesn't close when adding a new address
   - Have a better separator for addresses
-  - Check why focus goes to top after adding an address
   - Give more max height to email/addresses widgets (needs to match)
   - Add Company Name or "type flag" to contacts (companies don't have middlename, lastname or DOB, so hide them)
 
@@ -621,3 +618,5 @@
   * Make positioning of addresses actually work
   * Check buttons positioning issue ('bottom' is not working)
   * Render somehow an empty address so that there is at least a node
+  * Check why dialog doesn't close when adding a new address
+  * Check why focus goes to top after adding an address
