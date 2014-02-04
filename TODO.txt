@@ -3,11 +3,6 @@
 
   "CONTACTS -- THE BASICS"
 
-  AFTERNOON:
-  - Have a better separator for addresses
-  - Give more max height to email/addresses widgets (needs to match)
-  - Add Company Name or "type flag" to contacts (companies don't have middlename, lastname or DOB, so hide them)
-
   * Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
 
   * Make the contact list look better, maybe adding columns
@@ -24,6 +19,8 @@
     Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
 
   * Write "contact lookup" widget that returns a contact, generic one
+
+  * Make initial investigation re: Google+ and Facebook integration, maybe add fields
 
   "MESSAGES"
 
@@ -620,3 +617,9 @@
   * Render somehow an empty address so that there is at least a node
   * Check why dialog doesn't close when adding a new address
   * Check why focus goes to top after adding an address
+  * Give more max height to email/addresses widgets (needs to match)
+  * Make date selector default to something saner
+  * Have a better separator for addresses
+  * Add Company Name or "type flag" to contacts (companies don't have middlename, lastname or DOB, so hide them)
+  * Deal with textboxes, add hooks to EditableList to deal with form submitting and widget assigning so that checkboxes work
+  * Fix horrible resize problem with the contact form
