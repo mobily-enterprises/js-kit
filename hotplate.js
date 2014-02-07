@@ -20,14 +20,18 @@ hotplate.config.set( 'hotplate.db', null );
 hotplate.config.set( 'hotplate.DbLayerMixin', function(){ } );
 hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
 
-// Logger, stolen from tracer.console()
-var colorConsole = tracer.colorConsole({ transport: function( data ){ process.stderr.write( data.output + "\n" ); } } );
-hotplate.logger = colorConsole;
-hotplate.log = colorConsole.log; // Shorthand
-hotplate.error = colorConsole.error; // Shorthand
+// Logging functions ( colorConsoleStdOut definitions stolen from tracer.console() )
+var colorConsoleStdOut = tracer.colorConsole({ transport: function( data ){ process.stdout.write( data.output + "\n" ); } } );
+var colorConsoleStdErr = tracer.colorConsole({ transport: function( data ){ process.stderr.write( data.output + "\n" ); } } );
+hotplate.logger = colorConsoleStdOut;
+hotplate.loggerErr = colorConsoleStdErr;
+hotplate.log = colorConsoleStdOut.log; // Shorthand
+hotplate.error = colorConsoleStdErr.log; // Shorthand
 hotplate.killLogging = function(){
   hotplate.log = hotplate.error = function(){};
-  var F = function(){}; hotplate.logger = { warn: F, info: F, debug: F, trace: F };
+  var F = function(){};
+  hotplate.logger = { warn: F, info: F, debug: F, trace: F };
+  hotplate.error = { warn: F, info: F, debug: F, trace: F };
 }
 
 var origEmit = hotplate.hotEvents.emit;
