@@ -3,17 +3,17 @@
 
   "CONTACTS -- THE BASICS"
 
-  AFTERNOON:
-
-  * Add fields "favourite contact" (virtual?), "syncModule" (string, will make it read-only), "syncId" (foreign ID)
-
-  * Make the contact list look better, maybe adding columns. Make a right box first, will be used for favourites
-  * Check the ordering of the contacts widget, sort by name option
+  *
+    - Make the contact list look better, adding columns like Google Contacts. Make a right box first, will be used for favourites
+    - Check the ordering of the contacts widget, sort by name or surname option
 
   * Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
-  * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
-  * In UserConfig, add option to have a default country code for SMSes and contact data entry
 
+  *
+    Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
+    In UserConfig, add option to have a default country code for SMSes and contact data entry
+
+  * Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. Tags?
 
   "CONTACTS -- IMPROVEMENTS"
 
@@ -24,7 +24,11 @@
 
   * Write "contact lookup" widget that returns a contact, generic one
 
-  * Make initial investigation re: Google+ and Facebook integration, maybe add fields.
+  "CONTACTS -- INTEGRATION"
+
+  * Add G+ authentication
+  **** Allow to sync contacts with Facebook
+  **** Allow to sync contacts with G+
   * Add buttons to re-sync all contacts from specified modules
 
   --------------------------
@@ -38,67 +42,72 @@
     - Use https://bitbucket.org/mutopia/autobox, but maybe use others
     User picks if it's an SMS or if it's an email.  The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
 
+  "SEND SMS/EMAIL, GATEWAY"
 
-  "BOOKINGS"
-  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
-
-  ** Ability to have messages under a specific booking, rather than just under a user
-
-  ** Implement simple TODO list for the bookings (first complex contained widget), date/time from, date/time to, who
-
-  ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
-
-
-  "FINISH UP"
-  * Make up God permissions mixin, setting God, add them
-  * Make God application separate, with separate login (only God can login)
-
-  ------------------------
-  DEADLINE: 30 March  2014
-  ------------------------
-
-  "THE MISSING PIECES"
-
-  Message infrastructure:
-  -----------------------
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
     status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
   * Integrate message-sending with the current simple comment infrastructure (!). 
   * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
 
-  User management and invites in Hotplate
-  ---------------------------------------
+  "USERS AND INVITES"
+
   * Write an "invite user" mechanism where users can be invited into the system: they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
     added to that workspace (UsersWorkspaces store)
 
-  * Add a "user management" section in settings for Admins only
+  --------------------------
+  DEADLINE: 30 March    2014
+  --------------------------
+
+  "WORKSPACE MANAGEMENT"
+
+  * Add a "user management" section in settings for workspace Admins only
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
+  * Decide on permissions/permissions model, maybe follow Drupal's
+
+  "BOOKINGS"
+
+  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
+  ** Ability to have messages under a specific booking, rather than just under a user
+  ** Implement simple TODO list for the bookings, date/time from, date/time to, who
+  ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
+
+  --------------------------
+  DEADLINE: 30 April    2014
+  --------------------------
+
+  "FINISH UP"
+
+  * Make up God permissions mixin, setting God, add them
+  * Make God application separate, with separate login (only God can login)
 
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
 
-  MARKET IT
-  ---------
+  --------------------------
+  DEADLINE: 30 May    2014
+  --------------------------
 
+                                                 RELEASE IT
+                                                 ----------
 
-  Advanced bookings
-  -----------------
+  "ADVANCED BOOKINGS"
+
   * Ability to set available "activities" for a contact and all contacts, with cost
   * product, money lines: [ booking owner | line owner | office ] OWES (min, price max) [ booking owner | line owner | office ] / qty
     where qty can be unit, one-off, hourly, half-daily, daily
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
-  Messages
-  --------
+  "ADVANCED MESSAGES AND TEMPLATES"
+
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
 
-  The money side
-  --------------
+  "ACCOUNTING"
+
   * Accounting summaries for each booking (with system-calculated ones)
   * Interface with payment system (Paypal?)
   * Ability to send invoices
@@ -112,6 +121,7 @@
   * Make sure that EditingWidget and StoreSelect are blind-friendly
     Allow country selection for phone number from a select box (straight, Dojo's?)
   * Add animations
+
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
@@ -619,3 +629,8 @@
   * Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
   * Add data about allowed countries somewhere both for client and for server side (shared function!)
   * Check country code and phone number client/server side
+  * Add fields "favourite contact" (virtual?), "syncModule" (string, will make it read-only), "syncId" (foreign ID), syncDate, isStarred, notes
+  * Make contact "starrable"
+  * Add option to offset buttons to the right
+  * Fix alignment of loading overlay with star
+  * Change widget so that it's about being ticked/unticked, move it to hotplate
