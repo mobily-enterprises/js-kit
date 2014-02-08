@@ -28,10 +28,9 @@ hotplate.loggerErr = colorConsoleStdErr;
 hotplate.log = colorConsoleStdOut.log; // Shorthand
 hotplate.error = colorConsoleStdErr.log; // Shorthand
 hotplate.killLogging = function(){
-  hotplate.log = hotplate.error = function(){};
+  hotplate.log = function(){};
   var F = function(){};
   hotplate.logger = { warn: F, info: F, debug: F, trace: F };
-  hotplate.error = { warn: F, info: F, debug: F, trace: F };
 }
 
 var origEmit = hotplate.hotEvents.emit;
