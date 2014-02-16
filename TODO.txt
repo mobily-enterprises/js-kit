@@ -1,39 +1,361 @@
   THE APPLICATION
   ---------------
 
+
+  PLAN OF ATTACK:
+  * DONE Pass Schema and searchSchema to db layer, make it use it to cast/validate data when fetching and inserting
+
+  **
+    X Pass ref: to constructor, store it
+    X Make a refRegistry variable to hold what changes, put it in the prototype
+
+  **
+    - Store all (VALIDATED) refs in _autoLoad, recursively, populate parents if a child has records added
+    - Add _searchData as well as _autoLoad, have all text fields in capital letters. This is the same as  the other one,
+      except that fields are in capital letters!
+
+    - Implement single-lookup autoload
+    - When searching, search in _searchData. If there are "dots" in the search, assumed a join, search the right fields in _ref
+    - Add a function to redo _searchData and _autoLoad for every child of a field
+
+  **
+    Store all keywords in _keywords, recursively
+    Add a "keyword" search in the searching options, will search keywords
+
+  * Allow indexing of sub-documents (keywords and search data) the right way with all necessary indexes, exposing a simple API
+
+  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities, let is pass a store in ref: (rather than coll) 
+
+  * Write tests for all this
+
+  INDEXER
+  -------
+
+  * Addresses
+  
+    #fields: {
+    #  workspaceId: true,
+    #  contactId: true,
+    #  id: true,
+
+    #  line1: true,
+    #  city: true,
+    #},
+    refs: {
+      Contacts: {
+        fetch: 'single',
+        joinFields: {
+          contactId: 'id',
+        }
+      }
+    } 
+
+
+
+  * Contacts
+
+    #fields:
+    #  workspaceId: true, // Searchable
+    #  id: true
+    #  firstName: true,
+    #  middleName: false, // UNsearchable
+    #  lastName: true,
+    #  dateOfBirth: true,
+    #  position: null, // Like "false", but UNprojected
+    #},
+
+    refs: {
+
+      Addresses: {
+
+        fetch: 'multiple',
+        joinFields: {
+          id: 'contactId',
+          bookingId: 'bookingId',
+        },
+        indexFields: [ 'line1', 'city' ],
+        preload: true,
+          
+        refs: {
+          Comments: {
+            fetch: multiple,
+            joinFields: {
+              contactId: 'contactId',
+              bookingId: 'bookingId',
+              id: 'commentId',
+              preload: false,
+            }
+          }
+        }
+
+      },
+    
+      StarredContact: {
+        fetch: 'single',
+        joinFields: {
+          id: 'id',
+        },
+        preload: false,
+      },
+
+    }
+
+    DATA CREATED:
+ 
+    {
+      _type: 'WorkspaceContacts',
+      _updated: date('20/2/2014')
+
+      record: {
+        workspaceId: '111',
+        id: '333',
+        firstName: 'Tony'
+        lastName: 'Mobily',
+        dateOfBirth: Date('10/1/76'),
+      },
+
+      _searchData: {
+
+        workspaceId: '111',
+        id: '333',
+        firstName: 'TONY'
+        lastName: 'MOBILY',
+        dateOfBirth: Date('10/1/76'),
+
+        StarredContact: true,            
+  
+          Addresses: {
+
+            record: {
+              workspaceId: '111',
+              contactId: 333,
+              id: 777,
+
+              line1: '11 Bitton st',
+              city: "Hamy hill",
+            },
+
+            _searchData: {
+              workspaceId: '111',
+              contactId: 333,
+              id: 777,
+
+              line1: '11 BITTON ST',
+              city: "HAMY HILL",
+
+              Comments: {
+                record: {
+                },
+
+                searchData:
+
+                }
+
+              }
+
+            }
+
+            
+
+
+          }
+        }
+ 
+      }
+
+      
+
+      _ref: {
+
+        // StarredContacts IS IGNORED!
+
+        Addresses: [
+
+          {
+            workspaceId: '111',
+            contactId: 333,
+            id: 777,
+
+            line1: '11 Bitton st',
+            city: "Hamy hill",
+            _ref: {
+
+            #  // Preload is off
+            #  Comments: [
+            #    {
+            #      workspaceId: '111',
+						#      contactId: 333,
+            #      addressId: 777,
+            #      id: aaa,
+
+            #      content: 'A first comment',
+            #      date: '14/2/2014'
+            #    }
+            #  ]
+
+            
+
+            }
+          }
+
+          {
+            workspaceId: '111',
+            contactId: 333,
+            id: 888,
+
+            line1: '24 Ivermey Road',
+            city: 'Hamy hill'
+            _ref: {
+
+            #  // Preload is off
+            #  Comments: [
+            #    {
+            #      workspaceId: '111',
+            #      contactId: 333,
+            #      addressId: 888,
+            #      id: bbb,
+
+            #      content: 'A second comment',
+            #      date: '15/2/2014'
+            #    }
+            #  ]
+
+            }
+          }
+
+        ]
+      }
+
+      _searchData: {
+        firstName: 'TONY',
+        lastName: 'MOBILY',
+        dateOfBirth: Date('10/1/76'),
+        _Contact_Addresses_line1: [ '11 BITTON ST', '24 IVERMEY ROAD' ],
+        _Contact_Addresses_city: [ 'HAMY HILL', 'HAMY HILL'  ],
+        _Contact_Addresses__Comments_content: ['A FIRST COMMENT' , 'A SECOND COMMENT' ],
+        _Contact_Addresses__Comments_date: [ date('14/2/2014') , date('15/2/2014') ],
+        _StarredContacts: true  <--- SPECIAL CASE, 1:1 relationship!
+      },
+
+      _keywords: {
+        ['TONY', 'MOBILY', '11 BITTON ST', '24 IVERMEY ROAD',  'HAMY HILL', 'HAMY HILL', 'A FIRST COMMENT' , 'A SECOND COMMENT' ]
+      }
+
+    }
+
+
+    {
+      _type: 'Addresses',
+      _updated: date('20/2/2014')
+
+      workspaceId: '111',
+      contactId: 333,
+      id: 777,
+
+      line1: '11 Bitton st',
+      city: "Hamy hill",
+
+      _searchData: {
+        line1: '11 BITTON ST',
+        city: "HAMY HILL",
+      }
+
+      _keywords: {
+        [ '24 IVERMEY ROAD',  'HAMY HILL' ],
+      }
+    }
+
+    {
+      _type: 'Addresses',
+      _updated: date('20/2/2014')
+
+      workspaceId: '111',
+      contactId: 333,
+      id: 888,
+
+      line1: '24 Ivermey Road',
+      city: 'Hamy hill'
+
+      _searchData: {
+        line1: '24 IVERMEY ROAD',
+        city: "HAMY HILL",
+      }
+      _keywords: {
+        [ '11 BITTON ST', '24 IVERMEY ROAD',  'HAMY HILL' ],
+      }
+    }
+ 
+
+    {
+      _type: 'Comments',
+      _updated: date('20/2/2014')
+
+      workspaceId: '111',
+		  contactId: 333,
+      addressId: 777,
+      id: aaa,
+
+      content: 'A first comment',
+      date: '14/2/2014'
+
+      _searchData: {
+        content: 'A FIRST COMMENT',
+        date: date('14/2/2014')
+      }
+
+    }
+
+
+    {
+      _type: 'Comments',
+      _updated: date('20/2/2014')
+
+      workspaceId: '111',
+      contactId: 333,
+      addressId: 888,
+      id: bbb,
+
+      content: 'A second comment',
+      date: '15/2/2014'
+
+      _searchData: {
+        content: 'A SECOND COMMENT',
+        date: date('15/2/2014')
+      }
+
+    }
+
+
+
   "CONTACTS -- THE BASICS"
+  
+  * Check the ordering of the contacts widget, sort by name or surname option
+    Add user-wide settings, that is respected when first creating the contact list
 
-  *
-    - Make the contact list look better, adding columns like Google Contacts. Make a right box first, will be used for favourites
-    - Check the ordering of the contacts widget, sort by name or surname option
+  * IMPORTANT: Find a way to find "starred" users only, or "category X" users only
 
-  * Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
-
-  *
-    Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
-    In UserConfig, add option to have a default country code for SMSes and contact data entry
-
-  * Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. Tags?
-
-  "CONTACTS -- IMPROVEMENTS"
+  * Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. "Groups"?
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+
+  "CONTACTS -- AND USERS"
+
+  * Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
+  * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
+    In UserConfig, add option to have a default country code for SMSes and contact data entry
+
+    This will require a "tick" widget where the list will depend on the available groups, cross-matching
+
+  "CONTACTS -- SEARCH"
 
   **
     Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
 
   * Write "contact lookup" widget that returns a contact, generic one
 
-  "CONTACTS -- INTEGRATION"
-
-  * Add G+ authentication
-  **** Allow to sync contacts with Facebook
-  **** Allow to sync contacts with G+
-  * Add buttons to re-sync all contacts from specified modules
-
-  --------------------------
-  DEADLINE: 28 February 2014
-  --------------------------
+  -----------------------
+  DEADLINE: 15 March 2014
+  -----------------------
 
   "MESSAGES"
 
@@ -57,9 +379,9 @@
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
     added to that workspace (UsersWorkspaces store)
 
-  --------------------------
-  DEADLINE: 30 March    2014
-  --------------------------
+  -----------------------
+  DEADLINE: 30 April 2014
+  -----------------------
 
   "WORKSPACE MANAGEMENT"
 
@@ -75,9 +397,9 @@
   ** Implement simple TODO list for the bookings, date/time from, date/time to, who
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
-  --------------------------
-  DEADLINE: 30 April    2014
-  --------------------------
+  ----------------------
+  DEADLINE: 30 May  2014
+  ----------------------
 
   "FINISH UP"
 
@@ -86,8 +408,16 @@
 
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
 
+  "CONTACTS -- INTEGRATION"
+
+  * Add G+ authentication
+  **** Allow to sync contacts with Facebook
+  **** Allow to sync contacts with G+
+  * Add buttons to re-sync all contacts from specified modules
+
+
   --------------------------
-  DEADLINE: 30 May    2014
+  DEADLINE: 30 June   2014
   --------------------------
 
                                                  RELEASE IT
@@ -112,7 +442,6 @@
   * Interface with payment system (Paypal?)
   * Ability to send invoices
   * Ability to _store_ received invoices
-
 
 
  LATER (hopefully other contributors)
@@ -634,3 +963,56 @@
   * Add option to offset buttons to the right
   * Fix alignment of loading overlay with star
   * Change widget so that it's about being ticked/unticked, move it to hotplate
+  * Make sure extra info is fetched when a contact is fetched (addresses, ph numbers, starred, emails)
+ 
+
+
+
+
+
+
+
+
+ 
+
+  // PROBABLY WRONG
+
+  * keywords table:
+
+    {
+      _type: 'Comments',
+      _id: aaa,
+      keywords: [
+        'A FIRST COMMENT',
+        #date('14/2/2014')
+      ]    
+    }
+
+    {
+      _type: 'Comments',
+      _id: bbb,
+      keywords: [
+        'A SECOND COMMENT',
+        date('15/2/2014')
+      ]    
+    }
+
+    { _type: 'Contacts',
+      _id: 333
+     keywords: [
+      'TONY',
+      'MOBILY',
+      # Date('10/1/76'),
+      '11 BITTON ST',
+      '24 IVERMEY ROAD',
+      'HAMY HILL',
+      'A FIRST COMMENT',
+      'A SECOND COMMENT'
+      # date('14/2/2014'),
+      # date('15/2/2014') ]
+      # true
+    }
+
+
+
+* Make the contact list look better, adding columns like Google Contacts.
