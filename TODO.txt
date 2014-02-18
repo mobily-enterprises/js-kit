@@ -3,28 +3,52 @@
 
 
   PLAN OF ATTACK:
-  * DONE Pass Schema and searchSchema to db layer, make it use it to cast/validate data when fetching and inserting
+  * X Pass Schema to db layer, make it use it to cast/validate data when fetching and inserting
 
   **
     X Pass ref: to constructor, store it
     X Make a refRegistry variable to hold what changes, put it in the prototype
 
   **
-    - Store all (VALIDATED) refs in _autoLoad, recursively, populate parents if a child has records added
-    - Add _searchData as well as _autoLoad, have all text fields in capital letters. This is the same as  the other one,
-      except that fields are in capital letters!
+    X Write recursive function to create the contents of _autoLoad  for a specific child table
+    X Populate parents' _autoLoadCache if a child has records added/modified
+    X See if it's best to use self rather than repeated first parameter, test carefully
+    X Add _searchData as well as _children, have all text fields in capital letters. This is the same as the other one,
+      except that fields are in capital letters and go into _searchData!
+    X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
 
-    - Implement single-lookup autoload
-    - When searching, search in _searchData. If there are "dots" in the search, assumed a join, search the right fields in _ref
-    - Add a function to redo _searchData and _autoLoad for every child of a field
 
-  **
+    - Implement single-lookup autoload (for 1:1 relationships)
+
+    - Add mechanism to avoid infinite recursion in case of circular referencing
+
+    - Improve join syntax so that it's possible to have hard-coded values for multi-purpose IDs
+
+    - Implement searchSchema in simpleDBLayer
+    - When searching, search in _searchData. If there are "dots" in the search, assumed a join, search the right fields in _searchData
+
+    - Add a function to redo _searchData and _children for every child of a record
+    - Add a function to populate all _children for a table without autoload
+
+  *
     Store all keywords in _keywords, recursively
     Add a "keyword" search in the searching options, will search keywords
 
+  * Work out scenarios:
+    - Two parent tables, bookings and contacts, and one child table with bookingId and contactId, where one or both defined
+    - Two parent tables, bookings and contacts, and one child table with parentId (the ID) and parentIdType (a string)
+    What about stores? A JsonRestStore, maybe a read-only one, would need to have the same layer for different queries. But at the moment
+    layers are created *by* the store. Maybe the layers (with schemas) should be defined beforehand, and *then* linked to stores, which would
+    be used to query them. Searchschemas would also have to be in the layer then.
+
+    - Requirement that only one layer per table: too strict? NO! Reasons:
+       * Update of a layer trigger message; if data is changed, other layer doesn't trigger the alert
+       * Different schemas means that different update mechanisms will emit different db structures
+       * Feels wrong
+
   * Allow indexing of sub-documents (keywords and search data) the right way with all necessary indexes, exposing a simple API
 
-  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities, let is pass a store in ref: (rather than coll) 
+  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
 
   * Write tests for all this
 
