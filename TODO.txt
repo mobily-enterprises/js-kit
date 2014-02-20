@@ -18,17 +18,17 @@
     X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
 
 
-    - Implement single-lookup autoload (for 1:1 relationships)
+    X Implement single-lookup autoload (for 1:1 relationships)
+
+    - Improve code and documentation on recursive code 
 
     - Add mechanism to avoid infinite recursion in case of circular referencing
-
-    - Improve join syntax so that it's possible to have hard-coded values for multi-purpose IDs
 
     - Implement searchSchema in simpleDBLayer
     - When searching, search in _searchData. If there are "dots" in the search, assumed a join, search the right fields in _searchData
 
     - Add a function to redo _searchData and _children for every child of a record
-    - Add a function to populate all _children for a table without autoload
+    - Add a function to populate all _children for a table  that doesn't have autoload
 
   *
     Store all keywords in _keywords, recursively
