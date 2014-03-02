@@ -1,362 +1,49 @@
   THE APPLICATION
   ---------------
 
+    X Add method to get a model from the registry once it's defined
+    \ Change recursion check:
+      X Add path AND root table (or path lists?) to the call
+      X Explicitely list what will be added to _children  as a list of paths in the root
 
-  PLAN OF ATTACK:
-  * X Pass Schema to db layer, make it use it to cast/validate data when fetching and inserting
+      X Complete rewrite of _updateParentsRecords
+      X Add conditions for _searchData, doing uppercasing of data
+      X Reinstate checks for autoLoad and searchable to see what to add
+      X Re-add  record information in _searchData in update or insert
 
-  **
-    X Pass ref: to constructor, store it
-    X Make a refRegistry variable to hold what changes, put it in the prototype
+      X Finish _updateSelfWithSelfUppercase()
+      X Make "delete" work (cases 5 and 6)
+      
+      **
+    - Implement searching in simpleDBLayer
+      - Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
+      - (Nearly done, only missing adding foreign keys for joins)
+      - When searching, search in _searchData
 
-  **
-    X Write recursive function to create the contents of _autoLoad  for a specific child table
-    X Populate parents' _autoLoadCache if a child has records added/modified
-    X See if it's best to use self rather than repeated first parameter, test carefully
-    X Add _searchData as well as _children, have all text fields in capital letters. This is the same as the other one,
-      except that fields are in capital letters and go into _searchData!
-    X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
+      **
+    - Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
+    - Declare positionField, make positioning work
 
-
-    X Implement single-lookup autoload (for 1:1 relationships)
-
-    - Improve code and documentation on recursive code 
-
-    - Add mechanism to avoid infinite recursion in case of circular referencing
-
-    - Implement searchSchema in simpleDBLayer
-    - When searching, search in _searchData. If there are "dots" in the search, assumed a join, search the right fields in _searchData
-
-    - Add a function to redo _searchData and _children for every child of a record
-    - Add a function to populate all _children for a table  that doesn't have autoload
-
-  *
-    Store all keywords in _keywords, recursively
-    Add a "keyword" search in the searching options, will search keywords
-
-  * Work out scenarios:
-    - Two parent tables, bookings and contacts, and one child table with bookingId and contactId, where one or both defined
-    - Two parent tables, bookings and contacts, and one child table with parentId (the ID) and parentIdType (a string)
-    What about stores? A JsonRestStore, maybe a read-only one, would need to have the same layer for different queries. But at the moment
-    layers are created *by* the store. Maybe the layers (with schemas) should be defined beforehand, and *then* linked to stores, which would
-    be used to query them. Searchschemas would also have to be in the layer then.
-
-    - Requirement that only one layer per table: too strict? NO! Reasons:
-       * Update of a layer trigger message; if data is changed, other layer doesn't trigger the alert
-       * Different schemas means that different update mechanisms will emit different db structures
-       * Feels wrong
-
-  * Allow indexing of sub-documents (keywords and search data) the right way with all necessary indexes, exposing a simple API
+      *
+    - Write tests for simpleDbSchema with better data, actually test things out
 
   * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
+    - Change JsonRestStores so that you first define layers, and then associate them to a JsonRest store
+    - Write tests for JsonRestStores with new infrastructure
+    - Note in documentation that if some extra features need special permissions, they need to be in a different store as lookups
 
-  * Write tests for all this
-
-  INDEXER
-  -------
-
-  * Addresses
+  * Update Hotplate
+    - Change hotplate so that it uses new JsonRest Stores
+    - Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
   
-    #fields: {
-    #  workspaceId: true,
-    #  contactId: true,
-    #  id: true,
-
-    #  line1: true,
-    #  city: true,
-    #},
-    refs: {
-      Contacts: {
-        fetch: 'single',
-        joinFields: {
-          contactId: 'id',
-        }
-      }
-    } 
-
-
-
-  * Contacts
-
-    #fields:
-    #  workspaceId: true, // Searchable
-    #  id: true
-    #  firstName: true,
-    #  middleName: false, // UNsearchable
-    #  lastName: true,
-    #  dateOfBirth: true,
-    #  position: null, // Like "false", but UNprojected
-    #},
-
-    refs: {
-
-      Addresses: {
-
-        fetch: 'multiple',
-        joinFields: {
-          id: 'contactId',
-          bookingId: 'bookingId',
-        },
-        indexFields: [ 'line1', 'city' ],
-        preload: true,
-          
-        refs: {
-          Comments: {
-            fetch: multiple,
-            joinFields: {
-              contactId: 'contactId',
-              bookingId: 'bookingId',
-              id: 'commentId',
-              preload: false,
-            }
-          }
-        }
-
-      },
-    
-      StarredContact: {
-        fetch: 'single',
-        joinFields: {
-          id: 'id',
-        },
-        preload: false,
-      },
-
-    }
-
-    DATA CREATED:
- 
-    {
-      _type: 'WorkspaceContacts',
-      _updated: date('20/2/2014')
-
-      record: {
-        workspaceId: '111',
-        id: '333',
-        firstName: 'Tony'
-        lastName: 'Mobily',
-        dateOfBirth: Date('10/1/76'),
-      },
-
-      _searchData: {
-
-        workspaceId: '111',
-        id: '333',
-        firstName: 'TONY'
-        lastName: 'MOBILY',
-        dateOfBirth: Date('10/1/76'),
-
-        StarredContact: true,            
-  
-          Addresses: {
-
-            record: {
-              workspaceId: '111',
-              contactId: 333,
-              id: 777,
-
-              line1: '11 Bitton st',
-              city: "Hamy hill",
-            },
-
-            _searchData: {
-              workspaceId: '111',
-              contactId: 333,
-              id: 777,
-
-              line1: '11 BITTON ST',
-              city: "HAMY HILL",
-
-              Comments: {
-                record: {
-                },
-
-                searchData:
-
-                }
-
-              }
-
-            }
-
-            
-
-
-          }
-        }
- 
-      }
-
-      
-
-      _ref: {
-
-        // StarredContacts IS IGNORED!
-
-        Addresses: [
-
-          {
-            workspaceId: '111',
-            contactId: 333,
-            id: 777,
-
-            line1: '11 Bitton st',
-            city: "Hamy hill",
-            _ref: {
-
-            #  // Preload is off
-            #  Comments: [
-            #    {
-            #      workspaceId: '111',
-						#      contactId: 333,
-            #      addressId: 777,
-            #      id: aaa,
-
-            #      content: 'A first comment',
-            #      date: '14/2/2014'
-            #    }
-            #  ]
-
-            
-
-            }
-          }
-
-          {
-            workspaceId: '111',
-            contactId: 333,
-            id: 888,
-
-            line1: '24 Ivermey Road',
-            city: 'Hamy hill'
-            _ref: {
-
-            #  // Preload is off
-            #  Comments: [
-            #    {
-            #      workspaceId: '111',
-            #      contactId: 333,
-            #      addressId: 888,
-            #      id: bbb,
-
-            #      content: 'A second comment',
-            #      date: '15/2/2014'
-            #    }
-            #  ]
-
-            }
-          }
-
-        ]
-      }
-
-      _searchData: {
-        firstName: 'TONY',
-        lastName: 'MOBILY',
-        dateOfBirth: Date('10/1/76'),
-        _Contact_Addresses_line1: [ '11 BITTON ST', '24 IVERMEY ROAD' ],
-        _Contact_Addresses_city: [ 'HAMY HILL', 'HAMY HILL'  ],
-        _Contact_Addresses__Comments_content: ['A FIRST COMMENT' , 'A SECOND COMMENT' ],
-        _Contact_Addresses__Comments_date: [ date('14/2/2014') , date('15/2/2014') ],
-        _StarredContacts: true  <--- SPECIAL CASE, 1:1 relationship!
-      },
-
-      _keywords: {
-        ['TONY', 'MOBILY', '11 BITTON ST', '24 IVERMEY ROAD',  'HAMY HILL', 'HAMY HILL', 'A FIRST COMMENT' , 'A SECOND COMMENT' ]
-      }
-
-    }
-
-
-    {
-      _type: 'Addresses',
-      _updated: date('20/2/2014')
-
-      workspaceId: '111',
-      contactId: 333,
-      id: 777,
-
-      line1: '11 Bitton st',
-      city: "Hamy hill",
-
-      _searchData: {
-        line1: '11 BITTON ST',
-        city: "HAMY HILL",
-      }
-
-      _keywords: {
-        [ '24 IVERMEY ROAD',  'HAMY HILL' ],
-      }
-    }
-
-    {
-      _type: 'Addresses',
-      _updated: date('20/2/2014')
-
-      workspaceId: '111',
-      contactId: 333,
-      id: 888,
-
-      line1: '24 Ivermey Road',
-      city: 'Hamy hill'
-
-      _searchData: {
-        line1: '24 IVERMEY ROAD',
-        city: "HAMY HILL",
-      }
-      _keywords: {
-        [ '11 BITTON ST', '24 IVERMEY ROAD',  'HAMY HILL' ],
-      }
-    }
- 
-
-    {
-      _type: 'Comments',
-      _updated: date('20/2/2014')
-
-      workspaceId: '111',
-		  contactId: 333,
-      addressId: 777,
-      id: aaa,
-
-      content: 'A first comment',
-      date: '14/2/2014'
-
-      _searchData: {
-        content: 'A FIRST COMMENT',
-        date: date('14/2/2014')
-      }
-
-    }
-
-
-    {
-      _type: 'Comments',
-      _updated: date('20/2/2014')
-
-      workspaceId: '111',
-      contactId: 333,
-      addressId: 888,
-      id: bbb,
-
-      content: 'A second comment',
-      date: '15/2/2014'
-
-      _searchData: {
-        content: 'A SECOND COMMENT',
-        date: date('15/2/2014')
-      }
-
-    }
-
-
+  * Document the lot
+    - Document simpledbschema
+    - Document JsonRestStores
 
   "CONTACTS -- THE BASICS"
   
   * Check the ordering of the contacts widget, sort by name or surname option
     Add user-wide settings, that is respected when first creating the contact list
-
-  * IMPORTANT: Find a way to find "starred" users only, or "category X" users only
 
   * Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. "Groups"?
 
@@ -988,55 +675,28 @@
   * Fix alignment of loading overlay with star
   * Change widget so that it's about being ticked/unticked, move it to hotplate
   * Make sure extra info is fetched when a contact is fetched (addresses, ph numbers, starred, emails)
- 
+  * Make the contact list look better, adding columns like Google Contacts.
+  * IMPORTANT: Find a way to find "starred" users only, or "category X" users only
+  * REWRITE SimpleDbLayer COMPLETELY TO IMPLEMENT AUTOMATIC LOOKUP AND ADVANCED SEARCHING
+  * X Pass Schema to db layer, make it use it to cast/validate data when fetching and inserting
+    X Pass ref: to constructor, store it
+    X Make a refRegistry variable to hold what changes, put it in the prototype
+    X Write recursive function to create the contents of _autoLoad  for a specific child table
+    X Populate parents' _autoLoadCache if a child has records added/modified
+    X See if it's best to use self rather than repeated first parameter, test carefully
+    X Add _searchData as well as _children, have all text fields in capital letters. This is the same as the other one,
+      except that fields are in capital letters and go into _searchData!
+    X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
+    X Add a function to populate all _children for a table  that doesn't have autoload
+    X Implement single-lookup autoload (for 1:1 relationships)
+    X Improve code and documentation on recursive code 
+    X Add a function to redo _searchData and _children for every child table of a record, just calls _completeRecord
+    X Add recursive code to updates and deletes, write helper functions for that
+    X Fix huge issue where there can be N lookup fields for the same table in a record, turn hashes into arrays and correct _getChildren
+    X Fix constructor for tables, take out recursion as it's 100% useless and silly
+    X Check output of tests to see that it does exactly what's needed, seems slow
+    X Fix last standing bug with configR apppearing
+    X Improve tests' code so that it's not as repetitive and it's actually usable
+    X Add mechanism to avoid infinite recursion in case of circular referencing
 
 
-
-
-
-
-
-
- 
-
-  // PROBABLY WRONG
-
-  * keywords table:
-
-    {
-      _type: 'Comments',
-      _id: aaa,
-      keywords: [
-        'A FIRST COMMENT',
-        #date('14/2/2014')
-      ]    
-    }
-
-    {
-      _type: 'Comments',
-      _id: bbb,
-      keywords: [
-        'A SECOND COMMENT',
-        date('15/2/2014')
-      ]    
-    }
-
-    { _type: 'Contacts',
-      _id: 333
-     keywords: [
-      'TONY',
-      'MOBILY',
-      # Date('10/1/76'),
-      '11 BITTON ST',
-      '24 IVERMEY ROAD',
-      'HAMY HILL',
-      'A FIRST COMMENT',
-      'A SECOND COMMENT'
-      # date('14/2/2014'),
-      # date('15/2/2014') ]
-      # true
-    }
-
-
-
-* Make the contact list look better, adding columns like Google Contacts.
