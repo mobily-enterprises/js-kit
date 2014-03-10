@@ -14,47 +14,75 @@
       X Finish _updateSelfWithSelfUppercase()
       X Make "delete" work (cases 5 and 6)
       
-      **
+      *
     - Implement searching in simpleDBLayer
-      - Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
-      - (Nearly done, only missing adding foreign keys for joins)
-      - When searching, search in _searchData
-
-      **
-    - Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
-    - Declare positionField, make positioning work
+      X Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
+      X (Nearly done, only missing adding foreign keys for joins)
+      X Take _searchData out of hash in constructor, make sure it's added by the search itself
+      X Make sure that selectors are created by hand, rather than with makeMongoParameters (the check on searchable fields will fail)
+      X Find out why updateSelfWithLookup doesn't work
+      X When searching in select(), search in _searchData at all times, all existing tests should then pass
+      X Fix problem when updating something ends up screwing up _searchData for all records
+      X Write tests for simpleDbSchema with better data
+      X HEAVILY optimise queries in the module now that the logic is there, merge all update calls so that they only happen once
 
       *
-    - Write tests for simpleDbSchema with better data, actually test things out
+      X Check answer: http://stackoverflow.com/questions/22212834/positional-working-on-different-parts-of-the-same-document
+      X Assign one row at a time, plus use unsetObject, in cases #3 and #4
+      X Make "delete" work (cases #5 and #6)
+
+      X Finish off cases #3, #4, #5 and #6 in updateParents with completely new data structure, will simply mirror updates
+
+      *
+      X Fix but with parentTablesArray pointing to the prototype
+      X Made sure that eachSeries is called when deleting to make logging clearer
+      X Check that indexes for joins are actually correct in SimpleDbLayer (look for TODO)
+      X Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
+
+      *
+      X Implement indexes for single fields
+      X Fix sortable with its own hash and its own check
+      X Declare positionField, make positioning work in SimpleSchema
+
+      - Place JOIN mongo-specific parts in separate functions
+
+      *
+      - Add id to every test in the least painful way (tweak the comparison function to ignore it?)
+      - Actually run tests after operations, passing a "test" function for each op
 
   * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
     - Change JsonRestStores so that you first define layers, and then associate them to a JsonRest store
+    - Rewrite the way search works, a JsonRestStore field activates a query on SimpleDbLayer on multiple fields
     - Write tests for JsonRestStores with new infrastructure
-    - Note in documentation that if some extra features need special permissions, they need to be in a different store as lookups
+
 
   * Update Hotplate
     - Change hotplate so that it uses new JsonRest Stores
     - Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
-  
+ 
   * Document the lot
     - Document simpledbschema
     - Document JsonRestStores
 
   "CONTACTS -- THE BASICS"
-  
+ 
+  * Add fields to the contacts: when saving, make sure that main contact, main address and main email are stored
+ 
   * Check the ordering of the contacts widget, sort by name or surname option
     Add user-wide settings, that is respected when first creating the contact list
-
-  * Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. "Groups"?
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
   "CONTACTS -- AND USERS"
 
-  * Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
+  **
+    Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
+
   * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
     In UserConfig, add option to have a default country code for SMSes and contact data entry
 
+  ***
+    Add a "category" for a user, think of easiest way to implement what's now possible with Entertainers. "Groups"?
     This will require a "tick" widget where the list will depend on the available groups, cross-matching
 
   "CONTACTS -- SEARCH"
@@ -62,10 +90,12 @@
   **
     Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
 
-  * Write "contact lookup" widget that returns a contact, generic one
+  ***
+    Write "contact lookup" widget that returns a contact, generic one
+
 
   -----------------------
-  DEADLINE: 15 March 2014
+  DEADLINE: 30 March 2014
   -----------------------
 
   "MESSAGES"
@@ -106,6 +136,7 @@
   * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
   ** Ability to have messages under a specific booking, rather than just under a user
   ** Implement simple TODO list for the bookings, date/time from, date/time to, who
+ 
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
   ----------------------
@@ -137,8 +168,8 @@
   "ADVANCED BOOKINGS"
 
   * Ability to set available "activities" for a contact and all contacts, with cost
-  * product, money lines: [ booking owner | line owner | office ] OWES (min, price max) [ booking owner | line owner | office ] / qty
-    where qty can be unit, one-off, hourly, half-daily, daily
+  * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
+    where qty can be unit, one-off, hourly, block, daily, with min units and unitsMultipleOf
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
   "ADVANCED MESSAGES AND TEMPLATES"
