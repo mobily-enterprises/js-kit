@@ -1,65 +1,27 @@
+
   THE APPLICATION
   ---------------
+  * Resolve issue of API being used in code. Making those fields searchable means that they are
+    searchable for *anybody*, which is a security risk. Well, theoretical since the query is enriched
+    with paramIds automatically and the only reason it works in the API is because paramIds is zapped.
+    Making them searchable by default is still something that shouldn't happen: the searchSchema is about
+    "what is searchable"
+    The real solution seems to be the change of:
 
-    X Add method to get a model from the registry once it's defined
-    \ Change recursion check:
-      X Add path AND root table (or path lists?) to the call
-      X Explicitely list what will be added to _children  as a list of paths in the root
+    grep [^a-zA-Z]GetQuery\( `find . -type f`
+    grep [^a-zA-Z]Put\( `find . -type f`
+    grep [^a-zA-Z]Post\( `find . -type f`
+    grep [^a-zA-Z]Delete\( `find . -type f`
 
-      X Complete rewrite of _updateParentsRecords
-      X Add conditions for _searchData, doing uppercasing of data
-      X Reinstate checks for autoLoad and searchable to see what to add
-      X Re-add  record information in _searchData in update or insert
-
-      X Finish _updateSelfWithSelfUppercase()
-      X Make "delete" work (cases 5 and 6)
-      
-      *
-    - Implement searching in simpleDBLayer
-      X Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
-      X (Nearly done, only missing adding foreign keys for joins)
-      X Take _searchData out of hash in constructor, make sure it's added by the search itself
-      X Make sure that selectors are created by hand, rather than with makeMongoParameters (the check on searchable fields will fail)
-      X Find out why updateSelfWithLookup doesn't work
-      X When searching in select(), search in _searchData at all times, all existing tests should then pass
-      X Fix problem when updating something ends up screwing up _searchData for all records
-      X Write tests for simpleDbSchema with better data
-      X HEAVILY optimise queries in the module now that the logic is there, merge all update calls so that they only happen once
-
-      *
-      X Check answer: http://stackoverflow.com/questions/22212834/positional-working-on-different-parts-of-the-same-document
-      X Assign one row at a time, plus use unsetObject, in cases #3 and #4
-      X Make "delete" work (cases #5 and #6)
-
-      X Finish off cases #3, #4, #5 and #6 in updateParents with completely new data structure, will simply mirror updates
-
-      *
-      X Fix but with parentTablesArray pointing to the prototype
-      X Made sure that eachSeries is called when deleting to make logging clearer
-      X Check that indexes for joins are actually correct in SimpleDbLayer (look for TODO)
-      X Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
-
-      *
-      X Implement indexes for single fields
-      X Fix sortable with its own hash and its own check
-      X Declare positionField, make positioning work in SimpleSchema
-
-      - Place JOIN mongo-specific parts in separate functions
-
-      *
-      - Add id to every test in the least painful way (tweak the comparison function to ignore it?)
-      - Actually run tests after operations, passing a "test" function for each op
-
-  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
-    - Change JsonRestStores so that you first define layers, and then associate them to a JsonRest store
-    - Rewrite the way search works, a JsonRestStore field activates a query on SimpleDbLayer on multiple fields
-    - Write tests for JsonRestStores with new infrastructure
+    From using the API to using the dbLayer (which, at this point, ALSO does casting on insert).
+    This will make it a lot better. The API way is really only a way to simulate calls.
+    But, doing so means that I don't get the extra goodies of pre-processing etc. from JsonRestStores. Plus,
+    does this mean that the API is essentially useless?
+    I could have different behaviour from remote:
+     - 
+    
 
 
-  * Update Hotplate
-    - Change hotplate so that it uses new JsonRest Stores
-    - Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
- 
   * Document the lot
     - Document simpledbschema
     - Document JsonRestStores
@@ -729,5 +691,72 @@
     X Fix last standing bug with configR apppearing
     X Improve tests' code so that it's not as repetitive and it's actually usable
     X Add mechanism to avoid infinite recursion in case of circular referencing
+    X Add method to get a model from the registry once it's defined
+    X Implement joins (!)
+    \ Change recursion check:
+      X Add path AND root table (or path lists?) to the call
+      X Explicitely list what will be added to _children  as a list of paths in the root
 
+      X Complete rewrite of _updateParentsRecords
+      X Add conditions for _searchData, doing uppercasing of data
+      X Reinstate checks for autoLoad and searchable to see what to add
+      X Re-add  record information in _searchData in update or insert
 
+      X Finish _updateSelfWithSelfUppercase()
+      X Make "delete" work (cases 5 and 6)
+      
+      *
+    - Implement searching in simpleDBLayer
+      X Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
+      X (Nearly done, only missing adding foreign keys for joins)
+      X Take _searchData out of hash in constructor, make sure it's added by the search itself
+      X Make sure that selectors are created by hand, rather than with makeMongoParameters (the check on searchable fields will fail)
+      X Find out why updateSelfWithLookup doesn't work
+      X When searching in select(), search in _searchData at all times, all existing tests should then pass
+      X Fix problem when updating something ends up screwing up _searchData for all records
+      X Write tests for simpleDbSchema with better data
+      X HEAVILY optimise queries in the module now that the logic is there, merge all update calls so that they only happen once
+
+      *
+      X Check answer: http://stackoverflow.com/questions/22212834/positional-working-on-different-parts-of-the-same-document
+      X Assign one row at a time, plus use unsetObject, in cases #3 and #4
+      X Make "delete" work (cases #5 and #6)
+
+      X Finish off cases #3, #4, #5 and #6 in updateParents with completely new data structure, will simply mirror updates
+
+      *
+      X Fix but with parentTablesArray pointing to the prototype
+      X Made sure that eachSeries is called when deleting to make logging clearer
+      X Check that indexes for joins are actually correct in SimpleDbLayer (look for TODO)
+      X Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
+
+      *
+      X Implement indexes for single fields
+      X Fix sortable with its own hash and its own check
+      X Declare positionField, make positioning work in SimpleSchema
+
+      X Place JOIN mongo-specific parts in separate functions, general code/variables tidy up
+
+      *
+      X Make idProperty mandatory in SimpleDbSchema and tests (for tests, just make name the idProperty)
+      X Create position key properly http://stackoverflow.com/questions/22291038/clarification-on-sorting-subsets-in-mongodb
+      X Create function that creates indexes for _all_ layers
+      X Change select: validation needs to allow the _children fields through
+      X Make sure select cleans up __uc__ fields from children, so that testing is even possible and results are correct
+      X Actually run tests after operations, passing a "test" function for each op
+      X Check that required fields cannot be set to undefined with an update with the deleteUnsetFields flag, decide with extra fields
+      X Add test for indexes
+  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
+    X Change JsonRestStores so that you first define layers, and then associate them to a JsonRest store
+    X Rewrite the way search works, a JsonRestStore field activates a query on SimpleDbLayer on multiple fields with conditions
+    X Write tests for JsonRestStores with new infrastructure
+
+  * Change hotplate so that it uses new JsonRest Stores
+    X ./node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js <- searchSchema!
+    X ./node_modules/hotCoreComet/lib/hotCoreComet.js <- searchSchema
+    X ./node_modules/hotCoreAuth/lib/hotCoreAuth.js <- searchSchema
+
+    X ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js
+    X ./node_modules/hotCoreStoreLogger/lib/hotCoreStoreLogger.js
+    X ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js
+  * Whatever this meant: Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
