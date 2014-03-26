@@ -2,13 +2,18 @@
   "CONTACTS -- THE BASICS"
 
   *
-    Change "relocation" into "reposition" everywhere in the code (inclding dgrid's patch)
-    Check and document that 'null' in `reposition`
     Add "data" or "blob" type to SimpleSchema, so that I can store data without uppercasing it (strings are)
+    * RUN THE APP, test positioning, play around
+
     Understand why authentication manager doesn't show the tick anymore (maybe it will after last mod)
 
     Convert existing code to new "nested" architecture. Also, add fields to the contacts: when saving, make
                                              sure that main contact, main address and main email are stored
+
+    Check ALL existing searchSchemas, make them work with new architecture, change it into onlineSearchSchema
+
+
+
 
   * Avoid some of the refreshes to the dgrid, make it look for the cell, and if there, change it
 
@@ -752,3 +757,5 @@
   * Document simpledbschema and JsonRestStores
   * FIxup problem where adding a new contact doesn't trigger a refresh
   * Check that reordering _actually_ works
+  * Change all "relocation" into "reposition"
+  * Check and document that 'null' in `reposition`
