@@ -1,39 +1,25 @@
 
-  THE APPLICATION
-  ---------------
-  * Resolve issue of API being used in code. Making those fields searchable means that they are
-    searchable for *anybody*, which is a security risk. Well, theoretical since the query is enriched
-    with paramIds automatically and the only reason it works in the API is because paramIds is zapped.
-    Making them searchable by default is still something that shouldn't happen: the searchSchema is about
-    "what is searchable"
-    The real solution seems to be the change of:
-
-    grep [^a-zA-Z]GetQuery\( `find . -type f`
-    grep [^a-zA-Z]Put\( `find . -type f`
-    grep [^a-zA-Z]Post\( `find . -type f`
-    grep [^a-zA-Z]Delete\( `find . -type f`
-
-    From using the API to using the dbLayer (which, at this point, ALSO does casting on insert).
-    This will make it a lot better. The API way is really only a way to simulate calls.
-    But, doing so means that I don't get the extra goodies of pre-processing etc. from JsonRestStores. Plus,
-    does this mean that the API is essentially useless?
-    I could have different behaviour from remote:
-     - 
-    
-
-
-  * Document the lot
-    - Document simpledbschema
-    - Document JsonRestStores
-
   "CONTACTS -- THE BASICS"
- 
-  * Add fields to the contacts: when saving, make sure that main contact, main address and main email are stored
- 
-  * Check the ordering of the contacts widget, sort by name or surname option
-    Add user-wide settings, that is respected when first creating the contact list
+
+  *
+    Change "relocation" into "reposition" everywhere in the code (inclding dgrid's patch)
+    Check and document that 'null' in `reposition`
+    Add "data" or "blob" type to SimpleSchema, so that I can store data without uppercasing it (strings are)
+    Understand why authentication manager doesn't show the tick anymore (maybe it will after last mod)
+
+    Convert existing code to new "nested" architecture. Also, add fields to the contacts: when saving, make
+                                             sure that main contact, main address and main email are stored
+
+  * Avoid some of the refreshes to the dgrid, make it look for the cell, and if there, change it
+
+
+  * Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+
+  -----------------------
+  DEADLINE: 30 March 2014
+  -----------------------
 
   "CONTACTS -- AND USERS"
 
@@ -55,9 +41,8 @@
   ***
     Write "contact lookup" widget that returns a contact, generic one
 
-
   -----------------------
-  DEADLINE: 30 March 2014
+  DEADLINE: 30 April 2014
   -----------------------
 
   "MESSAGES"
@@ -83,7 +68,7 @@
     added to that workspace (UsersWorkspaces store)
 
   -----------------------
-  DEADLINE: 30 April 2014
+  DEADLINE: 30 May 2014
   -----------------------
 
   "WORKSPACE MANAGEMENT"
@@ -102,7 +87,7 @@
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
   ----------------------
-  DEADLINE: 30 May  2014
+  DEADLINE: 30 Jun  2014
   ----------------------
 
   "FINISH UP"
@@ -111,6 +96,11 @@
   * Make God application separate, with separate login (only God can login)
 
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
+  * Create admin interface for things
+
+  ----------------------
+  DEADLINE: 30 Jul  2014
+  ----------------------
 
   "CONTACTS -- INTEGRATION"
 
@@ -120,12 +110,10 @@
   * Add buttons to re-sync all contacts from specified modules
 
 
-  --------------------------
-  DEADLINE: 30 June   2014
-  --------------------------
+  ---------------------
+  DEADLINE: 30 Aug 2014
+  ---------------------
 
-                                                 RELEASE IT
-                                                 ----------
 
   "ADVANCED BOOKINGS"
 
@@ -760,3 +748,7 @@
     X ./node_modules/hotCoreStoreLogger/lib/hotCoreStoreLogger.js
     X ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js
   * Whatever this meant: Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
+  * Make sure that, when called by API, GetQuery allows searching for anything in either the searchSchema or the main schema
+  * Document simpledbschema and JsonRestStores
+  * FIxup problem where adding a new contact doesn't trigger a refresh
+  * Check that reordering _actually_ works
