@@ -2,18 +2,10 @@
   "CONTACTS -- THE BASICS"
 
   *
-    Add "data" or "blob" type to SimpleSchema, so that I can store data without uppercasing it (strings are)
-    * RUN THE APP, test positioning, play around
-
-    Understand why authentication manager doesn't show the tick anymore (maybe it will after last mod)
-
-    Convert existing code to new "nested" architecture. Also, add fields to the contacts: when saving, make
-                                             sure that main contact, main address and main email are stored
-
-    Check ALL existing searchSchemas, make them work with new architecture, change it into onlineSearchSchema
-
-
-
+    - Convert existing code to new "nested" architecture. Also, add fields to the contacts: when saving, make
+      sure that main contact, main address and main email are stored
+      REMEMBER: node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js (workspaceName, will be handled by DbLayer)
+    - Deploy app to NodeJitsu
 
   * Avoid some of the refreshes to the dgrid, make it look for the cell, and if there, change it
 
@@ -759,3 +751,11 @@
   * Check that reordering _actually_ works
   * Change all "relocation" into "reposition"
   * Check and document that 'null' in `reposition`
+  * Changed all searchSchema entries into onlineSearchSchema which makes a lot more sense
+  * Add "data" or "blob" type to SimpleSchema, so that I can store data without uppercasing it (strings are)
+  * Fix huge problem when userId is null in MultiHome
+  * RUN THE APP, test positioning, play around (is authManager fixed?)
+  * Go through all API calls, make sure that killComet is on when necessary
+  * Understand why authentication manager doesn't show the tick anymore. This one was ridiculous. How did the CSS change?!?
+  * Check ALL existing onlineSearchSchemas, make them work with new architecture, check sanity
+  * Make sure that all small custom-created stores have logError set so that they log hotpate errors
