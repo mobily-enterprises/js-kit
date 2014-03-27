@@ -11,6 +11,7 @@
 
 
   * Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
+    Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
