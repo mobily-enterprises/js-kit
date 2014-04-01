@@ -2,7 +2,7 @@
   "CONTACTS -- THE BASICS"
 
   *
-    - Convert existing code to new "nested" architecture. Also, add fields to the contacts: when saving, make
+    - Also, add fields to the contacts: when saving, make
       sure that main contact, main address and main email are stored
       REMEMBER: node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js (workspaceName, will be handled by DbLayer)
     - Deploy app to NodeJitsu
@@ -760,3 +760,4 @@
   * Understand why authentication manager doesn't show the tick anymore. This one was ridiculous. How did the CSS change?!?
   * Check ALL existing onlineSearchSchemas, make them work with new architecture, check sanity
   * Make sure that all small custom-created stores have logError set so that they log hotpate errors
+  * Convert existing code to new "nested" architecture. 
