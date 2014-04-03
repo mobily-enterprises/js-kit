@@ -1,14 +1,52 @@
 
-  "CONTACTS -- THE BASICS"
+  "PEDONE"
+
+  * 
+    X Get existing application ready
+    X Write initial form and stores
+    X Plan work and TODO
+    X Pick modules and headless chrome (CHOICE: phantomJS + node-phantomjs-simple)
+
 
   *
-    - Also, add fields to the contacts: when saving, make
-      sure that main contact, main address and main email are stored
-      REMEMBER: node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js (workspaceName, will be handled by DbLayer)
-    - Deploy app to NodeJitsu
+    X Move UTCDate from ./WorkspacesContacts/WorkspacesContactsInfo.js to hotplate
+    X Draft a form that sends date/time to the server (UTC) mixing the two
+    - Finish off form: validation, and setting time in form calculating time from date
+    - Add codes as a list of codes/labels
+    - Finish off initial interface, making space for iframe
+
+  *
+    - Add a button to synchronise time offset based on server's UTC time
+    - Incorporate headless webkit properly
+
+  *
+
+    - Make requests to form, check for changes, using Phantom rather than Get
+    - Write layer around Phantom
+    - Write initial scraper using Phantom (1 request per second)
+
+  *
+    - Log changes on log store
+    - Write dgrid to browse logs
+    - Rewrite aggressive scraper that makes N requests, manage closing down requests using Phantom
+
+  *
+    - Add part of interface that allows manual inserting of code with iFrame
+
+  *
+    - Write form server with several forms (straight, JS, cookies, in-field coockies, etc.)
+
+  *
+    - Write log browser for server results
+    - Test program with itself
+
+
+  "CONTACTS -- THE BASICS"
+
+  * Add fields to the contacts: when saving, make sure that main contact, main address and email are stored
+    REMEMBER: node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js (workspaceName, will be handled by DbLayer)
 
   * Avoid some of the refreshes to the dgrid, make it look for the cell, and if there, change it
-
 
   * Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
     Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
@@ -16,7 +54,7 @@
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
   -----------------------
-  DEADLINE: 30 March 2014
+  DEADLINE: 15 April 2014
   -----------------------
 
   "CONTACTS -- AND USERS"
@@ -34,13 +72,13 @@
   "CONTACTS -- SEARCH"
 
   **
-    Make up filters for contacts (would love to have _one_ search field, really), allow to search for them
+    Make up filters for contacts allow to search for them
 
   ***
-    Write "contact lookup" widget that returns a contact, generic one
+    Write "contact lookup" field form that auto-completes contacts (make it configurable)
 
   -----------------------
-  DEADLINE: 30 April 2014
+  DEADLINE: 15 May 2014
   -----------------------
 
   "MESSAGES"
@@ -66,7 +104,7 @@
     added to that workspace (UsersWorkspaces store)
 
   -----------------------
-  DEADLINE: 30 May 2014
+  DEADLINE: 10 June 2014
   -----------------------
 
   "WORKSPACE MANAGEMENT"
@@ -97,7 +135,7 @@
   * Create admin interface for things
 
   ----------------------
-  DEADLINE: 30 Jul  2014
+  DEADLINE: 20 Jul  2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
@@ -111,7 +149,6 @@
   ---------------------
   DEADLINE: 30 Aug 2014
   ---------------------
-
 
   "ADVANCED BOOKINGS"
 
@@ -761,3 +798,4 @@
   * Check ALL existing onlineSearchSchemas, make them work with new architecture, check sanity
   * Make sure that all small custom-created stores have logError set so that they log hotpate errors
   * Convert existing code to new "nested" architecture. 
+  * Re-Deploy app to NodeJitsu
