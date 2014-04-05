@@ -11,34 +11,28 @@
   *
     X Move UTCDate from ./WorkspacesContacts/WorkspacesContactsInfo.js to hotplate
     X Draft a form that sends date/time to the server (UTC) mixing the two
-    - Finish off form: validation, and setting time in form calculating time from date
-    - Add codes as a list of codes/labels
-    - Finish off initial interface, making space for iframe
+    X Finish off form: validation, and setting time in form calculating time from date
+    X Add codes as a list of codes/labels
+    X Finish off initial interface
 
   *
-    - Add a button to synchronise time offset based on server's UTC time
-    - Incorporate headless webkit properly
+    X Add a button to synchronise time offset based on server's UTC time
+    X Add interface with time when crawling starts, and "status" (can be waiting, requesting, submiting)
+
+  * - Work on interface, adding iFrame for manual submit and initial log browser
+    - Add browser-calculated time to crawl initiation
+    - Test manual interface on Marco's form
 
   *
+    - Rewrite request scheduler with configurable times and logger
 
-    - Make requests to form, check for changes, using Phantom rather than Get
-    - Write layer around Phantom
-    - Write initial scraper using Phantom (1 request per second)
-
-  *
-    - Log changes on log store
-    - Write dgrid to browse logs
-    - Rewrite aggressive scraper that makes N requests, manage closing down requests using Phantom
+  * - Add message logger
 
   *
-    - Add part of interface that allows manual inserting of code with iFrame
+    - Test scheduler, decide what to do with cookies etc.
 
   *
     - Write form server with several forms (straight, JS, cookies, in-field coockies, etc.)
-
-  *
-    - Write log browser for server results
-    - Test program with itself
 
 
   "CONTACTS -- THE BASICS"
