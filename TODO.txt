@@ -45,7 +45,11 @@
     X Make logs downloadable as text files
 
   *
-    - Rewrite server-side request scheduler
+    X Rewrite server-side request scheduler
+      - Bottone per resettare lo status, in modo che si possa ricominciare la submit dopo che e' successa
+      - "Partenza in X secondi" che si aggiorna live sulla pagina
+      - Logging lato server
+      - Il DISPLAY dello status a volte non va a "submit in corso" (questa la capisco quando faccio i log)
 
   *
     - Testing
