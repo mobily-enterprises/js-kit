@@ -1,77 +1,15 @@
-
-  "PEDONE"
-
-  * 
-    X Get existing application ready
-    X Write initial form and stores
-    X Plan work and TODO
-    X Pick modules and headless chrome (CHOICE: phantomJS + node-phantomjs-simple)
-
-
-  *
-    X Move UTCDate from ./WorkspacesContacts/WorkspacesContactsInfo.js to hotplate
-    X Draft a form that sends date/time to the server (UTC) mixing the two
-    X Finish off form: validation, and setting time in form calculating time from date
-    X Add codes as a list of codes/labels
-    X Finish off initial interface
-
-  *
-    X Add a button to synchronise time offset based on server's UTC time
-    X Add interface with time when crawling starts, and "status" (can be waiting, requesting, submiting)
-
-
-  *
-    X Change form so that it works on browser's local time
-    X Work on interface, adding iFrame for manual submit and initial log browser
-    X Test manual interface on Marco's form
-
-  *
-    X Only set fields that are empty
-    X Add buttons to iframe interface: "force reload", "stop refreshing", "close"
-    X Make interface collapse when sending requests
-    X Make it less "bliky" (overlay, or two frames)
-    X Enable/disable buttons depending on the automaton's state
-    X Have indicator of reload counts
-    X Display code at the top of the frame
-    X Fix frame height so that iframe is as big as it needs to be
-    X Check for ways to see if just "body" has loaded
-
-  * 
-    X Ability to log from client side
-    X Ability to see logs
-
-  *
-    X Fix "time offset" procedure
-    X Make logs downloadable as text files
-
-  *
-    X Rewrite server-side request scheduler
-      - Bottone per resettare lo status, in modo che si possa ricominciare la submit dopo che e' successa
-      - "Partenza in X secondi" che si aggiorna live sulla pagina
-      - Logging lato server
-      - Il DISPLAY dello status a volte non va a "submit in corso" (questa la capisco quando faccio i log)
-
-  *
-    - Testing
-
-  *
-    - Write form server with several forms (straight, JS, cookies, in-field coockies, etc.)
-
-
   "CONTACTS -- THE BASICS"
 
-  * Add fields to the contacts: when saving, make sure that main contact, main address and email are stored
-    REMEMBER: node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js (workspaceName, will be handled by DbLayer)
-
-  * Avoid some of the refreshes to the dgrid, make it look for the cell, and if there, change it
-
-  * Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
+  *
+    Avoid (all?) refreshes to the dgrid, make it look for the cell, and if there, change it
+    Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
     Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
 
   * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
+
   -----------------------
-  DEADLINE: 15 April 2014
+  DEADLINE: 30 April 2014
   -----------------------
 
   "CONTACTS -- AND USERS"
@@ -84,12 +22,14 @@
 
   "CONTACTS -- SEARCH"
 
-  **
+  ***
     Make up filters for contacts allow to search for them
 
-  ***
+  *******
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
-    Use the same widget for selecting groups/categories for a user
+    Use the same widget for selecting groups/categories for a user, or maybe create a "tick" widget
+
+  * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
   DEADLINE: 15 May 2014
@@ -813,3 +753,58 @@
   * Make sure that all small custom-created stores have logError set so that they log hotpate errors
   * Convert existing code to new "nested" architecture. 
   * Re-Deploy app to NodeJitsu
+
+  "PEDONE"
+
+  * 
+    X Get existing application ready
+    X Write initial form and stores
+    X Plan work and TODO
+    X Pick modules and headless chrome (CHOICE: phantomJS + node-phantomjs-simple)
+
+
+  *
+    X Move UTCDate from ./WorkspacesContacts/WorkspacesContactsInfo.js to hotplate
+    X Draft a form that sends date/time to the server (UTC) mixing the two
+    X Finish off form: validation, and setting time in form calculating time from date
+    X Add codes as a list of codes/labels
+    X Finish off initial interface
+
+  *
+    X Add a button to synchronise time offset based on server's UTC time
+    X Add interface with time when crawling starts, and "status" (can be waiting, requesting, submiting)
+
+
+  *
+    X Change form so that it works on browser's local time
+    X Work on interface, adding iFrame for manual submit and initial log browser
+    X Test manual interface on Marco's form
+
+  *
+    X Only set fields that are empty
+    X Add buttons to iframe interface: "force reload", "stop refreshing", "close"
+    X Make interface collapse when sending requests
+    X Make it less "bliky" (overlay, or two frames)
+    X Enable/disable buttons depending on the automaton's state
+    X Have indicator of reload counts
+    X Display code at the top of the frame
+    X Fix frame height so that iframe is as big as it needs to be
+    X Check for ways to see if just "body" has loaded
+
+  * 
+    X Ability to log from client side
+    X Ability to see logs
+
+  *
+    X Fix "time offset" procedure
+    X Make logs downloadable as text files
+
+  *
+    X Rewrite server-side request scheduler
+
+    X Add fields to the contacts: when saving, make sure that main contact, main address and email are stored
+    X Check _broadcast in hotCoreJsonRestStores, after HUGE refactoring, reordering eats records on different tab
+    X Make sure that local app gets notified of change in record if an email is changed/repositioned (!)
+    X Fix ordering in main screen, seems off, contacts added at the end (fingers crossed it's nothing serious)
+    X Change hotCoreMultiHome.js so that workspaceName is handled by layer
+    X Make sure that what I did for email also happens for addresses and phone numbers, do it the right way
