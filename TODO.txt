@@ -1,18 +1,40 @@
-  "CONTACTS -- THE BASICS"
+
+  "RETHINK CSS AND LAYOUTS"
+  
+  * 
+    Make sure the following sets CLASSES and not styles:
+    - ./hotDojoWidgets/client/AlertBar.js
+    - ./hotCorePage/lib/Csses.js
+    - ./hotDojoAdd/lib/hotDojoAdd.js
+    - ./hotDojoDgridWidgets/lib/hotDojoDgridWidgets.js
+    
+    ./hotDojoWidgets/client/_StackFadingMixin.js [ html.style ] https://dojotoolkit.org/reference-guide/1.9/dojo/dom-style.html#dojo-dom-style-get
+    ./hotDojoWidgets/client/_OverlayMixin.js
+    ./hotDojoDgridWidgets/client/EditableList.js
+    ./hotDojoDgridWidgets/client/StoreSelect.js
+    ./hotDojoAuth/client/auth/local.js
 
   *
-    Avoid (all?) refreshes to the dgrid, make it look for the cell, and if there, change it
-    Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
-    Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
+    Make sure that widget classes are declared within widgets themselves, probably in postcreate in non-template ones
+    Make sure heights/sizes are defined for each BorderContainer-based widgets, or they won't show up at all
 
-  * Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+  *
+    Find better names for existing select boxes and config options
+    Prettify all existing widgets including contacts and login, get a feel again for the app's CSS
 
-
+ 
   -----------------------
   DEADLINE: 30 April 2014
   -----------------------
 
-  "CONTACTS -- AND USERS"
+  "CONTACTS -- AND USERS, FINAL"
+
+  *
+    Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
+    Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
+
+  *
+    Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
   **
     Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
@@ -67,6 +89,7 @@
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
   * Decide on permissions/permissions model, maybe follow Drupal's
+
 
   "BOOKINGS"
 
@@ -808,3 +831,8 @@
     X Fix ordering in main screen, seems off, contacts added at the end (fingers crossed it's nothing serious)
     X Change hotCoreMultiHome.js so that workspaceName is handled by layer
     X Make sure that what I did for email also happens for addresses and phone numbers, do it the right way
+    X Avoid (all?) refreshes to the dgrid, make it look for the cell, and if there, change it. It turned out to be
+      a problem with successfulsubmit (local event) triggering a refresh (which would only work locally)
+
+   X Change EditableList so that it's a container, placing list in centre and widgets where required
+   X Check existing CSS for sanity
