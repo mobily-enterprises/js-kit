@@ -1,33 +1,20 @@
 
   "RETHINK CSS AND LAYOUTS"
   
-  * 
-    Make sure the following sets CLASSES and not styles:
-    - ./hotDojoWidgets/client/AlertBar.js
-    - ./hotCorePage/lib/Csses.js
-    - ./hotDojoAdd/lib/hotDojoAdd.js
-    - ./hotDojoDgridWidgets/lib/hotDojoDgridWidgets.js
-    
-    ./hotDojoWidgets/client/_StackFadingMixin.js [ html.style ] https://dojotoolkit.org/reference-guide/1.9/dojo/dom-style.html#dojo-dom-style-get
-    ./hotDojoWidgets/client/_OverlayMixin.js
-    ./hotDojoDgridWidgets/client/EditableList.js
-    ./hotDojoDgridWidgets/client/StoreSelect.js
-    ./hotDojoAuth/client/auth/local.js
+  * Phone numbers, unlike emails, don't get updated (set?) when setting them as first
+    Editing an address adding lines to the first field stuffs up the form
 
-  *
-    Make sure that widget classes are declared within widgets themselves, probably in postcreate in non-template ones
-    Make sure heights/sizes are defined for each BorderContainer-based widgets, or they won't show up at all
+  * Try and make BorderContainer resize automatically somehow, auto-grow dgrids?
 
-  *
-    Find better names for existing select boxes and config options
-    Prettify all existing widgets including contacts and login, get a feel again for the app's CSS
+  * Find better names for existing select boxes and config options, finalise them
 
+  * Make sure app works well, general basic QA
  
   -----------------------
-  DEADLINE: 30 April 2014
+  DEADLINE: 10 May 2014
   -----------------------
 
-  "CONTACTS -- AND USERS, FINAL"
+  "CONTACTS -- FULL FEATURES"
 
   *
     Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
@@ -42,10 +29,8 @@
   * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
     In UserConfig, add option to have a default country code for SMSes and contact data entry
 
-  "CONTACTS -- SEARCH"
-
   ***
-    Make up filters for contacts allow to search for them
+    Make up filters for contacts, allow to search for them
 
   *******
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
@@ -54,7 +39,7 @@
   * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
-  DEADLINE: 15 May 2014
+  DEADLINE: 30 May 2014
   -----------------------
 
   "MESSAGES"
@@ -146,6 +131,9 @@
   * Interface with payment system (Paypal?)
   * Ability to send invoices
   * Ability to _store_ received invoices
+
+
+
 
 
  LATER (hopefully other contributors)
@@ -836,3 +824,18 @@
 
    X Change EditableList so that it's a container, placing list in centre and widgets where required
    X Check existing CSS for sanity
+  * 
+    Make sure the following sets CLASSES and not styles:
+    N ./hotDojoWidgets/client/AlertBar.js
+    N ./hotCorePage/lib/Csses.js
+    N ./hotDojoAdd/lib/hotDojoAdd.js
+    N ./hotDojoDgridWidgets/lib/hotDojoDgridWidgets.js
+    
+    X ./hotDojoWidgets/client/_StackFadingMixin.js [ html.style ]
+    X ./hotDojoWidgets/client/_OverlayMixin.js (easy)
+    N ./hotDojoDgridWidgets/client/EditableList.js
+    N ./hotDojoDgridWidgets/client/StoreSelect.js
+    N ./hotDojoAuth/client/auth/local.js
+  * Make sure that widget classes are declared within widgets themselves, probably in postcreate in non-template ones
+  * Make sure heights/sizes are defined for each BorderContainer-based widgets, or they won't show up at all
+  * Redo CSS for the whole app
