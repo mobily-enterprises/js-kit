@@ -1,8 +1,5 @@
 
   "RETHINK CSS AND LAYOUTS"
-  
-  * Phone numbers, unlike emails, don't get updated (set?) when setting them as first
-    Editing an address adding lines to the first field stuffs up the form
 
   * Try and make BorderContainer resize automatically somehow, auto-grow dgrids?
 
@@ -839,3 +836,6 @@
   * Make sure that widget classes are declared within widgets themselves, probably in postcreate in non-template ones
   * Make sure heights/sizes are defined for each BorderContainer-based widgets, or they won't show up at all
   * Redo CSS for the whole app
+  * Phone numbers, unlike emails, don't get updated (set?) when setting them as first
+  * Check double-refresh issue with lists and contacts
+  * Editing an address adding lines to the first field stuffs up the form
