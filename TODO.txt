@@ -1,14 +1,13 @@
 
   "RETHINK CSS AND LAYOUTS"
 
-  * Try and make BorderContainer resize automatically somehow, auto-grow dgrids?
-
-  * Find better names for existing select boxes and config options, finalise them
-
-  * Make sure app works well, general basic QA
+  *
+    Find better names for existing select boxes and config options, finalise them
+    Finish polishing up the CSS for the rest of the app
+    Make sure app works well, general basic QA
  
   -----------------------
-  DEADLINE: 10 May 2014
+  DEADLINE: 6 May 2014
   -----------------------
 
   "CONTACTS -- FULL FEATURES"
@@ -62,7 +61,7 @@
     added to that workspace (UsersWorkspaces store)
 
   -----------------------
-  DEADLINE: 10 June 2014
+  DEADLINE: 30 June 2014
   -----------------------
 
   "WORKSPACE MANAGEMENT"
@@ -82,7 +81,7 @@
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
   ----------------------
-  DEADLINE: 30 Jun  2014
+  DEADLINE: 30 Jul  2014
   ----------------------
 
   "FINISH UP"
@@ -94,7 +93,7 @@
   * Create admin interface for things
 
   ----------------------
-  DEADLINE: 20 Jul  2014
+  DEADLINE: 20 Aug  2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
@@ -839,3 +838,5 @@
   * Phone numbers, unlike emails, don't get updated (set?) when setting them as first
   * Check double-refresh issue with lists and contacts
   * Editing an address adding lines to the first field stuffs up the form
+  * Turn EditableList back to a templated widget, since it's not a layout defining widget
+  * Fix heights for all editable lists
