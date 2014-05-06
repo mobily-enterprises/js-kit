@@ -3,6 +3,10 @@
 
   *
     Find better names for existing select boxes and config options, finalise them
+    - Workspace-specific list for a user -- Goals for workspace
+    - User-specific list (no workspace) -- Hobbies 
+    - User's attribute -- Users categories -- 
+    - Contact's attribute -- Contacts categories -- Position?
     Finish polishing up the CSS for the rest of the app
     Make sure app works well, general basic QA
  
@@ -840,3 +844,4 @@
   * Editing an address adding lines to the first field stuffs up the form
   * Turn EditableList back to a templated widget, since it's not a layout defining widget
   * Fix heights for all editable lists
+  * Fix bug where a delete doesn't trigger refresh of contact in list
