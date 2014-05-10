@@ -1,20 +1,23 @@
-
-  "RETHINK CSS AND LAYOUTS"
+  
+  "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
 
   *
-    Find better names for existing select boxes and config options, finalise them
-    - Workspace-specific list for a user -- Goals for workspace
-    - User-specific list (no workspace) -- Hobbies 
-    - User's attribute -- Users categories -- 
-    - Contact's attribute -- Contacts categories -- Position?
-    Finish polishing up the CSS for the rest of the app
-    Make sure app works well, general basic QA
- 
-  -----------------------
-  DEADLINE: 6 May 2014
-  -----------------------
+    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
-  "CONTACTS -- FULL FEATURES"
+  *
+    Put contacts editing widget in config options as own information
+
+  *
+    Rationalise WORKSPACE-user settings after linking users and contacts (email picked from contacts, address, etc.)
+
+  *
+    Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
+
+  *
+    In config, add option to have a default country code for SMSes and contact data entry
+
+
+  "CONTACTS -- FAVORITES AND ORDERING"
 
   *
     Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
@@ -23,11 +26,9 @@
   *
     Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
 
-  **
-    Link contacts with users, make sure that each newly created user has a contact attached to it (userId field in contact)
 
-  * Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
-    In UserConfig, add option to have a default country code for SMSes and contact data entry
+  "CONTACTS -- SEARCH AND WIDGETS"
+
 
   ***
     Make up filters for contacts, allow to search for them
@@ -36,6 +37,11 @@
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
     Use the same widget for selecting groups/categories for a user, or maybe create a "tick" widget
 
+
+  "HOUSE KEEPING"
+
+  * Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
+  * Check for "default filters" active for a specific store, write pattern for it
   * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
@@ -845,3 +851,8 @@
   * Turn EditableList back to a templated widget, since it's not a layout defining widget
   * Fix heights for all editable lists
   * Fix bug where a delete doesn't trigger refresh of contact in list
+  * Make sure app works well, general basic QA
+  * Find better names for existing select boxes and config options, finalise them
+  * Make dummy widget to prevent singleChild resizing
+  * When a user is added to a workspace, create an empty contact linked to it and add nested: to workspacesUsersInfo
+  * Check the 74 (!) errors in tests in simpledbschema
