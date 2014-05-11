@@ -2,13 +2,13 @@
   "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
  
   *
-    Put contacts editing widget in config options as own information
+    Make "contact type" not appear for self-editing (add option to widget itself)
+    Make "contact type" not appear for companies 
+    Have small 2px border for tabs, make email address a select from contacts' email addresses
+    Add configuration option to decide sorting of contacts, make that setting the default in contact list
     Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
-  *
-    Rationalise WORKSPACE-user settings after linking users and contacts (email picked from contacts, address, etc.)
-
-  *
+  * 
     Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces 
 
   *
@@ -18,12 +18,10 @@ DEADLINE: 15 MAY 2014
 
   "CONTACTS -- FAVORITES AND ORDERING"
 
-  **
-    Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
-    Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
-
-  **
+  ***
     Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+    (Check what happens when sorting by boolean, probably need an "onlineBoolean" cast)
+
 
 DEADLINE: 20 MAY 2014
 
@@ -59,7 +57,7 @@ DEADLINE: 30 MAY 2014
   "SEND SMS/EMAIL, GATEWAY"
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
+  status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
   * Integrate message-sending with the current simple comment infrastructure (!). 
   * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
 
@@ -858,3 +856,4 @@ DEADLINE: 30 MAY 2014
   * When a user is added to a workspace, create an empty contact linked to it and add nested: to workspacesUsersInfo
   * Check the 74 (!) errors in tests in simpledbschema
   * Change how I develop, start using some kind of GUI, this is becoming silly. Really. Not good. At all.
+  * Put contacts editing widget in config options as own information
