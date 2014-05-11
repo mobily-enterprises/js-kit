@@ -1,9 +1,6 @@
   
   "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
 
-  * Change how I develop, start using some kind of GUI, this is becoming silly
-    Really. Not good. At all.
-
   *
     Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
@@ -859,3 +856,4 @@
   * Make dummy widget to prevent singleChild resizing
   * When a user is added to a workspace, create an empty contact linked to it and add nested: to workspacesUsersInfo
   * Check the 74 (!) errors in tests in simpledbschema
+  * Change how I develop, start using some kind of GUI, this is becoming silly. Really. Not good. At all.
