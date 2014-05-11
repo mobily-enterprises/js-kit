@@ -4,6 +4,7 @@ Welcome to Hotplate
 Hotplate is a framework that allows you to create 201X software in no time.
 By 201X software I mean software that:
 
+
 * allows you to log in using Facebook, Google, Twitter, Oauth1/2, or... well, login/password pair if you like
 * shows information **as it changes** to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well. If you change your name, other users will need to see the update right away.
 * _feels like_ software, and not like a bunch of web pages
