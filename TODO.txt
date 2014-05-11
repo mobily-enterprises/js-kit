@@ -1,34 +1,34 @@
   
   "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
-
-  *
-    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
-
+ 
   *
     Put contacts editing widget in config options as own information
+    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
   *
     Rationalise WORKSPACE-user settings after linking users and contacts (email picked from contacts, address, etc.)
 
   *
-    Have "Tell us about you" screen when creating workspace, place contact editing in UserConfig
+    Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces 
 
   *
-    In config, add option to have a default country code for SMSes and contact data entry
+    In workspace config, add option to have a default country code for SMSes and contact data entry
 
+DEADLINE: 15 MAY 2014
 
   "CONTACTS -- FAVORITES AND ORDERING"
 
-  *
+  **
     Check the ordering of the contacts widget, sort by name or surname option, make setting sticky, user-wide
     Check what happens when sorting by boolean, probably need an "onlineBoolean" cast
 
-  *
+  **
     Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
+
+DEADLINE: 20 MAY 2014
 
 
   "CONTACTS -- SEARCH AND WIDGETS"
-
 
   ***
     Make up filters for contacts, allow to search for them
@@ -37,6 +37,7 @@
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
     Use the same widget for selecting groups/categories for a user, or maybe create a "tick" widget
 
+DEADLINE: 30 MAY 2014
 
   "HOUSE KEEPING"
 
@@ -45,7 +46,7 @@
   * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
-  DEADLINE: 30 May 2014
+  DEADLINE: 10 June 2014
   -----------------------
 
   "MESSAGES"
