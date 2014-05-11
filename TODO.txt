@@ -1,6 +1,8 @@
   
   "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
 
+  * Change how I develop, start using some kind of GUI, this is becoming silly
+
   *
     Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
