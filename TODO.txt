@@ -1,30 +1,49 @@
   
-  "CONTACTS AND USERS AND SETTINGS -- BASIC FEATURES"
- 
-  *
-    Make "contact type" not appear for self-editing (add option to widget itself)
-    Make "contact type" not appear for companies 
-    Have small 2px border for tabs, make email address a select from contacts' email addresses
-    Add configuration option to decide sorting of contacts, make that setting the default in contact list
-    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
+  "CONTACTS AND USERS (LINKED)"
+  
+  
+  * Fix issue with linkedUserId, needs to be an external table or any save will kill it, just like isStarred
 
-  * 
-    Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces 
+  *
+    Make any contact form update itself based on linkedUserId being there (contact category will disappear)
+    Make "contact type" not appear for companies 
+    
+  *
+    Have a select box for email address in user config, taken from contacts' email addresses
+    When adding an email address, if it's the first one, set it as default in userConfig
+
+  **
+    In contact list, mark contacts connected to users
+    In contact list, take the buttons out for linked contacts
+    In contact list, make sure contacts are not DnD-able (meaningless)
+    Add permissions so that a user cannot chance a linked contact unless it's their own (or it's God)    
+
+  *   
+    Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
+    Check for "default filters" active for a specific store, write pattern for it
+    Check what happens when you delete the selected email address in a contact, must stay selected 
+
+  
+  "CONTACTS AND USERS -- EXTRA FEATURES"
+
+  *
+    In contact list, on hover on a contact, come up with contact's view (no editing)
+
+  *
+    Add configuration option to decide sorting of contacts, 
+    Make "sorting of contact" setting the default in contact list at startup
 
   *
     In workspace config, add option to have a default country code for SMSes and contact data entry
+    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
-DEADLINE: 15 MAY 2014
+  **
+    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing. Check
+    -> what happens when sorting by boolean, probably need an "onlineBoolean" cast)
 
-  "CONTACTS -- FAVORITES AND ORDERING"
-
-  ***
-    Make up an example with DnD dragging, use body preprocessing, see if it does it (create list of "favourite contacts")
-    (Check what happens when sorting by boolean, probably need an "onlineBoolean" cast)
-
-
-DEADLINE: 20 MAY 2014
-
+-----------------------
+DEADLINE: 30 MAY 2014
+-----------------------
 
   "CONTACTS -- SEARCH AND WIDGETS"
 
@@ -39,8 +58,6 @@ DEADLINE: 30 MAY 2014
 
   "HOUSE KEEPING"
 
-  * Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
-  * Check for "default filters" active for a specific store, write pattern for it
   * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
@@ -112,7 +129,6 @@ DEADLINE: 30 MAY 2014
   **** Allow to sync contacts with G+
   * Add buttons to re-sync all contacts from specified modules
 
-
   ---------------------
   DEADLINE: 30 Aug 2014
   ---------------------
@@ -139,11 +155,10 @@ DEADLINE: 30 MAY 2014
 
 
 
-
-
  LATER (hopefully other contributors)
   ------------------------------------
-  * Use SOCKJS for messaging, no more polling (authentication and reconnection are tricky)
+  * Use SOCKJS for messaging,
+   no more polling (authentication and reconnection are tricky)
   * Make sure that EditingWidget and StoreSelect are blind-friendly
     Allow country selection for phone number from a select box (straight, Dojo's?)
   * Add animations
@@ -857,3 +872,8 @@ DEADLINE: 30 MAY 2014
   * Check the 74 (!) errors in tests in simpledbschema
   * Change how I develop, start using some kind of GUI, this is becoming silly. Really. Not good. At all.
   * Put contacts editing widget in config options as own information
+  * Have small 2px space for tabs, make email address a select from contacts' email addresses
+  * Fix problem where after workspace creation config options do not include _children
+  * Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces
+  * Make sure "tell us about you" stays on till a name and an email address is entered
+  
