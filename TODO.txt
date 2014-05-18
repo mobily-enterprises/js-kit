@@ -2,10 +2,10 @@
   "CONTACTS AND USERS (LINKED)"
   
   *
-    Make isStarred a generic class in JsonRestStores 
-    Make sure linkedUserId is properly protexted and it all works (no longer gets overwritten)  
+    Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
     Make any contact form update itself based on linkedUserId being there (contact category will disappear)
-    
+    Understand how the hell  mainAddressId (and other mainS) did NOT get overwritten without "protected"
+
   *
     Improve way in which "Tell us about us" handles an email address being there, no error message
     Have a select box for email address in user config, taken from contacts' email addresses
@@ -873,4 +873,5 @@ DEADLINE: 30 MAY 2014
   * Make sure "tell us about you" stays on till a name and an email address is entered  
   * Redesign SimpleDbLayer/JsonRestStores so that they allow one-field stores implement isStarred with new way
   * Make "contact type" not appear for companies 
-    
+  * Make isStarred a generic class in JsonRestStores 
+  
