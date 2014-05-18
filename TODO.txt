@@ -2,7 +2,6 @@
   "CONTACTS AND USERS (LINKED)"
   
   *
-    Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
     Make any contact form update itself based on linkedUserId being there (contact category will disappear)
     Understand how the hell  mainAddressId (and other mainS) did NOT get overwritten without "protected"
 
@@ -874,4 +873,4 @@ DEADLINE: 30 MAY 2014
   * Redesign SimpleDbLayer/JsonRestStores so that they allow one-field stores implement isStarred with new way
   * Make "contact type" not appear for companies 
   * Make isStarred a generic class in JsonRestStores 
-  
+  * Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
