@@ -2,18 +2,16 @@
   "CONTACTS AND USERS (LINKED)"
   
   *
-    Make any contact form update itself based on linkedUserId being there (contact category will disappear)
-    Understand how the hell  mainAddressId (and other mainS) did NOT get overwritten without "protected"
-
-  *
     Improve way in which "Tell us about us" handles an email address being there, no error message
     Have a select box for email address in user config, taken from contacts' email addresses
     When adding an email address, if it's the first one, set it as default in userConfig
 
-  **
+  *
     In contact list, mark contacts connected to users
     In contact list, take the buttons out for linked contacts
     In contact list, make sure contacts are not DnD-able (meaningless)
+
+  *
     Add permissions so that a user cannot chance a linked contact unless it's their own (or it's God)    
 
   **   
@@ -874,3 +872,6 @@ DEADLINE: 30 MAY 2014
   * Make "contact type" not appear for companies 
   * Make isStarred a generic class in JsonRestStores 
   * Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
+  * Make any contact form update itself based on linkedUserId being there (contact category will disappear)
+  * Understand how the hell mainAddressId (and other mainS) did NOT get overwritten without "protected"
+    (Answer: SimpleDbLayer-Mongo was broken and wasn't unsetting _children, so they DID get overwritten...)
