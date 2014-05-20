@@ -2,17 +2,13 @@
   "CONTACTS AND USERS (LINKED)"
   
   *
-    Improve way in which "Tell us about us" handles an email address being there, no error message
-    Have a select box for email address in user config, taken from contacts' email addresses
-    When adding an email address, if it's the first one, set it as default in userConfig
-
-  *
+    Show main email address in user WorkspacesUsersInfo
     In contact list, mark contacts connected to users
     In contact list, take the buttons out for linked contacts
     In contact list, make sure contacts are not DnD-able (meaningless)
 
   *
-    Add permissions so that a user cannot chance a linked contact unless it's their own (or it's God)    
+    Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
 
   **   
     Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
@@ -68,7 +64,7 @@ DEADLINE: 30 MAY 2014
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
   status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
   * Integrate message-sending with the current simple comment infrastructure (!). 
-  * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
+  * Develop the "inbox" for incoming emails/SMSge, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
 
   "USERS AND INVITES"
 
@@ -88,7 +84,6 @@ DEADLINE: 30 MAY 2014
   * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
   * Decide on permissions/permissions model, maybe follow Drupal's
-
 
   "BOOKINGS"
 
@@ -135,7 +130,7 @@ DEADLINE: 30 MAY 2014
   "ADVANCED MESSAGES AND TEMPLATES"
 
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to send messages to different present types (all types in a booking)
+  * Ability to send messages to different present types (all types in a geoking)
   * Ability to set templates for messages of different types, with instant previews
 
   "ACCOUNTING"
@@ -158,7 +153,7 @@ DEADLINE: 30 MAY 2014
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
-  * Understand, fully, the whole "events" on widgets and DOM nodes http://livedocs.dojotoolkit.org/quickstart/events
+  * Understand, fully, the whole "events" on widgets and Dge nodes http://livedocs.dojotoolkit.org/quickstart/events
   * Add a busybutton -- Look into dojox/widgets/standby and forms/busybutton
   * Check things with server, make sure server can respond with form setting error messages
   * Understand _fully_ the whole promise thing in Dojo
@@ -166,7 +161,7 @@ DEADLINE: 30 MAY 2014
   * Initial data saving with MongoDB
   * Write async code to save everything, MAYBE using Async library https://github.com/caolan/async#series (niiice!)
   * Actually create account/workspace with MongoDB
-  * CLIENT: Fix forms, as it turns out we don't really need labels (not possible, I was dreaming)
+  * CLIENT: Fix forms, as it turns out we don't really geed labels (not possible, I was dreaming)
   * Validation/error manager framework:
   -- Change client so that it shows which fields had what problem from the server adding validators on the fly
   -- CLIENT: Add a xhr function for client (making request, writing a message) to keep things dry. Do it with promises and new Form
@@ -875,3 +870,6 @@ DEADLINE: 30 MAY 2014
   * Make any contact form update itself based on linkedUserId being there (contact category will disappear)
   * Understand how the hell mainAddressId (and other mainS) did NOT get overwritten without "protected"
     (Answer: SimpleDbLayer-Mongo was broken and wasn't unsetting _children, so they DID get overwritten...)
+  * Improve way in which "Tell us about us" handles an email address being there, no error message
+  * Have a select box for email address in user config, taken from contacts' email addresses
+  * 
