@@ -1,25 +1,10 @@
-  
-  "CONTACTS AND USERS (LINKED)"
-  
-  *
-    Show main email address in user WorkspacesUsersInfo
-    In contact list, mark contacts connected to users
-    In contact list, take the buttons out for linked contacts
-    In contact list, make sure contacts are not DnD-able (meaningless)
 
-  *
-    Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
+  "CONTACTS AND USERS -- EXTRA FEATURES"
 
   **   
     Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
     Check for "default filters" active for a specific store, write pattern for it
     Check what happens when you delete the selected email address in a contact, must stay selected 
-
-  
-  "CONTACTS AND USERS -- EXTRA FEATURES"
-
-  *
-    In contact list, on hover on a contact, come up with contact's view (no editing)
 
   *
     Add configuration option to decide sorting of contacts, 
@@ -139,7 +124,6 @@ DEADLINE: 30 MAY 2014
   * Interface with payment system (Paypal?)
   * Ability to send invoices
   * Ability to _store_ received invoices
-
 
 
  LATER (hopefully other contributors)
@@ -872,4 +856,10 @@ DEADLINE: 30 MAY 2014
     (Answer: SimpleDbLayer-Mongo was broken and wasn't unsetting _children, so they DID get overwritten...)
   * Improve way in which "Tell us about us" handles an email address being there, no error message
   * Have a select box for email address in user config, taken from contacts' email addresses
-  * 
+  * Show main email address in user WorkspacesUsersInfo
+  * In contact list, make sure contacts are not DnD-able (meaningless)
+  * In contact list, mark contacts connected to users
+  * In contact list, take the buttons out for linked contacts
+  * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
+    MultiHomePermsMixin will do this automatically if field is called userId!
+    
