@@ -1,10 +1,8 @@
 
   "CONTACTS AND USERS -- EXTRA FEATURES"
 
-  **   
-    Write functionality so that "delete" actually sets a flag (probably in simpleDbLayer)
-    Check for "default filters" active for a specific store, write pattern for it
-    Check what happens when you delete the selected email address in a contact, must stay selected 
+  *
+    Add "enabled" flag to stores that can have fields deleted, change queries for stores
 
   *
     Add configuration option to decide sorting of contacts, 
@@ -862,4 +860,4 @@ DEADLINE: 30 MAY 2014
   * In contact list, take the buttons out for linked contacts
   * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
     MultiHomePermsMixin will do this automatically if field is called userId!
-    
+  * Fix issue with same-layer store, where cache needs to be updated in all of them and notifcations
