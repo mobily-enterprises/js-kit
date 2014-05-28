@@ -2,8 +2,8 @@
   "CONTACTS AND USERS -- EXTRA FEATURES"
 
   *
-    Add "enabled" flag to stores that can have fields deleted, change queries for stores
-
+    Improve look of rubbish bin: change icon, make it look "ready" when item is droppable
+   
   *
     Add configuration option to decide sorting of contacts, 
     Make "sorting of contact" setting the default in contact list at startup
@@ -861,3 +861,8 @@ DEADLINE: 30 MAY 2014
   * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
     MultiHomePermsMixin will do this automatically if field is called userId!
   * Fix issue with same-layer store, where cache needs to be updated in all of them and notifcations
+  * Add "enabled" flag to stores that can have fields deleted
+  * change queries for stores
+  * Add DnD recipient that, when it receives a record, will submit it with enable=false and refresh list
+  * Fix bug in EditingWidget where first added element will take recordId
+  * See if there is an easy way to get store to give visual cue of reload after moving to rubbish bin
