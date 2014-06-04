@@ -1,6 +1,14 @@
 
   "CONTACTS AND USERS -- EXTRA FEATURES"
 
+  **
+    -Add dgrid events in store operations to get visual feedback back
+    -Make sure there is a refresh every time there is any operation
+    -Make sure query on config store is cached
+    - ...
+    -Make 'cached' option for stores, export it, construct the right one
+    -Update JsonRestStores so that useRangeHeaders: true, is no longer necessary
+
   *
     Improve look of rubbish bin: change icon, make it look "ready" when item is droppable
    
@@ -17,7 +25,7 @@
     -> what happens when sorting by boolean, probably need an "onlineBoolean" cast)
 
 -----------------------
-DEADLINE: 30 MAY 2014
+DEADLINE: 15 JUNE 2014
 -----------------------
 
   "CONTACTS -- SEARCH AND WIDGETS"
@@ -32,7 +40,7 @@ DEADLINE: 30 MAY 2014
   * Write function to workout _children for a whole store in simpleDbLayer
 
   -----------------------
-  DEADLINE: 10 June 2014
+  DEADLINE: 20 June 2014
   -----------------------
 
   "MESSAGES"
@@ -58,7 +66,7 @@ DEADLINE: 30 MAY 2014
     added to that workspace (UsersWorkspaces store)
 
   -----------------------
-  DEADLINE: 30 June 2014
+  DEADLINE: 15 July 2014
   -----------------------
 
   "WORKSPACE MANAGEMENT"
@@ -77,7 +85,7 @@ DEADLINE: 30 MAY 2014
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
   ----------------------
-  DEADLINE: 30 Jul  2014
+  DEADLINE: 20 Aug  2014
   ----------------------
 
   "FINISH UP"
@@ -89,7 +97,7 @@ DEADLINE: 30 MAY 2014
   * Create admin interface for things
 
   ----------------------
-  DEADLINE: 20 Aug  2014
+  DEADLINE: 15 Sept  2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
