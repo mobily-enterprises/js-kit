@@ -1,17 +1,78 @@
 
+"STORES"
+
+  * Natural ordering is where things are placed when querying without specifying sorting
+  * Natural ordering should always exist for stores (although it could be switched off on server to optimise)
+  * An item's placement is set by
+    - the `beforeId` parameter in `put()`
+    - or at the end unless the store's `defaultNewToStart` is set to `true` 
+  * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place the element
+  * In Rest.js, the server doesn't know anything about the store; so, when adding via Rest, the header `X-Put-Default-Position` is set to `end` or `start`
+  * In Rest.js, the server is instructed about natural ordering via the header `X-Put-Before`.
+
+"JsonRestStores"
+* Add option defaultNewToStart at reposition()
+* Change reposition(), make it so that
+  - it decides whether to do repositioning basd on positionField
+  - if beforeId is specified, positions based on beforeId (null for the end, or spot)
+  - if beforeId isn't specified, position at end by default, unless defaultNewToStart is set
+  - party!
+
+  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+  Previous notes
+  --------------
+  Notes: in case of a put, this is what Brandon came up with:
+  trackedCollection.on('add, update', function (event) {
+    if (event.index !== undefined) {
+      if (!trackedCollection.queryEngine && trackedCollection.queryLog.length > 0) {
+
+  If there is no queryEngine, then it's _always_ impossible to tell if an item will belong to the collection,
+  unless BOTH repositionOnly and beforeId (in which case, you know you can avoid the refresh). YAY.
+  The flag repositionOnly is very important just for this reason.
+
+  BUT! This means using the put() as a "mover" (with repositionOnly, and with the data not really mattering); this is too hacky, and definitely not worth it in terms of complications. Refreshes are saved by the caching store, and adding too much complication for the sake of a few posted bites is meaningless. If anything, there should be a "reposition" method in the store.
+  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+  [X] DO: Update hotplate to latest dstore/dgrid, keeping changes files (DnD.js in dgrid, nothing in dstore)
+  [X] PATCH: dgrid, emit events and make sure things are not deleted
+  [X] UNDERSTAND: code of dstores, all of it (esp. memory queries)
+  [X] PATCH: repositionOnly (dgrid needs to set it), defaultIndex (add option in event with Brandon's "if")
+  [X] PATCH: support header put-default-position (this.defaultNewToStart)
+  [X] PATCH: add defaultNewToStart an option in page variables so that cache memory stores behave correctly
+  [X] FIX: Check how to place things in last spot, `null` currently doesn't work
+
+  [X] DO: Run the application, make it work again 
+
+  [X] DO: Clone latest dgrid and latest dstore
+  [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
+  [ ] DO: Add memory cache back to application (injecting values will now work)
+  [ ] DO: Rewrite code to only force refresh when actually needed (patch dstore with shouldRefresh)
+  [ ] FIX: make sure the right message is broadcast, `put` can create or update, make sure it's right one
+
+  [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
+
+* Rest store ("straight", no cache)
+ * Case SOU: ordered collection, unfiltered (Refresh)
+ * Case SNUe: natural collection, unfiltered, put with defaultNewToStart=false
+ * Case SNUs: natural collection, unfiltered, put with defaultNewToStart=true
+ * Case SOF: ordered collection, filtered (Refresh)
+ * Case SNFe: natural collection, filtered, put with defaultNewToStart=false (Refresh)
+ * Case SNFs: natural collection, filtered, put with defaultNewToStart=true (Refresh)
+
+* Rest store (cached)
+ * Case COU: ordered collection, unfiltered (QueryEngine)
+ * Case CNUe: natural collection, unfiltered, put with defaultNewToStart=false
+ * Case CNUs: natural collection, unfiltered, put with defaultNewToStart=true
+ * Case COF: ordered collection, filtered (QueryEngine)
+ * Case CNFe: natural collection, filtered, put with defaultNewToStart=false (QueryEngine)
+ * Case CNFs: natural collection, filtered, put with defaultNewToStart=true (QueryEngine)
+
   "CONTACTS AND USERS -- EXTRA FEATURES"
-
-  **
-    -Add dgrid events in store operations to get visual feedback back
-    -Make sure there is a refresh every time there is any operation
-    -Make sure query on config store is cached
-    - ...
-    -Make 'cached' option for stores, export it, construct the right one
-    -Update JsonRestStores so that useRangeHeaders: true, is no longer necessary
-
+      
   *
-    Improve look of rubbish bin: change icon, make it look "ready" when item is droppable
-   
+    Add memory cache back to application (injecting values)
+
   *
     Add configuration option to decide sorting of contacts, 
     Make "sorting of contact" setting the default in contact list at startup
@@ -21,8 +82,8 @@
     Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
   **
-    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing. Check
-    -> what happens when sorting by boolean, probably need an "onlineBoolean" cast)
+    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing. Check what happens when sorting by boolean, probably need an "onlineBoolean" cast)
+
 
 -----------------------
 DEADLINE: 15 JUNE 2014
@@ -31,13 +92,14 @@ DEADLINE: 15 JUNE 2014
   "CONTACTS -- SEARCH AND WIDGETS"
 
   ***
-    Make up filters for contacts, allow to search for them
+    Make up filters for contacts, allow to search for them. Maybe change JsonRestStores so that it uses
+    a more advanced query engine and more complex queries
 
   *******
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
     Use the same widget for selecting groups/categories for a user, or maybe create a "tick" widget
 
-  * Write function to workout _children for a whole store in simpleDbLayer
+  * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
 
   -----------------------
   DEADLINE: 20 June 2014
@@ -134,11 +196,14 @@ DEADLINE: 15 JUNE 2014
 
  LATER (hopefully other contributors)
   ------------------------------------
+  * StoreSelect: add a way to go back to initial value even if it's no longer in select
+  * StoreSelect: add network resiliance
   * Use SOCKJS for messaging,
    no more polling (authentication and reconnection are tricky)
   * Make sure that EditingWidget and StoreSelect are blind-friendly
     Allow country selection for phone number from a select box (straight, Dojo's?)
   * Add animations
+  * Update JsonRestStores so that useRangeHeaders: true, is no longer necessary, sortBy isn't either
 
 
   DONE:
@@ -874,3 +939,13 @@ DEADLINE: 15 JUNE 2014
   * Add DnD recipient that, when it receives a record, will submit it with enable=false and refresh list
   * Fix bug in EditingWidget where first added element will take recordId
   * See if there is an easy way to get store to give visual cue of reload after moving to rubbish bin
+  * (dstore) Add dgrid events in store operations to get visual feedback back
+  * Make sure there is a refresh every time there is any operation
+  * Make 'cached' option for stores, export it, construct the right one   
+  * Fix messages, right now returning the same message over and over again, and avoid using __proto__
+  * Turn Caching off altogether in app waiting for dstore to be fixed
+  * Fix deletion, dnd source with dstore 0.4 must have changed
+  * Make sure StoreSelect uses get() to get current element, rather than grid (L165)
+  * Make sort work again    
+  * Add tracking code to _ManagerButton.js (it's now commented out)
+  * Improve look of rubbish bin
