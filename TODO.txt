@@ -7,9 +7,9 @@
     - the `beforeId` parameter in `put()`
     - or at the end unless the store's `defaultNewToStart` is set to `true` 
   * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place the element
-  * In Rest.js, the server doesn't know anything about the store; so, when adding via Rest, the header `X-Put-Default-Position` is set to `end` or `start`
-  * In Rest.js, the server is instructed about natural ordering via the header `X-Put-Before`.
-
+  * In Rest.js, if `options.beforeId` is set and it's not `null` (which means "place last"), `then X-Put-Before` is set. If `options.beforeId` is `null` (which means "place last"), then `X-Put-Default-Position` is set to `end`. Otherwise, if `options.beforeId` is undefined, then `X-Put-Default-Position` will depend on the store's `defaultNewToStart` (it will be `start` or `end`). Note that `X-Put-Default-Position` is used in two cases: 1) To mean "place at the end" when `options.beforeId` is `null` 2) To place the item at beginning or end, depending on `store.defaultNewToStart`, when `options.beforeId` isn't set. This solves elegantly the problem of having `options.beforeId` mean two things in the store (`null` meaning "at the end"), but actually only being able to pass a string (through the HTTP header) to the server (in which context `null` is not possible to pass, unless you want the 4-byte string `null` to mean something specific). 
+  * The server doesn't know anything about the store; for positioning, two headers are used" `X-Put-Before` and `X-Put-Default-Position`. If the server tracks natural ordering for the collection, it will 1) Check if `X-Put-Before` is set. If so, will need to place the item there 2) OR check `X-Put-Default-Position` -- if it's `end`, it will place things at the end. If it's `start`, it will place the item as first. 
+  
 "JsonRestStores"
 * Add option defaultNewToStart at reposition()
 * Change reposition(), make it so that
@@ -46,8 +46,12 @@
 
   [X] DO: Clone latest dgrid and latest dstore
   [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
-  [ ] DO: Add memory cache back to application (injecting values will now work)
-  [ ] DO: Rewrite code to only force refresh when actually needed (patch dstore with shouldRefresh)
+  [X] FIX: Code that observes auth buttons, now that I have the object on delete
+  [X] DO: Add memory cache back to application (injecting values will now work)
+  [ ] FIX: AppStoreNotify, solve TODO: needs to know whether it's a creation or an update
+  [ ] CHECK: https://github.com/SitePen/dstore/issues/38, see minimim requirements in event object
+  [ ] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
+  [ ] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
   [ ] FIX: make sure the right message is broadcast, `put` can create or update, make sure it's right one
 
   [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
@@ -69,10 +73,7 @@
  * Case CNFs: natural collection, filtered, put with defaultNewToStart=true (QueryEngine)
 
   "CONTACTS AND USERS -- EXTRA FEATURES"
-      
-  *
-    Add memory cache back to application (injecting values)
-
+   
   *
     Add configuration option to decide sorting of contacts, 
     Make "sorting of contact" setting the default in contact list at startup
