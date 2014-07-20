@@ -4,10 +4,10 @@
   * Natural ordering is where things are placed when querying without specifying sorting
   * Natural ordering should always exist for stores (although it could be switched off on server to optimise)
   * An item's placement is set by
-    - the `beforeId` parameter in `put()`
-    - or at the end unless the store's `defaultNewToStart` is set to `true` 
-  * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place the element. When `beforeId` is set to `null`, then `defaultNewToStart` is ignored and element is added at the end.
-  * In Rest.js, if `options.beforeId` is set and it's not `null` (which would mean "place last"), then the header `X-Put-Before` is set. If `options.beforeId` is `null` (which means "place last"), then the header `X-Put-Default-Position` is set to `end`. Otherwise, if `options.beforeId` is undefined, then the header `X-Put-Default-Position` will depend on the store's `defaultNewToStart` (it will be `start` or `end`). Note that `X-Put-Default-Position` is used in two cases: 1) To mean "place at the end" when `options.beforeId` is `null` 2) To place the item at beginning or end, depending on `store.defaultNewToStart`, when `options.beforeId` isn't set. This solves elegantly the problem of having `options.beforeId` mean two things in the store (`null` meaning "at the end"), but actually only being able to pass a string (through the HTTP header) to the server (in which context `null` is not possible to pass, unless you want the 4-byte string `null` to mean something specific). 
+    - the `beforeId` parameter in `put()` (existing and new elements)
+    - or at the end unless the store's `defaultNewToStart` is set to `true` (new elements)
+  * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place a new element. When `beforeId` is set to `null`, then `defaultNewToStart` is ignored and element is added at the end.
+  * In Rest.js, two headers are set depending on `put`'s `options.beforeId` and the store's `defaultNewToStart`. If `beforeId` is set, then if it's !== `null`, `X-Put-Before` will be set to `beforeId`; if it's == `null`,  `X-Put-Default-Position` will be set to `end`. If `beforeId` is not set, and if it's a new element, then `X-Put-Default-Position` is set to `start` or `end` (depending on the store's `defaultNewToStart`).
   * The server doesn't know anything about the store; for positioning, two headers are used" `X-Put-Before` and `X-Put-Default-Position`. If the server tracks natural ordering for the collection, it will 1) Check if `X-Put-Before` is set. If so, will need to place the item there 2) OR check `X-Put-Default-Position` -- if it's `end`, it will place things at the end. If it's `start`, it will place the item as first. 
   
 
@@ -54,11 +54,12 @@
   [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
   [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
   [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
-
-  [ ] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
+  [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
+  
   [ ] Create own repository for dstore, send pull request for status 201, commit with own stores properly
 
   [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
+  [ ] FIX: Now that stores can be listened, and not queries, convert where topic.subscribe('storeRecordUpdate'
 
 * Rest store ("straight", no cache)
  * Case SOU: ordered collection, unfiltered (Refresh)
