@@ -7,59 +7,17 @@
     - the `beforeId` parameter in `put()` (existing and new elements)
     - or at the end unless the store's `defaultNewToStart` is set to `true` (new elements)
   * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place a new element. When `beforeId` is set to `null`, then `defaultNewToStart` is ignored and element is added at the end.
-  * In Rest.js, two headers are set depending on `put`'s `options.beforeId` and the store's `defaultNewToStart`. If `beforeId` is set, then if it's !== `null`, `X-Put-Before` will be set to `beforeId`; if it's == `null`,  `X-Put-Default-Position` will be set to `end`. If `beforeId` is not set, and if it's a new element, then `X-Put-Default-Position` is set to `start` or `end` (depending on the store's `defaultNewToStart`).
+  * In Rest.js, two headers are set depending on `put`'s `options.beforeId` and the store's `defaultNewToStart`. 
+    * If `beforeId` is set:
+        - If it's !== `null`, `X-Put-Before` will be set to `beforeId`;
+        - If it's  == `null`,  `X-Put-Default-Position` will be set to `end`.
+    * If `beforeId` is not set:
+        - If it's a new element, then `X-Put-Default-Position` is set to `start` or `end` (depending on the store's `defaultNewToStart`).
+    Note that `X-Put-Default-Position` is used BOTH if `beforeId` is `null` (to make up for the inability to pass anything but a string via headers), AND for new elements where `beforeId` is not set (to tell the server where to place the element in such a case, to make up for the fact that the server doesn't know what the client store's default is).
   * The server doesn't know anything about the store; for positioning, two headers are used" `X-Put-Before` and `X-Put-Default-Position`. If the server tracks natural ordering for the collection, it will 1) Check if `X-Put-Before` is set. If so, will need to place the item there 2) OR check `X-Put-Default-Position` -- if it's `end`, it will place things at the end. If it's `start`, it will place the item as first. 
   
 
-  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  Previous notes
-  --------------
-  Notes: in case of a put, this is what Brandon came up with:
-  trackedCollection.on('add, update', function (event) {
-    if (event.index !== undefined) {
-      if (!trackedCollection.queryEngine && trackedCollection.queryLog.length > 0) {
-
-  If there is no queryEngine, then it's _always_ impossible to tell if an item will belong to the collection,
-  unless BOTH repositionOnly and beforeId (in which case, you know you can avoid the refresh). YAY.
-  The flag repositionOnly is very important just for this reason.
-
-  BUT! This means using the put() as a "mover" (with repositionOnly, and with the data not really mattering); this is too hacky, and definitely not worth it in terms of complications. Refreshes are saved by the caching store, and adding too much complication for the sake of a few posted bites is meaningless. If anything, there should be a "reposition" method in the store.
-  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  [X] Add option defaultNewToStart at reposition()
-  [X] Change reposition(), make it so that
-    - it decides whether to do repositioning basd on positionField
-    - if beforeId is specified, positions based on beforeId (null for the end, or spot)
-    - if beforeId isn't specified, position at end by default, unless defaultNewToStart is set
-  [X] Party!
-
-  [X] DO: Update hotplate to latest dstore/dgrid, keeping changes files (DnD.js in dgrid, nothing in dstore)
-  [X] PATCH: dgrid, emit events and make sure things are not deleted
-  [X] UNDERSTAND: code of dstores, all of it (esp. memory queries)
-  [X] PATCH: repositionOnly (dgrid needs to set it), defaultIndex (add option in event with Brandon's "if")
-  [X] PATCH: support header put-default-position (this.defaultNewToStart)
-  [X] PATCH: add defaultNewToStart an option in page variables so that cache memory stores behave correctly
-  [X] FIX: Check how to place things in last spot, `null` currently doesn't work
-
-  [X] DO: Run the application, make it work again 
-
-  [X] DO: Clone latest dgrid and latest dstore
-  [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
-  [X] FIX: Code that observes auth buttons, now that I have the object on delete
-  [X] DO: Add memory cache back to application (injecting values will now work)
-  [X] CHECK: make sure the right message is broadcast, `put` can create or update, make sure it's right one
-  [X] FIX: AppStoreNotify to use store's events rather than aspects to get events, which will fix TODO in it too
-  [X] FIX: Make sure that Rest.js emits right event, create/update depending on HTTP response
-  [X] FIX: Reposition mustn't be called on putExisting unless beforeId is specified
-  [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
-  [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
-  [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
-  [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
-  
-  [ ] Create own repository for dstore, send pull request for status 201, commit with own stores properly
-
   [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
-  [ ] FIX: Now that stores can be listened, and not queries, convert where topic.subscribe('storeRecordUpdate'
 
 * Rest store ("straight", no cache)
  * Case SOU: ordered collection, unfiltered (Refresh)
@@ -76,6 +34,8 @@
  * Case COF: ordered collection, filtered (QueryEngine)
  * Case CNFe: natural collection, filtered, put with defaultNewToStart=false (QueryEngine)
  * Case CNFs: natural collection, filtered, put with defaultNewToStart=true (QueryEngine)
+
+  * Now that stores can be listened, and not queries, convert where topic.subscribe('storeRecordUpdate'
 
   "CONTACTS AND USERS -- EXTRA FEATURES"
    
@@ -955,3 +915,35 @@ DEADLINE: 15 JUNE 2014
   * Make sort work again    
   * Add tracking code to _ManagerButton.js (it's now commented out)
   * Improve look of rubbish bin
+  * Implement new dstores:
+      [X] Add option defaultNewToStart at reposition()
+      [X] Change reposition(), make it so that
+        - it decides whether to do repositioning basd on positionField
+        - if beforeId is specified, positions based on beforeId (null for the end, or spot)
+        - if beforeId isn't specified, position at end by default, unless defaultNewToStart is set
+      [X] Party!
+      [X] DO: Update hotplate to latest dstore/dgrid, keeping changes files (DnD.js in dgrid, nothing in dstore)
+      [X] PATCH: dgrid, emit events and make sure things are not deleted
+      [X] UNDERSTAND: code of dstores, all of it (esp. memory queries)
+      [X] PATCH: repositionOnly (dgrid needs to set it), defaultIndex (add option in event with Brandon's "if")
+      [X] PATCH: support header put-default-position (this.defaultNewToStart)
+      [X] PATCH: add defaultNewToStart an option in page variables so that cache memory stores behave correctly
+      [X] FIX: Check how to place things in last spot, `null` currently doesn't work
+
+      [X] DO: Run the application, make it work again 
+
+      [X] DO: Clone latest dgrid and latest dstore
+      [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
+      [X] FIX: Code that observes auth buttons, now that I have the object on delete
+      [X] DO: Add memory cache back to application (injecting values will now work)
+      [X] CHECK: make sure the right message is broadcast, `put` can create or update, make sure it's right one
+      [X] FIX: AppStoreNotify to use store's events rather than aspects to get events, which will fix TODO in it too
+      [X] FIX: Make sure that Rest.js emits right event, create/update depending on HTTP response
+      [X] FIX: Reposition mustn't be called on putExisting unless beforeId is specified
+      [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
+      [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
+      [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
+      [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
+      
+      [X] Create own repository for dstore, send pull request for status 201, commit with own stores properly
+
