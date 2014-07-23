@@ -16,7 +16,6 @@
     Note that `X-Put-Default-Position` is used BOTH if `beforeId` is `null` (to make up for the inability to pass anything but a string via headers), AND for new elements where `beforeId` is not set (to tell the server where to place the element in such a case, to make up for the fact that the server doesn't know what the client store's default is).
   * The server doesn't know anything about the store; for positioning, two headers are used" `X-Put-Before` and `X-Put-Default-Position`. If the server tracks natural ordering for the collection, it will 1) Check if `X-Put-Before` is set. If so, will need to place the item there 2) OR check `X-Put-Default-Position` -- if it's `end`, it will place things at the end. If it's `start`, it will place the item as first. 
   
-
   [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
 
 * Rest store ("straight", no cache)
@@ -34,8 +33,6 @@
  * Case COF: ordered collection, filtered (QueryEngine)
  * Case CNFe: natural collection, filtered, put with defaultNewToStart=false (QueryEngine)
  * Case CNFs: natural collection, filtered, put with defaultNewToStart=true (QueryEngine)
-
-  * Now that stores can be listened, and not queries, convert where topic.subscribe('storeRecordUpdate'
 
   "CONTACTS AND USERS -- EXTRA FEATURES"
    
@@ -946,4 +943,5 @@ DEADLINE: 15 JUNE 2014
       [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
       
       [X] Create own repository for dstore, send pull request for status 201, commit with own stores properly
+      [X] DO: Rewrite AppStoreNotify and change any topic.subscribe('storeRecordUpdate') to listening to store
 
