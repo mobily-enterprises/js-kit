@@ -1,20 +1,5 @@
 
-"STORES"
-
-  * Natural ordering is where things are placed when querying without specifying sorting
-  * Natural ordering should always exist for stores (although it could be switched off on server to optimise)
-  * An item's placement is set by
-    - the `beforeId` parameter in `put()` (existing and new elements)
-    - or at the end unless the store's `defaultNewToStart` is set to `true` (new elements)
-  * In Memory.js, the JS library has access to the store; so, when adding to Memory without beforeId, Memory checks for the store's `defaultNewToStart` attribute to see where to place a new element. When `beforeId` is set to `null`, then `defaultNewToStart` is ignored and element is added at the end.
-  * In Rest.js, two headers are set depending on `put`'s `options.beforeId` and the store's `defaultNewToStart`. 
-    * If `beforeId` is set:
-        - If it's !== `null`, `X-Put-Before` will be set to `beforeId`;
-        - If it's  == `null`,  `X-Put-Default-Position` will be set to `end`.
-    * If `beforeId` is not set:
-        - If it's a new element, then `X-Put-Default-Position` is set to `start` or `end` (depending on the store's `defaultNewToStart`).
-    Note that `X-Put-Default-Position` is used BOTH if `beforeId` is `null` (to make up for the inability to pass anything but a string via headers), AND for new elements where `beforeId` is not set (to tell the server where to place the element in such a case, to make up for the fact that the server doesn't know what the client store's default is).
-  * The server doesn't know anything about the store; for positioning, two headers are used" `X-Put-Before` and `X-Put-Default-Position`. If the server tracks natural ordering for the collection, it will 1) Check if `X-Put-Before` is set. If so, will need to place the item there 2) OR check `X-Put-Default-Position` -- if it's `end`, it will place things at the end. If it's `start`, it will place the item as first. 
+"STORES "
   
   [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
 
@@ -48,9 +33,9 @@
     In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing. Check what happens when sorting by boolean, probably need an "onlineBoolean" cast)
 
 
------------------------
-DEADLINE: 15 JUNE 2014
------------------------
+---------------------
+DEADLINE: 30 Jul 2014
+---------------------
 
   "CONTACTS -- SEARCH AND WIDGETS"
 
@@ -64,9 +49,9 @@ DEADLINE: 15 JUNE 2014
 
   * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
 
-  -----------------------
-  DEADLINE: 20 June 2014
-  -----------------------
+  ---------------------
+  DEADLINE: 30 Aug 2014
+  ---------------------
 
   "MESSAGES"
 
@@ -90,9 +75,9 @@ DEADLINE: 15 JUNE 2014
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
     added to that workspace (UsersWorkspaces store)
 
-  -----------------------
-  DEADLINE: 15 July 2014
-  -----------------------
+  ---------------------
+  DEADLINE: 30 Sep 2014
+  ---------------------
 
   "WORKSPACE MANAGEMENT"
 
@@ -109,9 +94,9 @@ DEADLINE: 15 JUNE 2014
  
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
 
-  ----------------------
-  DEADLINE: 20 Aug  2014
-  ----------------------
+  ---------------------
+  DEADLINE: 30 Oct 2014
+  ---------------------
 
   "FINISH UP"
 
@@ -122,7 +107,7 @@ DEADLINE: 15 JUNE 2014
   * Create admin interface for things
 
   ----------------------
-  DEADLINE: 15 Sept  2014
+  DEADLINE: 15 Nov  2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
@@ -133,7 +118,7 @@ DEADLINE: 15 JUNE 2014
   * Add buttons to re-sync all contacts from specified modules
 
   ---------------------
-  DEADLINE: 30 Aug 2014
+  DEADLINE: 30 Nov 2014
   ---------------------
 
   "ADVANCED BOOKINGS"
