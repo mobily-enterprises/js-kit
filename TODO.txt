@@ -1,24 +1,4 @@
-
-"STORES "
   
-  [ ] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
-
-* Rest store ("straight", no cache)
- * Case SOU: ordered collection, unfiltered (Refresh)
- * Case SNUe: natural collection, unfiltered, put with defaultNewToStart=false
- * Case SNUs: natural collection, unfiltered, put with defaultNewToStart=true
- * Case SOF: ordered collection, filtered (Refresh)
- * Case SNFe: natural collection, filtered, put with defaultNewToStart=false (Refresh)
- * Case SNFs: natural collection, filtered, put with defaultNewToStart=true (Refresh)
-
-* Rest store (cached)
- * Case COU: ordered collection, unfiltered (QueryEngine)
- * Case CNUe: natural collection, unfiltered, put with defaultNewToStart=false
- * Case CNUs: natural collection, unfiltered, put with defaultNewToStart=true
- * Case COF: ordered collection, filtered (QueryEngine)
- * Case CNFe: natural collection, filtered, put with defaultNewToStart=false (QueryEngine)
- * Case CNFs: natural collection, filtered, put with defaultNewToStart=true (QueryEngine)
-
   "CONTACTS AND USERS -- EXTRA FEATURES"
    
   *
@@ -62,8 +42,7 @@ DEADLINE: 30 Jul 2014
 
   "SEND SMS/EMAIL, GATEWAY"
 
-  * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-  status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
+  * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
   * Integrate message-sending with the current simple comment infrastructure (!). 
   * Develop the "inbox" for incoming emails/SMSge, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
 
@@ -929,4 +908,7 @@ DEADLINE: 30 Jul 2014
       
       [X] Create own repository for dstore, send pull request for status 201, commit with own stores properly
       [X] DO: Rewrite AppStoreNotify and change any topic.subscribe('storeRecordUpdate') to listening to store
-
+      [X] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
+      [X] Check why email addresses don't get refreshed, Suppress reload for local changes after a put
+      [X] Re-implement suppressRefresh, Check user registration screen
+      [X] Make sure message attributes are copied onto events, with minimal manipulation through message life
