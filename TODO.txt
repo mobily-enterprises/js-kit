@@ -1,27 +1,17 @@
   
   "CONTACTS AND USERS -- EXTRA FEATURES"
-   
-  *
-    Add configuration option to decide sorting of contacts, 
-    Make "sorting of contact" setting the default in contact list at startup
 
-  *
-    In workspace config, add option to have a default country code for SMSes and contact data entry
-    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
-
-  **
-    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing. Check what happens when sorting by boolean, probably need an "onlineBoolean" cast)
-
+  * Check refreshes when there is filtering in contact box and an item is changed   
+  * Fix CSS around the app, make configs look OK
 
 ---------------------
-DEADLINE: 30 Jul 2014
+DEADLINE: 8 Aug 2014
 ---------------------
 
   "CONTACTS -- SEARCH AND WIDGETS"
 
-  ***
-    Make up filters for contacts, allow to search for them. Maybe change JsonRestStores so that it uses
-    a more advanced query engine and more complex queries
+  *
+    Make up filters for contacts, allow to search for them.
 
   *******
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
@@ -55,7 +45,7 @@ DEADLINE: 30 Jul 2014
     added to that workspace (UsersWorkspaces store)
 
   ---------------------
-  DEADLINE: 30 Sep 2014
+  DEADaLINE: 30 Sep 2014
   ---------------------
 
   "WORKSPACE MANAGEMENT"
@@ -912,3 +902,10 @@ DEADLINE: 30 Jul 2014
       [X] Check why email addresses don't get refreshed, Suppress reload for local changes after a put
       [X] Re-implement suppressRefresh, Check user registration screen
       [X] Make sure message attributes are copied onto events, with minimal manipulation through message life
+    Add configuration option to decide sorting of contacts, 
+    Make "sorting of contact" setting the default in contact list at startup
+    In workspace config, add option to have a default country code for SMSes and contact data entry
+    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
+
+    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing.
+    Add filter box on top of contacts
