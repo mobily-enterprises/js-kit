@@ -1,40 +1,33 @@
-  
-  "CONTACTS AND USERS -- EXTRA FEATURES"
 
-  * Check refreshes when there is filtering in contact box and an item is changed   
-  * Fix CSS around the app, make configs look OK
-
----------------------
-DEADLINE: 8 Aug 2014
----------------------
-
-  "CONTACTS -- SEARCH AND WIDGETS"
-
-  *
-    Make up filters for contacts, allow to search for them.
-
-  *******
-    Write "contact lookup" field form that auto-completes contacts (make it configurable)
-    Use the same widget for selecting groups/categories for a user, or maybe create a "tick" widget
-
-  * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
-
-  ---------------------
-  DEADLINE: 30 Aug 2014
-  ---------------------
+  "CONTACTS PICK"
+    
+    - MAYBE re-enable 'remote' messages for whole stores, or do whatever it takes to make the contact lookup
+    refresh changes (especially since you can edit things with it)
+    - Polish up contact picker
 
   "MESSAGES"
 
   *****
-    Add ability to type messages underneath contacts, send a message to multiple recipients (1:n)
-    - Use https://bitbucket.org/mutopia/autobox, but maybe use others
-    User picks if it's an SMS or if it's an email.  The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
+    Turn contats screen into a multi-tab screen
+    Change interface to allow editing, opening of contacts
+    Write screen to open up a contact
+    Add ability to add a message under a contact, cc'ing other contacts (using contact lookup widget)    
+    Ability to set message as SMS or email. Editing widget will change accordingly
+    Amend "message under a contact" so that it can send messages to anybody (take out default one)
+
+  ----------------------
+  DEADLINE: 30 Aug 2014
+  ----------------------
 
   "SEND SMS/EMAIL, GATEWAY"
 
   * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
   * Integrate message-sending with the current simple comment infrastructure (!). 
-  * Develop the "inbox" for incoming emails/SMSge, mark as read, archived, etc. When an email or SMS comes in, ability to match it to a booking
+  * Develop the "inbox" for incoming emails/SMSes, mark as read, archived, etc. 
+
+  ----------------------
+  DEADLINE: 30 Aug 2014
+  ----------------------
 
   "USERS AND INVITES"
 
@@ -45,7 +38,15 @@ DEADLINE: 8 Aug 2014
     added to that workspace (UsersWorkspaces store)
 
   ---------------------
-  DEADaLINE: 30 Sep 2014
+  DEADLINE: 5 Sep 2014
+  ---------------------
+
+  "DATABASE FINAL TOUCHES"
+
+  * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
+
+  ---------------------
+  DEADLINE: 10 Sep 2014
   ---------------------
 
   "WORKSPACE MANAGEMENT"
@@ -58,7 +59,9 @@ DEADLINE: 8 Aug 2014
   "BOOKINGS"
 
   * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
-  ** Ability to have messages under a specific booking, rather than just under a user
+  * When an email or SMS comes in, ability to match it to a booking
+  ** Ability to have messages under a specific booking, rather than just under a user. Change "New Message"
+
   ** Implement simple TODO list for the bookings, date/time from, date/time to, who
  
   ** Add calendar (Dojox's), rendering users' birthdays and TODO items in it
@@ -100,7 +103,7 @@ DEADLINE: 8 Aug 2014
   "ADVANCED MESSAGES AND TEMPLATES"
 
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to send messages to different present types (all types in a geoking)
+  * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
 
   "ACCOUNTING"
@@ -909,3 +912,11 @@ DEADLINE: 8 Aug 2014
 
     In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing.
     Add filter box on top of contacts
+    Check refreshes when there is filtering in contact box and an item is changed   
+    Make up filters for contacts, allow to search for them.
+    Make refreshing on filter more intellingent, check for onChange and then issue refresh with scheduleRefresh
+    Fix problem with special characters in search like @
+    Fix CSS around the app, make configs look OK
+    Write "contact lookup" field form that auto-completes contacts (make it configurable)
+    Cannge contact pick so that it searches in email store rather than contacts
+    Change remote messages so that they are the right way
