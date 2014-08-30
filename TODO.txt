@@ -1,9 +1,7 @@
 
-  "CONTACTS PICK"
-    
-    - MAYBE re-enable 'remote' messages for whole stores, or do whatever it takes to make the contact lookup
-    refresh changes (especially since you can edit things with it)
-    - Polish up contact picker
+  "PICKERS"
+    Write "Phone number pick", take it from email addresses (or )
+    Sort out .sort(...).sort(...) -> two sortBy entry in URL https://github.com/SitePen/dstore/issues/48
 
   "MESSAGES"
 
@@ -920,3 +918,16 @@
     Write "contact lookup" field form that auto-completes contacts (make it configurable)
     Cannge contact pick so that it searches in email store rather than contacts
     Change remote messages so that they are the right way
+    Re-enable 'remote' messages for whole stores
+    Make the contact lookup refresh changes (especially since you can edit things with it)
+    Polish up contact picker
+      [X] order by contactId.id 
+      [X] If possible, do not repeat details if ids match
+      [X] Highlight primary email address, or (better) make it come up first (__positioning not working?)
+      [X] Develop "default sorting" in JsonRestStores.
+      [X] Use default sorting for main contacts screen too
+      [X] Focus on search box when opening window
+      [X] Edit icon to edit
+
+
+
