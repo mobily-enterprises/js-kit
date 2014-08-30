@@ -198,5 +198,5 @@ Stores can have an `alsoNotify` parameter, which is an array of store names. If 
     });
 
 By reading the code, it's clear that this is a simple way to keep related stores in sync. This is useful when, for example, there are two remote stores with different names, but that will manipulate the same data on the server.
-Think about `workspacesUsers` and `usersWorkspaces`.
+Think about `workspacesUsers` and `usersWorkspaces`: they are two different stores linked to the same database table. So, when one changes, the other one should also change.
 
