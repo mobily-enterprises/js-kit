@@ -36,6 +36,7 @@
     "hotDojo": "*",
     "hotDojoAdd": "*",
     "hotDojoAppContainer": "*",
+    "hotDojoAutobox": "*",
     "hotDojoAuth": "*",
     "hotDojoComet": "*",
     "hotDojoDgridWidgets": "*",
