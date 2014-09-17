@@ -57,7 +57,8 @@
     "passport-facebook": "1.x",
     "hat": "0.0.x",
     "bcrypt": "0.7.x",
-    "send": "0.1.x"
+    "send": "0.1.x",
+    "twilio": "1.7.x"
 
   },
   "bundleDependencies": [
