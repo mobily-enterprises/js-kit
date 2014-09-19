@@ -5,17 +5,17 @@
     - Add ability to configure twillo (God): add shared phone numbers, API key
     - Add ability to configure email (God): default SMTP
     - Add ability to configure email (ws): address, SMTP, IMAP address, IMAP password, poll interval
-    SERVER 1/2:
-    - Write hooks to workspaceMessage store to actually add messages to the right spots using API
-    - Render messages well enough properly in list
+    - Add "from" to GUI to see who the message will be from
     SERVER 2/2:
     - Add program-side export of configuration based on type/recipient in BD
     - Write cron job to go through message queue and actually attempt to re-send
-    - Write twillo layer to actually send the SMSes
+    - Write twillo layer to actually send/receive the SMSes
     - Write email layer to actually send emails
+    - Write email layer to actually receive emails
+    - Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     - Write email and phone number validations, puke if invalid
     GUI:
-    - Render messages properly in list (beginning of email)
+    - Render messages properly in list (subject, beginning of email)
     - Add extra popup to see full email
     - Show the message inbox
     - Make sure there are incoming messages in queue, display them
@@ -92,7 +92,7 @@
 
   "GET PAID!"
   * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
-  * Add way to get paid and add credit (Paypal, or more likely stripe, better API)
+  * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
 
   ---------------------
   DEADLINE: 30 Nov 2014
@@ -949,7 +949,7 @@
     X Make a new tab open reliably when contact is selected (handle multiple openings)
     X Create screen to show a contact
     X Write basic database fields for the 5 messages table (3 core, 2 app)
-    GUI 1/2:
+
     - Add ability to add a message under a contact, no cc: (SMS/email)
        X Body needs to reset after send
        X Widget spacing
@@ -969,5 +969,7 @@
        X Fix breaking when selected by keyboard
        X Improve keyboard selection, get picker to come up when typing
        X Send the right data to the server (list of IDs)
-
-
+      X Fix rendering issue in list, always refresh flag in stores
+      X Rewrite the API for JsonRestStores so that it's uniform and it's easier to add messages
+      X Write hooks to workspaceMessage store to actually add messages to the right spots using API
+    - Render messages well enough in list
