@@ -2,13 +2,18 @@
 
   *****
     GUI 2/2:
-    - Add ability to configure twillo (God): add shared phone numbers, API key
-    - Add ability to configure email (God): default SMTP
-    - Add ability to configure email (ws): address, SMTP, IMAP address, IMAP password, poll interval
+    - Add ability to configure twilio (God): add shared phone numbers, API key
+    - Add ability to configure email (ws): 
+      - Email address
+       - SMTP (server, account, pw, port)
+       - IMAP (server, account, user, pw, port, interval) 
     - Add "from" to GUI to see who the message will be from
+    - Add "system message from"
     SERVER 2/2:
     - Add program-side export of configuration based on type/recipient in BD
-    - Write cron job to go through message queue and actually attempt to re-send
+    - Add program-side export of "from" set in GUI, use it
+    - Format "from" with user name, or message
+    - Write cron job t o go through message queue and actually attempt to re-send
     - Write twillo layer to actually send/receive the SMSes
     - Write email layer to actually send emails
     - Write email layer to actually receive emails
@@ -973,3 +978,5 @@
       X Rewrite the API for JsonRestStores so that it's uniform and it's easier to add messages
       X Write hooks to workspaceMessage store to actually add messages to the right spots using API
     - Render messages well enough in list
+    - Add way to set 'from' via API rather than session
+  
