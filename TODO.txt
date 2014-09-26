@@ -1,33 +1,25 @@
   "MESSAGES"
 
-  *****
-    GUI 2/2:
-    - Add ability to configure twilio (God): add shared phone numbers, API key
-    - Add ability to configure email (ws): 
-      - Email address
-       - SMTP (server, account, pw, port)
-       - IMAP (server, account, user, pw, port, interval) 
-    - Add "from" to GUI to see who the message will be from
-    - Add "system message from"
-    SERVER 2/2:
-    - Add program-side export of configuration based on type/recipient in BD
-    - Add program-side export of "from" set in GUI, use it
-    - Format "from" with user name, or message
-    - Write cron job t o go through message queue and actually attempt to re-send
-    - Write twillo layer to actually send/receive the SMSes
-    - Write email layer to actually send emails
-    - Write email layer to actually receive emails
+  
+    SERVER
+    *****
+    - Write twilio layer to actually send/receive the SMSes
+    - Write plivo layer to actually send/receive the SMSes
+    - Write email layer to actually send/receive emails
     - Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     - Write email and phone number validations, puke if invalid
-    GUI:
-    - Render messages properly in list (subject, beginning of email)
-    - Add extra popup to see full email
-    - Show the message inbox
+
+    ***
+    GUI
+    - Render messages properly in list
+    - Make GLOBAL message inbox
+    - Make USER message inbox
     - Make sure there are incoming messages in queue, display them
     - Enrich message inbox so that it has widgets to 1) Match 'From' 2) Archive 3) Mark as important
     - Add tabs "all", "sent", "received"
 
-    Sort out .sort(...).sort(...) -> two sortBy entry in URL https://github.com/SitePen/dstore/issues/48
+    Add "internal messages" option in GUI
+    Add ability to mark messages as read by USER for USER message inbox
 
   ----------------------
   DEADLINE: 30 Sep 2014
@@ -51,6 +43,7 @@
   ---------------------
 
   * Decide on permissions/permissions model, maybe follow Drupal's
+  * Write a God permission mixin, apply to main stores (or everybody can write on them)
 
   ---------------------
   DEADLINE: 15 Oct 2014
@@ -64,7 +57,7 @@
 
   ** Implement simple TODO list for the bookings, date/time from, date/time to, who
  
-  ** Add calendar (Dojox's), rendering users' birthdays and TODO items and bookings in it
+  ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
   DEADLINE: 30 Oct 2014
@@ -72,13 +65,8 @@
 
   "FINISH UP"
 
-  * Make up God permissions mixin, setting God, add them
   * Make God application separate, with separate login (only God can login)
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
-
-  "DATABASE FINAL TOUCHES"
-
-  * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
 
   ----------------------
   DEADLINE: 15 Nov  2014
@@ -98,6 +86,18 @@
   "GET PAID!"
   * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
   * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
+
+
+  "BEAUTIFY AND FINAL TOUCHES"
+
+  * Work on CSS, make app look better with minimal intervention
+    AND:
+  * Do all those things that can be done during beautification
+    * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
+    * Full code audit
+    * Full client-validation audit
+    * Write web site text
+    * Test drive possible usage
 
   ---------------------
   DEADLINE: 30 Nov 2014
@@ -123,21 +123,25 @@
   "ACCOUNTING"
 
   * Accounting summaries for each booking (with system-calculated ones)
-  * Interface with payment system (Paypal?)
+  * Interface with payment system allowing workspaces to get paid
   * Ability to send invoices
   * Ability to _store_ received invoices
 
+  "LONGER TERM"
+
+  * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
+  * Use SOCKJS for instand messanging instead of polling (dealing with authentication and reconnection)
+  * Replace any non-widget dojo with custom ones (mainly aspect, topic, signals)
+  * Take out Dojo layout widget for straight/WebComponent/Polymer ones
+  * Incorporate Mayhem for routing, stores, templates
+  * (When it even exists) switch to a widget library based on Polymer/web components, use it via Mayhem
 
  LATER (hopefully other contributors)
   ------------------------------------
   * StoreSelect: add a way to go back to initial value even if it's no longer in select
   * StoreSelect: add network resiliance
-  * Use SOCKJS for messaging,
-   no more polling (authentication and reconnection are tricky)
-  * Make sure that EditingWidget and StoreSelect are blind-friendly
-    Allow country selection for phone number from a select box (straight, Dojo's?)
-  * Add animations
-  * Update JsonRestStores so that useRangeHeaders: true, is no longer necessary, sortBy isn't either
+  * Make sure that everything is blind-friendly
+  * Allow country selection for phone number from a select box (straight, Dojo's?)
 
 
   DONE:
@@ -977,6 +981,33 @@
       X Fix rendering issue in list, always refresh flag in stores
       X Rewrite the API for JsonRestStores so that it's uniform and it's easier to add messages
       X Write hooks to workspaceMessage store to actually add messages to the right spots using API
-    - Render messages well enough in list
-    - Add way to set 'from' via API rather than session
-  
+    X Render messages well enough in list
+    X Add way to set 'from' via API rather than session
+   SERVER. STORES/FIELDS FOR:
+    X Add ability to configure twilio (God): add shared phone numbers, API key, API token
+    X Add ability to configure email (ws): 
+      - Email address
+       - SMTP (server, account, pw, port)
+       - IMAP (server, account, user, pw, port, interval) 
+    X Add "system message from" (ws)
+    GUI
+    X Add ability to configure twilio (God): API key, API token
+    X Add ability to configure email (ws):
+      X SMTP (email, name, server, account, pw, port)
+      X  IMAP (server, user, pw, port, interval) 
+    - Add ability to configure twilio's numbers:
+      X (God) Add shared phone number/subsystem pair as "shared", "available", "private" (to specific ws)
+      X (God) Render numbers better, make it work with 
+      X (God) Make it generic, not just for Twilio, adding a "provider" field.
+    X (God) Validate so that workspaceId is only allowed for 'private', validate type and provider
+      X (ws) Ability to pick a public number, or a private one with matching workspaceId
+      X (ws) Make a store called WorkspacesSmsConfig, configure it via GUI 
+    X (ws) Add "from" to GUI to see who the message will be from (only name, not phone/email address)
+    - Add program-side export of "from" set in GUI, use it
+**
+    SERVER
+    X Add program-side export of configuration based on type/recipient in BD
+    X Write interface to pick senders of SMSes as well (right now only email actually works)
+    X Write cron job to go through message queue
+    X As it goes through message queue, actually attempt to re-send with right layer changing status
+    X Run run() of each working layer; SMTP will start a cron job, SMS will activate URLS (incoming, statuses)
