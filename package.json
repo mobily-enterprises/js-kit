@@ -58,8 +58,9 @@
     "hat": "0.0.x",
     "bcrypt": "0.7.x",
     "send": "0.1.x",
-    "twilio": "1.7.x"
-
+    "twilio": "1.7.x",
+    "nodemailer": "1.x",
+    "imap": "0.8.x"
   },
   "bundleDependencies": [
     "hotCore",

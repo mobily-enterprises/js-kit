@@ -1,11 +1,10 @@
   "MESSAGES"
 
-  
     SERVER
     *****
-    - Write twilio layer to actually send/receive the SMSes
-    - Write plivo layer to actually send/receive the SMSes
     - Write email layer to actually send/receive emails
+    - Write twilio layer to actually send/receive the SMSes
+    - Write plivo layer to actually send/receivPppe the SMSes
     - Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     - Write email and phone number validations, puke if invalid
 
