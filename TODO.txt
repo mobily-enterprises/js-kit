@@ -3,8 +3,7 @@
     SERVER
     *****
     - Write email layer to actually send/receive emails
-    - Write twilio layer to actually send/receive the SMSes
-    - Write plivo layer to actually send/receivPppe the SMSes
+    - Write twilio OR plivo layer to actually send/receive the SMSes
     - Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     - Write email and phone number validations, puke if invalid
 
@@ -21,7 +20,7 @@
     Add ability to mark messages as read by USER for USER message inbox
 
   ----------------------
-  DEADLINE: 30 Sep 2014
+  DEADLINE: 15 Oct 2014
   ----------------------
 
   "USERS AND INVITES"
@@ -38,14 +37,14 @@
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
 
   ---------------------
-  DEADLINE: 10 Oct 2014
+  DEADLINE: 30 Oct 2014
   ---------------------
 
   * Decide on permissions/permissions model, maybe follow Drupal's
   * Write a God permission mixin, apply to main stores (or everybody can write on them)
 
   ---------------------
-  DEADLINE: 15 Oct 2014
+  DEADLINE: 5 Nov 2014
   ---------------------
 
   "BOOKINGS"
@@ -59,7 +58,7 @@
   ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
-  DEADLINE: 30 Oct 2014
+  DEADLINE: 15 Nov 2014
   ---------------------
 
   "FINISH UP"
@@ -68,7 +67,7 @@
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
 
   ----------------------
-  DEADLINE: 15 Nov  2014
+  DEADLINE: 25 Nov  2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
@@ -79,7 +78,7 @@
   * Add buttons to re-sync all contacts from specified modules
 
   ----------------------
-  DEADLINE: 20 Nov  2014
+  DEADLINE: 30 Nov  2014
   ----------------------
 
   "GET PAID!"
@@ -99,7 +98,7 @@
     * Test drive possible usage
 
   ---------------------
-  DEADLINE: 30 Nov 2014
+  DEADLINE: 15 Dec 2014
   ---------------------
 
                          --------------------------------------
