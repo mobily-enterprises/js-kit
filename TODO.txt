@@ -1,11 +1,13 @@
+
   "MESSAGES"
 
     SERVER
     *****
-    - Write email layer to actually send/receive emails
-    - Write twilio OR plivo layer to actually send/receive the SMSes
-    - Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
-    - Write email and phone number validations, puke if invalid
+    [X] Structure API for all layers, define all functions and their exact signatures
+    [ ] Write email layer to actually send/receive emails
+    [ ] Write twilio OR plivo layer to actually send/receive the SMSes
+    [ ] Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
+    [ ] Write email and phone number validations, puke if invalid
 
     ***
     GUI
@@ -16,7 +18,7 @@
     - Enrich message inbox so that it has widgets to 1) Match 'From' 2) Archive 3) Mark as important
     - Add tabs "all", "sent", "received"
 
-    Add "internal messages" option in GUI
+    Add "internal messages" option in GUI, layers
     Add ability to mark messages as read by USER for USER message inbox
 
   ----------------------
@@ -460,7 +462,7 @@
   * Made sure that default error page sends the right HTTP error code
   * Added forgotten error check, minor formatting issues and small issues fixed, indentations
   * Now using Put instead of Post to create predefined user records (current system broken) fix "Put" which doesn't work
-  * Finally using hotplate.log, and added tracer, so that logging is much much saner
+  * Finally using debug, and added tracer, so that logging is much much saner
   * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
   * Made the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
   * Made sure things actually DO work even if no db driver is used
@@ -1009,3 +1011,9 @@
     X Write cron job to go through message queue
     X As it goes through message queue, actually attempt to re-send with right layer changing status
     X Run run() of each working layer; SMTP will start a cron job, SMS will activate URLS (incoming, statuses)
+
+* Library modules (simpledblayer, simpledblayer-mongo, etc.) do debugging wit hthe "debug" module.
+  No log levels, no specific handling, just debug info that can be switched on and off
+
+* For debugging messages, each module does require('debug')('hotplate:hotModuleName') and then does
+  debugging by issuing debug('...')
