@@ -10,9 +10,10 @@
   },
   "dependencies": {
     "async": "0.2.x",
-    "tracer": "0.6.x",
+    "tracer": "0.7.x",
     "deepobject": "0.3.x",
     "eventemittercollector": "0.3.x",
+    "debug": "2.x",
     "hotCore": "*",
     "hotCoreAuth": "*",
     "hotCoreClientFiles": "*",
