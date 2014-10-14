@@ -4,25 +4,30 @@
     SERVER
     *****
     [X] Structure API for all layers, define all functions and their exact signatures
-    [ ] Write email layer to actually send/receive emails
-    [ ] Write twilio OR plivo layer to actually send/receive the SMSes
+    [X] Write email layer to actually send/receive emails
+    [ ] Write plivo layer to actually send/receive the SMSes
+    [ ] Send TEXT version of email as well, taken by taking out tags from interface
     [ ] Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     [ ] Write email and phone number validations, puke if invalid
+    [ ] Check that everything "more or less" works
 
     ***
-    GUI
-    - Render messages properly in list
-    - Make GLOBAL message inbox
-    - Make USER message inbox
-    - Make sure there are incoming messages in queue, display them
-    - Enrich message inbox so that it has widgets to 1) Match 'From' 2) Archive 3) Mark as important
-    - Add tabs "all", "sent", "received"
-
-    Add "internal messages" option in GUI, layers
-    Add ability to mark messages as read by USER for USER message inbox
+    GUI: THE BOX
+    - Design BOX widget, with message list at the top and contents at the bottom
+    - BOX should have All, Sent, Received, Archived (if "archivable" feature is on)
+    - BOX will be used for:
+      1) General workspace inbox.
+      2) User-specific inbox.
+      3) Booking-specific inbox (make sure design allows for this)
+    - Allow messages to be marked as read for specific contactIds
+    - Enrich BOX so that:
+      1) Incoming messages can match From: (providing suggestions)
+      2) Messages can be archived (if "archivable")
+      3) Messages can be marked as important
+    - Make it all work with "Internal messages" as well, decide if duplicate them based on GUI
 
   ----------------------
-  DEADLINE: 15 Oct 2014
+  DEADLINE: 30 Oct 2014
   ----------------------
 
   "USERS AND INVITES"
@@ -39,14 +44,14 @@
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
 
   ---------------------
-  DEADLINE: 30 Oct 2014
+  DEADLINE: 15 Nov 2014
   ---------------------
 
   * Decide on permissions/permissions model, maybe follow Drupal's
   * Write a God permission mixin, apply to main stores (or everybody can write on them)
 
   ---------------------
-  DEADLINE: 5 Nov 2014
+  DEADLINE: 30 Nov 2014
   ---------------------
 
   "BOOKINGS"
@@ -60,7 +65,7 @@
   ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
-  DEADLINE: 15 Nov 2014
+  DEADLINE: 15 Dec 2014
   ---------------------
 
   "FINISH UP"
@@ -69,7 +74,7 @@
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
 
   ----------------------
-  DEADLINE: 25 Nov  2014
+  DEADLINE: 20 Dec 2014
   ----------------------
 
   "CONTACTS -- INTEGRATION"
@@ -80,12 +85,16 @@
   * Add buttons to re-sync all contacts from specified modules
 
   ----------------------
-  DEADLINE: 30 Nov  2014
+  DEADLINE: 25 Dec  2014
   ----------------------
 
   "GET PAID!"
   * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
   * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
+
+  ----------------------
+  DEADLINE: 10 Jan  2015
+  ----------------------
 
 
   "BEAUTIFY AND FINAL TOUCHES"
@@ -100,7 +109,7 @@
     * Test drive possible usage
 
   ---------------------
-  DEADLINE: 15 Dec 2014
+  DEADLINE: 31 Dec 2014
   ---------------------
 
                          --------------------------------------
