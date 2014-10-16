@@ -6,6 +6,7 @@
     [X] Structure API for all layers, define all functions and their exact signatures
     [X] Write email layer to actually send/receive emails
     [ ] Write plivo layer to actually send/receive the SMSes
+
     [ ] Send TEXT version of email as well, taken by taking out tags from interface
     [ ] Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
     [ ] Write email and phone number validations, puke if invalid
@@ -1077,3 +1078,25 @@
   [X] Decide on logLine, does the err parameter make sense? Fully undertand difference bw logLine and debug
   [X] Full code audit, especially in terms of what to do in case of errors (logging/debug)
   [ ] Test that fetching/sending emails actually works, final testing, simulate errors, check timeouts
+  
+X Configure router so that incoming requests work for testing
+X Get an example text and print req
+X Check request signature, signature code (do not use Plivo's module, copy code)
+X - If signature is wrong, log level 3 and exit
+X Add email to database
+X Emit signal about message received
+X Fix huge config mistake: config entry needs to match, first one is not good enough
+X Add URL for message status update (add URL to sms request)
+X MAYBE make 2 URLs (incoming, status) configurable via GUI (check first)
+
+X When a message is sent, it needs to be set as "delivering", and it NEEDS to have its foreignId set when the
+  processor actually has it for delivery. The status will then be updated by the processor
+X Add some kind of semaphone to the update of status. Or, BETTER, never change the status from "delivered"
+
+
+X Check sendMessage for email, maybe it's worth getting the message ID upon sending like I do with SMSes
+X Check the story with status response when sending multple SMSes in one go, be clear about it in doc
+X CHeck all setMessageStatus, that they have FALSE to attemptTried
+X implement attemptAfter, enforce delay in hotCoreTransport
+X See if the whole thing still actually works (which at this point would be a bit of a miracle)
+X In SimpleSchema, attempt as 0 pukes -- check why, and set attempts to 0 so that it works
