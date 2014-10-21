@@ -5,15 +5,20 @@
     *****
     [X] Structure API for all layers, define all functions and their exact signatures
     [X] Write email layer to actually send/receive emails
-    [ ] Write plivo layer to actually send/receive the SMSes
+    [X] Write plivo layer to actually send/receive the SMSes
+    [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (email)
+    [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (sms)
+    
+    [ ] Finish off last bits before closing messaging:
+      * Send TEXT version of email as well, taken by taking out tags from interface
+      * Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
+      * Write email and phone number validations, puke if invalid
+    [ ] Do a last code audit and better debugging messages for the Transport code
 
-    [ ] Send TEXT version of email as well, taken by taking out tags from interface
-    [ ] Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
-    [ ] Write email and phone number validations, puke if invalid
-    [ ] Check that everything "more or less" works
 
     ***
     GUI: THE BOX
+    Use Dgrid (NOT List!) to make a messages widget:
     - Design BOX widget, with message list at the top and contents at the bottom
     - BOX should have All, Sent, Received, Archived (if "archivable" feature is on)
     - BOX will be used for:
@@ -41,15 +46,15 @@
 
   "WORKSPACE MANAGEMENT"
 
-  * Add a "user management" section in settings for workspace Admins only
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
+  * Add a "user management" section in settings for workspace Admins only
 
   ---------------------
   DEADLINE: 15 Nov 2014
   ---------------------
 
   * Decide on permissions/permissions model, maybe follow Drupal's
-  * Write a God permission mixin, apply to main stores (or everybody can write on them)
+  * Write a God permission mixin, apply to root-level stores (or everybody can write on them)
 
   ---------------------
   DEADLINE: 30 Nov 2014
@@ -136,6 +141,9 @@
   * Interface with payment system allowing workspaces to get paid
   * Ability to send invoices
   * Ability to _store_ received invoices
+
+
+
 
   "LONGER TERM"
 
@@ -1078,7 +1086,7 @@
   [X] Decide on logLine, does the err parameter make sense? Fully undertand difference bw logLine and debug
   [X] Full code audit, especially in terms of what to do in case of errors (logging/debug)
   [ ] Test that fetching/sending emails actually works, final testing, simulate errors, check timeouts
-  
+
 X Configure router so that incoming requests work for testing
 X Get an example text and print req
 X Check request signature, signature code (do not use Plivo's module, copy code)
@@ -1100,3 +1108,10 @@ X CHeck all setMessageStatus, that they have FALSE to attemptTried
 X implement attemptAfter, enforce delay in hotCoreTransport
 X See if the whole thing still actually works (which at this point would be a bit of a miracle)
 X In SimpleSchema, attempt as 0 pukes -- check why, and set attempts to 0 so that it works
+        // X Add appData as object to messageTo, to store the contactId the message is meant for
+        // X Emit an event that allows modules to manipulate an email before sending
+        // X On way out, add something to the subject "Hello there [C:323123]"
+        // X Match ID in subject with ID in WorkspacesContacts and set messagesToContactId
+        // X Make sure subject is stored to the DB *without* trailing [C:3131321]
+        // X Match email address with email in WorkspacesContacts and set messagesFromContactId
+       
