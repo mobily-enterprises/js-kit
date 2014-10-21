@@ -15,6 +15,7 @@
     "eventemittercollector": "0.3.x",
     "debug": "2.x",
     "crypto": "0.0.x",
+    "email-addresses": "2.x",
     "hotCore": "*",
     "hotCoreAuth": "*",
     "hotCoreClientFiles": "*",
