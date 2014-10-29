@@ -1,39 +1,61 @@
 
   "MESSAGES"
-
-    SERVER
-    *****
-    [X] Structure API for all layers, define all functions and their exact signatures
-    [X] Write email layer to actually send/receive emails
-    [X] Write plivo layer to actually send/receive the SMSes
-    [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (email)
-    [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (sms)
     
-    [ ] Finish off last bits before closing messaging:
-      * Send TEXT version of email as well, taken by taking out tags from interface
-      * Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
-      * Write email and phone number validations, puke if invalid
-    [ ] Do a last code audit and better debugging messages for the Transport code
+    [ ] GUI: THE BOX
+      [X] Move "new message" form out of the top of the contacts info, make a button instead
+      [X] Make sure that only the right tabs actually come out. For now, if empty leave blank (intnl msgs later)
+      [X] Change form so that the contactId is a dropdown of all emails/ph numbers for the person
 
+      *
+      [X] Rename variables/styles to sane "to", "cc" so that it makes sense for one message or several
+      [X] Redo WorkspacesMessagesTo so that it's ONE widget, which will deal with SMSes and ph numbers
+      [X] Apply same drop-down changes to email
+      [X] Fix CSS for email and SMS sending, completely gone by restructuring things
 
-    ***
-    GUI: THE BOX
-    Use Dgrid (NOT List!) to make a messages widget:
-    - Design BOX widget, with message list at the top and contents at the bottom
-    - BOX should have All, Sent, Received, Archived (if "archivable" feature is on)
-    - BOX will be used for:
-      1) General workspace inbox.
-      2) User-specific inbox.
-      3) Booking-specific inbox (make sure design allows for this)
-    - Allow messages to be marked as read for specific contactIds
-    - Enrich BOX so that:
-      1) Incoming messages can match From: (providing suggestions)
-      2) Messages can be archived (if "archivable")
-      3) Messages can be marked as important
-    - Make it all work with "Internal messages" as well, decide if duplicate them based on GUI
+      **
+      [X] Switch to Dgrid (NOT List!) to make a messages widget
+      [X] Format "From" properly, maybe rendered from server?
+      [X] Format "To" properly, maybe rendered from server?
+      [X] Format "Date" like Google does it
+      [X] Use common validators server-side as well
+      [X] Format "Body" so that it has the subject + some of the body text in text mode
+      [X] Attempt to find the beginning of the message AFTER quoting, maybe convert to text from server?
+      [X] Fix problems with field validation, needs to allow empty "to" in messages, only puke in remote
+      [X] Fix error, id in subject is wrong, needs to be the userId logged in
+      [ ] View full (cleaned up) message when clicking. It's OK that it's already downloaded
+
+      **
+      [ ] Place BOX in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
+      [ ] Add tab to "Inbox" for "archived" messages (same widget, with extra option)
+      [ ] Make it possible to archive messages
+      [ ] Make it possible to reply to messages (include original, include subject)
+
+      **
+      [ ] For computedFrom, make it possible to change contactId from messageTo (make log)
+      [ ] For computedTo, make it possible to change contactId for messageTo (make log)
+
+      **
+      [ ] Allow messages to be marked as read for specific contactIds, display bold if unread
+      [ ] Enrich BOX so that inInbox messages can match different From: (provide contact picker)
+
+      *
+      [ ] Implement "Internal messages" (messages sent with "inInbox" marked as false and 'incoming' as true)
+      [ ] Check line with "debugger" in storeSelect -- why error at times when changing email address?
+
+      *
+      [ ] Add cache to the computedTo field, zap cache when a message has matching contactTo
+
+      *
+      [ ] Add ability to display, download attachments, dealing with un-downloaded ones
+      [ ] Make 1:n relationship between workspacesMessages and messagesAttchments
+      [ ] Make ABSOLUTE sure attachment data is not downloaded when getting messages (too much info)
+
+      *
+      [ ] Improve look of table, icons
+      [ ] Make sure validation bubbles don't stay after closing dialog
 
   ----------------------
-  DEADLINE: 30 Oct 2014
+  DEADLINE: 10 Nov 2014
   ----------------------
 
   "USERS AND INVITES"
@@ -42,12 +64,15 @@
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
-    added to that workspace (UsersWorkspaces store)
+    added to that workspace (usersWorkspaces store)
 
   "WORKSPACE MANAGEMENT"
 
   * Write a "log browser" for workspace owners and for God to see what happened, with filters
   * Add a "user management" section in settings for workspace Admins only
+    - Detach/attach user from contactId (use contact picker)
+    - Add user by hand
+    - Invite user
 
   ---------------------
   DEADLINE: 15 Nov 2014
@@ -1114,4 +1139,13 @@ X In SimpleSchema, attempt as 0 pukes -- check why, and set attempts to 0 so tha
         // X Match ID in subject with ID in WorkspacesContacts and set messagesToContactId
         // X Make sure subject is stored to the DB *without* trailing [C:3131321]
         // X Match email address with email in WorkspacesContacts and set messagesFromContactId
-       
+          [X] Structure API for all layers, define all functions and their exact signatures
+[X] Write email layer to actually send/receive emails
+[X] Write plivo layer to actually send/receive the SMSes
+[X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (email)
+[X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (sms)
+X Improve debugging messages in workspacesMessages    
+X Send TEXT version of email as well, taken by taking out tags from interface
+X Figure out how to send SANE, CLIENT-SAFE html from the email contents
+X Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
+X Changed ownedByWorkspaceId into workspaceId
