@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ln -s ../hotplate hotplate
+
 echo Copying the guide over...
 cat _includes/top_page.txt hotplate/GUIDE.md  > guide.md
 
@@ -28,6 +30,7 @@ git add *;
 echo Press enter to commit...
 read
 
+rm -f hotplate
 git commit -m "Automatic build done"
 git push origin gh-pages
 

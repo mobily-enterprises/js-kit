@@ -43,31 +43,21 @@
             "fors": {},
             "namespaces": {}
         },
-        "hotplate/node_modules/hotCorePage/lib/Csses.js": {
-            "name": "hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "hotplate/node_modules/hotCorePage/lib/HeadLines.js": {
-            "name": "hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
-        "hotplate/node_modules/hotCorePage/lib/Jses.js": {
-            "name": "hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "modules": {},
-            "classes": {},
-            "fors": {},
-            "namespaces": {}
-        },
         "hotplate/node_modules/hotCorePage/lib/Vars.js": {
             "name": "hotplate/node_modules/hotCorePage/lib/Vars.js",
             "modules": {},
             "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js": {
+            "name": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
+            "modules": {
+                "hotCoreTransport": 1
+            },
+            "classes": {
+                "hotCoreTransport": 1
+            },
             "fors": {},
             "namespaces": {}
         }
@@ -84,8 +74,8 @@
             "namespaces": {},
             "tag": "main",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 24,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
+            "line": 17,
+            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UsersStrategies. The list of strategies set by that user.\n* AuthStrategies. The complete list of auth strategies available\n* Logins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
             "itemtype": "main"
         },
         "hotCoreClientFiles": {
@@ -112,8 +102,22 @@
             "namespaces": {},
             "tag": "main",
             "file": "hotplate/node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js",
-            "line": 1,
-            "description": "Provides multi-home abilities to Hotplate\n\nThis module's aim is to make sure Hotplate has full multi-home abilities. The module itself:\n\n* Defines all of the relevant stores ( `workspaces`, `workspaceUsers`, `userWorkspaces`)\n* Places important variables on the rendered page ( `vars.hotCoreMultiHome.enabled` and `.multiHomeURL`)\n* Places the crucial `vars.hotCoreMultiHome.workspaceId` variable on the rendered page\n\nHowever, given the nature of this module, there are _several_ other modules in Hotplate that interact with it.\n\n## SUMMARY: modules that deal with multihome environments:\n\n* hotCoreJsonRestStores -- it will broadcast comet messages only to workspace users\n* hotCoreStoreConfig -- if the url has `:workspaceId`, it will set config stores' records in the page for that workspace\n* hotDojoGlobals -- will set global variable workspaceId if it's set within the page\n* hotDojoStoreConfig -- will call `stores()` passing `userId` and `workspaceId` in resolution hash, allowing easy workspace-bound setting lists\n* hotDojoAppContainer -- fully multi-home aware, will hook to correct URL and, if `:workspaceId` is in the URL, it will check that it exists.\n* hotDojoAuth -- fully multi-home aware, providing a pick mechanism etc. Gets the workspace URL from `vars.hotCoreMultiHome.multiHomeURL` \n\n* hotDojoComet -- will add header `X-hotplate-workspaceId` to tab messages requests\n* hotCoreComet -- will use `X-hotplate-workspaceId` to return updated config records for the expired workspace\n\nA more detailed explanation of what each module does, in terms of interaction with hotCoreMultiHome, follows. Note that any interaction happens on the basis that `hotCoreMultiHome` is enabled.\n\n## hotCoreJsonRestStores\n\n* ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js\n\nWhen broadcasting changes to stores via the hook `cometBroadcast`, it will change its behavious depending on multi-home being enabled or not.\n\nIf multiHome is enabled, checks if the record has a workspaceId field -- in which case, it will only broadcast the message to users in that workspaceId (it will do so by passing a `makeTabIdHash()` function to the `cometBroadcast` hook) \n\n## hotCoreStoreConfig\n\n* ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js\n\nImplements `pageElementsPerPage` that passes `params.workspaceId` to `getConfig()` -- which means that if the URL has the `workspaceId` parameter, it will add a variable with the workspace's configuration to the page. It also passes `session.userId` to `getConfig()`, so if the user is logged in, it will return that user's config too.\n\nNOTE: `getConfig()` is implemented here. Signature: `function( workspaceId, userId, cb )`. It basically will return all configs with `workspaceId` and/or `userId` set in their `store.configStore` property\n\n## hotDojoGlobals\n\n* ./node_modules/hotDojoGlobals/client/globals.js\n\nSets the global variable `workspaceId` based on `vars.hotCoreMultiHome.workspaceId` (Unrelated: it also sets `userId` based in `vars.hotCoreAuth.userId`)\n\n## hotDojoStoreConfig\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\nConfig variables are bound to \"nothing\" (system-wide settings), to a user (user-wide settings), to a workspace (workspace-wide settings) or both (user-specific settings for a specific workspace). That's why ConfigVars will call `stores()` passing `:userId` and :`workspaceId` in resolution hash.\n\nNote that `:workspaceId` and `userId` are the ONLY parameters allowed in a config store URL.\n\n\n## hotDojoAppContainer\n\n* ./node_modules/hotDojoAppContainer/lib/hotDojoAppContainer.js\n\nIn terms of URLs, it will attach to `hotCoreMultiHome.multiHomeURL` or `hotCoreAuth.appURL` depending on multi-home being enabled or not. Also, IF `:workspaceId` is in the URL as a parameter, it will check that the workspace actually exists or it will return an error.\n\n## hotDojoAuth\n\n* ./node_modules/hotDojoAuth/lib/hotDojoAuth.js\n\nThe pagePick callback is there just for multi-home environments, picking the workspace\n\n* ./node_modules/hotDojoAuth/client/NewWorkspace.js\n\nAfter adding a new workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` (replacing `:workspaceId` with the id of the record that was just created) \n\n* ./node_modules/hotDojoAuth/client/Pick.js\n\nAfter picking a workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` as above\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\n## hotDojoComet\n\n* ./node_modules/hotDojoComet/client/messages.js\n\nIt adds a header `X-hotplate-workspaceId` to tabId requests. This is ESSENTIAL so that hotCoreComet knows which workspaceId the tab belongs to. Yes, IT NEEDS to know it: if the tab is not found or it's expired, hotCoreComet will return only one message, `resetStores`, which will INCLUDE all configuration records for that user and workspace (in order to save GETs and implement error management app-side).\n\n## hotCoreComet\n\n* ./node_modules/hotCoreComet/lib/hotCoreComet.js\n\nUses the header `X-hotplate-workspaceId` to return the config stores' records for that `workspaceId` in case the tab is expired or not there",
+            "line": 3,
+            "description": "Provides multi-home abilities to Hotplate\n\nThis module's aim is to make sure Hotplate has full multi-home abilities. The module itself:\n\n* Defines all of the relevant stores ( `workspaces`, `workspacesUsers`, `usersWorkspaces`)\n* Places important variables on the rendered page ( `vars.hotCoreMultiHome.enabled` and `.multiHomeURL`)\n* Places the crucial `vars.hotCoreMultiHome.workspaceId` variable on the rendered page\n\nHowever, given the nature of this module, there are _several_ other modules in Hotplate that interact with it.\n\n## SUMMARY: modules that deal with multihome environments:\n\n* hotCoreJsonRestStores -- it will broadcast comet messages only to workspace users\n* hotCoreStoreConfig -- if the url has `:workspaceId`, it will set config stores' records in the page for that workspace\n* hotDojoGlobals -- will set global variable workspaceId if it's set within the page\n* hotDojoStoreConfig -- will call `stores()` passing `userId` and `workspaceId` in resolution hash, allowing easy workspace-bound setting lists\n* hotDojoAppContainer -- fully multi-home aware, will hook to correct URL and, if `:workspaceId` is in the URL, it will check that it exists.\n* hotDojoAuth -- fully multi-home aware, providing a pick mechanism etc. Gets the workspace URL from `vars.hotCoreMultiHome.multiHomeURL` \n\n* hotDojoComet -- will add header `X-hotplate-workspaceId` to tab messages requests\n* hotCoreComet -- will use `X-hotplate-workspaceId` to return updated config records for the expired workspace\n\nA more detailed explanation of what each module does, in terms of interaction with hotCoreMultiHome, follows. Note that any interaction happens on the basis that `hotCoreMultiHome` is enabled.\n\n## hotCoreJsonRestStores\n\n* ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js\n\nWhen broadcasting changes to stores via the hook `cometBroadcast`, it will change its behavious depending on multi-home being enabled or not.\n\nIf multiHome is enabled, checks if the record has a workspaceId field -- in which case, it will only broadcast the message to users in that workspaceId (it will do so by passing a `makeTabIdHash()` function to the `cometBroadcast` hook) \n\n## hotCoreStoreConfig\n\n* ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js\n\nImplements `pageElementsPerPage` that passes `params.workspaceId` to `getConfig()` -- which means that if the URL has the `workspaceId` parameter, it will add a variable with the workspace's configuration to the page. It also passes `session.userId` to `getConfig()`, so if the user is logged in, it will return that user's config too.\n\nNOTE: `getConfig()` is implemented here. Signature: `function( workspaceId, userId, cb )`. It basically will return all configs with `workspaceId` and/or `userId` set in their `store.configStore` property\n\n## hotDojoGlobals\n\n* ./node_modules/hotDojoGlobals/client/globals.js\n\nSets the global variable `workspaceId` based on `vars.hotCoreMultiHome.workspaceId` (Unrelated: it also sets `userId` based in `vars.hotCoreAuth.userId`)\n\n## hotDojoStoreConfig\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\nConfig variables are bound to \"nothing\" (system-wide settings), to a user (user-wide settings), to a workspace (workspace-wide settings) or both (user-specific settings for a specific workspace). That's why ConfigVars will call `stores()` passing `:userId` and :`workspaceId` in resolution hash.\n\nNote that `:workspaceId` and `userId` are the ONLY parameters allowed in a config store URL.\n\n\n## hotDojoAppContainer\n\n* ./node_modules/hotDojoAppContainer/lib/hotDojoAppContainer.js\n\nIn terms of URLs, it will attach to `hotCoreMultiHome.multiHomeURL` or `hotCoreAuth.appURL` depending on multi-home being enabled or not. Also, IF `:workspaceId` is in the URL as a parameter, it will check that the workspace actually exists or it will return an error.\n\n## hotDojoAuth\n\n* ./node_modules/hotDojoAuth/lib/hotDojoAuth.js\n\nThe pagePick callback is there just for multi-home environments, picking the workspace\n\n* ./node_modules/hotDojoAuth/client/NewWorkspace.js\n\nAfter adding a new workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` (replacing `:workspaceId` with the id of the record that was just created) \n\n* ./node_modules/hotDojoAuth/client/Pick.js\n\nAfter picking a workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` as above\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\n## hotDojoComet\n\n* ./node_modules/hotDojoComet/client/messages.js\n\nIt adds a header `X-hotplate-workspaceId` to tabId requests. This is ESSENTIAL so that hotCoreComet knows which workspaceId the tab belongs to. Yes, IT NEEDS to know it: if the tab is not found or it's expired, hotCoreComet will return only one message, `resetStores`, which will INCLUDE all configuration records for that user and workspace (in order to save GETs and implement error management app-side).\n\n## hotCoreComet\n\n* ./node_modules/hotCoreComet/lib/hotCoreComet.js\n\nUses the header `X-hotplate-workspaceId` to return the config stores' records for that `workspaceId` in case the tab is expired or not there",
+            "itemtype": "main"
+        },
+        "hotCoreTransport": {
+            "name": "hotCoreTransport",
+            "submodules": {},
+            "classes": {
+                "hotCoreTransport": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "main",
+            "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
+            "line": 21,
+            "description": "Provides tranport functionalities (SMS an email) to hotplate modules",
             "itemtype": "main"
         }
     },
@@ -142,8 +146,8 @@
             "module": "hotCoreAuth",
             "namespace": "",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 24,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UserStrategies. The list of strategies set bu that user.\n* AuthStrategies. The complete list of auth strategies available\n* UserLogins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
+            "line": 17,
+            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UsersStrategies. The list of strategies set by that user.\n* AuthStrategies. The complete list of auth strategies available\n* Logins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
             "mainName": "hotCoreAuth",
             "tag": "main",
             "itemtype": "main",
@@ -178,9 +182,27 @@
             "module": "hotCoreMultiHome",
             "namespace": "",
             "file": "hotplate/node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js",
-            "line": 1,
-            "description": "Provides multi-home abilities to Hotplate\n\nThis module's aim is to make sure Hotplate has full multi-home abilities. The module itself:\n\n* Defines all of the relevant stores ( `workspaces`, `workspaceUsers`, `userWorkspaces`)\n* Places important variables on the rendered page ( `vars.hotCoreMultiHome.enabled` and `.multiHomeURL`)\n* Places the crucial `vars.hotCoreMultiHome.workspaceId` variable on the rendered page\n\nHowever, given the nature of this module, there are _several_ other modules in Hotplate that interact with it.\n\n## SUMMARY: modules that deal with multihome environments:\n\n* hotCoreJsonRestStores -- it will broadcast comet messages only to workspace users\n* hotCoreStoreConfig -- if the url has `:workspaceId`, it will set config stores' records in the page for that workspace\n* hotDojoGlobals -- will set global variable workspaceId if it's set within the page\n* hotDojoStoreConfig -- will call `stores()` passing `userId` and `workspaceId` in resolution hash, allowing easy workspace-bound setting lists\n* hotDojoAppContainer -- fully multi-home aware, will hook to correct URL and, if `:workspaceId` is in the URL, it will check that it exists.\n* hotDojoAuth -- fully multi-home aware, providing a pick mechanism etc. Gets the workspace URL from `vars.hotCoreMultiHome.multiHomeURL` \n\n* hotDojoComet -- will add header `X-hotplate-workspaceId` to tab messages requests\n* hotCoreComet -- will use `X-hotplate-workspaceId` to return updated config records for the expired workspace\n\nA more detailed explanation of what each module does, in terms of interaction with hotCoreMultiHome, follows. Note that any interaction happens on the basis that `hotCoreMultiHome` is enabled.\n\n## hotCoreJsonRestStores\n\n* ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js\n\nWhen broadcasting changes to stores via the hook `cometBroadcast`, it will change its behavious depending on multi-home being enabled or not.\n\nIf multiHome is enabled, checks if the record has a workspaceId field -- in which case, it will only broadcast the message to users in that workspaceId (it will do so by passing a `makeTabIdHash()` function to the `cometBroadcast` hook) \n\n## hotCoreStoreConfig\n\n* ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js\n\nImplements `pageElementsPerPage` that passes `params.workspaceId` to `getConfig()` -- which means that if the URL has the `workspaceId` parameter, it will add a variable with the workspace's configuration to the page. It also passes `session.userId` to `getConfig()`, so if the user is logged in, it will return that user's config too.\n\nNOTE: `getConfig()` is implemented here. Signature: `function( workspaceId, userId, cb )`. It basically will return all configs with `workspaceId` and/or `userId` set in their `store.configStore` property\n\n## hotDojoGlobals\n\n* ./node_modules/hotDojoGlobals/client/globals.js\n\nSets the global variable `workspaceId` based on `vars.hotCoreMultiHome.workspaceId` (Unrelated: it also sets `userId` based in `vars.hotCoreAuth.userId`)\n\n## hotDojoStoreConfig\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\nConfig variables are bound to \"nothing\" (system-wide settings), to a user (user-wide settings), to a workspace (workspace-wide settings) or both (user-specific settings for a specific workspace). That's why ConfigVars will call `stores()` passing `:userId` and :`workspaceId` in resolution hash.\n\nNote that `:workspaceId` and `userId` are the ONLY parameters allowed in a config store URL.\n\n\n## hotDojoAppContainer\n\n* ./node_modules/hotDojoAppContainer/lib/hotDojoAppContainer.js\n\nIn terms of URLs, it will attach to `hotCoreMultiHome.multiHomeURL` or `hotCoreAuth.appURL` depending on multi-home being enabled or not. Also, IF `:workspaceId` is in the URL as a parameter, it will check that the workspace actually exists or it will return an error.\n\n## hotDojoAuth\n\n* ./node_modules/hotDojoAuth/lib/hotDojoAuth.js\n\nThe pagePick callback is there just for multi-home environments, picking the workspace\n\n* ./node_modules/hotDojoAuth/client/NewWorkspace.js\n\nAfter adding a new workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` (replacing `:workspaceId` with the id of the record that was just created) \n\n* ./node_modules/hotDojoAuth/client/Pick.js\n\nAfter picking a workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` as above\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\n## hotDojoComet\n\n* ./node_modules/hotDojoComet/client/messages.js\n\nIt adds a header `X-hotplate-workspaceId` to tabId requests. This is ESSENTIAL so that hotCoreComet knows which workspaceId the tab belongs to. Yes, IT NEEDS to know it: if the tab is not found or it's expired, hotCoreComet will return only one message, `resetStores`, which will INCLUDE all configuration records for that user and workspace (in order to save GETs and implement error management app-side).\n\n## hotCoreComet\n\n* ./node_modules/hotCoreComet/lib/hotCoreComet.js\n\nUses the header `X-hotplate-workspaceId` to return the config stores' records for that `workspaceId` in case the tab is expired or not there",
+            "line": 3,
+            "description": "Provides multi-home abilities to Hotplate\n\nThis module's aim is to make sure Hotplate has full multi-home abilities. The module itself:\n\n* Defines all of the relevant stores ( `workspaces`, `workspacesUsers`, `usersWorkspaces`)\n* Places important variables on the rendered page ( `vars.hotCoreMultiHome.enabled` and `.multiHomeURL`)\n* Places the crucial `vars.hotCoreMultiHome.workspaceId` variable on the rendered page\n\nHowever, given the nature of this module, there are _several_ other modules in Hotplate that interact with it.\n\n## SUMMARY: modules that deal with multihome environments:\n\n* hotCoreJsonRestStores -- it will broadcast comet messages only to workspace users\n* hotCoreStoreConfig -- if the url has `:workspaceId`, it will set config stores' records in the page for that workspace\n* hotDojoGlobals -- will set global variable workspaceId if it's set within the page\n* hotDojoStoreConfig -- will call `stores()` passing `userId` and `workspaceId` in resolution hash, allowing easy workspace-bound setting lists\n* hotDojoAppContainer -- fully multi-home aware, will hook to correct URL and, if `:workspaceId` is in the URL, it will check that it exists.\n* hotDojoAuth -- fully multi-home aware, providing a pick mechanism etc. Gets the workspace URL from `vars.hotCoreMultiHome.multiHomeURL` \n\n* hotDojoComet -- will add header `X-hotplate-workspaceId` to tab messages requests\n* hotCoreComet -- will use `X-hotplate-workspaceId` to return updated config records for the expired workspace\n\nA more detailed explanation of what each module does, in terms of interaction with hotCoreMultiHome, follows. Note that any interaction happens on the basis that `hotCoreMultiHome` is enabled.\n\n## hotCoreJsonRestStores\n\n* ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js\n\nWhen broadcasting changes to stores via the hook `cometBroadcast`, it will change its behavious depending on multi-home being enabled or not.\n\nIf multiHome is enabled, checks if the record has a workspaceId field -- in which case, it will only broadcast the message to users in that workspaceId (it will do so by passing a `makeTabIdHash()` function to the `cometBroadcast` hook) \n\n## hotCoreStoreConfig\n\n* ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js\n\nImplements `pageElementsPerPage` that passes `params.workspaceId` to `getConfig()` -- which means that if the URL has the `workspaceId` parameter, it will add a variable with the workspace's configuration to the page. It also passes `session.userId` to `getConfig()`, so if the user is logged in, it will return that user's config too.\n\nNOTE: `getConfig()` is implemented here. Signature: `function( workspaceId, userId, cb )`. It basically will return all configs with `workspaceId` and/or `userId` set in their `store.configStore` property\n\n## hotDojoGlobals\n\n* ./node_modules/hotDojoGlobals/client/globals.js\n\nSets the global variable `workspaceId` based on `vars.hotCoreMultiHome.workspaceId` (Unrelated: it also sets `userId` based in `vars.hotCoreAuth.userId`)\n\n## hotDojoStoreConfig\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\nConfig variables are bound to \"nothing\" (system-wide settings), to a user (user-wide settings), to a workspace (workspace-wide settings) or both (user-specific settings for a specific workspace). That's why ConfigVars will call `stores()` passing `:userId` and :`workspaceId` in resolution hash.\n\nNote that `:workspaceId` and `userId` are the ONLY parameters allowed in a config store URL.\n\n\n## hotDojoAppContainer\n\n* ./node_modules/hotDojoAppContainer/lib/hotDojoAppContainer.js\n\nIn terms of URLs, it will attach to `hotCoreMultiHome.multiHomeURL` or `hotCoreAuth.appURL` depending on multi-home being enabled or not. Also, IF `:workspaceId` is in the URL as a parameter, it will check that the workspace actually exists or it will return an error.\n\n## hotDojoAuth\n\n* ./node_modules/hotDojoAuth/lib/hotDojoAuth.js\n\nThe pagePick callback is there just for multi-home environments, picking the workspace\n\n* ./node_modules/hotDojoAuth/client/NewWorkspace.js\n\nAfter adding a new workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` (replacing `:workspaceId` with the id of the record that was just created) \n\n* ./node_modules/hotDojoAuth/client/Pick.js\n\nAfter picking a workspace, it will redirect to it thanks to `vars.hotCoreMultiHome.multiHomeURL` as above\n\n* ./node_modules/hotDojoStoreConfig/client/ConfigVars.js\n\n## hotDojoComet\n\n* ./node_modules/hotDojoComet/client/messages.js\n\nIt adds a header `X-hotplate-workspaceId` to tabId requests. This is ESSENTIAL so that hotCoreComet knows which workspaceId the tab belongs to. Yes, IT NEEDS to know it: if the tab is not found or it's expired, hotCoreComet will return only one message, `resetStores`, which will INCLUDE all configuration records for that user and workspace (in order to save GETs and implement error management app-side).\n\n## hotCoreComet\n\n* ./node_modules/hotCoreComet/lib/hotCoreComet.js\n\nUses the header `X-hotplate-workspaceId` to return the config stores' records for that `workspaceId` in case the tab is expired or not there",
             "mainName": "hotCoreMultiHome",
+            "tag": "main",
+            "itemtype": "main",
+            "_main": true
+        },
+        "hotCoreTransport": {
+            "name": "hotCoreTransport",
+            "shortname": "hotCoreTransport",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "hotCoreTransport",
+            "namespace": "",
+            "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
+            "line": 21,
+            "description": "Provides tranport functionalities (SMS an email) to hotplate modules",
+            "mainName": "hotCoreTransport",
             "tag": "main",
             "itemtype": "main",
             "_main": true
@@ -197,8 +219,8 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 86,
-            "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UserStrategies, AuthStrategies, UserLogins)",
+            "line": 78,
+            "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UsersStrategies, AuthStrategies, Logins)",
             "itemtype": "event",
             "name": "init",
             "requires": [
@@ -209,7 +231,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 320,
+            "line": 304,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "run",
@@ -236,8 +258,8 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreClientFiles/lib/hotCoreClientFiles.js",
-            "line": 59,
-            "description": "Returns a function that will serve files that are set as\npublic by other modules by implementing the `clientPaths` hook",
+            "line": 76,
+            "description": "Returns a function that will serve files that are set as\npublic by other modules by implementing the `clientPaths` hook\n\nThis function is a mixture of:\n  * express/node_modules/connect/lib/middleware\n  * express/lib/application.js#app.render",
             "itemtype": "method",
             "name": "serve",
             "params": [
@@ -250,176 +272,8 @@
             "module": "hotCoreClientFiles"
         },
         {
-            "file": "hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 11,
-            "description": "Csses constructor.\n\nAn object to which you can add CSS files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 33,
-            "description": "Css rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Csses.js",
-            "line": 49,
-            "description": "Add a CSS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Csses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 11,
-            "description": "HeadLines constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 33,
-            "description": "Javascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/HeadLines.js",
-            "line": 49,
-            "description": "Add a JS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Jsses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 11,
-            "description": "Jses constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 33,
-            "description": "Javascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Jses.js",
-            "line": 55,
-            "description": "Add a JS file",
-            "params": [
-                {
-                    "name": "The",
-                    "description": "module's name",
-                    "type": "String"
-                },
-                {
-                    "name": "The",
-                    "description": "file's full path",
-                    "type": "String"
-                }
-            ],
-            "return": {
-                "description": "this",
-                "type": "Jsses"
-            },
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
             "file": "hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 11,
-            "description": "Csses constructor.\n\nAn object to which you can add variables to, and render them",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 24,
-            "description": "The exports object is the object's constructor",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 33,
-            "description": "Variable rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page.\nThe returned string is javascript code which will create a global variable \"vars\"\nwith all the values assigned to it.",
-            "api": "public",
-            "class": "",
-            "module": "hotCoreMultiHome"
-        },
-        {
-            "file": "hotplate/node_modules/hotCorePage/lib/Vars.js",
-            "line": 84,
+            "line": 41,
             "description": "Add a variable",
             "params": [
                 {
@@ -443,138 +297,34 @@
                 "type": "Csses"
             },
             "api": "public",
-            "class": "",
+            "class": "hotCoreTransport",
             "module": "hotCoreMultiHome"
+        },
+        {
+            "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
+            "line": 314,
+            "itemtype": "event",
+            "name": "setRoutes",
+            "class": "hotCoreTransport",
+            "module": "hotCoreTransport"
+        },
+        {
+            "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
+            "line": 344,
+            "itemtype": "event",
+            "name": "run",
+            "class": "hotCoreTransport",
+            "module": "hotCoreTransport"
         }
     ],
     "warnings": [
         {
             "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:49"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:49"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:55"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:11"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:24"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:33"
-        },
-        {
-            "message": "unknown tag: api",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:84"
-        },
-        {
-            "message": "Missing item type\nCsses constructor.\n\nAn object to which you can add CSS files to, and render them",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:24"
-        },
-        {
-            "message": "Missing item type\nCss rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a CSS file",
-            "line": " hotplate/node_modules/hotCorePage/lib/Csses.js:49"
-        },
-        {
-            "message": "Missing item type\nHeadLines constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:24"
-        },
-        {
-            "message": "Missing item type\nJavascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a JS file",
-            "line": " hotplate/node_modules/hotCorePage/lib/HeadLines.js:49"
-        },
-        {
-            "message": "Missing item type\nJses constructor.\n\nAn object to which you can add javascript files to, and render them",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:24"
-        },
-        {
-            "message": "Missing item type\nJavascript rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:33"
-        },
-        {
-            "message": "Missing item type\nAdd a JS file",
-            "line": " hotplate/node_modules/hotCorePage/lib/Jses.js:55"
-        },
-        {
-            "message": "Missing item type\nCsses constructor.\n\nAn object to which you can add variables to, and render them",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:11"
-        },
-        {
-            "message": "Missing item type\nThe exports object is the object's constructor",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:24"
-        },
-        {
-            "message": "Missing item type\nVariable rendering function.\n\nThis will return a string which can be dropped into the HEAD of an HTML page.\nThe returned string is javascript code which will create a global variable \"vars\"\nwith all the values assigned to it.",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:33"
+            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:41"
         },
         {
             "message": "Missing item type\nAdd a variable",
-            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:84"
+            "line": " hotplate/node_modules/hotCorePage/lib/Vars.js:41"
         }
     ]
 }

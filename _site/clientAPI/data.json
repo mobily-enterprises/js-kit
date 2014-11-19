@@ -1,15 +1,15 @@
 {
     "project": {},
     "files": {
-        "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js": {
-            "name": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
+        "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js": {
+            "name": "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js",
             "modules": {},
             "classes": {},
             "fors": {},
             "namespaces": {}
         },
-        "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js": {
-            "name": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js",
+        "hotplate/node_modules/hotDojoExtras/client/xstyle/core/load-imports.js": {
+            "name": "hotplate/node_modules/hotDojoExtras/client/xstyle/core/load-imports.js",
             "modules": {},
             "classes": {},
             "fors": {},
@@ -20,43 +20,55 @@
     "classes": {},
     "classitems": [
         {
-            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
-            "line": 1,
-            "description": "This includes code from https://github.com/unscriptable/cssx\nCopyright (c) 2010 unscriptable.com",
+            "file": "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js",
+            "line": 17,
+            "description": "{id: 1, field1: 'one', field2: '1'},\n{id: 2, field1: 'one', field2: '2'},\n{id: 6, field1: 'one', field2: '3'}\n{id: 5, field1: 'two', field2: '3'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 3, field1: 'two', field2: '5'},",
             "class": ""
         },
         {
-            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
-            "line": 142,
+            "file": "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js",
+            "line": 39,
+            "description": "{id: 6, field1: 'one', field2: '3'}\n{id: 2, field1: 'one', field2: '2'},\n{id: 1, field1: 'one', field2: '1'},\n{id: 3, field1: 'two', field2: '5'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 5, field1: 'two', field2: '3'},",
             "class": ""
         },
         {
-            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js",
-            "line": 221,
+            "file": "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js",
+            "line": 59,
+            "description": "{id: 5, field1: 'two', field2: '3'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 3, field1: 'two', field2: '5'},\n{id: 1, field1: 'one', field2: '1'},\n{id: 2, field1: 'one', field2: '2'},\n{id: 6, field1: 'one', field2: '3'}",
             "class": ""
         },
         {
-            "file": "hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js",
-            "line": 239,
+            "file": "hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js",
+            "line": 80,
+            "description": "{id: 3, field1: 'two', field2: '5'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 5, field1: 'two', field2: '3'},\n{id: 6, field1: 'one', field2: '3'}\n{id: 2, field1: 'one', field2: '2'},\n{id: 1, field1: 'one', field2: '1'},",
+            "class": ""
+        },
+        {
+            "file": "hotplate/node_modules/hotDojoExtras/client/xstyle/core/load-imports.js",
+            "line": 249,
             "class": ""
         }
     ],
     "warnings": [
         {
-            "message": "Missing item type\nThis includes code from https://github.com/unscriptable/cssx\nCopyright (c) 2010 unscriptable.com",
-            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:1"
+            "message": "Missing item type\n{id: 1, field1: 'one', field2: '1'},\n{id: 2, field1: 'one', field2: '2'},\n{id: 6, field1: 'one', field2: '3'}\n{id: 5, field1: 'two', field2: '3'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 3, field1: 'two', field2: '5'},",
+            "line": " hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js:17"
+        },
+        {
+            "message": "Missing item type\n{id: 6, field1: 'one', field2: '3'}\n{id: 2, field1: 'one', field2: '2'},\n{id: 1, field1: 'one', field2: '1'},\n{id: 3, field1: 'two', field2: '5'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 5, field1: 'two', field2: '3'},",
+            "line": " hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js:39"
+        },
+        {
+            "message": "Missing item type\n{id: 5, field1: 'two', field2: '3'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 3, field1: 'two', field2: '5'},\n{id: 1, field1: 'one', field2: '1'},\n{id: 2, field1: 'one', field2: '2'},\n{id: 6, field1: 'one', field2: '3'}",
+            "line": " hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js:59"
+        },
+        {
+            "message": "Missing item type\n{id: 3, field1: 'two', field2: '5'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 5, field1: 'two', field2: '3'},\n{id: 6, field1: 'one', field2: '3'}\n{id: 2, field1: 'one', field2: '2'},\n{id: 1, field1: 'one', field2: '1'},",
+            "line": " hotplate/node_modules/hotDojoExtras/client/dstore/tests/sorting.js:80"
         },
         {
             "message": "Missing item type",
-            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:142"
-        },
-        {
-            "message": "Missing item type",
-            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-css.js:221"
-        },
-        {
-            "message": "Missing item type",
-            "line": " hotplate/node_modules/hotDojoDgridWidgets/client/xstyle/load-imports.js:239"
+            "line": " hotplate/node_modules/hotDojoExtras/client/xstyle/core/load-imports.js:249"
         }
     ]
 }

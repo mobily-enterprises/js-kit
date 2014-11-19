@@ -42,95 +42,90 @@
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
 
-      <h1 id='welcome_to_hotplate'>Welcome to Hotplate</h1>
+      <h1 id="welcome-to-hotplate">Welcome to Hotplate</h1>
 
-<p>Hotplate is a framework that allows you to create 201X software in no time. By 201X software I mean software that:</p>
-
-<ul>
-<li>allows you to log in using Facebook, Google, Twitter, Oauth1/2, or&#8230; well, login/password pair if you like</li>
-
-<li>shows information <strong>as it changes</strong> to the user. If you have three tabs open, and change your user photo, from one tab, the other two tabs need to see the new photo as well. If you change your name, other users will need to see the update right away.</li>
-
-<li><em>feels like</em> software, and not like a bunch of web pages</li>
-
-<li>uses a smart client, and a smart server; the smart client is to display information is the most user-friendly possibly way, whereas the smart server is to provide a bunch of secure data stores that are JSON-REST compatible</li>
-
-<li>handles errors (including, and in fact <em>especially</em>, network errors) properly. If anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong</li>
-
-<li>has the ability to communicate to your users in different ways: email, SMS, and whatever the world throws at us</li>
-
-<li>is written as a bunch of small, independent, maintainable modules</li>
-</ul>
-
-<p>I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don&#8217;t know, and I frankly don&#8217;t care. I wrote Hotplate because I felt that this is what software <em>should</em> be in 201X &#8211; which is now.</p>
-
-<h1 id='getting_into_it'>Getting into it</h1>
-
-<p>Hotplate is written for Node. It&#8217;s a normal, no-frills Node-based framework. So, before you get into Node, you should know:</p>
-
-<h2 id='core_technologies'>Core technologies</h2>
+<p>Hotplate is a framework that allows you to create 201X software in no time.
+By 201X software I mean software that has the following features:</p>
 
 <ul>
-<li>
-<p>Javascript. Too many resources to list. The book that got me started was <a href='http://www.amazon.com/dp/1847194141'>Object-Oriented Javascript</a>. I think it&#8217;s great that it covers how constructors and objects work.</p>
-</li>
-
-<li>
-<p><a href='http://nodejs.org/api/all.html'>NodeJs</a>&#8217;s documentation. Not exactly tutorial style, but I find that actually going through Node&#8217;s own documentation is a great way to actually get to know Node. It starts with a simple, basic web server and then goes through all the nitty-gritty about Node. I personally read it once a month, just to freshen up (you end up using a tiny fraction of what&#8217;s in the docs)</p>
-</li>
-
-<li>
-<p><a href='http://expressjs.com/'>ExpressJs</a>&#8217;s <a href='http://expressjs.com/guide.html'>guide</a> and <a href='http://expressjs.com/api.html'>API</a>. Express is actually surprisingly simple and small. It doesn&#8217;t actually do <em>that</em> much, what everything it does is really important, and it does it well. It&#8217;s important to understand how middleware plugins work.</p>
-</li>
+  <li>Live information. Have live information and forms. This means that if you have three tabs open, and change your user photo in one tab, the other two tabs will get updated with the new photo as well. Other users logged in and display your user will get the update right away. Forms need to be live as well: if you are viewing a form, and another user changes the information, your form needs to get reloaded or warn you</li>
+  <li>Resiliance. Network and error resiliance; ff anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong</li>
+  <li>One page. One page application, with ony minimal information transferred from the client to the server</li>
+  <li>Use of JSON REST stores for all data access; the client displays information is the most user-friendly possibly way and handles forms, while the server  provides a bunch of secure data stores that are JSON-REST compatible </li>
+  <li>Security. Implementing new stores needs to be safe and secure <em>by default</em>. It needs to be easy to write permission-granting routines for specific stores</li>
+  <li>Modularity. A piece of software should be written as a bunch of independent modules, each one of them requiring specific CSS (included in the page), specific JSes, specific Javascript frameworks, etc.</li>
+  <li>Advanced authentication. Login using any authentication method (Facebook, Google, Twitter, Oauth1/2, login/pass pair) and where no method is “favoured” (see: login and password are only a possible method to get in);</li>
+  <li>Multi-homing. Software needs to be multi-home ready, in a world where SaaS is king and people want to have their own little islands.</li>
+  <li>Communication with users via email, SMS,  and whatever the world throws at us</li>
+  <li>Established patterns. There needs to be a common way to carry out a common task.</li>
+  <li>API-ready. Having an API needs to be as simple as flicking a switch. Rewriting the software logic for the API is the wrong route.</li>
+  <li>Logging. Everything, good or bad, needs to be logged</li>
+  <li>Simple, pattern-based forms.</li>
 </ul>
 
-<h2 id='support_libraries'>Support libraries</h2>
+<p>I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don’t know, and I frankly don’t care. I wrote Hotplate because I felt that this is what software <em>should</em> be in 201X – which is now.</p>
+
+<h1 id="getting-into-it">Getting into it</h1>
+
+<p>Hotplate is written for Node. It’s a normal, no-frills Node-based framework that can work very happily alongside with ExpressJS.</p>
+
+<p>Here are the technologies Hotplate is based on, bottom to top:</p>
+
+<h2 id="core-technologies">Core technologies</h2>
 
 <ul>
-<li>
-<p><a href='https://github.com/mercmobily/HTTPErrors'>HTTPErrors</a>. A very simple module that creates constructor functions for every HTTP return code (actually, not just errors).</p>
-</li>
-
-<li>
-<p><a href='https://github.com/mercmobily/simpleDeclare'>SimpleDeclare</a>. Javascript is a great language, but it lacks a simple way to declare object constructors and inheriting. A lot of node programmers actually do it by hand, writing <code>Class.prototype.someMethod = function(){ ... }</code>. I personally find that absolutely insane. SimpleDeclare solves this problem: it handles (multiple) inheritance, constructor methods, calling of inherited methods, and inheritance of constructor-wide methods. <a href='https://github.com/mercmobily/simpleDeclare/blob/master/declare.js'>SimpleDeclare is really small</a>, but it does everything for you.</p>
-</li>
-
-<li>
-<p><a href='https://github.com/mercmobily/JsonRestStores'>JsonRestStores</a> (which uses <a href='https://github.com/mercmobily/SimpleSchema'>SimpleSchema</a>). Hotplate is all about stores &#8211; really. JsonRestStores is a fundamental piece here: it allows you to create Json REST stores in no time, dealing with permissions, queries, error management, inherited stores, and so on. You should make yourself comfortable with JsonRestStores <em>while</em> studying Hotplate.</p>
-</li>
+  <li>
+    <p>Javascript. Too many resources to list. The book that got me started was <a href="http://www.amazon.com/dp/1847194141">Object-Oriented Javascript</a>. I think it’s great that it covers how constructors and objects work.</p>
+  </li>
+  <li>
+    <p><a href="http://nodejs.org/api/all.html">NodeJs</a>’s documentation. Not exactly tutorial style, but I find that actually going through Node’s own documentation is a great way to actually get to know Node. It starts with a simple, basic web server and then goes through all the nitty-gritty about Node. I personally read it once a month, just to freshen up (you end up using a tiny fraction of what’s in the docs)</p>
+  </li>
+  <li>
+    <p><a href="http://expressjs.com/">ExpressJs</a>’s <a href="http://expressjs.com/guide.html">guide</a> and <a href="http://expressjs.com/api.html">API</a>. Express is actually surprisingly simple and small. It doesn’t actually do <em>that</em> much, what everything it does is really important, and it does it well. It’s important to understand how middleware plugins work.</p>
+  </li>
 </ul>
 
-<h2 id='hotplates_documentation'>Hotplate&#8217;s documentation</h2>
-
-<p>Hotplate comes with comprehensive documentation <strong><span>Note: not yet, documentation is in the works. The statement below are blatantly false</span></strong>. It has:</p>
+<h2 id="support-libraries">Support libraries</h2>
 
 <ul>
-<li>
-<p><a href='http://www.hotplatejs.com/guide.html'>A comprehensive guide</a>. The guide takes you from absolute zero, to actually knowing what you are doing with Hotplate. It&#8217;s a tutorial-style guide, where you are explained everything step by step.</p>
-</li>
-
-<li>
-<p><a href='http://www.hotplatejs.com/serverAPI/index.html'>Server API documentation</a>. It documents what each Hotplate module provides, from a server point of view.</p>
-</li>
-
-<li>
-<p><a href='http://www.hotplatejs.com/clientAPI/index.html'>Client API documentation</a>. It documents what each Hotplate module provides to the clients (for example Dojo widgets).</p>
-</li>
+  <li>
+    <p><a href="https://github.com/mercmobily/HTTPErrors">HTTPErrors</a>. A very simple module that creates constructor functions for every HTTP return code (actually, not just errors).</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/mercmobily/simpleDeclare">SimpleDeclare</a>. Javascript is a great language, but it lacks a simple way to declare object constructors and inheriting. A lot of node programmers actually do it by hand, writing <code>Class.prototype.someMethod = function(){ ... }</code>. I personally find that absolutely insane. SimpleDeclare solves this problem: it handles (multiple) inheritance, constructor methods, calling of inherited methods, and inheritance of constructor-wide methods. <a href="https://github.com/mercmobily/simpleDeclare/blob/master/declare.js">SimpleDeclare is really small</a>, but it does everything for you.</p>
+  </li>
+  <li>
+    <p><a href="https://github.com/mercmobily/JsonRestStores">JsonRestStores</a> (which uses <a href="https://github.com/mercmobily/SimpleSchema">SimpleSchema</a>). Hotplate is all about stores – really. JsonRestStores is a fundamental piece here: it allows you to create Json REST stores in no time, dealing with permissions, queries, error management, inherited stores, and so on. You should make yourself comfortable with JsonRestStores <em>while</em> studying Hotplate.</p>
+  </li>
 </ul>
 
-<h1 id='current_status'>Current status:</h1>
+<h2 id="hotplates-documentation">Hotplate’s documentation</h2>
+
+<p>Hotplate comes with comprehensive documentation <strong>[Note: not yet, documentation is in the works. The statement below are blatantly false]</strong>. It has:</p>
 
 <ul>
-<li>Authentication: DONE</li>
-
-<li>General code cleanup: DONE</li>
-
-<li>Fixing hotCoreCometMessages for real time comet updates: DONE</li>
-
-<li>Write a sample, small application: IN THE WORKS</li>
-
-<li>Writing the messenging framework: UPCOMING</li>
+  <li>
+    <p><a href="http://www.hotplatejs.com/guide.html">A comprehensive guide</a>. The guide takes you from absolute zero, to actually knowing what you are doing with Hotplate. It’s a tutorial-style guide, where you are explained everything step by step.</p>
+  </li>
+  <li>
+    <p><a href="http://www.hotplatejs.com/serverAPI/index.html">Server API documentation</a>. It documents what each Hotplate module provides, from a server point of view.</p>
+  </li>
+  <li>
+    <p><a href="http://www.hotplatejs.com/clientAPI/index.html">Client API documentation</a>. It documents what each Hotplate module provides to the clients (for example Dojo widgets).</p>
+  </li>
 </ul>
+
+<h1 id="current-status">Current status:</h1>
+
+<ul>
+  <li>Authentication: DONE</li>
+  <li>General code cleanup: DONE</li>
+  <li>Fixing hotCoreCometMessages for real time comet updates: DONE</li>
+  <li>Write a sample, small application: IN THE WORKS</li>
+  <li>Writing the messenging framework: UPCOMING</li>
+</ul>
+
+
 
       </section>
     </div>

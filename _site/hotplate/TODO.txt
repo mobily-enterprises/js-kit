@@ -1,104 +1,214 @@
 
-  MAJOR HOTPLATE CLEANUP
+  "MESSAGES"
+    
+    [ ] GUI: THE BOX
+      [X] Move "new message" form out of the top of the contacts info, make a button instead
+      [X] Make sure that only the right tabs actually come out. For now, if empty leave blank (intnl msgs later)
+      [X] Change form so that the contactId is a dropdown of all emails/ph numbers for the person
+
+      *
+      [X] Rename variables/styles to sane "to", "cc" so that it makes sense for one message or several
+      [X] Redo WorkspacesMessagesTo so that it's ONE widget, which will deal with SMSes and ph numbers
+      [X] Apply same drop-down changes to email
+      [X] Fix CSS for email and SMS sending, completely gone by restructuring things
+
+      **
+      [X] Switch to Dgrid (NOT List!) to make a messages widget
+      [X] Format "From" properly, maybe rendered from server?
+      [X] Format "To" properly, maybe rendered from server?
+      [X] Format "Date" like Google does it
+      [X] Use common validators server-side as well
+      [X] Format "Body" so that it has the subject + some of the body text in text mode
+      [X] Attempt to find the beginning of the message AFTER quoting, maybe convert to text from server?
+      [X] Fix problems with field validation, needs to allow empty "to" in messages, only puke in remote
+      [X] Fix error, id in subject is wrong, needs to be the userId logged in
+      [X] Fix bug where inbound SMSes simply don't happen
+
+      *
+      [X] Implement in smsManager.js: // TODO:  silent attempt to delete workspaceMessage
+      [X] Show if message is an email or a text
+      [X] Write skeleton of ViewingWidget, deciding on design
+
+      *
+      [X] Write initial version of email viewing widget based on new ViewingWidget
+      [X] Fix viewing widget so that it works with message viewing widget
+
+      *
+      [ ] Rename smsManager.js, check line 293, map exactly what's added in terms of text and HTML
+      [ ] Complete message viewing widget, so that it looks OK
+
+      *
+      [ ] Place inbox in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
+      [ ] Add tab to "Inbox" for "archived" messages (same widget, with extra option)
+
+      *
+      [ ] Make it possible to archive messages 
+      [ ] Make it possible to reply to messages (include original, include subject) from list and single view
+
+      **
+      [ ] For computedFrom, make it possible to change contactId from messageTo (make log)
+      [ ] For computedTo, make it possible to change contactId for messageTo (make log)
+
+      **
+      [ ] Make it possible to see each recipient's status for outcoung messages
+      [ ] Make it possible to see logs for specific recipients
+      [ ] Make it possible to see logs for full messages
+
+      **
+      [ ] Allow messages to be marked as read for specific contactIds, display bold if unread
+      
+      *
+      [ ] Implement "Internal messages" (messages sent with "inInbox" marked as false and 'incoming' as true)
+
+      **
+      [ ] Add ability to display, download attachments, dealing with un-downloaded ones
+      [ ] Make 1:n relationship between workspacesMessages and messagesAttchments
+      [ ] Make ABSOLUTE sure attachment data is not downloaded when getting messages (too much info)
+
+      *
+      [ ] Add cache to the computedTo field, zap cache when a message has matching contactTo
+
+      *
+      [ ] Implement search in messages
+
+      *
+      [ ] Improve look of table, icons
+      [ ] Make sure validation bubbles don't stay after closing dialog
+
+
+  ----------------------
+  DEADLINE: 30 Nov 2014
   ----------------------
 
-  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
-  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
+  "USERS AND INVITES"
 
-  SMALL THINGS:
-  -------------
-  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
-
-  * Make the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
-
-  * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search) and separate the
-    cast function from the other one (they got bundled) for code clarity
-
-  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
-    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
-    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
-
-
-  VISIBLE STUFF:
-  --------------
-  * Add a "new contact" form, and a contacts browser/editor. Add ability to type messages underneath contacts. (30 mins and 200 lines of code?)
-    Make sure you have "contact type" in the list of configurations
- 
-  * Fix DnD in stores, so that placement is kept (see nabble thread about it)
-    * Ability to have a default "order" field, which will be influenced by "placeBefore" in options (db will auto-populate it)
-    * Add "placeBefore" header to JsonRestStores calls
-    * Check that placeBefore is passed on and considered by Observer
-    * Make sure you can DnD freely between two boxes
-
-  * Improve StoreSelect and EditableList:
-    * With "refreshData", change "refresh" to clickable overlay 
-    * catch dgrid errors with overlay if necessary
-
-  * Improve the look of the app and widgets: Overlay with reload icon, top bar with shade, welcome and pick, etc.
-  * Check: http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
-
-  --------------------------
-  DEADLINE: 30th November 2013
-  --------------------------
-
-  ***************************
-  * DOCUMENT THE ABSOLUTE LOT
-  ***************************
-
-  "THE MISSING PIECES"
-
-  Message infrastructure:
-
-  * Write messages infrastructure, where app can send messages (email, sms) and then a queue manager sends them recording the
-    status. Write modules to send (smtp/sms gateway) _and_ receive (pop/sms gateway) messages.
-
-  * Integrate message-sending with the current simple comment infrastructure (!). user picks if it's an SMS or if it's an email.
-    The sending/editing widget will have to change accordingly (SMSes are given less space, no subject)
-
-  * Develop the "booking inbox" for incoming emails/SMSes
-
-  User management and invites in Hotplate:
-
-  * Write an "invite user" mechanism where users can be invited into the system (they receive an email, will redirect to a screen
+  * Write an "invite user" mechanism where users can be invited into the system: they receive an email, will redirect to a screen
     which allows them to register a new user (if available, etc.) or link the workspace to their existing user.
     TO DO THIS, I can definitely get away with just 1) Adding a page that adds a session variable 1a) Redirect to the
     normal welcome page 2) Adding a hook to register and login, so that if that session variable is set, the created user will be
-    added to that workspace (UsersWorkspaces store)
+    added to that workspace (usersWorkspaces store)
 
-  * Add a "user management" section in settings for Admins only
-  * Write a "message browser" for the workspace admin so that they can see exactly what was sent, when, and see the logs
-  * Write a "log browser" for workspace owners and for ME to see what happened, with filters
+  "WORKSPACE MANAGEMENT"
 
-  * Make an "booking": an abstract entity with a name and a bunch of people attached. When an email comes in, match it to a booking
+  * Add a "user management" section in settings for workspace Admins only
+    - Detach/attach user from contactId (use contact picker)
+    - Add user by hand
+    - Invite user
+* Write a "log browser" for workspace owners and for God to see what happened, with filters
+  
+  ---------------------
+  DEADLINE: 5 Dec 2014
+  ---------------------
 
+"PERMISSIONS"
+  * Decide on permissions/permissions model, maybe follow Drupal's
+  * Write a God permission mixin, apply to root-level stores (or everybody can write on them)
+  * Make God application separate, with separate login (only God can login)
 
-  ------------------------------
-  DEADLINE: 30th December 2013
-  ------------------------------
+  ---------------------
+  DEADLINE: 8 Dec 2014
+  ---------------------
 
-                          ----------------------------
-                          !!  HOTPLATE IS FINISHED  !!
-                          ----------------------------
+"GET PAID!"
+  * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
+  * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
 
-  The following is the short TODO list for my own booking system, which is what I was meant to start from day 1 (and was "slightly"
-  side tracked by writing a "boilerplate"... err...)
+  ---------------------
+  DEADLINE: 20 Dec 2014
+  ---------------------
 
-  PHASE 1: Information
+"FINAL TOUCHES"
+  * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
+  * Make simple tabbed wizard to setup smtp and imap, with credential real-time check
+
+  ---------------------
+  DEADLINE: 30 Dec 2014
+  ---------------------
+
+  "BOOKINGS"
+
+  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
+  * When an email or SMS comes in, ability to match it to a booking
+  ** Ability to have messages under a specific booking, rather than just under a user. Change "New Message"
+
+  ** Implement simple TODO list for the bookings, date/time from, date/time to, who
+ 
+  ** Add calendar (Dojox's), rendering TODO items
+
+  ---------------------
+  DEADLINE: 15 Jan 2015
+  ---------------------
+
+  "CONTACTS -- INTEGRATION"
+
+  * Add G+ authentication
+  **** Allow to sync contacts with Facebook
+  **** Allow to sync contacts with G+
+  * Add buttons to re-sync all contacts from specified modules
+
+  "BEAUTIFY AND FINAL TOUCHES"
+
+  * Work on CSS, make app look better with minimal intervention
+    AND:
+  * Do all those things that can be done during beautification
+    * Write function to run _completeRecord on each record of a collection, add it to simpleDbLayer
+    * Full code audit
+    * Full client-validation audit
+    * Write web site text
+    * Test drive possible usage
+
+  ---------------------
+  DEADLINE: 31 Jan 2015
+  ---------------------
+
+                         --------------------------------------
+                          TONY, FINISH ALL THIS BY JANUARY!!!
+                         --------------------------------------
+
+  "ADVANCED BOOKINGS"
+
+  * Ability to set available "activities" for a contact and all contacts, with cost
+  * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
+    where qty can be unit, one-off, hourly, block, daily, with min units and unitsMultipleOf
+  * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
+
+  "ACCOUNTING"
+
+  * Accounting summaries for each booking (with system-calculated ones)
+  * Interface with payment system allowing workspaces to get paid
+  * Ability to send invoices
+  * Ability to _store_ received invoices
+
+  "ADVANCED MESSAGES AND TEMPLATES"
+
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to set products for each contact:
-    product, money lines: [ booking owner | line owner | office ] OWES (min, max) [  booking owner | line owner | office ] /unit or /timeUnit
-  * Ability to create bookings. For each person added, [ product, quantity OR from/to times, accounting entries ]
-  * Ability to set templates for messages of different types, with previews
+  * Ability to send messages to different present types (all types in a booking)
+  * Ability to set templates for messages of different types, with instant previews
 
-  PHASE 2: Money/billing
-  * Accounting entries for products for each booking (with system-calculated ones)
-  * Interface with payment system (Paypal?)
-  * Ability to send invoices and _store_ received invoices
+
+
+
+  "LONGER TERM"
+
+  * Add schema to static page, use schema for basic validation
+  * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
+  * Use SOCKJS for instand messanging instead of polling (dealing with authentication and reconnection)
+  * Replace any non-widget dojo with custom ones (mainly aspect, topic, signals)
+  * Take out Dojo layout widget for straight/WebComponent/Polymer ones
+  * Incorporate Mayhem for routing, stores, templates
+  * (When it even exists) switch to a widget library based on Polymer/web components, use it via Mayhem
+
+ LATER (hopefully other contributors)
+  ------------------------------------
+  * StoreSelect: add a way to go back to initial value even if it's no longer in select
+  * StoreSelect: add network resiliance
+  * Make sure that everything is blind-friendly
+  * Allow country selection for phone number from a select box (straight, Dojo's?)
 
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
-  * Understand, fully, the whole "events" on widgets and DOM nodes http://livedocs.dojotoolkit.org/quickstart/events
+  * Understand, fully, the whole "events" on widgets and Dge nodes http://livedocs.dojotoolkit.org/quickstart/events
   * Add a busybutton -- Look into dojox/widgets/standby and forms/busybutton
   * Check things with server, make sure server can respond with form setting error messages
   * Understand _fully_ the whole promise thing in Dojo
@@ -106,7 +216,7 @@
   * Initial data saving with MongoDB
   * Write async code to save everything, MAYBE using Async library https://github.com/caolan/async#series (niiice!)
   * Actually create account/workspace with MongoDB
-  * CLIENT: Fix forms, as it turns out we don't really need labels (not possible, I was dreaming)
+  * CLIENT: Fix forms, as it turns out we don't really geed labels (not possible, I was dreaming)
   * Validation/error manager framework:
   -- Change client so that it shows which fields had what problem from the server adding validators on the fly
   -- CLIENT: Add a xhr function for client (making request, writing a message) to keep things dry. Do it with promises and new Form
@@ -406,3 +516,655 @@
   * Get rid of all the registration functions in hotplate, which are now obsolete
   * Move AsyncCollectEvents to its own github module
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
+  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
+  * Make sure that it all works with "use strict";
+  * Made _getTabId() more robust in case the header is not there
+  * Fixed registration with username/password, which was broken
+  * Simplified the flow of all functions in JsonRestStores. More verbose, but clearer
+  * Made sure that default error page sends the right HTTP error code
+  * Added forgotten error check, minor formatting issues and small issues fixed, indentations
+  * Now using Put instead of Post to create predefined user records (current system broken) fix "Put" which doesn't work
+  * Finally using debug, and added tracer, so that logging is much much saner
+  * Rewrite the Dojo side, so that it loads module in a much more dojo-style way
+  * Made the driver mixin as a POSSIBLE mixin, configure it via Hotplate.
+  * Made sure things actually DO work even if no db driver is used
+  * Understood the strange 404 error, came up when tabs expire <--- this one was horrible
+  * For JsonRestStores, MAYBE force the query to do a normal castAndParams (rather than deleting search)
+  * Major rewriting of SimpleSchema and JsonRestStores, changing hotplate too
+  * Change _checkParamIds in JsonRestStores so that it uses a much saner approach
+  * Add body preprocessing to methods other than POST in JsonRestStores
+  * Add generic, schema-less driver
+  * Decide on the unit test library I will stick with for the next week
+  * Finish writing tests for SimpleDbLayer
+  * Change way in which totals are returned for noncursor queries, use third parameter. UPDATE DOCUMENTATION
+  * Change queries so that they work as documented
+  * Understand seriously when/how errors are silent
+  * Check versions in packages.js for all recent modules
+  * Write mongoDb-specific tests, plug them in somehow
+  * Find way to allow case-insensitive searches, add "indexes" hash and query those instead
+  * Add case insensitive searches to TingoDb
+  * Split SimpleSchema into two, document SimpleSchema, write tests for SimpleSchema and for SimpleSchemaMongo, decide with serialize
+  * Finish documenting and Write tests for SimpleDeclare (document async version of inherited)
+  * Document and write tests for DeepObject and add class methods to work on a specific object
+  * Document and write tests for EventEmitterCollector
+  * Write tests for JsonRestStores (which will be buggy as hell). Test it by using API and checking internal param functions
+  * Change hotplate so that it works with new DbLayer/JsonRestStores/SimpleSchema
+  * Implement TODOs in hotCoreComet (mainly mass delete)
+  * Make handleXXXX option FALSE by default, check that things still work
+  * Last fix to JsonRestStores -- the paramId issue for updates
+  * Change all "_id" into "id", final detachment from MongoDb...
+  * Check all hotplate schemas in general, check for `searchable`, take 'required' out of paramId fields
+  * Change UserStrategies into UsersStrategy & others
+  * Change storeName to capital letters
+  * Make things work (again)
+  * Finish rewriting hotCorePage 
+  * Make bookingdojo "simply work", publish it online
+  * Set example application's store names to new standards
+  * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
+  * Change example application to new naming standards, test permission checks just implemented
+  * Decide on path standards: prefix for stores, module file paths, all other urls
+  * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
+  * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
+  * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
+  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreJsonRestStores)
+  * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
+  * Update docs about indexing for dbLayer, JsonRestStores
+  * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
+    "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
+    http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
+  * Turn Jade into a proper module, with enriching Dojo mixin
+  * Fixup existing BD application: 
+   - DONE only require() actually used modules in files
+   - DONE modularise tab registration
+   - DONE modularise password re-ask
+   - DONE check that there is nothing else to modulalise
+   - DONE check overlay logic, maybe make sure overlay is automatic
+   - DONE Check that code uses new notation for widgets, with '/' instead of '.' for paths
+   - DONE Fix & standardise ID names in forms
+   - DONE Make sure that ALL widgets are baseless
+   - DONE Delete old code, examples, tests, alternatives, etc. General tidying up of code
+   - DONE Fix & standardise file names with right plurals, they are an anomaly right now
+   - DONE Make sure client-side widgets requiring other widgets have a require in server-side module
+   - DONE Decide on baseless in-file widgets
+   - DONE Fix indentation in all files (client side), decide on strict standards
+   * Search for 'domReady', take it out when it doesn't make sense
+    ./node_modules/hotDojoAdd/lib/hotDojoAdd.js
+    ./node_modules/hotDojoStores/client/AppStoreNotify.js
+    ./node_modules/hotDojoStores/client/stores.js
+    ./node_modules/hotDojoGlobalAlertBar/client/mainAlertBar.js
+    ./node_modules/hotDojoStoreConfig/client/ConfigVars.js
+  * Fix simpleDeclare, as this.inherited is very very broken
+  * Fix problem with Jade, decide what to do (drop it?)
+  * Change clientPaths hook to clientPath, only one "public" path per module
+  * Select items need to be ALL preloaded beforehand, overlay goes away once dgrid is ready.
+  * Fix StoreSelect and EditableList so that they are overlayed properly. Also:
+    * With "refreshData", change "refresh" to clickable overlay 
+    * catch dgrid errors with overlay if necessary
+  * Improve overlay: "Loading", "ClickToReload" (with icons accordingly), make the dgrid widgets use it
+  * DONE Write a detailed email to the Dojo guys, explaining exactly what I did:
+     - Add options.relocation to options in put() in case it's just a relocation
+     - Change JsonRestStores (adding headers X-hotplate-relocation and X-hotplate-before)
+     - Change Observable.js so that it doesn't use a queryEngine (requires adding adding methodParams to notify() )
+     - Tell them about insanities such as http://stackoverflow.com/questions/14796968/how-to-implement-row-reordering-with-dnd-in-dgrid
+  * Finish JsonRestStores with proper reordering
+    - DONE Finish fixing JsonRest.js so that placement is changed if necessary
+    - DONE Finish Observable.js properly, so that it extends notify() and actually works 100%
+    - DONE Change storeNotify.js so that notify is called with the new parameter (or a new message altogether?)
+    - DONE Change the after header, if after is null, send an empty header and not lame string 'null'
+    - DONE Change JsonRestStores so that it has a "order" field that gets set according to the passed options.before
+    - DONE Change dojo/store/Memory.js so that it keeps into consideration "before" and "relocation" (AAAAAAAAHHHHHHHHHH!!!!!!!)
+    - DONE Fix MongoDb so that it uses an easier way of doing the counting
+    - DONE (Not done, useless burden on Dgrid) Change DnD.js so that it sends a FAKE EMPTY field when `reposition` is true
+    - DONE Change JsonRestStores so that it broadcasts 'before' and 'relocation', chose how to do it
+    - DONE Fix strange issue where delete grays records, dgrid doesn't refresh (doesn't get notified?)
+    - DONE Deploy onto live server on nodejitsu (change dgrid reference in repo)
+    - DONE Complete email with links
+  * Make timeouts longer for tab expiry (change client/server)
+  * Move everything to Dojo 1.9.x
+  * Implement artificial delay in JsonRestStores
+  * Give visual cue of DnD in hotplate
+  * Rewrite _OverlayMixin so that it keeps a counter of how many reload overlays there are, rewrite code so that is uses the new Overlay
+  * Fix bug with dialog editing that doesn't work in EditingWidget
+  * Give visual cue of adding element in EditingWidget
+  * Improve code in dgrid's event emission, avoid repeating code, merge it onto the patch
+  * Check bug where select list doesn't get updated
+  * Check bug where dispatcher calls fail strangely
+  * !!! Understand how to make un-invasive CSSes, "get" CSSes, fix CSS in all widgets
+     - http://dojo-toolkit.33424.n3.nabble.com/Question-on-CSS-with-widgets-td3995316.html
+     - http://stackoverflow.com/questions/21175377/css-classes-and-widgets-three-questions
+  * Improve the look of the app and widgets: welcome and pick to look nicer without abbruzzese
+  * Fix busy buttons when login/create accounts, overlay on redirect when creating workspace
+  * Change JsoNRestStores so that it's much much more DRY: get paramIds from URL if possible, set the ids in schema from paramIds
+    if not in schema
+  * IMPORTANT: Check that hotCoreMultiHome still makes sense (check stores.UsersWorkspaces)
+  * Reorganise WHOLE application, so that all select boxes and editable lists actually have a point
+    - Fix CSS (no inline stuff, make space) in all forms
+    - Fix overflow
+    - Add "god" tab
+    - Move EditableList's css from bdMain to EditableList
+    - Add app-wide selectable options for workspace and for user in "god" section
+    - Move login info into user config
+    - Check that I covered all cases:
+      - List no wid nor uid
+      - Save/list with only wid
+      - Save/list with only uid
+      - Save/list with both uid and wid
+    - Missing: list with both uid and wid (list of something in userConfig)
+    - Add config stores with no wid/uid (loads the lot at startup)
+    - Check that Multihome permissions work with only userId, and both in queries and fetching
+    - Take out queryParams from postCreate around the code since it's useless
+    - Check why buttons don't work in users dialog box (focus issue). Solution: add dijitPopup class to them, focus issue with dialog
+    - Automatically focus on first focusable node on startup of EditingWidget
+    - Fix conflict between inline editing and DnD. Can't believe I fixed this myself, I think I am getting the whole DOM thing
+    - !! Check why horizontal scrollbars appear when editing an inline textbox
+    - Add to EditableList the ability to define an extra widget, and display the new Widget in a dialog without repeating code
+    - Have "preset" text that disappeares in textbox (Dojo should have it)
+  * Document JsonRestStores, paramIds is now optional, publicURL is what counts, id fields are assigned automatically
+  - Check why adding an entry doesn't automatically position it at the end (reload after adding to see)
+    DECIDED: only accept to add as "last" for ordered and unsorted ones. Later we can add in specific spots easily
+             but for unspecified it needs to be last 
+  * Fix stupid bug in JsonRestStores
+  * Check why JsonRestStores sends double headers if on line 1048, _relocation is passed null rather than 'null', bad symptom
+  * Test if comet does what it's meant to do when broadcasting all store cases
+  * Fix the way parameters are passed in EditableList/editingWidget: not storeName and store, but storeName+storeParameters+storeExtraParameters
+  * Test that I can nest however many times without losing URL parameters <-- Geeeeeeeeeeeesus
+  * Make it possible to pass ONE widget, for editing and adding, since they are (nearly) always the same 
+  * Fix successfulsubmit, make it bubble from the editing widgets, and kill the bubbling from the main form. WAY: add "store"
+  * Check what you are meant to do when you have a prop you can pass a widget that is also defined in the prototype,
+    check that the prop-copying is in the right spot
+  * Find a way to have stores where you just add things, and it takes more space as it grows
+  * Improve interface for email addresses, make it come out after adding a new email address automatically
+  * Improve the UI for email addresses so that it's actually clear what it is
+  * Make sure non-children (placed) widgets are destroyed (including buttons!) when EditableList is destroyes
+  * Make sure the second half of the contact form is its own widget, that will appear all at once when adding has happened
+  * Decide if editable-list needs to be relative (it has an overlay!)
+  * Understand strange extra refresh in email dgrid after first email address added -- Dgrid does it, cannot fix it!
+  * Resolve issue where dgrid is calling refresh at the same time as bd.js, and in the end there are two overlays as
+    dgrid-refresh-complete is only called once. Find/make flag to see if a refresh is happening
+  * Check why email is not checked server-side (disable client-side check to see)
+  * Do not allow entering same email address twice (only server side!)
+  * Make DnD actually work for email addresses
+  * Fix JsonRestStore's "positioning", dbLayer needs to be passed a table AND a filter, or it will reorder the WHOLE TABLE!!!
+  * Document JsonRestStores with new hook, postValidate(), which is always useful. Consider changing the signatures of others as well
+  * Document skipHardLimitOnQueries for select
+  * Update tests for JsonRestStores, add TODO for new hook and fix existing hook
+  * Update TingoDb with latest code
+  * Fix ENORMOUS bug where if a contact is saved twice, there is a post rather than a put (!!!)
+  * Make sure that after a new adding, form is reset for email
+  * If application is down and a contact is open, reload button missing from email overlay (needs to preload the image)
+    http://stackoverflow.com/questions/21449635/pre-loading-images-in-a-one-page-application
+    (In the end, resolved creating TWO overlays and only displaying the right one)
+  * Check *ALL* issues regarding editing widget that must reset, writing in the field beforehand, widths, etc.
+  * Prettify email widget (adding side)
+  * Add birthday, with near date picker. Ths one was easy. Dealing with dates *regardless* of their timezone, however... meh.
+  * Implement postal addresses, with a neat interface like emails
+  * Make positioning of addresses actually work
+  * Check buttons positioning issue ('bottom' is not working)
+  * Render somehow an empty address so that there is at least a node
+  * Check why dialog doesn't close when adding a new address
+  * Check why focus goes to top after adding an address
+  * Give more max height to email/addresses widgets (needs to match)
+  * Make date selector default to something saner
+  * Have a better separator for addresses
+  * Add Company Name or "type flag" to contacts (companies don't have middlename, lastname or DOB, so hide them)
+  * Deal with textboxes, add hooks to EditableList to deal with form submitting and widget assigning so that checkboxes work
+  * Fix horrible resize problem with the contact form
+  * Implement phone numbers, with a neat interface like emails and ability to pick the country from a list of country codes
+  * Add data about allowed countries somewhere both for client and for server side (shared function!)
+  * Check country code and phone number client/server side
+  * Add fields "favourite contact" (virtual?), "syncModule" (string, will make it read-only), "syncId" (foreign ID), syncDate, isStarred, notes
+  * Make contact "starrable"
+  * Add option to offset buttons to the right
+  * Fix alignment of loading overlay with star
+  * Change widget so that it's about being ticked/unticked, move it to hotplate
+  * Make sure extra info is fetched when a contact is fetched (addresses, ph numbers, starred, emails)
+  * Make the contact list look better, adding columns like Google Contacts.
+  * IMPORTANT: Find a way to find "starred" users only, or "category X" users only
+  * REWRITE SimpleDbLayer COMPLETELY TO IMPLEMENT AUTOMATIC LOOKUP AND ADVANCED SEARCHING
+  * X Pass Schema to db layer, make it use it to cast/validate data when fetching and inserting
+    X Pass ref: to constructor, store it
+    X Make a refRegistry variable to hold what changes, put it in the prototype
+    X Write recursive function to create the contents of _autoLoad  for a specific child table
+    X Populate parents' _autoLoadCache if a child has records added/modified
+    X See if it's best to use self rather than repeated first parameter, test carefully
+    X Add _searchData as well as _children, have all text fields in capital letters. This is the same as the other one,
+      except that fields are in capital letters and go into _searchData!
+    X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
+    X Add a function to populate all _children for a table  that doesn't have autoload
+    X Implement single-lookup autoload (for 1:1 relationships)
+    X Improve code and documentation on recursive code 
+    X Add a function to redo _searchData and _children for every child table of a record, just calls _completeRecord
+    X Add recursive code to updates and deletes, write helper functions for that
+    X Fix huge issue where there can be N lookup fields for the same table in a record, turn hashes into arrays and correct _getChildren
+    X Fix constructor for tables, take out recursion as it's 100% useless and silly
+    X Check output of tests to see that it does exactly what's needed, seems slow
+    X Fix last standing bug with configR apppearing
+    X Improve tests' code so that it's not as repetitive and it's actually usable
+    X Add mechanism to avoid infinite recursion in case of circular referencing
+    X Add method to get a model from the registry once it's defined
+    X Implement joins (!)
+    \ Change recursion check:
+      X Add path AND root table (or path lists?) to the call
+      X Explicitely list what will be added to _children  as a list of paths in the root
+
+      X Complete rewrite of _updateParentsRecords
+      X Add conditions for _searchData, doing uppercasing of data
+      X Reinstate checks for autoLoad and searchable to see what to add
+      X Re-add  record information in _searchData in update or insert
+
+      X Finish _updateSelfWithSelfUppercase()
+      X Make "delete" work (cases 5 and 6)
+      
+      *
+    - Implement searching in simpleDBLayer
+      X Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
+      X (Nearly done, only missing adding foreign keys for joins)
+      X Take _searchData out of hash in constructor, make sure it's added by the search itself
+      X Make sure that selectors are created by hand, rather than with makeMongoParameters (the check on searchable fields will fail)
+      X Find out why updateSelfWithLookup doesn't work
+      X When searching in select(), search in _searchData at all times, all existing tests should then pass
+      X Fix problem when updating something ends up screwing up _searchData for all records
+      X Write tests for simpleDbSchema with better data
+      X HEAVILY optimise queries in the module now that the logic is there, merge all update calls so that they only happen once
+
+      *
+      X Check answer: http://stackoverflow.com/questions/22212834/positional-working-on-different-parts-of-the-same-document
+      X Assign one row at a time, plus use unsetObject, in cases #3 and #4
+      X Make "delete" work (cases #5 and #6)
+
+      X Finish off cases #3, #4, #5 and #6 in updateParents with completely new data structure, will simply mirror updates
+
+      *
+      X Fix but with parentTablesArray pointing to the prototype
+      X Made sure that eachSeries is called when deleting to make logging clearer
+      X Check that indexes for joins are actually correct in SimpleDbLayer (look for TODO)
+      X Implement indexes with existing system (field names are just longer), taking code from JsonRestStores
+
+      *
+      X Implement indexes for single fields
+      X Fix sortable with its own hash and its own check
+      X Declare positionField, make positioning work in SimpleSchema
+
+      X Place JOIN mongo-specific parts in separate functions, general code/variables tidy up
+
+      *
+      X Make idProperty mandatory in SimpleDbSchema and tests (for tests, just make name the idProperty)
+      X Create position key properly http://stackoverflow.com/questions/22291038/clarification-on-sorting-subsets-in-mongodb
+      X Create function that creates indexes for _all_ layers
+      X Change select: validation needs to allow the _children fields through
+      X Make sure select cleans up __uc__ fields from children, so that testing is even possible and results are correct
+      X Actually run tests after operations, passing a "test" function for each op
+      X Check that required fields cannot be set to undefined with an update with the deleteUnsetFields flag, decide with extra fields
+      X Add test for indexes
+  * Update JsonRestStores so that it uses the new db infrastructure and new search abilities
+    X Change JsonRestStores so that you first define layers, and then associate them to a JsonRest store
+    X Rewrite the way search works, a JsonRestStore field activates a query on SimpleDbLayer on multiple fields with conditions
+    X Write tests for JsonRestStores with new infrastructure
+
+  * Change hotplate so that it uses new JsonRest Stores
+    X ./node_modules/hotCoreMultiHome/lib/hotCoreMultiHome.js <- searchSchema!
+    X ./node_modules/hotCoreComet/lib/hotCoreComet.js <- searchSchema
+    X ./node_modules/hotCoreAuth/lib/hotCoreAuth.js <- searchSchema
+
+    X ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js
+    X ./node_modules/hotCoreStoreLogger/lib/hotCoreStoreLogger.js
+    X ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js
+  * Whatever this meant: Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
+  * Make sure that, when called by API, GetQuery allows searching for anything in either the searchSchema or the main schema
+  * Document simpledbschema and JsonRestStores
+  * FIxup problem where adding a new contact doesn't trigger a refresh
+  * Check that reordering _actually_ works
+  * Change all "relocation" into "reposition"
+  * Check and document that 'null' in `reposition`
+  * Changed all searchSchema entries into onlineSearchSchema which makes a lot more sense
+  * Add "data" or "blob" type to SimpleSchema, so that I can store data without uppercasing it (strings are)
+  * Fix huge problem when userId is null in MultiHome
+  * RUN THE APP, test positioning, play around (is authManager fixed?)
+  * Go through all API calls, make sure that killComet is on when necessary
+  * Understand why authentication manager doesn't show the tick anymore. This one was ridiculous. How did the CSS change?!?
+  * Check ALL existing onlineSearchSchemas, make them work with new architecture, check sanity
+  * Make sure that all small custom-created stores have logError set so that they log hotpate errors
+  * Convert existing code to new "nested" architecture. 
+  * Re-Deploy app to NodeJitsu
+
+  "PEDONE"
+
+  * 
+    X Get existing application ready
+    X Write initial form and stores
+    X Plan work and TODO
+    X Pick modules and headless chrome (CHOICE: phantomJS + node-phantomjs-simple)
+
+
+  *
+    X Move UTCDate from ./WorkspacesContacts/WorkspacesContactsInfo.js to hotplate
+    X Draft a form that sends date/time to the server (UTC) mixing the two
+    X Finish off form: validation, and setting time in form calculating time from date
+    X Add codes as a list of codes/labels
+    X Finish off initial interface
+
+  *
+    X Add a button to synchronise time offset based on server's UTC time
+    X Add interface with time when crawling starts, and "status" (can be waiting, requesting, submiting)
+
+
+  *
+    X Change form so that it works on browser's local time
+    X Work on interface, adding iFrame for manual submit and initial log browser
+    X Test manual interface on Marco's form
+
+  *
+    X Only set fields that are empty
+    X Add buttons to iframe interface: "force reload", "stop refreshing", "close"
+    X Make interface collapse when sending requests
+    X Make it less "bliky" (overlay, or two frames)
+    X Enable/disable buttons depending on the automaton's state
+    X Have indicator of reload counts
+    X Display code at the top of the frame
+    X Fix frame height so that iframe is as big as it needs to be
+    X Check for ways to see if just "body" has loaded
+
+  * 
+    X Ability to log from client side
+    X Ability to see logs
+
+  *
+    X Fix "time offset" procedure
+    X Make logs downloadable as text files
+
+  *
+    X Rewrite server-side request scheduler
+
+    X Add fields to the contacts: when saving, make sure that main contact, main address and email are stored
+    X Check _broadcast in hotCoreJsonRestStores, after HUGE refactoring, reordering eats records on different tab
+    X Make sure that local app gets notified of change in record if an email is changed/repositioned (!)
+    X Fix ordering in main screen, seems off, contacts added at the end (fingers crossed it's nothing serious)
+    X Change hotCoreMultiHome.js so that workspaceName is handled by layer
+    X Make sure that what I did for email also happens for addresses and phone numbers, do it the right way
+    X Avoid (all?) refreshes to the dgrid, make it look for the cell, and if there, change it. It turned out to be
+      a problem with successfulsubmit (local event) triggering a refresh (which would only work locally)
+
+   X Change EditableList so that it's a container, placing list in centre and widgets where required
+   X Check existing CSS for sanity
+  * 
+    Make sure the following sets CLASSES and not styles:
+    N ./hotDojoWidgets/client/AlertBar.js
+    N ./hotCorePage/lib/Csses.js
+    N ./hotDojoAdd/lib/hotDojoAdd.js
+    N ./hotDojoDgridWidgets/lib/hotDojoDgridWidgets.js
+    
+    X ./hotDojoWidgets/client/_StackFadingMixin.js [ html.style ]
+    X ./hotDojoWidgets/client/_OverlayMixin.js (easy)
+    N ./hotDojoDgridWidgets/client/EditableList.js
+    N ./hotDojoDgridWidgets/client/StoreSelect.js
+    N ./hotDojoAuth/client/auth/local.js
+  * Make sure that widget classes are declared within widgets themselves, probably in postcreate in non-template ones
+  * Make sure heights/sizes are defined for each BorderContainer-based widgets, or they won't show up at all
+  * Redo CSS for the whole app
+  * Phone numbers, unlike emails, don't get updated (set?) when setting them as first
+  * Check double-refresh issue with lists and contacts
+  * Editing an address adding lines to the first field stuffs up the form
+  * Turn EditableList back to a templated widget, since it's not a layout defining widget
+  * Fix heights for all editable lists
+  * Fix bug where a delete doesn't trigger refresh of contact in list
+  * Make sure app works well, general basic QA
+  * Find better names for existing select boxes and config options, finalise them
+  * Make dummy widget to prevent singleChild resizing
+  * When a user is added to a workspace, create an empty contact linked to it and add nested: to workspacesUsersInfo
+  * Check the 74 (!) errors in tests in simpledbschema
+  * Change how I develop, start using some kind of GUI, this is becoming silly. Really. Not good. At all.
+  * Put contacts editing widget in config options as own information
+  * Have small 2px space for tabs, make email address a select from contacts' email addresses
+  * Fix problem where after workspace creation config options do not include _children
+  * Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces
+  * Make sure "tell us about you" stays on till a name and an email address is entered  
+  * Redesign SimpleDbLayer/JsonRestStores so that they allow one-field stores implement isStarred with new way
+  * Make "contact type" not appear for companies 
+  * Make isStarred a generic class in JsonRestStores 
+  * Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
+  * Make any contact form update itself based on linkedUserId being there (contact category will disappear)
+  * Understand how the hell mainAddressId (and other mainS) did NOT get overwritten without "protected"
+    (Answer: SimpleDbLayer-Mongo was broken and wasn't unsetting _children, so they DID get overwritten...)
+  * Improve way in which "Tell us about us" handles an email address being there, no error message
+  * Have a select box for email address in user config, taken from contacts' email addresses
+  * Show main email address in user WorkspacesUsersInfo
+  * In contact list, make sure contacts are not DnD-able (meaningless)
+  * In contact list, mark contacts connected to users
+  * In contact list, take the buttons out for linked contacts
+  * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
+    MultiHomePermsMixin will do this automatically if field is called userId!
+  * Fix issue with same-layer store, where cache needs to be updated in all of them and notifcations
+  * Add "enabled" flag to stores that can have fields deleted
+  * change queries for stores
+  * Add DnD recipient that, when it receives a record, will submit it with enable=false and refresh list
+  * Fix bug in EditingWidget where first added element will take recordId
+  * See if there is an easy way to get store to give visual cue of reload after moving to rubbish bin
+  * (dstore) Add dgrid events in store operations to get visual feedback back
+  * Make sure there is a refresh every time there is any operation
+  * Make 'cached' option for stores, export it, construct the right one   
+  * Fix messages, right now returning the same message over and over again, and avoid using __proto__
+  * Turn Caching off altogether in app waiting for dstore to be fixed
+  * Fix deletion, dnd source with dstore 0.4 must have changed
+  * Make sure StoreSelect uses get() to get current element, rather than grid (L165)
+  * Make sort work again    
+  * Add tracking code to _ManagerButton.js (it's now commented out)
+  * Improve look of rubbish bin
+  * Implement new dstores:
+      [X] Add option defaultNewToStart at reposition()
+      [X] Change reposition(), make it so that
+        - it decides whether to do repositioning basd on positionField
+        - if beforeId is specified, positions based on beforeId (null for the end, or spot)
+        - if beforeId isn't specified, position at end by default, unless defaultNewToStart is set
+      [X] Party!
+      [X] DO: Update hotplate to latest dstore/dgrid, keeping changes files (DnD.js in dgrid, nothing in dstore)
+      [X] PATCH: dgrid, emit events and make sure things are not deleted
+      [X] UNDERSTAND: code of dstores, all of it (esp. memory queries)
+      [X] PATCH: repositionOnly (dgrid needs to set it), defaultIndex (add option in event with Brandon's "if")
+      [X] PATCH: support header put-default-position (this.defaultNewToStart)
+      [X] PATCH: add defaultNewToStart an option in page variables so that cache memory stores behave correctly
+      [X] FIX: Check how to place things in last spot, `null` currently doesn't work
+
+      [X] DO: Run the application, make it work again 
+
+      [X] DO: Clone latest dgrid and latest dstore
+      [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
+      [X] FIX: Code that observes auth buttons, now that I have the object on delete
+      [X] DO: Add memory cache back to application (injecting values will now work)
+      [X] CHECK: make sure the right message is broadcast, `put` can create or update, make sure it's right one
+      [X] FIX: AppStoreNotify to use store's events rather than aspects to get events, which will fix TODO in it too
+      [X] FIX: Make sure that Rest.js emits right event, create/update depending on HTTP response
+      [X] FIX: Reposition mustn't be called on putExisting unless beforeId is specified
+      [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
+      [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
+      [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
+      [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
+      
+      [X] Create own repository for dstore, send pull request for status 201, commit with own stores properly
+      [X] DO: Rewrite AppStoreNotify and change any topic.subscribe('storeRecordUpdate') to listening to store
+      [X] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
+      [X] Check why email addresses don't get refreshed, Suppress reload for local changes after a put
+      [X] Re-implement suppressRefresh, Check user registration screen
+      [X] Make sure message attributes are copied onto events, with minimal manipulation through message life
+    Add configuration option to decide sorting of contacts, 
+    Make "sorting of contact" setting the default in contact list at startup
+    In workspace config, add option to have a default country code for SMSes and contact data entry
+    Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
+
+    In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing.
+    Add filter box on top of contacts
+    Check refreshes when there is filtering in contact box and an item is changed   
+    Make up filters for contacts, allow to search for them.
+    Make refreshing on filter more intellingent, check for onChange and then issue refresh with scheduleRefresh
+    Fix problem with special characters in search like @
+    Fix CSS around the app, make configs look OK
+    Write "contact lookup" field form that auto-completes contacts (make it configurable)
+    Cannge contact pick so that it searches in email store rather than contacts
+    Change remote messages so that they are the right way
+    Re-enable 'remote' messages for whole stores
+    Make the contact lookup refresh changes (especially since you can edit things with it)
+    Polish up contact picker
+      [X] order by contactId.id 
+      [X] If possible, do not repeat details if ids match
+      [X] Highlight primary email address, or (better) make it come up first (__positioning not working?)
+      [X] Develop "default sorting" in JsonRestStores.
+      [X] Use default sorting for main contacts screen too
+      [X] Focus on search box when opening window
+      [X] Edit icon to edit
+    Write "Phone number pick", take it from email addresses (or )
+     X Rename WorkspacesContactsEmailsPicker back to WorkspacesContactsPicker
+     X Take out "Picker" from WorkspacesContactsEmailsPicker onto its own file
+     X Make sure output is different if type is "PhoneNumber"
+     X Test it
+    X Change interface to allow editing, opening of contacts
+    X Turn contats screen into a multi-tab screen
+    X Make a new tab open reliably when contact is selected (handle multiple openings)
+    X Create screen to show a contact
+    X Write basic database fields for the 5 messages table (3 core, 2 app)
+
+    - Add ability to add a message under a contact, no cc: (SMS/email)
+       X Body needs to reset after send
+       X Widget spacing
+       X Message is "sent" not "saved"
+       X SMS characters count
+       X SMS don't validate over X
+    - Add ability to cc other contacts, with ability to delete added contacts
+       X Add in right spot
+       X Put CC in same div so that it doesn't get separated
+       X Format names right
+       X Format PLUS properly, turn it into a button
+       X Do not repeat already inserted IDs
+       X To: added as one of the recipients, as first, not mandatory
+       X Make names look better
+       X Add X to names, delete div when pressed
+       X Delete all EXTRA To: after sending
+       X Fix breaking when selected by keyboard
+       X Improve keyboard selection, get picker to come up when typing
+       X Send the right data to the server (list of IDs)
+      X Fix rendering issue in list, always refresh flag in stores
+      X Rewrite the API for JsonRestStores so that it's uniform and it's easier to add messages
+      X Write hooks to workspaceMessage store to actually add messages to the right spots using API
+    X Render messages well enough in list
+    X Add way to set 'from' via API rather than session
+   SERVER. STORES/FIELDS FOR:
+    X Add ability to configure twilio (God): add shared phone numbers, API key, API token
+    X Add ability to configure email (ws): 
+      - Email address
+       - SMTP (server, account, pw, port)
+       - IMAP (server, account, user, pw, port, interval) 
+    X Add "system message from" (ws)
+    GUI
+    X Add ability to configure twilio (God): API key, API token
+    X Add ability to configure email (ws):
+      X SMTP (email, name, server, account, pw, port)
+      X  IMAP (server, user, pw, port, interval) 
+    - Add ability to configure twilio's numbers:
+      X (God) Add shared phone number/subsystem pair as "shared", "available", "private" (to specific ws)
+      X (God) Render numbers better, make it work with 
+      X (God) Make it generic, not just for Twilio, adding a "provider" field.
+    X (God) Validate so that workspaceId is only allowed for 'private', validate type and provider
+      X (ws) Ability to pick a public number, or a private one with matching workspaceId
+      X (ws) Make a store called WorkspacesSmsConfig, configure it via GUI 
+    X (ws) Add "from" to GUI to see who the message will be from (only name, not phone/email address)
+    - Add program-side export of "from" set in GUI, use it
+**
+    SERVER
+    X Add program-side export of configuration based on type/recipient in BD
+    X Write interface to pick senders of SMSes as well (right now only email actually works)
+    X Write cron job to go through message queue
+    X As it goes through message queue, actually attempt to re-send with right layer changing status
+    X Run run() of each working layer; SMTP will start a cron job, SMS will activate URLS (incoming, statuses)
+
+* Library modules (simpledblayer, simpledblayer-mongo, etc.) do debugging wit hthe "debug" module.
+  No log levels, no specific handling, just debug info that can be switched on and off
+
+* For debugging messages, each module does require('debug')('hotplate:hotModuleName') and then does
+  debugging by issuing debug('...')
+  
+[X] Study node-imap module to see how it all works
+[X] Write first rough function to fetch messages via IMAP
+[X] Patch IMAP module so that it handles socket timeouts properly
+[X] Rewrite lot so that it's two different functions
+[X] Add a counter to see if the imap connection can actually be closed
+[X] Rewrite logging/status functions as two separate ones, change code that use them
+[X] Rework naming of some variables to be consistent in terms of text/body
+
+[X] Close/kill connection RANDOMLY too early, and see if errors are shown properly
+
+"LOGGING"
+[X] Emit events when logging, decide what to do about events that are not message-specific
+[X] Change logLine so that it only adds to messagesDeliveryLog if there is messageTo
+[X] Add 'config' to message logging
+
+"REVERSE-ADDING"
+[X] Add the messages/messagesTo to the database, checking that the unique ID is not duplicated.
+[X] Serialise attachment data onto the database in ad-hoc field
+[X] Emit events so that app can update their shit too
+[X] Make bookingDojo add messages with those signals
+[X] Only when EVERYTHING is OK, mark messages as read on server
+[X] Change config name of "smtpSystemEmail" to something more generic
+[X] Add function to delete records in messages, messagesTo, messagesAttachments (not logs) if error
+[X] If message was already in database, try to mark it as read while giving up on fetch
+[X] Place full IMAP fetched headers in foreignData
+[X] Chech flow of hell-ish imap-fetching function
+[X] Check why socket timeout is triggered regardless of data going through, probably change to keepAlive
+
+[Sunday]
+* Fix logging before it's too late, in the WHOLE of hotplate, MongoMixin, and hotCoreTransport
+  [X] Finish off hotCoreError, making sure that _all_ JSON rest stores calls it
+  [X] Finish off hotCoreStoreLogger
+  [X] Finish off description document
+  [X] Add log entries here and there in the program, when user logs in, for example
+  [X] Move out some of the functions, decide if it's OK to pass stores as arguments
+  [X] Allow the system to return a stream rather than the part directly with different function
+  [X] Figure out how the API should work -- forward thinking required. Stores? Module calls?
+
+[Wednesday]
+  [X] Make sure changeMessageStatus is emitted every time a message changes its status
+  [X] Implement attachmentOnStoreSave and attachmentOnStoreDelete (Add MD5 on configID for attachments)
+  [X] Make sure attachments are downloaded on the spot
+  [X] Do not download large attachments, giving a warning
+
+[Thursday/Friday]
+  [X] Check individual intervals for IMAP
+  [X] Fully reorganise code for hotCoreTransport
+  [X] Decide on logLine, does the err parameter make sense? Fully undertand difference bw logLine and debug
+  [X] Full code audit, especially in terms of what to do in case of errors (logging/debug)
+  [ ] Test that fetching/sending emails actually works, final testing, simulate errors, check timeouts
+
+X Configure router so that incoming requests work for testing
+X Get an example text and print req
+X Check request signature, signature code (do not use Plivo's module, copy code)
+X - If signature is wrong, log level 3 and exit
+X Add email to database
+X Emit signal about message received
+X Fix huge config mistake: config entry needs to match, first one is not good enough
+X Add URL for message status update (add URL to sms request)
+X MAYBE make 2 URLs (incoming, status) configurable via GUI (check first)
+
+X When a message is sent, it needs to be set as "delivering", and it NEEDS to have its foreignId set when the
+  processor actually has it for delivery. The status will then be updated by the processor
+X Add some kind of semaphone to the update of status. Or, BETTER, never change the status from "delivered"
+
+
+X Check sendMessage for email, maybe it's worth getting the message ID upon sending like I do with SMSes
+X Check the story with status response when sending multple SMSes in one go, be clear about it in doc
+X CHeck all setMessageStatus, that they have FALSE to attemptTried
+X implement attemptAfter, enforce delay in hotCoreTransport
+X See if the whole thing still actually works (which at this point would be a bit of a miracle)
+X In SimpleSchema, attempt as 0 pukes -- check why, and set attempts to 0 so that it works
+        // X Add appData as object to messageTo, to store the contactId the message is meant for
+        // X Emit an event that allows modules to manipulate an email before sending
+        // X On way out, add something to the subject "Hello there [C:323123]"
+        // X Match ID in subject with ID in WorkspacesContacts and set messagesToContactId
+        // X Make sure subject is stored to the DB *without* trailing [C:3131321]
+        // X Match email address with email in WorkspacesContacts and set messagesFromContactId
+          [X] Structure API for all layers, define all functions and their exact signatures
+[X] Write email layer to actually send/receive emails
+[X] Write plivo layer to actually send/receive the SMSes
+[X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (email)
+[X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (sms)
+X Improve debugging messages in workspacesMessages    
+X Send TEXT version of email as well, taken by taking out tags from interface
+X Figure out how to send SANE, CLIENT-SAFE html from the email contents
+X Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
+X Changed ownedByWorkspaceId into workspaceId
