@@ -22,40 +22,67 @@
       [X] Attempt to find the beginning of the message AFTER quoting, maybe convert to text from server?
       [X] Fix problems with field validation, needs to allow empty "to" in messages, only puke in remote
       [X] Fix error, id in subject is wrong, needs to be the userId logged in
-      [ ] View full (cleaned up) message when clicking. It's OK that it's already downloaded
+      [X] Fix bug where inbound SMSes simply don't happen
 
-      **
-      [ ] Place BOX in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
+      *
+      [X] Implement in smsManager.js: // TODO:  silent attempt to delete workspaceMessage
+      [X] Show if message is an email or a text
+      [X] Write skeleton of ViewingWidget, deciding on design
+
+      *
+      [X] Write initial version of email viewing widget based on new ViewingWidget
+      [X] Fix viewing widget so that it works with message viewing widget
+
+      *
+      [X] Rename smsManager.js, check line 293, map exactly what's added in terms of text and HTML
+      [X] Uniform bodyHtml and BodyText across application
+
+      *
+      [ ] Complete message viewing widget, so that it looks OK
+
+      *
+      [ ] Place inbox in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
       [ ] Add tab to "Inbox" for "archived" messages (same widget, with extra option)
-      [ ] Make it possible to archive messages
-      [ ] Make it possible to reply to messages (include original, include subject)
+
+      *
+      [ ] Make it possible to archive messages 
+      [ ] Make it possible to reply to messages (include original, include subject) from list and single view
 
       **
       [ ] For computedFrom, make it possible to change contactId from messageTo (make log)
       [ ] For computedTo, make it possible to change contactId for messageTo (make log)
 
       **
-      [ ] Allow messages to be marked as read for specific contactIds, display bold if unread
-      [ ] Enrich BOX so that inInbox messages can match different From: (provide contact picker)
+      [ ] Make it possible to see each recipient's status for outcoung messages
+      [ ] Make it possible to see logs for specific recipients
+      [ ] Make it possible to see logs for full messages
 
+      **
+      [ ] Allow messages to be marked as read for specific contactIds, display bold if unread
+      
       *
       [ ] Implement "Internal messages" (messages sent with "inInbox" marked as false and 'incoming' as true)
-      [ ] Check line with "debugger" in storeSelect -- why error at times when changing email address?
 
-      *
-      [ ] Add cache to the computedTo field, zap cache when a message has matching contactTo
-
-      *
+      **
       [ ] Add ability to display, download attachments, dealing with un-downloaded ones
       [ ] Make 1:n relationship between workspacesMessages and messagesAttchments
       [ ] Make ABSOLUTE sure attachment data is not downloaded when getting messages (too much info)
 
+
       *
-      [ ] Improve look of table, icons
+      [ ] Implement basic search in messages
+
+
+
+[LATER]
+      *
+      [ ] Add cache to the computedTo field, zap cache when a message has matching contactTo
       [ ] Make sure validation bubbles don't stay after closing dialog
+      [ ] Improve look of table, icons
+
 
   ----------------------
-  DEADLINE: 10 Nov 2014
+  DEADLINE: 5 Dec 2014
   ----------------------
 
   "USERS AND INVITES"
@@ -68,21 +95,42 @@
 
   "WORKSPACE MANAGEMENT"
 
-  * Write a "log browser" for workspace owners and for God to see what happened, with filters
   * Add a "user management" section in settings for workspace Admins only
     - Detach/attach user from contactId (use contact picker)
     - Add user by hand
     - Invite user
-
+* Write a "log browser" for workspace owners and for God to see what happened, with filters
+  
   ---------------------
-  DEADLINE: 15 Nov 2014
+  DEADLINE: 8 Dec 2014
   ---------------------
 
+[LATER]
+"PERMISSIONS"
   * Decide on permissions/permissions model, maybe follow Drupal's
   * Write a God permission mixin, apply to root-level stores (or everybody can write on them)
+  * Make God application separate, with separate login (only God can login)
 
   ---------------------
-  DEADLINE: 30 Nov 2014
+  DEADLINE: 10 Dec 2014
+  ---------------------
+
+[LATER]
+"GET PAID!"
+  * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
+  * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
+
+  ---------------------
+  DEADLINE: 20 Dec 2014
+  ---------------------
+
+[LATER]
+"FINAL TOUCHES"
+  * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
+  * Make simple tabbed wizard to setup smtp and imap, with credential real-time check
+
+  ---------------------
+  DEADLINE: 30 Dec 2014
   ---------------------
 
   "BOOKINGS"
@@ -96,38 +144,18 @@
   ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
-  DEADLINE: 15 Dec 2014
+  DEADLINE: 15 Jan 2015
   ---------------------
-
-  "FINISH UP"
-
-  * Make God application separate, with separate login (only God can login)
-  * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
-
-  ----------------------
-  DEADLINE: 20 Dec 2014
-  ----------------------
 
   "CONTACTS -- INTEGRATION"
 
+[LATER]
   * Add G+ authentication
   **** Allow to sync contacts with Facebook
   **** Allow to sync contacts with G+
   * Add buttons to re-sync all contacts from specified modules
 
-  ----------------------
-  DEADLINE: 25 Dec  2014
-  ----------------------
-
-  "GET PAID!"
-  * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
-  * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
-
-  ----------------------
-  DEADLINE: 10 Jan  2015
-  ----------------------
-
-
+[LATER]
   "BEAUTIFY AND FINAL TOUCHES"
 
   * Work on CSS, make app look better with minimal intervention
@@ -140,25 +168,18 @@
     * Test drive possible usage
 
   ---------------------
-  DEADLINE: 31 Dec 2014
+  DEADLINE: 31 Jan 2015
   ---------------------
 
                          --------------------------------------
-                          TONY, FINISH ALL THIS BY DECEMBER!!!
+                          TONY, FINISH ALL THIS BY JANUARY!!!
                          --------------------------------------
-
   "ADVANCED BOOKINGS"
 
   * Ability to set available "activities" for a contact and all contacts, with cost
   * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
-    where qty can be unit, one-off, hourly, block, daily, with min units and unitsMultipleOf
+    where qty can be each, hourly, daily, with min units and unitsMultipleOf
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
-
-  "ADVANCED MESSAGES AND TEMPLATES"
-
-  * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
-  * Ability to send messages to different present types (all types in a booking)
-  * Ability to set templates for messages of different types, with instant previews
 
   "ACCOUNTING"
 
@@ -167,11 +188,15 @@
   * Ability to send invoices
   * Ability to _store_ received invoices
 
+  "ADVANCED MESSAGES AND TEMPLATES"
 
+  * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
+  * Ability to send messages to different present types (all types in a booking)
+  * Ability to set templates for messages of different types, with instant previews
 
-
+[LATER]
   "LONGER TERM"
-
+  * Add schema to static page, use schema for basic validation
   * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
   * Use SOCKJS for instand messanging instead of polling (dealing with authentication and reconnection)
   * Replace any non-widget dojo with custom ones (mainly aspect, topic, signals)
@@ -179,6 +204,7 @@
   * Incorporate Mayhem for routing, stores, templates
   * (When it even exists) switch to a widget library based on Polymer/web components, use it via Mayhem
 
+[LATER]
  LATER (hopefully other contributors)
   ------------------------------------
   * StoreSelect: add a way to go back to initial value even if it's no longer in select
