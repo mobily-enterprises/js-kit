@@ -1,3 +1,39 @@
+FROM:
+=====
+
+Widget  with parameters:
+messageId (obj)
+contactId (obj)
+
+=>
+if contactId:
+  * contactId 
+if !contactId:
+  * Select...
+* Link email to another existing contact (contact picker)
+* Link email to a new contact (create contact, add email address, take person there)
+* Another contact with matching email address 1, != contactId
+* Another contact with matching email address 2, != contactId
+* Another contact with matching email address 3, != contactId
+
+When selection, save to messageId on one-field table with fromContactId.
+Check that change propagages properly to other tabs
+
+--------------------------------------------------
+
+TO:
+===
+
+Widget with parameters:
+messageToId
+contactId
+
+=>
+
+* ContactId (if contactId)
+* Assign contact... (only internal users)
+
+
 
   "MESSAGES"
     
@@ -38,19 +74,46 @@
       [X] Uniform bodyHtml and BodyText across application
 
       *
-      [ ] Complete message viewing widget, so that it looks OK
+      [X] Make sure email is quoted-printable decoded
+      [X] Complete message viewing widget, so that it looks OK
+      
+      *
+      [X] Finish off email viewer: 
+          [X] scroll only contents, not head
+          [X] Take subject out if not present
+          [X] Add spans to from
+          [X] Have "via" only for computed ones
+          [X] Have editing widgets for FROM and TO
+
+      *
+      [X] Get rid of computedFrom/computedTo, use incoming instead
+      [X] Figure out why workspacesMessages records have bodyHtml, bodyText etc. empty
+      
+      *
+      [ ] Assign contact widget
+        [ ] Write link to new contact
+          [ ] Update contact form so that you can add email addresses instantaneously
+          [ ] Parse email address, add new contact with the address, show the editing form
+        [ ] Write picker for link to existing contact
+        [ ] Use same picker, with search already activated, for the picker above
+
+
+      [ ] For incoming, make it possible to change contactId for messageTo[0] (make log entry)
+      
+      [ ] Place widget to change messageTo[0] in the main inbox, it's always useful there (first 24h)
+
+      *
+      [ ] For putNew, make sure that 'protected' fields are copied over from existing record
+      [ ] Add security to server-side: only contactId can change in PUT for workspacesMessages
 
       *
       [ ] Place inbox in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
-      [ ] Add tab to "Inbox" for "archived" messages (same widget, with extra option)
+      [ ] Add tab to "Inbox" for "archived", "All" messages (same widget, with extra option)
+      [ ] Make it possible to archive messages 
 
       *
-      [ ] Make it possible to archive messages 
       [ ] Make it possible to reply to messages (include original, include subject) from list and single view
-
-      **
-      [ ] For computedFrom, make it possible to change contactId from messageTo (make log)
-      [ ] For computedTo, make it possible to change contactId for messageTo (make log)
+     
 
       **
       [ ] Make it possible to see each recipient's status for outcoung messages
@@ -59,24 +122,23 @@
 
       **
       [ ] Allow messages to be marked as read for specific contactIds, display bold if unread
-      
+      [ ] Allow to mark messages as unread
+
       *
-      [ ] Implement "Internal messages" (messages sent with "inInbox" marked as false and 'incoming' as true)
+      [ ] Implement "Internal messages" (messages sent with "inInbox" marked as false and 'outgoing' as true)
 
       **
       [ ] Add ability to display, download attachments, dealing with un-downloaded ones
       [ ] Make 1:n relationship between workspacesMessages and messagesAttchments
       [ ] Make ABSOLUTE sure attachment data is not downloaded when getting messages (too much info)
 
-
       *
       [ ] Implement basic search in messages
 
 
-
 [LATER]
       *
-      [ ] Add cache to the computedTo field, zap cache when a message has matching contactTo
+      [ ] Add cache to the toAsString field, zap cache when a message has matching contactTo
       [ ] Make sure validation bubbles don't stay after closing dialog
       [ ] Improve look of table, icons
 
@@ -96,9 +158,8 @@
   "WORKSPACE MANAGEMENT"
 
   * Add a "user management" section in settings for workspace Admins only
-    - Detach/attach user from contactId (use contact picker)
-    - Add user by hand
-    - Invite user
+    - Detach/attach user from contactId by inviting
+
 * Write a "log browser" for workspace owners and for God to see what happened, with filters
   
   ---------------------
@@ -135,12 +196,10 @@
 
   "BOOKINGS"
 
-  * Make a "booking": an abstract entity that can be owned by a contact and that has a name and a bunch of people attached.
+  * Make a "booking": an abstract entity that can be owned by a contact and that has a name
   * When an email or SMS comes in, ability to match it to a booking
-  ** Ability to have messages under a specific booking, rather than just under a user. Change "New Message"
-
+  ** Ability to have messages under a specific booking, setting it in the "New Message" screen
   ** Implement simple TODO list for the bookings, date/time from, date/time to, who
- 
   ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
@@ -178,7 +237,7 @@
 
   * Ability to set available "activities" for a contact and all contacts, with cost
   * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
-    where qty can be each, hourly, daily, with min units and unitsMultipleOf
+    where qty can be "each", hourly, daily, with min units and unitsMultipleOf
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
   "ACCOUNTING"
