@@ -65,7 +65,10 @@
     "nodemailer": "1.x",
     "imap": "0.8.x",
     "request": "2.x",
-    "sanitize-caja": "0.1.x"
+    "sanitize-caja": "0.1.x",
+    "html-to-text": "1.x",
+    "mimelib": "0.2.x"
+
   },
   "bundleDependencies": [
     "hotCore",
