@@ -114,7 +114,6 @@ contactId
       *
       [ ] Make it possible to reply to messages (include original, include subject) from list and single view
      
-
       **
       [ ] Make it possible to see each recipient's status for outcoung messages
       [ ] Make it possible to see logs for specific recipients
@@ -751,7 +750,7 @@ contactId
   * Do not allow entering same email address twice (only server side!)
   * Make DnD actually work for email addresses
   * Fix JsonRestStore's "positioning", dbLayer needs to be passed a table AND a filter, or it will reorder the WHOLE TABLE!!!
-  * Document JsonRestStores with new hook, postValidate(), which is always useful. Consider changing the signatures of others as well
+  * Document JsonRestStores with new hook, afterValidate(), which is always useful. Consider changing the signatures of others as well
   * Document skipHardLimitOnQueries for select
   * Update tests for JsonRestStores, add TODO for new hook and fix existing hook
   * Update TingoDb with latest code
