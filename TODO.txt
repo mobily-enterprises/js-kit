@@ -1,10 +1,8 @@
 FROM:
 =====
-
 Widget  with parameters:
 messageId (obj)
 contactId (obj)
-
 =>
 if contactId:
   * contactId 
@@ -19,21 +17,27 @@ if !contactId:
 When selection, save to messageId on one-field table with fromContactId.
 Check that change propagages properly to other tabs
 
---------------------------------------------------
-
 TO:
 ===
-
 Widget with parameters:
 messageToId
 contactId
-
 =>
-
 * ContactId (if contactId)
 * Assign contact... (only internal users)
 
-
+  "HOTPLATE RELOADED"
+    [ ] Fix JsonRestStores with new DB Layer API, make everything work
+    [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLibDojo (all they do is
+        include those JSes)
+    [ ] Move all Dojo files in ONE BIG Hotplate module hotClientBridgeDojo (eventually, hotClientBridgeAngular, 
+        hotClientBridgeBackbone, hotClientBridgeAmber, hotClientBridgeKnockout)
+    [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
+    [ ] Change Dojo layer to use the hotClientBridge for features implemented there
+    [ ] Maybe see if it makes sense to write Dojo mixin to make templating easier using published schema
+    [ ] Move all documentation to JsDoc, make sure web site still works
+    [ ] Write basic documentation for hotplate's server modules
+    [ ] Write blueprint documentation for client modules
 
   "MESSAGES"
     
