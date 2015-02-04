@@ -28,15 +28,17 @@ contactId
 
   "HOTPLATE RELOADED"
     [ ] Fix JsonRestStores with new DB Layer API, make dstore filter, make everything work
-    [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLibDojo (all they do is include those JSes)
-    [ ] Move all Dojo files in ONE BIG Hotplate module hotClientBridgeDojo (eventually, hotClientBridgeAngular, hotClientBridgeBackbone, hotClientBridgeAmber, hotClientBridgeKnockout)
+    [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
+    [ ] Move all Dojo files in ONE BIG Hotplate module hotClientLibDojoBridge (eventually, hotClientLibAngularBridge, hotClientLibBackboneBridge, hotClientLibAmberBridge, hotClientLibKnockoutBridge)
     [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
     [ ] Change Dojo layer to use the hotClientBridge for features implemented there
     [ ] Maybe see if it makes sense to write Dojo mixin to make templating easier using published schema (it would be just. so. good.)
-
     [ ] Move all documentation to JsDoc, make sure hotplatejs' web site still works
     [ ] Write documentation for hotplate's server modules
     [ ] Write blueprint documentation for client modules
+
+OMG Hotplate is finished?!?!?!?!?!?
+Release pre-release of hotplate
 
   "MESSAGES"
     
@@ -255,8 +257,7 @@ contactId
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
 
-[LATER]
-  "LONGER TERM"
+[LATER, LONGER TERM]
   * Add schema to static page, use schema for basic validation
   * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
   * Use SOCKJS for instand messanging instead of polling (dealing with authentication and reconnection)
@@ -266,7 +267,6 @@ contactId
   * (When it even exists) switch to a widget library based on Polymer/web components, use it via Mayhem
 
 [LATER]
- LATER (hopefully other contributors)
   ------------------------------------
   * StoreSelect: add a way to go back to initial value even if it's no longer in select
   * StoreSelect: add network resiliance
