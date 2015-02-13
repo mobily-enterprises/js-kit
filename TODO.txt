@@ -29,6 +29,8 @@ contactId
   "HOTPLATE RELOADED"
     [ ] Fix JsonRestStores with new DB Layer API, make dstore filter, make everything work
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
+    [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
+        and changing the API for the store so that it only gets storeParameters once
     [ ] Move all Dojo files in ONE BIG Hotplate module hotClientLibDojoBridge (eventually, hotClientLibAngularBridge, hotClientLibBackboneBridge, hotClientLibAmberBridge, hotClientLibKnockoutBridge)
     [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
     [ ] Change Dojo layer to use the hotClientBridge for features implemented there
