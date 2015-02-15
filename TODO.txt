@@ -27,7 +27,14 @@ contactId
 * Assign contact... (only internal users)
 
   "HOTPLATE RELOADED"
-    [ ] Fix JsonRestStores with new DB Layer API, make dstore filter, make everything work
+  
+    [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
+      [ ] Change dstore so that it can search in _children as well [Kris Zip's doing it]
+      [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
+      [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
+      [ ] Client-side, make sure that when child table is updated, parent table looks for matching children
+          and, if any, marks that one record as changed
+
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
     [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
         and changing the API for the store so that it only gets storeParameters once
