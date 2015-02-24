@@ -27,24 +27,29 @@ contactId
 * Assign contact... (only internal users)
 
   "HOTPLATE RELOADED"
-  
+
+    [ ] Take out onlineSearchSchema from WorkspacesUsers and UsersWorkspaces in hotCoreMultiHome.js
+
     [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
-      [ ] Change dstore so that it can search in _children as well [Kris Zip's doing it]
+      [.] Change dstore so that it can search in _children as well [Kris Zip's doing it]
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
       [ ] Client-side, make sure that when child table is updated, parent table looks for matching children
           and, if any, marks that one record as changed
 
+    [ ] Make it work again with the new express change the starting point
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
-    [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
-        and changing the API for the store so that it only gets storeParameters once
     [ ] Move all Dojo files in ONE BIG Hotplate module hotClientLibDojoBridge (eventually, hotClientLibAngularBridge, hotClientLibBackboneBridge, hotClientLibAmberBridge, hotClientLibKnockoutBridge)
     [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
     [ ] Change Dojo layer to use the hotClientBridge for features implemented there
+    [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
+        and changing the API for the store so that it only gets storeParameters once
     [ ] Maybe see if it makes sense to write Dojo mixin to make templating easier using published schema (it would be just. so. good.)
-    [ ] Move all documentation to JsDoc, make sure hotplatejs' web site still works
+    [ ] Generally check that client-side code is all good
+    [ ] Move all documentation to JsDoc from YUIDoc, make sure hotplatejs' web site still works
     [ ] Write documentation for hotplate's server modules
     [ ] Write blueprint documentation for client modules
+    [ ] Write documentation for Dojo's bluepront widgets
 
 OMG Hotplate is finished?!?!?!?!?!?
 Release pre-release of hotplate
@@ -157,7 +162,7 @@ Release pre-release of hotplate
 
 
   ----------------------
-  DEADLINE: 28 Feb 2014
+  DEADLINE: 30 Apr 2015
   ----------------------
 
   "USERS AND INVITES"
@@ -176,17 +181,16 @@ Release pre-release of hotplate
 * Write a "log browser" for workspace owners and for God to see what happened, with filters
   
   ---------------------
-  DEADLINE: 10 Mar 2014
+  DEADLINE: 10 May 2015
   ---------------------
 
-[LATER]
 "PERMISSIONS"
   * Decide on permissions/permissions model, maybe follow Drupal's
   * Write a God permission mixin, apply to root-level stores (or everybody can write on them)
   * Make God application separate, with separate login (only God can login)
 
   ---------------------
-  DEADLINE: 10 Dec 2014
+  DEADLINE: 20 May 2015
   ---------------------
 
 [LATER]
@@ -195,7 +199,7 @@ Release pre-release of hotplate
   * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
 
   ---------------------
-  DEADLINE: 20 Dec 2014
+  DEADLINE: 30 May 2015
   ---------------------
 
 [LATER]
@@ -204,7 +208,7 @@ Release pre-release of hotplate
   * Make simple tabbed wizard to setup smtp and imap, with credential real-time check
 
   ---------------------
-  DEADLINE: 30 Dec 2014
+  DEADLINE: 10 Jun 2015
   ---------------------
 
   "BOOKINGS"
@@ -216,18 +220,20 @@ Release pre-release of hotplate
   ** Add calendar (Dojox's), rendering TODO items
 
   ---------------------
-  DEADLINE: 15 Jan 2015
+  DEADLINE: 30 Jun 2015
   ---------------------
 
   "CONTACTS -- INTEGRATION"
 
-[LATER]
   * Add G+ authentication
   **** Allow to sync contacts with Facebook
   **** Allow to sync contacts with G+
   * Add buttons to re-sync all contacts from specified modules
 
-[LATER]
+  ---------------------
+  DEADLINE: 30 Jul 2015
+  ---------------------
+
   "BEAUTIFY AND FINAL TOUCHES"
 
   * Work on CSS, make app look better with minimal intervention
@@ -240,7 +246,7 @@ Release pre-release of hotplate
     * Test drive possible usage
 
   ---------------------
-  DEADLINE: 31 Jan 2015
+  DEADLINE: 30 Aug 2015
   ---------------------
 
                          --------------------------------------
@@ -253,6 +259,10 @@ Release pre-release of hotplate
     where qty can be "each", hourly, daily, with min units and unitsMultipleOf
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
+  ---------------------
+  DEADLINE: 30 Sep 2015
+  ---------------------
+
   "ACCOUNTING"
 
   * Accounting summaries for each booking (with system-calculated ones)
@@ -260,11 +270,19 @@ Release pre-release of hotplate
   * Ability to send invoices
   * Ability to _store_ received invoices
 
+  ---------------------
+  DEADLINE: 30 Oct 2015
+  ---------------------
+
   "ADVANCED MESSAGES AND TEMPLATES"
 
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
+
+  ---------------------
+  DEADLINE: 30 Nov 2015
+  ---------------------
 
 [LATER, LONGER TERM]
   * Add schema to static page, use schema for basic validation
