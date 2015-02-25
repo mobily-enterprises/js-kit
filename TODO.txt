@@ -28,16 +28,15 @@ contactId
 
   "HOTPLATE RELOADED"
 
+    [ ] Make everything work with the latest Express.JS
     [ ] Take out onlineSearchSchema from WorkspacesUsers and UsersWorkspaces in hotCoreMultiHome.js
-
-    [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
-      [.] Change dstore so that it can search in _children as well [Kris Zip's doing it]
-      [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
-      [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
-      [ ] Client-side, make sure that when child table is updated, parent table looks for matching children
-          and, if any, marks that one record as changed
-
-    [ ] Make it work again with the new express change the starting point
+    [ ] In JsonRestStores, action TODO:
+        // TODO: take AND out if Object.keys( self.onlineSearchSchema.structure ).length is only 1
+        // TODO: Check what happens when sorting for a nested field with a 1:n relationship with table (?!)
+    [ ] Change 'name' into 'type' in queries (double check that that's what it is in dstore)
+    [ ] Make everything work with the latest dstore
+    [ ] Make online application work again
+    
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
     [ ] Move all Dojo files in ONE BIG Hotplate module hotClientLibDojoBridge (eventually, hotClientLibAngularBridge, hotClientLibBackboneBridge, hotClientLibAmberBridge, hotClientLibKnockoutBridge)
     [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
@@ -50,6 +49,15 @@ contactId
     [ ] Write documentation for hotplate's server modules
     [ ] Write blueprint documentation for client modules
     [ ] Write documentation for Dojo's bluepront widgets
+
+    [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
+      [.] Change dstore so that it can search in _children as well [Kris Zip's doing it]
+      [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
+      [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
+      [ ] Client-side, make sure that when child table is updated, parent table looks for matching children
+          and, if any, marks that one record as changed
+
+
 
 OMG Hotplate is finished?!?!?!?!?!?
 Release pre-release of hotplate
