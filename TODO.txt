@@ -37,8 +37,11 @@ contactId
     [X] Improve deletion in SimpleDbLayer
     [X] Make sure JsonRestStores passes all tests, data range tests are failing
     [X] Make TingoDB work again with JsonRestStores
+    [X] Make everything work with the latest Express.JS
+    [ ] Make Bookingdojo work straight out of a fresh install with npm install
+      -- Make it work with Mongo 2.6 now that 3.0 is out and 2.4 is really quite outdated
+    [ ] Thorough check of application, 100% of features, to work both locally and remotely including email/sms
 
-    [ ] Make everything work with the latest Express.JS
 
     REFACTORING
     [ ] Change `session` variable throughout Hotplate to request.session
@@ -47,7 +50,6 @@ contactId
         // TODO: take AND out if Object.keys( self.onlineSearchSchema.structure ).length is only 1
         // TODO: Check what happens when sorting for a nested field with a 1:n relationship with table (?!)
     [ ] Change 'name' into 'type' in queries (double check that that's what it is in dstore)
-    [ ] Install latest dstore
 
     TIDY UP AND AGGREGATE
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
@@ -58,6 +60,7 @@ contactId
         and changing the API for the store so that it only gets storeParameters once
     [ ] Maybe see if it makes sense to write Dojo mixin to make templating easier using published schema (it would be just. so. good.)
     [ ] Generally check that client-side code is all good
+    [ ] Install latest dstore
     [ ] Move all documentation to JsDoc from YUIDoc, make sure hotplatejs' web site still works
 
     [ ] Write documentation for hotplate's server modules
