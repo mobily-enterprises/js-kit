@@ -38,8 +38,8 @@ contactId
     [X] Make sure JsonRestStores passes all tests, data range tests are failing
     [X] Make TingoDB work again with JsonRestStores
     [X] Make everything work with the latest Express.JS
-    [ ] Make Bookingdojo work straight out of a fresh install with npm install
-      -- Make it work with Mongo 2.6 now that 3.0 is out and 2.4 is really quite outdated
+    [X] Make Bookingdojo work straight out of a fresh install with npm install
+    [X] Make it work with Mongo 2.6 now that 3.0 is out and 2.4 is really quite outdated
     [ ] Thorough check of application, 100% of features, to work both locally and remotely including email/sms
 
 
