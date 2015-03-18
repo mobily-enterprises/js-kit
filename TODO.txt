@@ -62,12 +62,12 @@ contactId
     [ ] Generally check that client-side code is all good
     [ ] Install latest dstore, make everything work again
 
+    FINAL HOTPLATE STRETCH: DOCUMENTATION
     [ ] Re-prepare documentation for hotplate's server modules, check web site
     [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
     [ ] Prepare blueprint documentation for client modules
     [ ] Sketch documentation (only code snipsets, bullet points) for Dojo's blueprint widgets
     [ ] Sketch documentation (only intro, structure) for Hotplate
-
 
 
     [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
@@ -79,7 +79,7 @@ contactId
 
 
 OMG Hotplate is finished?!?!?!?!?!?
-Release pre-release of hotplate
+NOW, example application NEEDS to get finished so that I can release!
 
   "MESSAGES"
     
@@ -235,6 +235,12 @@ Release pre-release of hotplate
   DEADLINE: 10 Jun 2015
   ---------------------
 
+--------------------------------------------
+THE EXAMPLE APPLICATION IS HERE
+HOTPLATE CAN BE RELEASED
+--------------------------------------------
+
+
   "BOOKINGS"
 
   * Make a "booking": an abstract entity that can be owned by a contact and that has a name
@@ -247,15 +253,17 @@ Release pre-release of hotplate
   DEADLINE: 30 Jun 2015
   ---------------------
 
-  "CONTACTS -- INTEGRATION"
 
-  * Add G+ authentication
-  **** Allow to sync contacts with Facebook
-  **** Allow to sync contacts with G+
-  * Add buttons to re-sync all contacts from specified modules
+
+"ADVANCED BOOKINGS"
+
+  * Ability to set available "activities" for a contact and all contacts, with cost
+  * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
+    where qty can be "each", hourly, daily, with min units and unitsMultipleOf
+  * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
   ---------------------
-  DEADLINE: 30 Jul 2015
+  DEADLINE: 30 Jun 2015
   ---------------------
 
   "BEAUTIFY AND FINAL TOUCHES"
@@ -269,20 +277,9 @@ Release pre-release of hotplate
     * Test drive possible usage
 
   ---------------------
-  DEADLINE: 30 Aug 2015
+  DEADLINE: 30 July 2015
   ---------------------
                          
-  "ADVANCED BOOKINGS"
-
-  * Ability to set available "activities" for a contact and all contacts, with cost
-  * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
-    where qty can be "each", hourly, daily, with min units and unitsMultipleOf
-  * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
-
-  ---------------------
-  DEADLINE: 30 Sep 2015
-  ---------------------
-
   "ACCOUNTING"
 
   * Accounting summaries for each booking (with system-calculated ones)
@@ -299,9 +296,19 @@ Release pre-release of hotplate
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
-
   ---------------------
   DEADLINE: 30 Nov 2015
+  ---------------------
+
+    "CONTACTS -- INTEGRATION"
+
+  * Add G+ authentication
+  **** Allow to sync contacts with Facebook
+  **** Allow to sync contacts with G+
+  * Add buttons to re-sync all contacts from specified modules
+
+  ---------------------
+  DEADLINE: 30 Dec 2015
   ---------------------
 
 [LATER, LONGER TERM]
