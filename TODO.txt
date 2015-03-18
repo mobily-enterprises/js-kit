@@ -40,18 +40,18 @@ contactId
     [X] Make everything work with the latest Express.JS
     [X] Make Bookingdojo work straight out of a fresh install with npm install
     [X] Make it work with Mongo 2.6 now that 3.0 is out and 2.4 is really quite outdated
-    [ ] Thorough check of application, 100% of features, to work both locally and remotely including email/sms
-
+    [X] Thorough check of application, 100% of features, to work both locally and remotely including email/sms
 
     REFACTORING
-    [ ] Change `session` variable throughout Hotplate to request.session
-    [ ] Take out onlineSearchSchema from WorkspacesUsers and UsersWorkspaces in hotCoreMultiHome.js
-    [ ] In JsonRestStores, action TODO:
-        // TODO: take AND out if Object.keys( self.onlineSearchSchema.structure ).length is only 1
-        // TODO: Check what happens when sorting for a nested field with a 1:n relationship with table (?!)
-    [ ] Change 'name' into 'type' in queries (double check that that's what it is in dstore)
+    [X] Change `session` variable throughout Hotplate to request.session
+    [X] Take out onlineSearchSchema from WorkspacesUsers and UsersWorkspaces in hotCoreMultiHome.js
+    [X] JRS TODO: take AND out if Object.keys( self.onlineSearchSchema.structure ).length is only 1
+    [X] JRS TODO: Check what happens when sorting for a nested field with a 1:n relationship with table (?!)
+        http://stackoverflow.com/questions/29115466/what-does-sort-do-in-mongodb-when-sorting-by-a-sub-field-in-an-array 
+    [X] Change 'name' into 'type' in queries (double check that that's what it is in dstore)
 
-    TIDY UP AND AGGREGATE
+
+    CLIENT-SIDE: TIDY UP AND AGGREGATE
     [ ] Move Dojo itself into a module called hotClientLibDojo. Add other hotCLientLib**** (all they do is include those JSes)
     [ ] Move all Dojo files in ONE BIG Hotplate module hotClientLibDojoBridge (eventually, hotClientLibAngularBridge, hotClientLibBackboneBridge, hotClientLibAmberBridge, hotClientLibKnockoutBridge)
     [ ] Create a "pure javascript" layer called "hotClientBridge" that handles messages, events, anything
@@ -60,12 +60,15 @@ contactId
         and changing the API for the store so that it only gets storeParameters once
     [ ] Maybe see if it makes sense to write Dojo mixin to make templating easier using published schema (it would be just. so. good.)
     [ ] Generally check that client-side code is all good
-    [ ] Install latest dstore
-    [ ] Move all documentation to JsDoc from YUIDoc, make sure hotplatejs' web site still works
+    [ ] Install latest dstore, make everything work again
 
-    [ ] Write documentation for hotplate's server modules
-    [ ] Write blueprint documentation for client modules
-    [ ] Write documentation for Dojo's blueprint widgets
+    [ ] Re-prepare documentation for hotplate's server modules, check web site
+    [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
+    [ ] Prepare blueprint documentation for client modules
+    [ ] Sketch documentation (only code snipsets, bullet points) for Dojo's blueprint widgets
+    [ ] Sketch documentation (only intro, structure) for Hotplate
+
+
 
     [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
@@ -232,8 +235,6 @@ Release pre-release of hotplate
   DEADLINE: 10 Jun 2015
   ---------------------
 
-
-
   "BOOKINGS"
 
   * Make a "booking": an abstract entity that can be owned by a contact and that has a name
@@ -270,7 +271,6 @@ Release pre-release of hotplate
   ---------------------
   DEADLINE: 30 Aug 2015
   ---------------------
-
                          
   "ADVANCED BOOKINGS"
 
@@ -313,7 +313,6 @@ Release pre-release of hotplate
   * StoreSelect: add network resiliance
   * Make sure that everything is blind-friendly
   * Allow country selection for phone number from a select box (straight, Dojo's?)
-
 
 
   DONE:
