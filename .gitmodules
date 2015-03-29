@@ -1,12 +1,12 @@
-[submodule "node_modules/hotDojoExtras/client/xstyle"]
-	path = node_modules/hotDojoExtras/client/xstyle
-	url = https://github.com/kriszyp/xstyle.git
-[submodule "node_modules/hotDojoExtras/client/put-selector"]
-	path = node_modules/hotDojoExtras/client/put-selector
+[submodule "node_modules/hotClientDojo/client/lib/dstore"]
+	path = node_modules/hotClientDojo/client/lib/dstore
+	url = https://github.com/sitepen/dstore
+[submodule "node_modules/hotClientDojo/client/lib/xstyle"]
+	path = node_modules/hotClientDojo/client/lib/xstyle
+	url = https://github.com/kriszyp/xstyle
+[submodule "node_modules/hotClientDojo/client/lib/put-selector"]
+	path = node_modules/hotClientDojo/client/lib/put-selector
 	url = https://github.com/kriszyp/put-selector
-[submodule "node_modules/hotDojoExtras/client/dstore"]
-	path = node_modules/hotDojoExtras/client/dstore
-	url = https://github.com/mercmobily/dstore.git
-[submodule "node_modules/hotDojoExtras/client/dgrid"]
-	path = node_modules/hotDojoExtras/client/dgrid
-	url = https://github.com/mercmobily/dgrid.git
+[submodule "node_modules/hotClientDojo/client/lib/dgrid"]
+	path = node_modules/hotClientDojo/client/lib/dgrid
+	url = https://github.com/SitePen/dgrid.git

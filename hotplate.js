@@ -21,7 +21,7 @@ hotplate.hotEvents.emit = function(){
 }
 // Hotplate's sane defaults
 // You can (and should) over-ride them in your server.js file
-hotplate.config.set( 'hotplate.moduleFilesPrefix', '/hotplate' ); // hotDojoAdd uses it as base URL
+hotplate.config.set( 'hotplate.moduleFilesPrefix', '/hotplate' ); // hotClientXXX modules will use it as base URL
 hotplate.config.set( 'hotplate.routeUrlsPrefix', '/pages' ); // hotCoreAuth uses it as base URL
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
