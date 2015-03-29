@@ -59,19 +59,29 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Work out paths properly
     [X] Make sure all paths are resolved property with new layout
     [X] Make registration work
-    [ ] Make SMS messaging work (re-work messagesManager, take API calls out)
+    [X] Re-work messagesManager, take API calls out)
     [ ] Make parameters for callbacks/app.set uniform, set route and host/port separately
 
-    CHECK IT
+    OTHER FIXES AND QA
     [ ] Check basic QA, make sure everything works
+      [X] Reordering of email addresses/address/anything works visually but not on the DB
+      [X] Primary email, address, number won't change if dragging
+      [X] Dragging phone numbers doesn't work at all, not visually not programmatically
+      [X] Changing a phone number prefix won't change what's displayeds in the list after save
+      [X] Reordering of address fails (actually, moving things to last spot failed to reposition)
+      [X] Changing a plivio phone number (adding space) won't change the configArray variable in sms-plivio.js
+      [?] When updating list record, the DISPLAYED record doesn't change (the value does, and re-edit value too)
+      [ ] Messages are in erratic order
+      [ ] When an SMS comes back, SMS list doesn't get refreshed
+      [ ] Double-clicking on the first message, an odd empty record, bombs javascript
+
     [ ] Write "testing checklist", something that includes ALL cases including logout from different tab
 
     CLIENT SIDE: TIDY UP AND FINALISE 
     [ ] Change the API for the store-aware widgets so that it only gets storeParameters once
     [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
-    [ ] Go through the full "testing checklist"
-
+   
     FINAL HOTPLATE STRETCH: DOCUMENTATION
     [ ] Re-prepare documentation for hotplate's server modules, check web site
     [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
@@ -80,7 +90,7 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [ ] Sketch documentation (only intro, structure) for Hotplate
 
 
-    [ ] Reach Nirvana with Dstore ## IMPROVE dstore, for nirvana
+    [ ] Reach Nirvana with Dstore
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
@@ -90,9 +100,6 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
   ----------------------
   DEADLINE: 30 Apr 2015
   ----------------------
-
-Jason, Jeremy (Felicity said no), Tel
-
 
 OMG Hotplate is finished?!?!?!?!?!?
 NOW, example application NEEDS to get finished so that I can release!
@@ -200,11 +207,10 @@ NOW, example application NEEDS to get finished so that I can release!
       *
       [ ] Add cache to the toAsString field, zap cache when a message has matching contactTo
       [ ] Make sure validation bubbles don't stay after closing dialog
-      [ ] Improve look of table, icons
 
 
   ----------------------
-  DEADLINE: 30 Apr 2015
+  DEADLINE: 30 May 2015
   ----------------------
 
   "USERS AND INVITES"
@@ -223,7 +229,7 @@ NOW, example application NEEDS to get finished so that I can release!
 * Write a "log browser" for workspace owners and for God to see what happened, with filters
   
   ---------------------
-  DEADLINE: 10 May 2015
+  DEADLINE: 10 June 2015
   ---------------------
 
 "PERMISSIONS"
@@ -232,7 +238,7 @@ NOW, example application NEEDS to get finished so that I can release!
   * Make God application separate, with separate login (only God can login)
 
   ---------------------
-  DEADLINE: 20 May 2015
+  DEADLINE: 20 June 2015
   ---------------------
 
 "GET PAID!"
@@ -240,7 +246,7 @@ NOW, example application NEEDS to get finished so that I can release!
   * Add way to get paid and add credit (Paypal, or more likely Stripe, better API)
 
   ---------------------
-  DEADLINE: 30 May 2015
+  DEADLINE: 30 June 2015
   ---------------------
 
 "FINAL TOUCHES"
@@ -249,15 +255,16 @@ NOW, example application NEEDS to get finished so that I can release!
   * Make application look better minimising the changes to the CSS
 
   ---------------------
-  DEADLINE: 10 Jun 2015
+  DEADLINE: 10 Jul 2015
   ---------------------
 
 --------------------------------------------
 THE EXAMPLE APPLICATION IS HERE
 HOTPLATE CAN BE RELEASED
+KICKSTARTER CAMPAIGN STARTS
 --------------------------------------------
 
-  "BOOKINGS"
+STEP 1: "BOOKINGS"
 
   * Make a "booking": an abstract entity that can be owned by a contact and that has a name
   * When an email or SMS comes in, ability to match it to a booking
@@ -273,8 +280,9 @@ HOTPLATE CAN BE RELEASED
 ---------------------------------------
 RELEASE BOOKINGDOJO AS IT IS, IN BETA
 ---------------------------------------
+
   
-  "ADVANCED BOOKINGS"
+STEP 2: "ADVANCED BOOKINGS"
 
   * Ability to set available "activities" for a contact and all contacts, with cost
   * product, money lines: [ booking owner | line owner | office ] OWES (min, max price) [ booking owner | line owner | office ] / qty
@@ -286,7 +294,7 @@ RELEASE BOOKINGDOJO AS IT IS, IN BETA
   ---------------------
 
 
-  "BEAUTIFY AND FINAL TOUCHES"
+STEP 3: "BEAUTIFY AND FINAL TOUCHES"
 
   * Make application look better, and different to stock application
   * Run a full code audit on everything
@@ -296,9 +304,8 @@ RELEASE BOOKINGDOJO AS IT IS, IN BETA
   ---------------------
   DEADLINE: 30 Aug 2015
   ---------------------
-  
 
-  "ACCOUNTING"
+STEP 4: "ACCOUNTING"
 
   * Accounting summaries for each booking (with system-calculated ones)
   * Interface with payment system allowing workspaces to get paid
@@ -310,17 +317,18 @@ RELEASE BOOKINGDOJO AS IT IS, IN BETA
   ---------------------
 
 
-  "ADVANCED MESSAGES AND TEMPLATES"
+STEP 5: "ADVANCED MESSAGES AND TEMPLATES"
 
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
+  
   ---------------------
   DEADLINE: 30 Oct 2015
   ---------------------
 
 
-  "CONTACTS -- INTEGRATION"
+STEP 6: "CONTACTS -- INTEGRATION"
 
   * Add G+ authentication
   * Allow to sync contacts with Facebook
@@ -331,6 +339,11 @@ RELEASE BOOKINGDOJO AS IT IS, IN BETA
   DEADLINE: 30 Nov 2015
   ---------------------
 
+
+-------------------------------------------------------------
+DECEMBER 2014 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
+-------------------------------------------------------------
+
 [LATER, LONGER TERM]
   * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
   * Use SOCKJS for instant messanging instead of polling (dealing with authentication and reconnection)
@@ -338,7 +351,6 @@ RELEASE BOOKINGDOJO AS IT IS, IN BETA
   * StoreSelect: add network resiliance
   * Make sure that everything is blind-friendly
   * Allow country selection for phone number from a select box (straight, Dojo's?)
-
 
   DONE:
   * Password1 and password2, fields, make dependent on each other
