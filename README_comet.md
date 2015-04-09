@@ -6,7 +6,7 @@
 
 Comet events (events that will be passed on to all other connected tabs) are triggered by emitting `cometBroadcast`:
 
-    hotplate.hotEvents.emit('cometBroadcast', userId, tabId, makeTabIdHash, message, cb );
+    hotplate.hotEvents.emitCollect('cometBroadcast', userId, tabId, makeTabIdHash, message, cb );
 
 hotCoreJsonRestStores.js provides a mixin that overloads afterXXXX() calls in JsonRestStores, like so:
 
@@ -26,7 +26,7 @@ So, _broadcast is called. It's a simple call:
 
 `this.broadcastStoreChanges()` is a public API call that will broadcast a comet message about the store having changed. Its final goal is to emit a `cometBroadcast` event:
 
-    hotplate.hotEvents.emit('cometBroadcast', userId, tabId, makeTabIdHash, message, cb );
+    hotplate.hotEvents.emitCollect('cometBroadcast', userId, tabId, makeTabIdHash, message, cb );
 
 `userId, `tabId` and `beforeId` are either taken from `options`, or worked out from `request` (which is why it's passed). Note that while `userId` and `tabId` are passed as "main" cometBroadcast parameters, `beforeId` is added to the message itself.
 
@@ -45,7 +45,7 @@ The message types that broadcastStoreChanges can emit are `storeRecordUpdate`, `
 
 hotCoreComet listens to cometBroadcast events:
 
-    hotplate.hotEvents.on('cometBroadcast', 'hotCoreComet', function( userId, tabId, makeTabIdHash, message, done ){
+    hotplate.hotEvents.onCollect('cometBroadcast', 'hotCoreComet', function( userId, tabId, makeTabIdHash, message, done ){
 
 When an event happens, it simply adds it to the queue of all listening tabs (except the one that originated it -- that's why tabId is passed).
 tabId is no longer necessary after this process: a message in the database has tis schema:
