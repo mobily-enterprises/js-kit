@@ -63,32 +63,38 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [ ] Make parameters for callbacks/app.set uniform, set route and host/port separately
 
     OTHER FIXES AND QA
-    [ ] Check basic QA, make sure everything works
+    [X] Check basic QA, make sure everything works
       [X] Reordering of email addresses/address/anything works visually but not on the DB
       [X] Primary email, address, number won't change if dragging
       [X] Dragging phone numbers doesn't work at all, not visually not programmatically
       [X] Changing a phone number prefix won't change what's displayeds in the list after save
       [X] Reordering of address fails (actually, moving things to last spot failed to reposition)
       [X] Changing a plivio phone number (adding space) won't change the configArray variable in sms-plivio.js
-      [?] When updating list record, the DISPLAYED record doesn't change (the value does, and re-edit value too)
-      [ ] Messages are in erratic order
-      [ ] When an SMS comes back, SMS list doesn't get refreshed
-      [ ] Double-clicking on the first message, an odd empty record, bombs javascript
+      [X] Messages are in erratic order
+      [X] When updating list record, the DISPLAYED record doesn't change (the value does, and re-edit value too)
+      [X] When an SMS comes back, SMS list doesn't get refreshed (but it IS matched!)
+      [X] Double-clicking on the first message, an odd empty record, bombs javascript
+      [X] Make the SMS list look a little better
+      [X] Test that email works 100%
+      [X] Fix re-authenticate screen if user logs out while app screen is up
+      [X] Fix bug which only show up wen a gazillion tab are present
+      [X] Tabs are not cleared up at all
+      [X] Fix broken messaging system
 
-    [ ] Write "testing checklist", something that includes ALL cases including logout from different tab
+    [X] Write initial "testing checklist", something that includes ALL cases including logout from different tab
 
     CLIENT SIDE: TIDY UP AND FINALISE 
-    [ ] Change the API for the store-aware widgets so that it only gets storeParameters once
     [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
+    [ ] Change the API for the store-aware widgets so that it only gets storeParameters once
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
-   
+    
     FINAL HOTPLATE STRETCH: DOCUMENTATION
     [ ] Re-prepare documentation for hotplate's server modules, check web site
     [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
     [ ] Prepare blueprint documentation for client modules
     [ ] Sketch documentation (only code snipsets, bullet points) for Dojo's blueprint widgets
     [ ] Sketch documentation (only intro, structure) for Hotplate
-
+    [ ] Sketch documentation (meaningful summaries) for hotCoreAuth and hotCoreTransport
 
     [ ] Reach Nirvana with Dstore
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
@@ -252,7 +258,7 @@ NOW, example application NEEDS to get finished so that I can release!
 "FINAL TOUCHES"
   * Have a look at hotDojoWidgets/lib/hotDojoWidgets.js, image in head will appear, might be good for the app
   * Make simple tabbed wizard to setup smtp and imap, with credential real-time check
-  * Make application look better minimising the changes to the CSS
+  * Make example application look better minimising the changes to the CSS
 
   ---------------------
   DEADLINE: 10 Jul 2015
@@ -271,10 +277,10 @@ STEP 1: "BOOKINGS"
   * Ability to have messages under a specific booking, setting it in the "New Message" screen
   * Implement simple TODO list for the bookings, date/time from, date/time to, who
   * Add calendar (Dojox's), rendering TODO items
-  * Minimal CSS fixups
+  * Make it look good (different to the "example application")
 
   ---------------------
-  DEADLINE: 30 Jun 2015
+  DEADLINE: 30 Jul 2015
   ---------------------
 
 ---------------------------------------
@@ -290,7 +296,7 @@ STEP 2: "ADVANCED BOOKINGS"
   * Ability to match activities (with dates) for a contact in a booking, render them in the calendar
 
   ---------------------
-  DEADLINE: 30 Jul 2015
+  DEADLINE: 30 Aug 2015
   ---------------------
 
 
@@ -302,7 +308,7 @@ STEP 3: "BEAUTIFY AND FINAL TOUCHES"
   * Give web site to Alan to improve
 
   ---------------------
-  DEADLINE: 30 Aug 2015
+  DEADLINE: 15 Sep 2015
   ---------------------
 
 STEP 4: "ACCOUNTING"
@@ -313,7 +319,7 @@ STEP 4: "ACCOUNTING"
   * Ability to _store_ received invoices
 
   ---------------------
-  DEADLINE: 30 Sept 2015
+  DEADLINE: 15 Oct Sept 2015
   ---------------------
 
 
@@ -662,7 +668,7 @@ DECEMBER 2014 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Get rid of all the registration functions in hotplate, which are now obsolete
   * Move AsyncCollectEvents to its own github module
   * Rewrite hotplate.get to make it object/save to get rid of a few (a lot of) typeof() === undefined, put defaults into modules
-  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.on `find . -type f`
+  * Check that all the hooks that should be cached are actually cached grep -i hotEvents.onCollect `find . -type f`
   * Make sure that it all works with "use strict";
   * Made _getTabId() more robust in case the header is not there
   * Fixed registration with username/password, which was broken
