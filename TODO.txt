@@ -60,7 +60,7 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Make sure all paths are resolved property with new layout
     [X] Make registration work
     [X] Re-work messagesManager, take API calls out)
-    [ ] Make parameters for callbacks/app.set uniform, set route and host/port separately
+    [X] Make parameters for callbacks/app.set uniform, set route and host/port separately
 
     OTHER FIXES AND QA
     [X] Check basic QA, make sure everything works
@@ -87,6 +87,7 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
     [ ] Change the API for the store-aware widgets so that it only gets storeParameters once
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
+    [ ] Generally improve client-side code
     
     FINAL HOTPLATE STRETCH: DOCUMENTATION
     [ ] Re-prepare documentation for hotplate's server modules, check web site
