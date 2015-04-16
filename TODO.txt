@@ -84,11 +84,23 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Write initial "testing checklist", something that includes ALL cases including logout from different tab
 
     CLIENT SIDE: TIDY UP AND FINALISE 
-    [ ] Improve client-side code in BookingDojo, using auto-updating templates whenever possible,
-    [ ] Change the API for the store-aware widgets so that it only gets storeParameters once
+    [X] Change the API for the store-aware widgets so that it only gets storeParameters once
+    [X] Improve API of ViewingWidget so that it can be call declaratively
+    [X] Always use auto-updating templates
+    * 
+    [X] Stop using global variables ANYWHERE in the program, each widget needs MINIMAL parameters
+    [ ] Take "region" out of the name of positioning, look for 'top', too confusing
+    [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
+        HINT: Maybe implement defaultFilter in JsonRestStores
+
+    *
+    [ ] Check the whole of the client-side code for quality, consistency
+    [ ] Decide on string, GOOD naming convention for screens
+
+    *
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
-    [ ] Generally improve client-side code
-    
+
+
     FINAL HOTPLATE STRETCH: DOCUMENTATION
     [ ] Re-prepare documentation for hotplate's server modules, check web site
     [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
@@ -101,8 +113,8 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
-      [ ] Client-side, make sure that when child table is updated, parent table looks for matching children
-          and, if any, marks that one record as changed
+      [ ] Client-side, make sure that when child table is updated, parent table looks for matching children and, if any, marks that one record as changed
+
 
   ----------------------
   DEADLINE: 30 Apr 2015
@@ -348,7 +360,7 @@ STEP 6: "CONTACTS -- INTEGRATION"
 
 
 -------------------------------------------------------------
-DECEMBER 2014 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
+DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 -------------------------------------------------------------
 
 [LATER, LONGER TERM]
