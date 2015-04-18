@@ -1,3 +1,18 @@
+
+
+                          /*
+                          '  <button data-dojo-type="dijit/form/DropDownButton" data-dojo-props="iconClass:\'dijitEditorIcon dijitEditorIconCut\',labelll:\'AND\'">\n'+
+                          '     <span>Edit<b>!</b></span>\n'+
+                          '       <span id="editMenu" data-dojo-type="dijit/Menu" >\n'+
+                          '         <span id="cut" data-dojo-type="dijit/MenuItem" data-dojo-props="iconClass:\'dijitEditorIcon dijitEditorIconCut\'">Cut</span>\n'+
+                          '         <span id="paste" data-dojo-type="dijit/MenuItem" data-dojo-attach-point="otherButton" data-dojo-props="iconClass:\'dijitEditorIcon dijitEditorIconPaste\'">Paste</span>\n'+
+                          '       </span>\n'+
+                          '     </span>\n'+
+                          '  </button>\n'+
+                          */
+
+
+
 FROM:
 =====
 Widget  with parameters:
@@ -89,14 +104,17 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Always use auto-updating templates
     * 
     [X] Stop using global variables ANYWHERE in the program, each widget needs MINIMAL parameters
-    [ ] Take "region" out of the name of positioning, look for 'top', too confusing
-    [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
-        HINT: Maybe implement defaultFilter in JsonRestStores
+    [X] Take "region" out of the name of positioning, look for 'top', too confusing
+    [X] Decide on string, GOOD naming convention for screens
 
+    * 
+    [X] Check the whole of the client-side code for quality, consistency
+    [X] Take out ANY useless require from every single file, only require actually used files
+    [X] Document each screen's input variables
+    
     *
-    [ ] Check the whole of the client-side code for quality, consistency
-    [ ] Decide on string, GOOD naming convention for screens
-
+    [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
+     
     *
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
 
@@ -114,7 +132,6 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
       [ ] Client-side, make sure that when child table is updated, parent table looks for matching children and, if any, marks that one record as changed
-
 
   ----------------------
   DEADLINE: 30 Apr 2015
