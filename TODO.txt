@@ -113,6 +113,8 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Document each screen's input variables
     
     *
+    [X] Work on TODOs in BookingDojo (parameter normalisation for two stores)
+    [ ] Pass a Store in Nested in JsonRestStores, apply post-filtering to sub-children when fetching data
     [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
      
     *
