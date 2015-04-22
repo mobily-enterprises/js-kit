@@ -114,7 +114,20 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     
     *
     [X] Work on TODOs in BookingDojo (parameter normalisation for two stores)
-    [ ] Pass a Store in Nested in JsonRestStores, apply post-filtering to sub-children when fetching data
+
+    *
+    [X] Pass a Store in Nested in JsonRestStores
+    [X] Make it so that layers are _global_ to the MAIN constructor
+    [X] Simplify definition of nested for stores with lookup, use idProperty of store
+    [X] Check if JsonRestStores can run SimpleDBLayer's init function after its own init
+    [X] Apply post-filtering to sub-children when fetching data (extrapolateDocs, prepareBeforeSend)
+    [X] Update JsonRestStores' documentation with new 'nested' syntax, now using stores!
+
+    *
+    [ ] Complete cache-manipulation so that updating a store will also update children records
+    [ ] Find best way to emit signal to parent when a store is updated
+
+    *
     [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
      
     *
