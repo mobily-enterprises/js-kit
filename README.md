@@ -57,11 +57,15 @@ Hotplate comes with comprehensive documentation **[Note: not yet, documentation 
 
 # Current status:
 
-* Authentication: DONE
-* General code cleanup: DONE
-* Fixing hotCoreCometMessages for real time comet updates: DONE
-* Write a sample, small application: IN THE WORKS
-* Writing the messenging framework: UPCOMING
+* Authentication: 100% -- DONE
+* General code cleanup: 100% -- DONE
+* Fixing hotCoreCometMessages for real time comet updates: 100% -- DONE
+* Writing the messenging framework: 100% -- DONE
+* Finish Hotplate itself and all related modules: 100% -- DONE
+* Write initial documentation: 60%
+* Write a sample application that uses EVERY feature in Hotplate: 70%
+* Write a small permission module: 0%
+* Write a Stripe payment module: 0%
+* Release!
 
-
-
+CURRENT ETA: July 2015
