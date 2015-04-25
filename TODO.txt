@@ -122,15 +122,19 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Check if JsonRestStores can run SimpleDBLayer's init function after its own init
     [X] Apply post-filtering to sub-children when fetching data (extrapolateDocs, prepareBeforeSend)
     [X] Update JsonRestStores' documentation with new 'nested' syntax, now using stores!
+    [X] Make sure JsonRestStores' tests actually pass
 
     *
-    [ ] Complete cache-manipulation so that updating a store will also update children records
-    [ ] Find best way to emit signal to parent when a store is updated
+    [X] Complete cache-manipulation so that updating a store will also update children records
+    [X] Rename AppStoreNotify with StoreCacheUpdater.js
+    [X] Use put and delete, and query, rather than manipulating/searching memCache straight (added TODO)
+    [X] Find best way to emit signal to parent when a store is updated, sort out refresh of contact list
+    [X] Manually set the main email address as the first one in the list without server notification
+    [?] Fix problem where changing email address doesn't refresh the grid
+    [ ] Check if it's possible to update the main email address in config screen without server notification
 
     *
     [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
-     
-    *
     [ ] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
 
 
@@ -254,7 +258,6 @@ NOW, example application NEEDS to get finished so that I can release!
       *
       [ ] Implement basic search in messages
 
-[LATER]
       *
       [ ] Add cache to the toAsString field, zap cache when a message has matching contactTo
       [ ] Make sure validation bubbles don't stay after closing dialog
