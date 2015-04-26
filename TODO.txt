@@ -130,8 +130,18 @@ Angular, Backbone, Amber, Knockout, React, Mayhem
     [X] Use put and delete, and query, rather than manipulating/searching memCache straight (added TODO)
     [X] Find best way to emit signal to parent when a store is updated, sort out refresh of contact list
     [X] Manually set the main email address as the first one in the list without server notification
-    [?] Fix problem where changing email address doesn't refresh the grid
-    [ ] Check if it's possible to update the main email address in config screen without server notification
+
+    *
+    [X] Fix problem where changing email address doesn't refresh the grid
+    [X] Check silent errors problem with application. 
+    [X] Check why email address in config screen doesn't update
+
+    *
+    [X] Check strange behaviour when saving (all child records lighten up, and why NOT addresses anyway?)
+    [X] Even stranger, cache seems to be zapped after refresh
+    [X] Make sure newStore CAN be listened to without fail, and maybe change it to topics
+    [X] Figure out why dragging below stops working, suspect suppressed syntax error
+    [X] Solve the "alsoNotify" dilemma in StoreCacheUpdater
 
     *
     [ ] Record deletion: Look for `initialFilter: { enabled: true },`, fix deletion!
