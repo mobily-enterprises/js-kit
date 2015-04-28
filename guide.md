@@ -15,11 +15,11 @@ Hotplate itself is essentially a simple module that provides:
 
 * A way to call hooks and get their results. This happens using the module [https://github.com/mercmobily/EventEmitterCollector](EventEmitterCollector), which basically allows you to emit an event, and then get each listener to (asynchronously) return a result.
 
-* An easy way to assign a configuration object. This happens using the module [https://github.com/mercmobily/deepobject](DeepObject) around a "config" variable. So, you can write things like `hotplate.config.get( 'hotDojoAdd.dojoUrl' )` or, more excitingly, `hotplate.config.set('hotCoreAuth.strategies.facebook.clientID', 9999999999);`.
+* An easy way to assign a configuration object. This happens using the module [https://github.com/mercmobily/deepobject](DeepObject) around a "config" variable. So, you can write things like `hotplate.config.get( 'hotClientDojo/dojoUrl' )` or, more excitingly, `hotplate.config.set('hotCoreAuth.strategies.facebook.clientID', 9999999999);`.
 
 That's it. Hotplate itself is only 25 lines. The modules that come with it, however, do everything.
 
-Some of the modules are considered "core" -- they all start with `hotCoreXXX`. They provide basic functionality for any "software as a service". Other modules are not part of core: for example the `hotDojoXXX` modules offer functionalities to use Dojo within Hotplate.
+Some of the modules are considered "core" -- they all start with `hotCoreXXX`. They provide basic functionality for any "software as a service". Other modules are not part of core: for example the `hotClientDojo` module offers functionalities to use Dojo within Hotplate.
 
 ## A note on the shown examples
 

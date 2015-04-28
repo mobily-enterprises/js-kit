@@ -1,0 +1,94 @@
+
+/*
+  ****************************************************************
+  The part of the widget that is actually part of the CSS flow 
+  (the selected item, and the arrow down on its right)
+  ****************************************************************
+*/
+
+.store-select {
+    background-color: #ffffff;
+    width: 200px;
+
+    /* Make the cursor show as a pointer */
+    cursor: pointer;
+    position: relative;
+}
+
+
+.store-select .picked {
+    /* Make this position: relative so our arrow is positioned within */
+    position: relative;
+    border: 1px solid #b5bcc7;
+    width: auto;
+}
+
+.store-select .label {
+    line-height: 17px;
+    vertical-align: middle;
+}
+
+.store-select .arrow {
+    /* Position the arrow on the right-hand side */
+    position: absolute;
+    top: 0;
+    right: 1px;
+ 
+    /* Use claro's arrow image */
+    /* background-image: url("/dojo/dijit/themes/claro/form/images/commonFormArrows.png"); */
+    background-image: url("//ajax.googleapis.com/ajax/libs/dojo/1.8.3/dijit/themes/claro/form/images/commonFormArrows.png"); 
+    background-position: -38px 50%;
+    background-repeat: no-repeat;
+ 
+    /* 16x16 with a white border and a gray background */
+    width: 12px;
+    height: 100%;
+    outline: 1px solid gray;
+    background-color: #efefef;
+    z-index: 100;
+}
+
+/*
+  ****************************************************************
+  The "dgrid" side of the story. This is not part of the page flow,
+  and it will appear after a click
+  ****************************************************************
+*/
+
+
+.store-select .dgrid-spot {
+    /* Make this position: relative so that the widget is placed within */
+    position: relative;
+}
+
+
+/* .store-select .dgrid-spot .dgrid { */
+.store-select .dgrid {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: -3px;
+    height: auto;
+}
+
+.store-select .dgrid .row{
+    height: auto;
+}
+
+
+
+/* .store-select .dgrid-spot .dgrid .dgrid-scroller { */
+.store-select .dgrid-scroller {
+   position: relative;
+   max-height: 200px;
+   overflow: auto;
+
+   z-index: 999;
+	 border-width: 1px;
+   border-style: solid;
+   border-color: rgb(117, 157, 192);
+
+}
+
+

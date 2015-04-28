@@ -10,7 +10,7 @@ By 201X software I mean software that has the following features:
 
 
 * Live information. Have live information and forms. This means that if you have three tabs open, and change your user photo in one tab, the other two tabs will get updated with the new photo as well. Other users logged in and display your user will get the update right away. Forms need to be live as well: if you are viewing a form, and another user changes the information, your form needs to get reloaded or warn you
-* Resiliance. Network and error resiliance; ff anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong
+* Resilience. Network and error resiliance; ff anything really bad happens, the application must not stop. Instead, it will tell the user that something network-wise went wrong
 * One page. One page application, with ony minimal information transferred from the client to the server
 * Use of JSON REST stores for all data access; the client displays information is the most user-friendly possibly way and handles forms, while the server  provides a bunch of secure data stores that are JSON-REST compatible 
 * Security. Implementing new stores needs to be safe and secure _by default_. It needs to be easy to write permission-granting routines for specific stores
@@ -61,11 +61,15 @@ Hotplate comes with comprehensive documentation **[Note: not yet, documentation 
 
 # Current status:
 
-* Authentication: DONE
-* General code cleanup: DONE
-* Fixing hotCoreCometMessages for real time comet updates: DONE
-* Write a sample, small application: IN THE WORKS
-* Writing the messenging framework: UPCOMING
+* Authentication: 100% -- DONE
+* General code cleanup: 100% -- DONE
+* Fixing hotCoreCometMessages for real time comet updates: 100% -- DONE
+* Writing the messenging framework: 100% -- DONE
+* Finish Hotplate itself and all related modules: 100% -- DONE
+* >>> Write initial documentation: 60%
+* Write a sample application that uses EVERY feature in Hotplate: 80%
+* Write a small permission module: 0%
+* Write a Stripe payment module: 0%
+* Release!
 
-
-
+CURRENT ETA: July 2015

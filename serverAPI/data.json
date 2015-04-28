@@ -231,7 +231,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 304,
+            "line": 300,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "run",
@@ -302,7 +302,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
-            "line": 314,
+            "line": 331,
             "itemtype": "event",
             "name": "setRoutes",
             "class": "hotCoreTransport",
@@ -310,7 +310,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreTransport/lib/hotCoreTransport.js",
-            "line": 344,
+            "line": 361,
             "itemtype": "event",
             "name": "run",
             "class": "hotCoreTransport",

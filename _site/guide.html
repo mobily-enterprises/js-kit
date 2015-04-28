@@ -57,13 +57,13 @@
     <p>A way to call hooks and get their results. This happens using the module <a href="EventEmitterCollector">https://github.com/mercmobily/EventEmitterCollector</a>, which basically allows you to emit an event, and then get each listener to (asynchronously) return a result.</p>
   </li>
   <li>
-    <p>An easy way to assign a configuration object. This happens using the module <a href="DeepObject">https://github.com/mercmobily/deepobject</a> around a “config” variable. So, you can write things like <code>hotplate.config.get( 'hotDojoAdd.dojoUrl' )</code> or, more excitingly, <code>hotplate.config.set('hotCoreAuth.strategies.facebook.clientID', 9999999999);</code>.</p>
+    <p>An easy way to assign a configuration object. This happens using the module <a href="DeepObject">https://github.com/mercmobily/deepobject</a> around a “config” variable. So, you can write things like <code>hotplate.config.get( 'hotClientDojo/dojoUrl' )</code> or, more excitingly, <code>hotplate.config.set('hotCoreAuth.strategies.facebook.clientID', 9999999999);</code>.</p>
   </li>
 </ul>
 
 <p>That’s it. Hotplate itself is only 25 lines. The modules that come with it, however, do everything.</p>
 
-<p>Some of the modules are considered “core” – they all start with <code>hotCoreXXX</code>. They provide basic functionality for any “software as a service”. Other modules are not part of core: for example the <code>hotDojoXXX</code> modules offer functionalities to use Dojo within Hotplate.</p>
+<p>Some of the modules are considered “core” – they all start with <code>hotCoreXXX</code>. They provide basic functionality for any “software as a service”. Other modules are not part of core: for example the <code>hotClientDojo</code> module offers functionalities to use Dojo within Hotplate.</p>
 
 <h2 id="a-note-on-the-shown-examples">A note on the shown examples</h2>
 
