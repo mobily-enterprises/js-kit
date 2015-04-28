@@ -1363,3 +1363,5 @@ X Changed ownedByWorkspaceId into workspaceId
     FINISHING HOTPLATE
     [X] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
     [X] Turn Bookingdojo itself into a normal embeddable widget, get globals from bdMain instead
+    [X] Make DEAD sure storeEnhanced is run before ANYTHING else by placing it in bd.js
+    
