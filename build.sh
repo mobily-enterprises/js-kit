@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm hotplate
 ln -s ../hotplate hotplate
 
 echo Copying the guide over...
@@ -13,6 +14,8 @@ yuidoc -t _yuidocThemes/server  -o serverAPI hotplate/node_modules/*/lib/
 
 echo Building client API...
 yuidoc -t _yuidocThemes/client  -o clientAPI hotplate/node_modules/*/client/
+
+rm hotplate
 
 echo Building side with Jekyll...
 jekyll build

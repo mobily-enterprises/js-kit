@@ -2,7 +2,7 @@ DOCUMENT HOTPLATE
 -----------------
 
     [ ] DOCUMENTATION INFRASTRUCTURE
-      [ ] Fix path problem with current documentation
+      [-] Fix path problem with current documentation
       [ ] Figure out the "gist" of how YUIDOC works right now for client and server
       [ ] Install new YUIDOC and see how things work
       [ ] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
