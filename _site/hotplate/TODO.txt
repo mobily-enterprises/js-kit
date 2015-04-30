@@ -1,11 +1,24 @@
+DOCUMENT HOTPLATE
+-----------------
 
-    FINAL HOTPLATE STRETCH: DOCUMENTATION
-    [ ] Re-prepare documentation for hotplate's server modules, check web site
-    [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
-    [ ] Prepare blueprint documentation for client modules
-    [ ] Sketch documentation (only code snipsets, bullet points) for Dojo's blueprint widgets
-    [ ] Sketch documentation (only intro, structure) for Hotplate
-    [ ] Sketch documentation (meaningful summaries) for hotCoreAuth and hotCoreTransport
+    [ ] DOCUMENTATION INFRASTRUCTURE
+      [ ] Fix path problem with current documentation
+      [ ] Figure out the "gist" of how YUIDOC works right now for client and server
+      [ ] Install new YUIDOC and see how things work
+      [ ] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
+      [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
+      [ ] Find a way to have a README.md file per module, have most of the documentation there
+      [ ] Prepare documentation for one client module (simple one)
+      [ ] Prepare documentation for one server module (simple one)
+      [ ] Write blueprint for client modules
+
+    [ ] DOCUMENTATION WRITING
+      [ ] Write  documentation (only intro, structure) for Hotplate's server modules, except Auth, Transport
+      [ ] Write documentation (only code snipsets, bullet points) for Dojo's blueprint widgets except auth
+
+    [ ] DOCUMENTING BIGGER MODULES
+      [ ] Write documentation for hotCoreAuth and hotCoreTransport
+      [ ] Write documentation for DojoAuth
 
     [ ] Reach Nirvana with Dstore
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
