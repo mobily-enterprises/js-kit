@@ -26,7 +26,6 @@ jekyll serve
 echo Submitting site to GitHut pages...
 git add *;
 
-
 echo Press enter to commit...
 read
 
