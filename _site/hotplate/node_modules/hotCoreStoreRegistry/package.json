@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreStoreRegistry",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreStoreRegistry.js"
-}

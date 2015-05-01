@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreSharedValidators",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreSharedValidators.js"
-}

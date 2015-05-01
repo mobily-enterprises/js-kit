@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreErrorProtocol",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreErrorProtocol.js"
-}

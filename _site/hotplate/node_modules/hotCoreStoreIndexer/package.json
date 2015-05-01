@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreStoreIndexer",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreStoreIndexer.js"
-}
