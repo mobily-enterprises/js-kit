@@ -64,9 +64,11 @@ Full-Width Styles
 
 body .main_menu span a {
   margin-left: 15px;
+/*
   font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
-  line-height: 1.5; 
-  font: inherit;
+  line-height: 1.5;
+  */
+  font: 13px/1.4 'Helvetica', 'Arial', sans-serif;
 }
 
 body .main_menu span a {
