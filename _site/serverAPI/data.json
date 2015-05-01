@@ -216,13 +216,14 @@
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
             "line": 107,
+            "description": "It returns the authentication stores \nThe stores returned are:\n\n## users\n\nThe users\n\n## usersStrategies\n\nThe strategies\n\n## authStrategies\n\nThe list of possible authentication strategies\n\n## logins\n\nThe list of all possible logins",
             "itemtype": "event",
             "name": "stores",
             "requires": [
                 "hotCoreJsonRestStores"
             ],
             "return": {
-                "description": "An associative array of stores\n\nIt returns the authentication stores \nThe stores returned are:\n\n## users\n\nThe users\n\n## usersStrategies\n\nThe strategies\n\n## authStrategies\n\nThe list of possible authentication strategies\n\n## logins\n\nThe list of all possible logins",
+                "description": "An associative array of stores",
                 "type": "Object"
             },
             "class": "hotCoreAuth",
@@ -230,10 +231,10 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 347,
+            "line": 348,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
-            "name": "run",
+            "name": "setRoutes",
             "class": "hotCoreAuth",
             "module": "hotCoreAuth"
         },
