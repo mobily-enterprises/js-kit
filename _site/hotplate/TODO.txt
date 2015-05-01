@@ -3,18 +3,23 @@ DOCUMENT HOTPLATE
 
     [ ] DOCUMENTATION INFRASTRUCTURE
       [-] Fix path problem with current documentation
-      [ ] Figure out the "gist" of how YUIDOC works right now for client and server
-      [ ] Install new YUIDOC and see how things work
+      [X] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
+      [X] Figure out the "gist" of how YUIDOC works right now for client and server
+      [X] Install new YUIDOC
+      [ ] Make new generic theme that uses same template by reusing changes to previous theme
       [ ] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
-      [ ] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
       [ ] Find a way to have a README.md file per module, have most of the documentation there
       [ ] Prepare documentation for one client module (simple one)
       [ ] Prepare documentation for one server module (simple one)
-      [ ] Write blueprint for client modules
 
     [ ] DOCUMENTATION WRITING
+      [ ] Write blueprint for client modules
       [ ] Write  documentation (only intro, structure) for Hotplate's server modules, except Auth, Transport
       [ ] Write documentation (only code snipsets, bullet points) for Dojo's blueprint widgets except auth
+
+    [ ] MAKING QUICKSTART GUIDES
+      [ ] Make 2 empty canvas example applications, non-multi homed and multi homed
+      [ ] Writing quickstart guide to get them started, explaining server
 
     [ ] DOCUMENTING BIGGER MODULES
       [ ] Write documentation for hotCoreAuth and hotCoreTransport
