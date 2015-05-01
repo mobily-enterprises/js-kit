@@ -215,19 +215,22 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 105,
-            "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UsersStrategies, AuthStrategies, Logins)",
+            "line": 107,
             "itemtype": "event",
-            "name": "init",
+            "name": "stores",
             "requires": [
                 "hotCoreJsonRestStores"
             ],
+            "return": {
+                "description": "An associative array of stores\n\nIt returns the authentication stores \nThe stores returned are:\n\n## users\n\nThe users\n\n## usersStrategies\n\nThe strategies\n\n## authStrategies\n\nThe list of possible authentication strategies\n\n## logins\n\nThe list of all possible logins",
+                "type": "Object"
+            },
             "class": "hotCoreAuth",
             "module": "hotCoreAuth"
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 327,
+            "line": 347,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "run",
