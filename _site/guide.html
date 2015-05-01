@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Hotplate - documentation: Framework to create multi-homed SaaS with NodeJs, Express" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/global/header.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css">
+
+    <title>Hotplate documentation</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+
+        <div class="main_menu">
+             <span><a href="/">Home</a></span>
+             <span><a href="/guide.html">Guide</a></span>
+             <span><a href="/serverAPI/index.html">Server API</a></span>
+             <span><a href="/clientAPI/index.html">Client API</a></span>
+        </div>
+
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mercmobily/hotplate">View on GitHub</a>
+
+
+          <h1 id="project_title">Hotplate documentation</h1>
+          <h2 id="project_tagline">Framework to create multi-homed SaaS with NodeJs, Express</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mercmobily/hotplate/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mercmobily/hotplate/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+      <h1 id="hotplate-a-practical-guide">Hotplate: a practical guide</h1>
+
+<p>Welcome to Hotplate! If you are reading this guide, it means that you are egar to get started and see “something” happen.</p>
+
+<p>This guide will do exactly that. By the end of it, you will have a good understanding of Hotplate and will be able to write modern, cutting-edge, network-resiliant software.</p>
+
+<h1 id="the-basics">The basics</h1>
+
+<p>Hotplate itself is essentially a simple module that provides:</p>
+
+<ul>
+  <li>
+    <p>A way to call hooks and get their results. This happens using the module <a href="EventEmitterCollector">https://github.com/mercmobily/EventEmitterCollector</a>, which basically allows you to emit an event, and then get each listener to (asynchronously) return a result.</p>
+  </li>
+  <li>
+    <p>An easy way to assign a configuration object. This happens using the module <a href="DeepObject">https://github.com/mercmobily/deepobject</a> around a “config” variable. So, you can write things like <code>hotplate.config.get( 'hotClientDojo/dojoUrl' )</code> or, more excitingly, <code>hotplate.config.set('hotCoreAuth.strategies.facebook.clientID', 9999999999);</code>.</p>
+  </li>
+</ul>
+
+<p>That’s it. Hotplate itself is only 25 lines. The modules that come with it, however, do everything.</p>
+
+<p>Some of the modules are considered “core” – they all start with <code>hotCoreXXX</code>. They provide basic functionality for any “software as a service”. Other modules are not part of core: for example the <code>hotClientDojo</code> module offers functionalities to use Dojo within Hotplate.</p>
+
+<h2 id="a-note-on-the-shown-examples">A note on the shown examples</h2>
+
+<p>My main aim is to always show fully working applications every time I show something. So, when you see something like <strong>[starting_point]</strong>, what I actually mean is the branch named <code>starting_point</code> of the repository <a href="https://github.com/mercmobily/hotplate-examples">hotplate-examples</a>. You can easily checkout that branch using Git, or browse it from GitHub.</p>
+
+<p>Once you’ve downloaded the code, you will need to do the usual:</p>
+
+<pre><code>npm install
+</code></pre>
+
+<p>And everything should work fine.</p>
+
+<h2 id="getting-started-with-hotplate">Getting started with Hotplate</h2>
+
+<p>First of all, checkout <strong>[starting_point]</strong>. That’s the basic, straight “expressJS” application that comes out of creating an application using the command <code>express</code>. The application’s source code is pretty basic:</p>
+
+<pre><code>/**
+ * Module dependencies.
+ */
+
+var express = require('express');
+var http = require('http');
+var path = require('path');
+
+var app = express();
+
+// all environments
+app.set('port', process.env.PORT || 3000);
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.bodyParser());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
+// development only
+if ('development' == app.get('env')) {
+  app.use(express.errorHandler());
+}
+
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
+</code></pre>
+
+<p>Basically, all of the template-oriented parts of Express (see: Jade) has been taken out. While you might still want to use Jade (that is, it’s not forbidden to do so), keep in mind that Hotplate aims at creating one-page, rich applications. So, chances are that you won’t actually need to create “pages” as such in your application – or, at least that’s the hope.</p>
+
+<p>So, now start integrating hotplate into your world.</p>
+
+<h2 id="your-first-hotplate-module">Your first Hotplate module</h2>
+
+<p>The most important bit to add to your app.js file is the code that <code>requires()</code> and runs Hotplate modules. That’s easily done:
+(See <strong>[first_hotplate]</strong>)</p>
+
+<h2 id="more-hotplate-features">More Hotplate features</h2>
+
+<h3 id="setting-hotplate-wide-variables">Setting Hotplate-wide variables</h3>
+
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Hotplate - documentation maintained by <a href="https://github.com/mercmobily">mercmobily</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>
