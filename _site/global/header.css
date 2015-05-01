@@ -62,13 +62,14 @@ Full-Width Styles
   border-bottom-right-radius: 2px;
 }
 
-body .main_menu span a {
+body .main_menu span a, body .main_menu span {
   margin-left: 15px;
 /*
   font-family: 'Myriad Pro', Calibri, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   */
-  font: 13px/1.4 'Helvetica', 'Arial', sans-serif;
+  font: bold 16px/1.4 'Helvetica', 'Arial', sans-serif;
+  line-height: 1.5;
 }
 
 body .main_menu span a {
