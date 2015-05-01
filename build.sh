@@ -10,10 +10,10 @@ echo Copying README.md onto index.md...
 cat _includes/top_page.txt hotplate/README.md  > index.md
 
 echo Building server API...
-yuidoc -t _yuidocThemes/server  -o serverAPI hotplate/node_modules/*/lib/
+yuidoc -t _yuidocThemes/hotplate  -o serverAPI hotplate/node_modules/*/lib/
 
 echo Building client API...
-yuidoc -t _yuidocThemes/client  -o clientAPI hotplate/node_modules/*/client/
+yuidoc -t _yuidocThemes/hotplate  -o clientAPI hotplate/node_modules/*/client/
 
 rm hotplate
 

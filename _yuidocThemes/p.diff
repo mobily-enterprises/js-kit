@@ -1,0 +1,1926 @@
+Binary files yui7_default/assets/css/logo.png and server0.4/assets/css/logo.png differ
+diff -r yui7_default/assets/css/main.css server0.4/assets/css/main.css
+28c28,29
+<     font: 13px/1.4 'Lucida Grande', 'Lucida Sans Unicode', 'DejaVu Sans', 'Bitstream Vera Sans', 'Helvetica', 'Arial', sans-serif;
+---
+>     /*font: 13px/1.4 'Lucida Grande', 'Lucida Sans Unicode', 'DejaVu Sans', 'Bitstream Vera Sans', 'Helvetica', 'Arial', sans-serif;*/
+>     font: 13px/1.4 'Helvetica', 'Arial', sans-serif;
+38a40,43
+> .hidden {
+>     display: none;
+> }
+> 
+96c101
+< p code, p kbd, p samp, li code {
+---
+> p code, p kbd, p samp {
+186,188d190
+< #main { width: 754px; }
+< #sidebar { width: 270px; margin: 0 15px; }
+< 
+191,221c193,194
+< /* -- Sidebar --------------------------------------------------------------- */
+< .sidebox {
+<     background: #F9F9FC;/*E6E9F5*/
+<     border: 1px solid #D4D8EB;
+< 
+<     -moz-border-radius: 4px;
+<     -webkit-border-radius: 4px;
+<     border-radius: 4px;
+<     -moz-box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+<     -webkit-box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+<     box-shadow: 0 0 6px rgba(0, 0, 0, 0.15);
+<     font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', 'Helvetica', 'Arial', sans-serif;
+<     margin: 0 0 15px 0;
+<     padding-bottom: 1px;
+< }
+< 
+< .sidebox h2 {
+<     background: #E5E6F1;
+<     -moz-border-radius: 4px 4px 0 0;
+<     -webkit-border-radius: 4px 4px 0 0;
+<     border-radius: 4px 4px 0 0;
+<     color: #5E6BA4;
+<     font-weight: bold;
+<     font-size: 107.692%;
+<     margin: 0;
+<     padding: 4px 7px 5px;
+< }
+< 
+< .sidebox .bd {
+<     font-size: 84.615%;
+<     padding: 0 5px 0 8px;
+---
+> .sidebar {
+>     padding: 0 15px 0 10px;
+223,234c196,199
+< 
+< .sidebox li { list-style-type: disc; color:#D4D5E3; }
+< 
+< .sidebox ol, .sidebox ul {
+<     margin-left: 0;
+<     padding-left: 16px;
+< }
+< 
+< .sidebox ol ol, .sidebox ol ul,
+< .sidebox ul ol, .sidebox ul ul {
+<     margin: 0;
+<     padding-left: 16px;
+---
+> #bd {
+>     padding: 7px 0 130px;
+>     position: relative;
+>     width: 99%;
+246a212
+> /*
+248d213
+< 
+258d222
+< 
+261a226
+> */
+311,360d275
+< .yui3-skin-sam #classdocs .yui3-tabview-panel {
+<     background-color: transparent;
+< }
+< 
+< .yui3-skin-sam #classdocs .yui3-tabview-panel {
+<     border: none;
+< }
+< 
+< .yui3-skin-sam .yui3-tabview .yui3-tab,
+< .yui3-skin-sam .yui3-tabview .yui3-tab-selected,
+< .yui3-skin-sam .yui3-tabview .yui3-tab-hover {
+<     background: -moz-linear-gradient(center top , #F4F0EC 0%, #D6D2CE 100%) repeat scroll 0 0 transparent;
+<     border-bottom: 1px solid #DEDCD9;
+<     border-right: 1px solid #CDCBC8;
+<     border-left: 1px solid #CDCBC8;
+<     border-top: 1px solid #DADADA;
+<     color: #333333;
+<     text-decoration: none;
+< }
+< .yui3-skin-sam .yui3-tabview .yui3-tab-label,
+< .yui3-skin-sam .yui3-tabview .yui3-tab-selected .yui3-tab-label {
+<     border: none;
+<     background: none;
+<     font-size: 100%;
+<     color: #000;
+< }
+< 
+< .yui3-skin-sam .yui3-tabview .yui3-tab-selected,
+< .yui3-skin-sam .yui3-tabview .yui3-tab-hover {
+<     background: none;
+<     background-color: #fff;
+<     border-bottom-color: #FFFFFF;
+<     border-top: 2px solid #8193C9;
+<     font-weight: bold;
+<     color: #000;
+< 
+< }
+< 
+< .yui3-skin-sam .yui3-tabview-list {
+<     border-color: #DFDFDF;
+<     border-width: 0 0 1px; 
+< }
+< 
+< 
+< a.external {
+<     background-image: url(external-small.png);
+<     background-repeat: no-repeat;
+<     background-position: 0 0;
+<     padding-left: 16px;
+< }
+417a333,346
+> .apidocs .methods .extends .method,
+> .apidocs .properties .extends .property,
+> .apidocs .attrs .extends .attr,
+> .apidocs .events .extends .event {
+>     font-weight: bold;
+> }
+> 
+> .apidocs .methods .extends .inherited,
+> .apidocs .properties .extends .inherited,
+> .apidocs .attrs .extends .inherited,
+> .apidocs .events .extends .inherited {
+>     font-weight: normal;
+> }
+> 
+419c348,351
+<     background: -moz-linear-gradient(center top , #DCDBD9 0%, #F6F5F3 100%) repeat scroll 0 0 transparent;
+---
+>     background: whiteSmoke;
+>     background: -moz-linear-gradient(top,#DCDBD9 0,#F6F5F3 100%);
+>     background: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#DCDBD9),color-stop(100%,#F6F5F3));
+>     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#dcdbd9',endColorstr='#F6F5F3',GradientType=0);
+427a360,781
+> }
+> 
+> 
+> /* -- API Docs CSS ---------------------------------------------------------- */
+> 
+> /*
+> This file is organized so that more generic styles are nearer the top, and more
+> specific styles are nearer the bottom of the file. This allows us to take full
+> advantage of the cascade to avoid redundant style rules. Please respect this
+> convention when making changes.
+> */
+> 
+> /* -- Generic TabView styles ------------------------------------------------ */
+> 
+> /*
+> These styles apply to all API doc tabviews. To change styles only for a
+> specific tabview, see the other sections below.
+> */
+> 
+> .yui3-js-enabled .apidocs .tabview {
+>     visibility: hidden; /* Hide until the TabView finishes rendering. */
+>     _visibility: visible;
+> }
+> 
+> .apidocs .tabview.yui3-tabview-content { visibility: visible; }
+> .apidocs .tabview .yui3-tabview-panel { background: #fff; }
+> 
+> /* -- Generic Content Styles ------------------------------------------------ */
+> 
+> /* Headings */
+> h2, h3, h4, h5, h6 {
+>     border: none;
+>     color: #30418C;
+>     font-weight: bold;
+>     text-decoration: none;
+> }
+> 
+> .link-docs {
+>     float: right;
+>     font-size: 15px;
+>     margin: 4px 4px 6px;
+>     padding: 6px 30px 5px;
+> }
+> 
+> .apidocs { zoom: 1; }
+> 
+> /* Generic box styles. */
+> .apidocs .box {
+>     border: 1px solid;
+>     border-radius: 3px;
+>     margin: 1em 0;
+>     padding: 0 1em;
+> }
+> 
+> /* A flag is a compact, capsule-like indicator of some kind. It's used to
+>    indicate private and protected items, item return types, etc. in an
+>    attractive and unobtrusive way. */
+> .apidocs .flag {
+>     background: #bababa;
+>     border-radius: 3px;
+>     color: #fff;
+>     font-size: 11px;
+>     margin: 0 0.5em;
+>     padding: 2px 4px 1px;
+> }
+> 
+> /* Class/module metadata such as "Uses", "Extends", "Defined in", etc. */
+> .apidocs .meta {
+>     background: #f9f9f9;
+>     border-color: #efefef;
+>     color: #555;
+>     font-size: 11px;
+>     padding: 3px 6px;
+> }
+> 
+> .apidocs .meta p { margin: 0; }
+> 
+> /* Deprecation warning. */
+> .apidocs .box.deprecated,
+> .apidocs .flag.deprecated {
+>     background: #fdac9f;
+>     border: 1px solid #fd7775;
+> }
+> 
+> .apidocs .box.deprecated p { margin: 0.5em 0; }
+> .apidocs .flag.deprecated { color: #333; }
+> 
+> /* Module/Class intro description. */
+> .apidocs .intro {
+>     background: #f0f1f8;
+>     border-color: #d4d8eb;
+> }
+> 
+> /* Loading spinners. */
+> #bd.loading .apidocs,
+> #api-list.loading .yui3-tabview-panel {
+>     background: #fff url(../img/spinner.gif) no-repeat center 70px;
+>     min-height: 150px;
+> }
+> 
+> #bd.loading .apidocs .content,
+> #api-list.loading .yui3-tabview-panel .apis {
+>     display: none;
+> }
+> 
+> .apidocs .no-visible-items { color: #666; }
+> 
+> /* Generic inline list. */
+> .apidocs ul.inline {
+>     display: inline;
+>     list-style: none;
+>     margin: 0;
+>     padding: 0;
+> }
+> 
+> .apidocs ul.inline li { display: inline; }
+> 
+> /* Comma-separated list. */
+> .apidocs ul.commas li:after { content: ','; }
+> .apidocs ul.commas li:last-child:after { content: ''; }
+> 
+> /* Keyboard shortcuts. */
+> kbd .cmd { font-family: Monaco, Helvetica; }
+> 
+> /* -- Generic Access Level styles ------------------------------------------- */
+> .apidocs .item.protected,
+> .apidocs .item.private,
+> .apidocs .index-item.protected,
+> .apidocs .index-item.deprecated,
+> .apidocs .index-item.private {
+>     display: none;
+> }
+> 
+> .show-deprecated .item.deprecated,
+> .show-deprecated .index-item.deprecated,
+> .show-protected .item.protected,
+> .show-protected .index-item.protected,
+> .show-private .item.private,
+> .show-private .index-item.private {
+>     display: block;
+> }
+> 
+> .hide-inherited .item.inherited,
+> .hide-inherited .index-item.inherited {
+>     display: none;
+> }
+> 
+> /* -- Generic Item Index styles --------------------------------------------- */
+> .apidocs .index { margin: 1.5em 0 3em; }
+> 
+> .apidocs .index h3 {
+>     border-bottom: 1px solid #efefef;
+>     color: #333;
+>     font-size: 13px;
+>     margin: 2em 0 0.6em;
+>     padding-bottom: 2px;
+> }
+> 
+> .apidocs .index .no-visible-items { margin-top: 2em; }
+> 
+> .apidocs .index-list {
+>     border-color: #efefef;
+>     font-size: 12px;
+>     list-style: none;
+>     margin: 0;
+>     padding: 0;
+>     -moz-column-count: 4;
+>     -moz-column-gap: 10px;
+>     -moz-column-width: 170px;
+>     -ms-column-count: 4;
+>     -ms-column-gap: 10px;
+>     -ms-column-width: 170px;
+>     -o-column-count: 4;
+>     -o-column-gap: 10px;
+>     -o-column-width: 170px;
+>     -webkit-column-count: 4;
+>     -webkit-column-gap: 10px;
+>     -webkit-column-width: 170px;
+>     column-count: 4;
+>     column-gap: 10px;
+>     column-width: 170px;
+> }
+> 
+> .apidocs .no-columns .index-list {
+>     -moz-column-count: 1;
+>     -ms-column-count: 1;
+>     -o-column-count: 1;
+>     -webkit-column-count: 1;
+>     column-count: 1;
+> }
+> 
+> .apidocs .index-item { white-space: nowrap; }
+> 
+> .apidocs .index-item .flag {
+>     background: none;
+>     border: none;
+>     color: #afafaf;
+>     display: inline;
+>     margin: 0 0 0 0.2em;
+>     padding: 0;
+> }
+> 
+> /* -- Generic API item styles ----------------------------------------------- */
+> .apidocs .args {
+>     display: inline;
+>     margin: 0 0.5em;
+> }
+> 
+> .apidocs .flag.chainable { background: #46ca3b; }
+> .apidocs .flag.protected { background: #9b86fc; }
+> .apidocs .flag.private { background: #fd6b1b; }
+> .apidocs .flag.async { background: #356de4; }
+> .apidocs .flag.required { background: #e60923; }
+> 
+> .apidocs .item {
+>     border-bottom: 1px solid #efefef;
+>     margin: 1.5em 0 2em;
+>     padding-bottom: 2em;
+> }
+> 
+> .apidocs .item h4,
+> .apidocs .item h5,
+> .apidocs .item h6 {
+>     color: #333;
+>     font-family: inherit;
+>     font-size: 100%;
+> }
+> 
+> .apidocs .item .description p,
+> .apidocs .item pre.code {
+>     margin: 1em 0 0;
+> }
+> 
+> .apidocs .item .meta {
+>     background: none;
+>     border: none;
+>     padding: 0;
+> }
+> 
+> .apidocs .item .name {
+>     display: inline;
+>     font-size: 14px;
+> }
+> 
+> .apidocs .item .type,
+> .apidocs .item .type a,
+> .apidocs .returns-inline {
+>     color: #555;
+> }
+> 
+> .apidocs .item .type,
+> .apidocs .returns-inline {
+>     font-size: 11px;
+>     margin: 0 0 0 0;
+> }
+> 
+> .apidocs .item .type a { border-bottom: 1px dotted #afafaf; }
+> .apidocs .item .type a:hover { border: none; }
+> 
+> /* -- Item Parameter List --------------------------------------------------- */
+> .apidocs .params-list {
+>     list-style: square;
+>     margin: 1em 0 0 2em;
+>     padding: 0;
+> }
+> 
+> .apidocs .param { margin-bottom: 1em; }
+> 
+> .apidocs .param .type,
+> .apidocs .param .type a {
+>     color: #666;
+> }
+> 
+> .apidocs .param .type {
+>     margin: 0 0 0 0.5em;
+>     *margin-left: 0.5em;
+> }
+> 
+> .apidocs .param-name { font-weight: bold; }
+> 
+> /* -- Item "Emits" block ---------------------------------------------------- */
+> .apidocs .item .emits {
+>     background: #f9f9f9;
+>     border-color: #eaeaea;
+> }
+> 
+> /* -- Item "Returns" block -------------------------------------------------- */
+> .apidocs .item .returns .type,
+> .apidocs .item .returns .type a {
+>     font-size: 100%;
+>     margin: 0;
+> }
+> 
+> /* -- Class Constructor block ----------------------------------------------- */
+> .apidocs .constructor .item {
+>     border: none;
+>     padding-bottom: 0;
+> }
+> 
+> /* -- File Source View ------------------------------------------------------ */
+> .apidocs .file pre.code,
+> #doc .apidocs .file pre.prettyprint {
+>     background: inherit;
+>     border: none;
+>     overflow: visible;
+>     padding: 0;
+> }
+> 
+> .apidocs .L0,
+> .apidocs .L1,
+> .apidocs .L2,
+> .apidocs .L3,
+> .apidocs .L4,
+> .apidocs .L5,
+> .apidocs .L6,
+> .apidocs .L7,
+> .apidocs .L8,
+> .apidocs .L9 {
+>     background: inherit;
+> }
+> 
+> /* -- Submodule List -------------------------------------------------------- */
+> .apidocs .module-submodule-description {
+>     font-size: 12px;
+>     margin: 0.3em 0 1em;
+> }
+> 
+> .apidocs .module-submodule-description p:first-child { margin-top: 0; }
+> 
+> /* -- Sidebar TabView ------------------------------------------------------- */
+> #api-tabview { margin-top: 0.6em; }
+> 
+> #api-tabview-filter,
+> #api-tabview-panel {
+>     border: 1px solid #dfdfdf;
+> }
+> 
+> #api-tabview-filter {
+>     border-bottom: none;
+>     border-top: none;
+>     padding: 0.6em 10px 0 10px;
+> }
+> 
+> #api-tabview-panel { border-top: none; }
+> #api-filter { width: 97%; }
+> 
+> /* -- Content TabView ------------------------------------------------------- */
+> #classdocs .yui3-tabview-panel { border: none; }
+> 
+> /* -- Source File Contents -------------------------------------------------- */
+> .prettyprint li.L0,
+> .prettyprint li.L1,
+> .prettyprint li.L2,
+> .prettyprint li.L3,
+> .prettyprint li.L5,
+> .prettyprint li.L6,
+> .prettyprint li.L7,
+> .prettyprint li.L8 {
+>     list-style: decimal;
+> }
+> 
+> /* -- API options ----------------------------------------------------------- */
+> #api-options {
+>     font-size: 11px;
+>     margin-top: 2.2em;
+>     position: absolute;
+>     right: 1.5em;
+> }
+> 
+> /*#api-options label { margin-right: 0.6em; }*/
+> 
+> /* -- API list -------------------------------------------------------------- */
+> #api-list {
+>     margin-top: 1.5em;
+>     *zoom: 1;
+> }
+> 
+> .apis {
+>     font-size: 12px;
+>     line-height: 1.4;
+>     list-style: none;
+>     margin: 0;
+>     padding: 0.5em 0 0.5em 0.4em;
+> }
+> 
+> .apis a {
+>     border: 1px solid transparent;
+>     display: block;
+>     margin: 0 0 0 -4px;
+>     padding: 1px 4px 0;
+>     text-decoration: none;
+>     _border: none;
+>     _display: inline;
+> }
+> 
+> .apis a:hover,
+> .apis a:focus {
+>     background: #E8EDFC;
+>     background: -moz-linear-gradient(top, #e8edfc 0%, #becef7 100%);
+>     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#E8EDFC), color-stop(100%,#BECEF7));
+>     border-color: #AAC0FA;
+>     border-radius: 3px;
+>     color: #333;
+>     outline: none;
+> }
+> 
+> .api-list-item a:hover,
+> .api-list-item a:focus {
+>     font-weight: bold;
+>     text-shadow: 1px 1px 1px #fff;
+> }
+> 
+> .apis .message { color: #888; }
+> .apis .result a { padding: 3px 5px 2px; }
+> 
+> .apis .result .type {
+>     right: 4px;
+>     top: 7px;
+> }
+> 
+> .api-list-item .yui3-highlight {
+>     font-weight: bold;
+Only in server0.4/assets/css: weblookalike.css
+Only in server0.4/assets: favicon.png
+Only in server0.4/assets: img
+Only in server0.4/assets: index.html
+Only in server0.4/assets/js: apidocs.js
+Only in server0.4/assets/js: api-filter.js
+Only in server0.4/assets/js: api-list.js
+Only in server0.4/assets/js: api-search.js
+Only in yui7_default/assets/js: tabs.js
+diff -r yui7_default/layouts/main.handlebars server0.4/layouts/main.handlebars
+5c5
+<     <title>{{htmlTitle}}</title>
+---
+>     <title>Hotplate server API</title>
+8a9,11
+>     <link rel="stylesheet" href="{{projectAssets}}/css/weblookalike.css" id="site_styles">
+>     <link rel="stylesheet" href="/global/header.css" id="site_styles">
+> <!-- <link rel="shortcut icon" type="image/png" href="{{projectAssets}}/favicon.png"> -->
+12a16,43
+> 
+>     <!-- HEADER -->
+>     <div id="header_wrap" class="outer">
+> 
+>         <div class="main_menu">
+>              <span><a href="/">Home</a></span>
+>              <span><a href="/guide.html">Guide</a></span>
+>              <span><a href="/serverAPI/index.html">Server API</a></span>
+>              <span><a href="/clientAPI/index.html">Client API</a></span>
+>         </div>
+> 
+>         <header class="inner">
+>           <a id="forkme_banner" href="https://github.com/mercmobily/hotplate">View on GitHub</a>
+> 
+>             
+>           <h1 id="project_title">Hotplate server API</h1>
+>           <h2 id="project_tagline">Framework to create multi-homed SaaS with NodeJs, Express</h2>
+> 
+> 
+>             <section id="downloads">
+>               <a class="zip_download_link" href="https://github.com/mercmobily/hotplate/zipball/master">Download this project as a .zip file</a>
+>               <a class="tar_download_link" href="https://github.com/mercmobily/hotplate/tarball/master">Download this project as a tar.gz file</a>
+>             </section>
+>         </header>
+>     </div>
+> 
+> 
+> 
+16c47,58
+<             <h1><a href="{{projectRoot}}index.html"><img src="{{projectAssets}}/css/logo.png" width="117" height="52">{{title}}</a></h1>
+---
+> 
+> 
+> 
+> 
+>            <!-- 
+>             {{#if projectLogo}}
+>                 <h1><img src="{{projectLogo}}" title="{{projectName}}"></h1>
+>             {{else}}
+>                 <h1><img src="{{projectAssets}}/css/logo.png" title="{{projectName}}"></h1>
+>             {{/if}}
+>             -->
+> 
+22c64
+<     <div class="yui3-g">
+---
+>     <div id="bd" class="yui3-g">
+24,25c66,69
+<         <div id="sidebar" class="yui3-u">
+<             {{>sidebar}}
+---
+>         <div class="yui3-u-1-4">
+>             <div id="docs-sidebar" class="sidebar apidocs">
+>                 {{>sidebar}}
+>             </div>
+27,29c71,79
+< 
+<         <div id="main" class="yui3-u">
+<             <div class="content">{{>layout_content}}</div>
+---
+>         <div class="yui3-u-3-4">
+>             {{>options}}
+>             <div class="apidocs">
+>                 <div id="docs-main">
+>                     <div class="content">
+>                         {{>layout_content}}
+>                     </div>
+>                 </div>
+>             </div>
+36c86,90
+< <script src="{{projectAssets}}/js/tabs.js"></script>
+---
+> <script src="{{projectAssets}}/../api.js"></script>
+> <script src="{{projectAssets}}/js/api-filter.js"></script>
+> <script src="{{projectAssets}}/js/api-list.js"></script>
+> <script src="{{projectAssets}}/js/api-search.js"></script>
+> <script src="{{projectAssets}}/js/apidocs.js"></script>
+Only in server0.4/layouts: xhr.handlebars
+diff -r yui7_default/partials/attrs.handlebars server0.4/partials/attrs.handlebars
+1,20c1,72
+< <a name="attrs_{{name}}"></a>
+< <div class="attrs item">
+<     `{{name}}` {{#if type}}<strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>{{/if}}
+<     {{#if extended_from}}<em>`/* Extended from {{extended_from}} */`</em>{{/if}}
+<     {{#if overwritten_from}}<em>`/* Overwritten from {{name}} */`</em>{{/if}}
+<     <br>
+<     <span class="foundat"><a href="{{foundAt}}">`{{file}}:{{line}}`</a></span>
+<     {{{attrDescription}}}
+<     {{#if emit}}
+<     <div class="emits">
+<         Fires: <strong>`{{name}}Change(e)`</strong>
+<         <p>Fires when the value for the configuration attribute `{{name}}` is changed. You can listen for the event using the `on` method if you wish to be notified before the attribute's value has changed, or using the `after` method if you wish to be notified after the attribute's value has changed.</p>
+<         <strong>Parameters:</strong><br>
+<         `e` <strong>&lt;EventFacade&gt;</strong> An Event Facade object with the following attribute specific properties added:
+<         <ul>
+<             <li>`prevVal` The value of the attribute, prior to it being set</li>
+<             <li>`newVal` The value the attribute is to be set to</li>
+<             <li>`attrName` The name of the attribute being set</li>
+<             <li>`subAttrName` If setting a property within the attribute's value, the name of the sub-attribute property being set</li>
+<         </ul>
+---
+> <div id="attr_{{name}}" class="attr item{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if extended_from}} inherited{{/if}}">
+>     <a name="config_{{name}}"></a> {{! For backwards compatibility }}
+>     <h3 class="name"><code>{{name}}</code></h3>
+>     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+> 
+>     {{#if deprecated}}
+>         <span class="flag deprecated"{{#if deprecationMessage}} title="{{deprecationMessage}}"{{/if}}>deprecated</span>
+>     {{/if}}
+> 
+>     {{#if access}}
+>         <span class="flag {{access}}">{{access}}</span>
+>     {{/if}}
+> 
+>     {{#if final}}
+>         <span class="flag final">final</span>
+>     {{/if}}
+> 
+>     {{#if static}}
+>         <span class="flag static">static</span>
+>     {{/if}}
+> 
+>     {{#if optional}}
+>         <span class="flag optional">optional</span>
+>     {{/if}}
+> 
+>     {{#if required}}
+>         <span class="flag required">required</span>
+>     {{/if}}
+> 
+>     {{#if readonly}}
+>         <span class="flag readonly">readonly</span>
+>     {{/if}}
+> 
+>     <div class="meta">
+>         {{#if overwritten_from}}
+>             <p>Inherited from
+>             <a href="{{crossLinkRaw overwritten_from/class}}#attr_{{overwritten_from/name}}">
+>                 {{overwritten_from/class}}
+>             </a>
+>             {{#if foundAt}}
+>             but overwritten in
+>             {{/if}}
+>         {{else}}
+>             {{#if extended_from}}
+>                 <p>Inherited from
+>                 <a href="{{crossLinkRaw extended_from}}#attr_{{name}}">{{extended_from}}</a>:
+>             {{else}}
+>                 {{#providedBy}}
+>                     <p>Provided by the <a href="../modules/{{.}}.html">{{.}}</a> module.</p>
+>                 {{/providedBy}}
+>                 <p>
+>                 {{#if foundAt}}
+>                 Defined in
+>                 {{/if}}
+>             {{/if}}
+>         {{/if}}
+>         {{#if foundAt}}
+>         <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+>         {{/if}}
+>         </p>
+> 
+>         {{#if deprecationMessage}}
+>             <p>Deprecated: {{deprecationMessage}}</p>
+>         {{/if}}
+> 
+>         {{#if since}}
+>             <p>Available since {{since}}</p>
+>         {{/if}}
+>     </div>
+> 
+>     <div class="description">
+>         {{{attrDescription}}}
+21a74,129
+> 
+>     {{#if default}}
+>         <p><strong>Default:</strong> {{default}}</p>
+>     {{/if}}
+> 
+>     {{#if emit}}
+>         <div class="emits box">
+>             <h4>Fires event <code>{{name}}Change</code></h4>
+> 
+>             <p>
+>             Fires when the value for the configuration attribute `{{{name}}}` is
+>             changed. You can listen for the event using the `on` method if you
+>             wish to be notified before the attribute's value has changed, or
+>             using the `after` method if you wish to be notified after the
+>             attribute's value has changed.
+>             </p>
+> 
+>             <div class="params">
+>                 <h4>Parameters:</h4>
+> 
+>                 <ul class="params-list">
+>                     <li class="param">
+>                         <code class="param-name">e</code>
+>                         <span class="type">{{#crossLink "EventFacade"}}{{/crossLink}}</span>
+> 
+>                         <div class="param-description">
+>                             An Event Facade object with the following
+>                             attribute-specific properties added:
+>                         </div>
+> 
+>                         <ul class="params-list">
+>                             <li class="param">
+>                                 <code class="param-name">prevVal</code>
+>                                 <span class="type">Any</span>
+>                                 <div class="param-description">The value of the attribute, prior to it being set.</div>
+>                             </li>
+>                             <li class="param">
+>                                 <code class="param-name">newVal</code>
+>                                 <span class="type">Any</span>
+>                                 <div class="param-description">The value the attribute is to be set to.</div>
+>                             </li>
+>                             <li class="param">
+>                                 <code class="param-name">attrName</code>
+>                                 <span class="type">{{#crossLink "String"}}{{/crossLink}}</span>
+>                                 <div class="param-description">The name of the attribute being set.</div>
+>                             </li>
+>                             <li class="param">
+>                                 <code class="param-name">subAttrName</code>
+>                                 <span class="type">{{#crossLink "String"}}{{/crossLink}}</span>
+>                                 <div class="param-description">If setting a property within the attribute's value, the name of the sub-attribute property being set.</div>
+>                             </li>
+>                         </ul>
+>                     </li>
+>                 </ul>
+>             </div>
+>         </div>
+22a131,140
+> 
+>     {{#example}}
+>         <div class="example">
+>             <h4>Example:</h4>
+> 
+>             <div class="example-content">
+>                 {{{.}}}
+>             </div>
+>         </div>
+>     {{/example}}
+diff -r yui7_default/partials/classes.handlebars server0.4/partials/classes.handlebars
+1,20c1,38
+< <h4>Class {{moduleName}}</h4>
+< {{#if uses}}
+<     Uses:
+<     {{#each uses}}
+<         <a href="{{this}}.html">{{this}}</a>
+<     {{/each}}
+<     <br>
+< {{/if}}
+< {{#if extension_for}}
+<     Extension For:
+<     {{#each extension_for}}
+<         <a href="{{this}}.html">{{this}}</a>
+<     {{/each}}
+<     <br>
+< {{/if}}
+< {{#if extends}}
+<     Extends: {{#crossLink extends}}{{/crossLink}}<br>
+< {{/if}}
+< <span class="foundat">Class defined in: <a href="{{foundAt}}">`{{file}}:{{line}}`</a></span>
+< <div class="intro">{{{classDescription}}}</div>
+---
+> <h1>{{name}} Class</h1>
+> <div class="box meta">
+>     {{#if uses}}
+>         <div class="uses">
+>             Uses
+>             <ul class="inline commas">
+>                 {{#uses}}
+>                     <li><a href="{{.}}.html">{{.}}</a></li>
+>                 {{/uses}}
+>             </ul>
+>         </div>
+>     {{/if}}
+> 
+>     {{#if extends}}
+>         <div class="extends">
+>             Extends {{#crossLink extends}}{{/crossLink}}
+>         </div>
+>     {{/if}}
+> 
+>     {{#if foundAt}}
+>         <div class="foundat">
+>             Defined in: <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+>         </div>
+>     {{/if}}
+> 
+>     {{#if module}}
+>         {{#if submodule}}
+>             Module: {{#crossLinkModule submodule}}{{/crossLinkModule}}<br>
+>             Parent Module: {{#crossLinkModule module}}{{/crossLinkModule}}
+>         {{else}}
+>             Module: {{#crossLinkModule module}}{{/crossLinkModule}}
+>         {{/if}}
+>     {{/if}}
+> 
+>     {{#if since}}
+>         <p>Available since {{since}}</p>
+>     {{/if}}
+> </div>
+22,25c40,49
+< {{#if is_constructor}}
+<     {{#is_constructor}}
+< {{>method}}
+<     {{/is_constructor}}
+---
+> {{#if deprecated}}
+>     <div class="box deprecated">
+>         <p>
+>         {{#if deprecationMessage}}
+>             <strong>Deprecated:</strong> {{deprecationMessage}}
+>         {{else}}
+>             This class is deprecated.
+>         {{/if}}
+>         </p>
+>     </div>
+28,29c52,66
+< <div id="classdocs">
+<     <ul>
+---
+> <div class="box intro">
+>     {{{classDescription}}}
+> </div>
+> 
+> {{#is_constructor}}
+>     <div class="constructor">
+>         <h2>Constructor</h2>
+>         {{>method}}
+>     </div>
+> {{/is_constructor}}
+> 
+> <div id="classdocs" class="tabview">
+>     <ul class="api-class-tabs">
+>         <li class="api-class-tab index"><a href="#index">Index</a></li>
+> 
+31c68
+<         <li><a href="#methods">Methods</a></li>
+---
+>             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+34c71
+<         <li><a href="#props">Properties</a></li>
+---
+>             <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+37c74
+<         <li><a href="#attrs">Attributes</a></li>
+---
+>             <li class="api-class-tab attrs"><a href="#attrs">Attributes</a></li>
+40c77
+<         <li><a href="#events">Events</a></li>
+---
+>             <li class="api-class-tab events"><a href="#events">Hooks</a></li>
+42a80
+> 
+43a82,162
+>         <div id="index" class="api-class-tabpanel index">
+>             <h2 class="off-left">Item Index</h2>
+> 
+>             {{#if methods}}
+>                 <div class="index-section methods">
+>                     <h3>Methods</h3>
+> 
+>                     <ul class="index-list methods{{#if extends}} extends{{/if}}">
+>                         {{#methods}}
+>                             <li class="index-item method{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if overwritten_from}} inherited{{/if}}{{#if extended_from}} inherited{{/if}}">
+>                                 <a href="#method_{{name}}">{{name}}</a>
+> 
+>                                 {{#if static}}
+>                                     <span class="flag static">static</span>
+>                                 {{/if}}
+>                                 {{#if deprecated}}
+>                                     <span class="flag deprecated">deprecated</span>
+>                                 {{/if}}
+>                             </li>
+>                         {{/methods}}
+>                     </ul>
+>                 </div>
+>             {{/if}}
+> 
+>             {{#if properties}}
+>                 <div class="index-section properties">
+>                     <h3>Properties</h3>
+> 
+>                     <ul class="index-list properties{{#if extends}} extends{{/if}}">
+>                         {{#properties}}
+>                             <li class="index-item property{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if overwritten_from}} inherited{{/if}}{{#if extended_from}} inherited{{/if}}">
+>                                 <a href="#property_{{name}}">{{name}}</a>
+> 
+>                                 {{#if static}}
+>                                     <span class="flag static">static</span>
+>                                 {{/if}}
+>                                 {{#if deprecated}}
+>                                     <span class="flag deprecated">deprecated</span>
+>                                 {{/if}}
+>                             </li>
+>                         {{/properties}}
+>                     </ul>
+>                 </div>
+>             {{/if}}
+> 
+>             {{#if attrs}}
+>                 <div class="index-section attrs">
+>                     <h3>Attributes</h3>
+> 
+>                     <ul class="index-list attrs{{#if extends}} extends{{/if}}">
+>                         {{#attrs}}
+>                             <li class="index-item attr{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if overwritten_from}} inherited{{/if}}{{#if extended_from}} inherited{{/if}}">
+>                                 <a href="#attr_{{name}}">{{name}}</a>
+>                             </li>
+>                         {{/attrs}}
+>                     </ul>
+>                 </div>
+>             {{/if}}
+> 
+>             {{#if events}}
+>                 <div class="index-section events">
+>                     <h3>Hooks</h3>
+> 
+>                     <ul class="index-list events{{#if extends}} extends{{/if}}">
+>                         {{#events}}
+>                             <li class="index-item event{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if overwritten_from}} inherited{{/if}}{{#if extended_from}} inherited{{/if}}">
+>                                 <a href="#event_{{name}}">{{name}}</a>
+> 
+>                                 {{#if static}}
+>                                     <span class="flag static">static</span>
+>                                 {{/if}}
+>                                 {{#if deprecated}}
+>                                     <span class="flag deprecated">deprecated</span>
+>                                 {{/if}}
+>                             </li>
+>                         {{/events}}
+>                     </ul>
+>                 </div>
+>             {{/if}}
+>         </div>
+> 
+45,48c164,169
+<             <div id="methods">
+<             {{#methods}}
+< {{>method}}
+<             {{/methods}}
+---
+>             <div id="methods" class="api-class-tabpanel">
+>                 <h2 class="off-left">Methods</h2>
+> 
+>                 {{#methods}}
+>                     {{>method}}
+>                 {{/methods}}
+50a172
+> 
+52,55c174,179
+<             <div id="props">
+<             {{#properties}}
+<                 {{>props}}
+<             {{/properties}}
+---
+>             <div id="properties" class="api-class-tabpanel">
+>                 <h2 class="off-left">Properties</h2>
+> 
+>                 {{#properties}}
+>                     {{>props}}
+>                 {{/properties}}
+57a182
+> 
+59,62c184,189
+<             <div id="attrs">
+<             {{#attrs}}
+<                 {{>attrs}}
+<             {{/attrs}}
+---
+>             <div id="attrs" class="api-class-tabpanel">
+>                 <h2 class="off-left">Attributes</h2>
+> 
+>                 {{#attrs}}
+>                     {{>attrs}}
+>                 {{/attrs}}
+64a192
+> 
+66,69c194,199
+<             <div id="events">
+<             {{#events}}
+<                 {{>events}}
+<             {{/events}}
+---
+>             <div id="events" class="api-class-tabpanel">
+>                 <h2 class="off-left">Hooks</h2>
+> 
+>                 {{#events}}
+>                     {{>events}}
+>                 {{/events}}
+diff -r yui7_default/partials/events.handlebars server0.4/partials/events.handlebars
+1,15c1,29
+< <a name="events_{{name}}"></a>
+< <div class="events item">
+<     `{{name}}` {{#if type}}<strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>{{/if}}
+<     {{#if extended_from}}<em>`/* Extended from {{extended_from}} */</em>`{{/if}}
+<     {{#if overwritten_from}}<em>`/* Overwritten from {{name}} */`</em>{{/if}}
+<     <br>
+<     <span class="foundat"><a href="{{foundAt}}">`{{file}}:{{line}}`</a></span>
+<     {{{eventDescription}}}
+<     {{#if params}}
+<     <strong>Extra event object properties:</strong>
+<     <ul>
+<     {{#params}}
+<         <li>
+<         {{#if optional}}
+<             `[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>
+---
+> <div id="event_{{name}}" class="events item{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if extended_from}} inherited{{/if}}">
+>     <h3 class="name"><code>{{name}}</code></h3>
+>     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+> 
+>     {{#if deprecated}}
+>         <span class="flag deprecated"{{#if deprecationMessage}} title="{{deprecationMessage}}"{{/if}}>deprecated</span>
+>     {{/if}}
+> 
+>     {{#if access}}
+>         <span class="flag {{access}}">{{access}}</span>
+>     {{/if}}
+> 
+>     {{#if final}}
+>         <span class="flag final">final</span>
+>     {{/if}}
+> 
+>     {{#if static}}
+>         <span class="flag static">static</span>
+>     {{/if}}
+> 
+>     <div class="meta">
+>         {{#if overwritten_from}}
+>             <p>Inherited from
+>             <a href="{{crossLinkRaw overwritten_from/class}}#event_{{overwritten_from/name}}">
+>                 {{overwritten_from/class}}
+>             </a>
+>             {{#if foundAt}}
+>             but overwritten in
+>             {{/if}}
+17c31,42
+<             `{{name}}` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>
+---
+>             {{#if extended_from}}
+>                 <p>Inherited from
+>                 <a href="{{crossLinkRaw extended_from}}#event_{{name}}">{{extended_from}}</a>:
+>             {{else}}
+>                 {{#providedBy}}
+>                     <p>Provided by the <a href="../modules/{{.}}.html">{{.}}</a> module.</p>
+>                 {{/providedBy}}
+>                 <p>
+>                 {{#if foundAt}}
+>                 Defined in
+>                 {{/if}}
+>             {{/if}}
+19,20c44,54
+<         {{#if multiple}}
+<             <abbr title="Denotes that this argument can contain (n) number">(*..n)</abbr>
+---
+>         {{#if foundAt}}
+>         <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+>         {{/if}}
+>         </p>
+> 
+>         {{#if deprecationMessage}}
+>             <p>Deprecated: {{deprecationMessage}}</p>
+>         {{/if}}
+> 
+>         {{#if since}}
+>             <p>Available since {{since}}</p>
+22,27c56,122
+<         {{{description}}}
+<             {{#if props}}
+<             <ul>
+<             {{#props}}
+<                 <li>`{{name}}` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong> {{{description}}}
+<             {{/props}}
+---
+>     </div>
+> 
+>     <div class="description">
+>         {{{eventDescription}}}
+>     </div>
+> 
+>     {{#if params}}
+>         <div class="params">
+>             <h4>Event Payload:</h4>
+> 
+>             <ul class="params-list">
+>             {{#params}}
+>                 <li class="param">
+>                     {{#if optional}}
+>                         <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                         <span class="flag optional" title="This parameter is optional.">optional</span>
+>                     {{else}}
+>                         <code class="param-name">{{name}}</code>
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                     {{/if}}
+> 
+>                     {{#if multiple}}
+>                         <span class="flag multiple" title="This parameter may occur one or more times.">Multiple</span>
+>                     {{/if}}
+> 
+>                     <div class="param-description">
+>                         {{{description}}}
+>                     </div>
+> 
+>                     {{#if props}}
+>                         <ul class="params-list">
+>                             {{#props}}
+>                             <li class="param">
+>                                 {{#if optional}}
+>                                     <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                     <span class="flag optional" title="This parameter is optional.">optional</span>
+>                                 {{else}}
+>                                     <code class="param-name">{{name}}</code>
+>                                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                 {{/if}}
+> 
+>                                 <div class="param-description">
+>                                     {{{description}}}
+>                                 </div>
+> 
+>                                 {{#if props}}
+>                                     <ul class="params-list">
+>                                         {{#props}}
+>                                         <li class="param">
+>                                             <code class="param-name">{{name}}</code>
+>                                             <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+> 
+>                                             <div class="param-description">
+>                                                 {{{description}}}
+>                                             </div>
+>                                         </li>
+>                                         {{/props}}
+>                                     </ul>
+>                                 {{/if}}
+>                             </li>
+>                             {{/props}}
+>                         </ul>
+>                     {{/if}}
+>                 </li>
+>             {{/params}}
+29,32c124
+<             {{/if}}
+<         </li>
+<     {{/params}}
+<     </ul>
+---
+>         </div>
+34d125
+< </div>
+35a127,137
+> 
+>     {{#example}}
+>         <div class="example">
+>             <h4>Example:</h4>
+> 
+>             <div class="example-content">
+>                 {{{.}}}
+>             </div>
+>         </div>
+>     {{/example}}
+> </div>
+diff -r yui7_default/partials/files.handlebars server0.4/partials/files.handlebars
+1c1
+< <h4>{{fileName}}</h4>
+---
+> <h1 class="file-heading">File: {{fileName}}</h1>
+3c3,4
+< <pre class="code prettyprint linenums">
+---
+> <div class="file">
+>     <pre class="code prettyprint linenums">
+5,6c6,7
+< </pre>
+< 
+---
+>     </pre>
+> </div>
+diff -r yui7_default/partials/index.handlebars server0.4/partials/index.handlebars
+1,2c1,21
+< <h3>API Docs - Main Index</h3>
+< <p>Something smart and pretty should probably go here.</p>
+---
+>     <div class="apidocs">
+>         <div id="docs-main" class="content">
+>             <p>
+>             Browse to a module or class using the sidebar to view its API documentation.
+>             </p>
+> 
+>             <h2>Keyboard Shortcuts</h2>
+> 
+>             <ul>
+>                 <li><p>Press <kbd>s</kbd> to focus the API search box.</p></li>
+> 
+>                 <li><p>Use <kbd>Up</kbd> and <kbd>Down</kbd> to select classes, modules, and search results.</p></li>
+> 
+>                 <li class="mac-only"><p>With the API search box or sidebar focused, use <kbd><span class="cmd">&#x2318;</span>-Left</kbd> or <kbd><span class="cmd">&#x2318;</span>-Right</kbd> to switch sidebar tabs.</p></li>
+> 
+>                 <li class="pc-only"><p>With the API search box or sidebar focused, use <kbd>Ctrl+Left</kbd> and <kbd>Ctrl+Right</kbd> to switch sidebar tabs.</p></li>
+>             </ul>
+>         </div>
+>     </div>
+> 
+> 
+diff -r yui7_default/partials/method.handlebars server0.4/partials/method.handlebars
+1,7c1,17
+< <a name="methods_{{name}}"></a>
+< <div class="method item{{#if access}} {{access}}{{/if}}">
+<     {{#if final}}<code>final</code> {{/if}}{{#if returnType}}{{#crossLink returnType}}{{/crossLink}} {{/if}}<strong class="name">`{{name}}`</strong>( `{{paramsList}} ` ) {{#if access}}<em>`/* {{access}} method */`</em>{{/if}}
+<     <br>
+<     <span class="foundat">
+<     {{#if overwritten_from}}
+<         Defined in <a href="{{overwritten_from/class}}.html#method_{{overwritten_from/name}}">{{overwritten_from/class}}</a> but overwritten locally: 
+---
+> <div id="method_{{name}}" class="method item{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if extended_from}} inherited{{/if}}">
+>     <h3 class="name"><code>{{name}}</code></h3>
+> 
+>     {{#if params}}
+>         <div class="args">
+>             <span class="paren">(</span><ul class="args-list inline commas">
+>             {{#params}}
+>                 <li class="arg">
+>                     {{#if optional}}
+>                         <code class="optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                     {{else}}
+>                         <code>{{name}}</code>
+>                     {{/if}}
+>                 </li>
+>             {{/params}}
+>             </ul><span class="paren">)</span>
+>         </div>
+9c19
+<         {{#if extended_from}} Defined in <a href="{{extended_from}}.html#method_{{name}}">{{extended_from}}</a>: {{/if}}
+---
+>         <span class="paren">()</span>
+11,20c21,60
+<         <a href="{{foundAt}}">`{{file}}:{{line}}`</a>
+<     </span><br>
+<     {{{methodDescription}}}
+<     {{#if params}}
+<     <strong>Parameters:</strong>
+<     <ul class="params">
+<     {{#params}}
+<         <li>
+<         {{#if optional}}
+<             `[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>
+---
+> 
+>     {{#if return}}
+>         <span class="returns-inline">
+>             <span class="type">{{#crossLink returnType}}{{/crossLink}}</span>
+>         </span>
+>     {{/if}}
+> 
+>     {{#if deprecated}}
+>         <span class="flag deprecated"{{#if deprecationMessage}} title="{{deprecationMessage}}"{{/if}}>deprecated</span>
+>     {{/if}}
+> 
+>     {{#if access}}
+>         <span class="flag {{access}}">{{access}}</span>
+>     {{/if}}
+> 
+>     {{#if final}}
+>         <span class="flag final">final</span>
+>     {{/if}}
+> 
+>     {{#if static}}
+>         <span class="flag static">static</span>
+>     {{/if}}
+> 
+>     {{#if chainable}}
+>         <span class="flag chainable">chainable</span>
+>     {{/if}}
+> 
+>     {{#if async}}
+>         <span class="flag async">async</span>
+>     {{/if}}
+> 
+>     <div class="meta">
+>         {{#if overwritten_from}}
+>             <p>Inherited from
+>             <a href="{{crossLinkRaw overwritten_from/class}}#method_{{overwritten_from/name}}">
+>                 {{overwritten_from/class}}
+>             </a>
+>             {{#if foundAt}}
+>             but overwritten in
+>             {{/if}}
+22c62,73
+<             `{{name}}` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong>
+---
+>             {{#if extended_from}}
+>                 <p>Inherited from
+>                 <a href="{{crossLinkRaw extended_from}}#method_{{name}}">{{extended_from}}</a>:
+>             {{else}}
+>                 {{#providedBy}}
+>                     <p>Provided by the <a href="../modules/{{.}}.html">{{.}}</a> module.</p>
+>                 {{/providedBy}}
+>                 <p>
+>                 {{#if foundAt}}
+>                 Defined in
+>                 {{/if}}
+>             {{/if}}
+24,25c75,76
+<         {{#if multiple}}
+<             <abbr title="Denotes that this argument can contain (n) number">(*..n)</abbr>
+---
+>         {{#if foundAt}}
+>         <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+27,38c78,158
+<         {{{description}}}
+<             {{#if props}}
+<             <ul>
+<             {{#props}}
+<                 <li>`{{name}}` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong> {{{description}}}
+<                 {{#if props}}
+<                     <ul>
+<                         {{#props}}
+<                             <li>`{{name}}` <strong>&lt;{{#crossLink type}}{{/crossLink}}&gt;</strong> {{{description}}} </li>
+<                         {{/props}}
+<                     </ul>
+<                 {{/if}}
+---
+>         </p>
+> 
+> 
+>         {{#if deprecationMessage}}
+>             <p>Deprecated: {{deprecationMessage}}</p>
+>         {{/if}}
+> 
+>         {{#if since}}
+>             <p>Available since {{since}}</p>
+>         {{/if}}
+>     </div>
+> 
+>     <div class="description">
+>         {{{methodDescription}}}
+>     </div>
+> 
+>     {{#if params}}
+>         <div class="params">
+>             <h4>Parameters:</h4>
+> 
+>             <ul class="params-list">
+>             {{#params}}
+>                 <li class="param">
+>                     {{#if optional}}
+>                         <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                         <span class="flag optional" title="This parameter is optional.">optional</span>
+>                     {{else}}
+>                         <code class="param-name">{{name}}</code>
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                     {{/if}}
+> 
+>                     {{#if multiple}}
+>                         <span class="flag multiple" title="This argument may occur one or more times.">multiple</span>
+>                     {{/if}}
+> 
+>                     <div class="param-description">
+>                         {{{description}}}
+>                     </div>
+> 
+>                     {{#if props}}
+>                         <ul class="params-list">
+>                             {{#props}}
+>                             <li class="param">
+>                                 {{#if optional}}
+>                                     <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                     <span class="flag optional" title="This parameter is optional.">optional</span>
+>                                 {{else}}
+>                                     <code class="param-name">{{name}}</code>
+>                                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                 {{/if}}
+> 
+>                                 <div class="param-description">
+>                                     {{{description}}}
+>                                 </div>
+> 
+>                                 {{#if props}}
+>                                     <ul class="params-list">
+>                                         {{#props}}
+>                                         <li class="param">
+>                                             {{#if optional}}
+>                                                 <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                                                 <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                                 <span class="flag optional" title="This parameter is optional.">optional</span>
+>                                             {{else}}
+>                                                 <code class="param-name">{{name}}</code>
+>                                                 <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                             {{/if}}
+> 
+>                                             <div class="param-description">
+>                                                 {{{description}}}
+>                                             </div>
+>                                         </li>
+>                                         {{/props}}
+>                                     </ul>
+>                                 {{/if}}
+>                             </li>
+>                             {{/props}}
+>                         </ul>
+>                     {{/if}}
+40c160
+<             {{/props}}
+---
+>             {{/params}}
+42,45c162
+<             {{/if}}
+<         </li>
+<     {{/params}}
+<     </ul>
+---
+>         </div>
+47c164
+<     {{#if return}}
+---
+> 
+49c166,181
+<     <br><div class="returns"><strong>Returns:</strong> {{#if type}}&lt;{{#crossLink type}}{{/crossLink}}&gt; {{/if}}{{{description}}}</div>
+---
+>         <div class="returns">
+>             <h4>Returns:</h4>
+> 
+>             <div class="returns-description">
+>                 {{#if description}}
+>                     {{#if type}}
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>:
+>                     {{/if}}
+>                     {{{description}}}
+>                 {{else}}
+>                     {{#if type}}
+>                         <span class="type">{{#crossLink type}}{{/crossLink}}</span>:
+>                     {{/if}}
+>                 {{/if}}
+>             </div>
+>         </div>
+51,60c183,192
+<     {{/if}}
+<     {{#if throws}}
+<     {{#throws}}
+<     <br><div class="throws"><strong>Throws:</strong> {{#if type}}&lt;{{#crossLink type}}{{/crossLink}}&gt; {{/if}}{{{description}}}</div>
+<     {{/throws}}
+<     {{/if}}
+<     {{#if example}}
+<         <h5>Example</h5>
+<         {{{example}}}
+<     {{/if}}
+---
+> 
+>     {{#example}}
+>         <div class="example">
+>             <h4>Example:</h4>
+> 
+>             <div class="example-content">
+>                 {{{.}}}
+>             </div>
+>         </div>
+>     {{/example}}
+diff -r yui7_default/partials/module.handlebars server0.4/partials/module.handlebars
+0a1,7
+> <h1>{{name}} Module</h1>
+> <div class="box clearfix meta">
+>     {{#extra}}
+>         {{#selleck}}
+>             <a class="button link-docs" href="/yui/docs/{{name}}">User Guide &amp; Examples</a>
+>         {{/selleck}}
+>     {{/extra}}
+2,3c9,54
+< <h2>{{moduleName}}</h2>
+< <div class="intro">{{{moduleDescription}}}</div>
+---
+>     {{#if requires}}
+>         <div class="uses">
+>             Requires
+>             <ul class="inline commas">
+>                 {{#requires}}
+>                     <li>{{#crossLinkModule .}}{{/crossLinkModule}}</li>
+>                 {{/requires}}
+>             </ul>
+>         </div>
+>     {{/if}}
+> 
+>     {{#if foundAt}}
+>         <div class="foundat">
+>             Defined in: <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+>         </div>
+>     {{/if}}
+> 
+>     {{#if since}}
+>         <p>Available since {{since}}</p>
+>     {{/if}}
+> </div>
+> 
+> {{#if deprecated}}
+>     <div class="box deprecated">
+>         <p>
+>         {{#if deprecationMessage}}
+>             <strong>Deprecated:</strong> {{deprecationMessage}}
+>         {{else}}
+>             This module is deprecated.
+>         {{/if}}
+>         </p>
+>     </div>
+> {{/if}}
+> 
+> <div class="box intro">
+>     {{{moduleDescription}}}
+> </div>
+> 
+> {{#example}}
+>     <div class="example">
+>         <h4>Example:</h4>
+>         <div class="example-content">
+>             {{{.}}}
+>         </div>
+>     </div>
+> {{/example}}
+8,13c59,69
+<         <p>This module has the following classes:</p>
+<         <ul>
+<         {{#moduleClasses}}
+<             <li><a href="{{../projectRoot}}classes/{{name}}.html">{{displayName}}</a></li>
+<         {{/moduleClasses}}
+<         </ul>
+---
+>             <p>This module provides the following classes:</p>
+> 
+>             <ul class="module-classes">
+>             {{#moduleClasses}}
+>                 <li class="module-class">
+>                     <a href="{{../projectRoot}}classes/{{name}}.html">
+>                         {{displayName}}
+>                     </a>
+>                 </li>
+>             {{/moduleClasses}}
+>             </ul>
+15a72
+> 
+18,23c75,89
+<         <p>This module has the following submodules:</p>
+<         <ul>
+<         {{#subModules}}
+<             <li id="{{name}}"><a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a><p>{{{description}}}</p></li>
+<         {{/subModules}}
+<         </ul>
+---
+>             <p>This module is a rollup of the following modules:</p>
+> 
+>             <ul class="module-submodules">
+>             {{#subModules}}
+>                 <li class="module-submodule">
+>                     <a href="{{../projectRoot}}modules/{{name}}.html">
+>                         {{displayName}}
+>                     </a>
+> 
+>                     <div class="module-submodule-description">
+>                         {{{description}}}
+>                     </div>
+>                 </li>
+>             {{/subModules}}
+>             </ul>
+27,28d92
+< <br><br>
+< <span class="foundat">Module description found: <a href="{{foundAt}}">`{{file}}:{{line}}`</a></span>
+Only in server0.4/partials: options.handlebars
+diff -r yui7_default/partials/props.handlebars server0.4/partials/props.handlebars
+1,8c1,117
+< <a name="props_{{name}}"></a>
+< <div class="props item">
+<     `{{name}}` &lt;<strong>{{#crossLink type}}{{/crossLink}}</strong>&gt;{{#if final}} <em>(final)</em>{{/if}}{{#if static}} <em>(static)</em>{{/if}}<br>
+<     <span class="foundat"><a href="{{foundAt}}">`{{file}}:{{line}}`</a></span>
+<     {{{propertyDescription}}}
+<     {{#if example}}
+<         <h5>Example</h5>
+<         {{{example}}}
+---
+> <div id="property_{{name}}" class="property item{{#if access}} {{access}}{{/if}}{{#if deprecated}} deprecated{{/if}}{{#if extended_from}} inherited{{/if}}">
+>     <h3 class="name"><code>{{name}}</code></h3>
+>     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+> 
+>     {{#if deprecated}}
+>         <span class="flag deprecated"{{#if deprecationMessage}} title="{{deprecationMessage}}"{{/if}}>deprecated</span>
+>     {{/if}}
+> 
+>     {{#if access}}
+>         <span class="flag {{access}}">{{access}}</span>
+>     {{/if}}
+> 
+>     {{#if final}}
+>         <span class="flag final">final</span>
+>     {{/if}}
+> 
+>     {{#if static}}
+>         <span class="flag static">static</span>
+>     {{/if}}
+> 
+>     <div class="meta">
+>         {{#if overwritten_from}}
+>             <p>Inherited from
+>             <a href="{{crossLinkRaw overwritten_from/class}}#property_{{overwritten_from/name}}">
+>                 {{overwritten_from/class}}
+>             </a>
+>             {{#if foundAt}}
+>             but overwritten in
+>             {{/if}}
+>         {{else}}
+>             {{#if extended_from}}
+>                 <p>Inherited from
+>                 <a href="{{crossLinkRaw extended_from}}#property_{{name}}">{{extended_from}}</a>:
+>             {{else}}
+>                 {{#providedBy}}
+>                     <p>Provided by the <a href="../modules/{{.}}.html">{{.}}</a> module.</p>
+>                 {{/providedBy}}
+>                 <p>
+>                 {{#if foundAt}}
+>                 Defined in
+>                 {{/if}}
+>             {{/if}}
+>         {{/if}}
+>         {{#if foundAt}}
+>         <a href="{{foundAt}}">`{{{file}}}:{{{line}}}`</a>
+>         {{/if}}
+>         </p>
+> 
+>         {{#if deprecationMessage}}
+>             <p>Deprecated: {{deprecationMessage}}</p>
+>         {{/if}}
+> 
+>         {{#if since}}
+>             <p>Available since {{since}}</p>
+>         {{/if}}
+>     </div>
+> 
+>     <div class="description">
+>         {{{propertyDescription}}}
+>     </div>
+> 
+>     {{#if default}}
+>         <p><strong>Default:</strong> {{default}}</p>
+>     {{/if}}
+> 
+>     {{#example}}
+>         <div class="example">
+>             <h4>Example:</h4>
+> 
+>             <div class="example-content">
+>                 {{{.}}}
+>             </div>
+>         </div>
+>     {{/example}}
+> 
+>     {{#if subprops}}
+>         <h4>Sub-properties:</h4>
+> 
+>         <ul class="params-list">
+>             {{#subprops}}
+>             <li class="param">
+>                 {{#if optional}}
+>                     <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                     <span class="flag optional" title="This property is optional.">optional</span>
+>                 {{else}}
+>                     <code class="param-name">{{name}}</code>
+>                     <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                 {{/if}}
+> 
+>                 <div class="param-description">
+>                     {{{description}}}
+>                 </div>
+> 
+>                 {{#if subprops}}
+>                     <ul class="params-list">
+>                         {{#subprops}}
+>                         <li class="param">
+>                             {{#if optional}}
+>                                 <code class="param-name optional">[{{name}}{{#if optdefault}}={{optdefault}}{{/if}}]</code>
+>                                 <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                                 <span class="flag optional" title="This property is optional.">optional</span>
+>                             {{else}}
+>                                 <code class="param-name">{{name}}</code>
+>                                 <span class="type">{{#crossLink type}}{{/crossLink}}</span>
+>                             {{/if}}
+> 
+>                             <div class="param-description">
+>                                 {{{description}}}
+>                             </div>
+>                         </li>
+>                         {{/subprops}}
+>                     </ul>
+>                 {{/if}}
+>             </li>
+>             {{/subprops}}
+>         </ul>
+diff -r yui7_default/partials/sidebar.handlebars server0.4/partials/sidebar.handlebars
+1,17c1,6
+< <div id="modules" class="sidebox">
+<     <div class="hd">
+<         <h2 class="no-toc">Modules</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+<             {{#modules}}
+<                 <li><a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a>
+<                 {{#if submodules}}
+<                     <ul>
+<                         {{#submodules}}
+<                             <li><a href="{{../../../projectRoot}}modules/{{../name}}.html#{{displayName}}">{{displayName}}</a></li>
+<                         {{/submodules}}
+<                     </ul>
+<                 {{/if}}
+<                 </li>
+<             {{/modules}}
+---
+> <div id="api-list">
+>     <h2 class="off-left">APIs</h2>
+>     <div id="api-tabview" class="tabview">
+>         <ul class="tabs">
+>             <li><a href="#api-classes">Classes</a></li>
+>             <li><a href="#api-modules">Modules</a></li>
+19,20d7
+<     </div>
+< </div>
+22,27c9,14
+< <div id="classes" class="sidebox">
+<     <div class="hd">
+<         <h2 class="no-toc">Classes</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+---
+>         <div id="api-tabview-filter">
+>             <input type="search" id="api-filter" placeholder="Type to filter APIs">
+>         </div>
+> 
+>         <div id="api-tabview-panel">
+>             <ul id="api-classes" class="apis classes">
+31,63c18
+<         </ul>
+<     </div>
+< </div>
+< 
+< {{#if methods}}
+< <div id="methods-on-page" class="sidebox on-page">
+<     <div class="hd">
+<         <h2 class="no-toc">Methods On Page</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+<             {{#methods}}
+<                 <li><a href="#methods_{{name}}">{{name}}</a></li>
+<             {{/methods}}
+<         </ul>
+<     </div>
+< </div>
+< {{/if}}
+< 
+< {{#if events}}
+< <div id="events-on-page" class="sidebox on-page">
+<     <div class="hd">
+<         <h2 class="no-toc">Events On Page</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+<             {{#events}}
+<                 <li><a href="#events_{{name}}">{{name}}</a></li>
+<             {{/events}}
+<         </ul>
+<     </div>
+< </div>
+< {{/if}}
+---
+>             </ul>
+65,75c20,25
+< {{#if props}}
+< <div id="props-on-page" class="sidebox">
+<     <div class="hd">
+<         <h2 class="no-toc">Props On Page</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+<             {{#events}}
+<                 <li><a href="#props_{{name}}">{{name}}</a></li>
+<             {{/events}}
+<         </ul>
+---
+>             <ul id="api-modules" class="apis modules">
+>             {{#allModules}}
+>                 <li><a href="{{../projectRoot}}modules/{{name}}.html">{{displayName}}</a></li>
+>             {{/allModules}}
+>             </ul>
+>         </div>
+78,105d27
+< {{/if}}
+< 
+< {{#if attributes}}
+< <div id="attrs-on-page" class="sidebox on-page">
+<     <div class="hd">
+<         <h2 class="no-toc">Attributes On Page</h2>
+<     </div>
+<     <div class="bd">
+<         <ul>
+<             {{#events}}
+<                 <li><a href="#attrs_{{name}}">{{name}}</a></li>
+<             {{/events}}
+<         </ul>
+<     </div>
+< </div>
+< {{/if}}
+< 
+< {{#if fileTree}}
+< <div id="fileTree" class="sidebox">
+<     <div class="hd">
+<         <h2 class="no-toc">Files</h2>
+<     </div>
+<     <div class="bd">
+<         {{#buildFileTree fileTree}}{{/buildFileTree}}
+<     </div>
+< </div>
+< {{/if}}
+< 
+diff -r yui7_default/theme.json server0.4/theme.json
+2,3c2,3
+<     "yuiGridsUrl": "http://yui.yahooapis.com/3.8.0pr2/build/cssgrids/cssgrids-min.css",
+<     "yuiSeedUrl": "http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"
+---
+>     "yuiGridsUrl": "http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css",
+>     "yuiSeedUrl": "http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"
