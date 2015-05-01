@@ -72,11 +72,11 @@
             },
             "fors": {},
             "namespaces": {},
-            "tag": "main",
+            "tag": "module",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 17,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UsersStrategies. The list of strategies set by that user.\n* AuthStrategies. The complete list of auth strategies available\n* Logins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
-            "itemtype": "main"
+            "line": 3,
+            "description": "Provides authentication abilities to Hotplate.\n\nThis module provides authentication abilities to your application by:\n\n* Defining the right stores to be used in your app\n* Creating the right routes to handle authentication\n\n## Configuration parameters\n\n    { hotCoreAuth: {\n\n      callbackURLBase: 'http://localhost:3000',\n\n      recoverURLexpiry: 60*30, // Seconds for which the recover URL works for\n\n      // Only local strategy enabled by default\n      strategies: {\n        local: { },\n      },\n\n      redirectURLs: {\n        success: {\n          signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick' ),\n          recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick'),\n          register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ),'/auth/pick'),\n          manager: '/',\n        },\n\n        fail: {\n          signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          manager: '/',\n        }\n      },\n      responsePage: basicResponsePage,\n      appURL: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/app' ),\n    };",
+            "static": 1
         },
         "hotCoreClientFiles": {
             "name": "hotCoreClientFiles",
@@ -146,12 +146,8 @@
             "module": "hotCoreAuth",
             "namespace": "",
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 17,
-            "description": "Provides authentication abilities to Hotplate\n\nThis module's goal is to do two things.\n\nFirst of all , it defines all of the stores necessary for authentication. The stores in question are:\n\n* Users. The list of users.\n* UsersStrategies. The list of strategies set by that user.\n* AuthStrategies. The complete list of auth strategies available\n* Logins. A store that simply allows the search of username, used by Ajax to check if a username is already taken",
-            "mainName": "hotCoreAuth",
-            "tag": "main",
-            "itemtype": "main",
-            "_main": true
+            "line": 3,
+            "description": "Provides authentication abilities to Hotplate.\n\nThis module provides authentication abilities to your application by:\n\n* Defining the right stores to be used in your app\n* Creating the right routes to handle authentication\n\n## Configuration parameters\n\n    { hotCoreAuth: {\n\n      callbackURLBase: 'http://localhost:3000',\n\n      recoverURLexpiry: 60*30, // Seconds for which the recover URL works for\n\n      // Only local strategy enabled by default\n      strategies: {\n        local: { },\n      },\n\n      redirectURLs: {\n        success: {\n          signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick' ),\n          recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick'),\n          register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ),'/auth/pick'),\n          manager: '/',\n        },\n\n        fail: {\n          signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),\n          manager: '/',\n        }\n      },\n      responsePage: basicResponsePage,\n      appURL: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/app' ),\n    };"
         },
         "hotCoreClientFiles": {
             "name": "hotCoreClientFiles",
@@ -219,7 +215,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 78,
+            "line": 105,
             "description": "Initialisation hook. It creates the basic authentication stores\n(Users, UsersStrategies, AuthStrategies, Logins)",
             "itemtype": "event",
             "name": "init",
@@ -231,7 +227,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 300,
+            "line": 327,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).  \nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "run",

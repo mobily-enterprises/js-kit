@@ -111,16 +111,43 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>Class hotCoreAuth</h4>
-<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l17"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:17</code></a></span>
-<div class="intro"><p>Provides authentication abilities to Hotplate</p>
-<p>This module's goal is to do two things.</p>
-<p>First of all , it defines all of the stores necessary for authentication. The stores in question are:</p>
+<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:3</code></a></span>
+<div class="intro"><p>Provides authentication abilities to Hotplate.</p>
+<p>This module provides authentication abilities to your application by:</p>
 <ul>
-<li>Users. The list of users.</li>
-<li>UsersStrategies. The list of strategies set by that user.</li>
-<li>AuthStrategies. The complete list of auth strategies available</li>
-<li>Logins. A store that simply allows the search of username, used by Ajax to check if a username is already taken</li>
+<li>Defining the right stores to be used in your app</li>
+<li>Creating the right routes to handle authentication</li>
 </ul>
+<h2>Configuration parameters</h2>
+<pre class="code prettyprint"><code>{ hotCoreAuth: {
+
+  callbackURLBase: 'http://localhost:3000',
+
+  recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
+
+  // Only local strategy enabled by default
+  strategies: {
+    local: { },
+  },
+
+  redirectURLs: {
+    success: {
+      signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick' ),
+      recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick'),
+      register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ),'/auth/pick'),
+      manager: '/',
+    },
+
+    fail: {
+      signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
+      recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
+      register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
+      manager: '/',
+    }
+  },
+  responsePage: basicResponsePage,
+  appURL: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/app' ),
+};</code></pre>
 </div>
 
 
@@ -136,7 +163,7 @@
                     
                     
                     <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l78"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:78</code></a></span>
+                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l105"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:105</code></a></span>
                     <p>Initialisation hook. It creates the basic authentication stores
                 (Users, UsersStrategies, AuthStrategies, Logins)</p>
                 
@@ -148,7 +175,7 @@
                     
                     
                     <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l300"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:300</code></a></span>
+                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l327"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:327</code></a></span>
                     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
                 Also goes through the list of <code>AuthStrategies</code>, loads the right
                 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
