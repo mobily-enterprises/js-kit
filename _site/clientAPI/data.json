@@ -1,5 +1,10 @@
 {
-    "project": {},
+    "project": {
+        "name": "Hotplate's API",
+        "description": "Hotplate: a framework to create SaaS, the lightning-fast way",
+        "version": "1.2.1",
+        "url": "http://hotplatejs.com/"
+    },
     "files": {
         "hotplate/node_modules/hotClientDojo/client/lib/dgrid/demos/laboratory/data/features.js": {
             "name": "hotplate/node_modules/hotClientDojo/client/lib/dgrid/demos/laboratory/data/features.js",
