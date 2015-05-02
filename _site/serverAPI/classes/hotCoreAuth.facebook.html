@@ -73,12 +73,13 @@
             
             <div id="classes" class="sidebox">
                 <div class="hd">
-                    <h2 class="no-toc">Classes</h2>
+                    <h2 class="no-toc">Files</h2>
                 </div>
                 <div class="bd">
                     <ul>
                             <li><a href="../classes/hotCoreAuth.html">hotCoreAuth</a></li>
                             <li><a href="../classes/hotCoreAuth.facebook.html">hotCoreAuth.facebook</a></li>
+                            <li><a href="../classes/hotCoreAuth.local.html">hotCoreAuth.local</a></li>
                             <li><a href="../classes/hotCoreClientFiles.html">hotCoreClientFiles</a></li>
                             <li><a href="../classes/hotCoreMultiHome.html">hotCoreMultiHome</a></li>
                             <li><a href="../classes/hotCoreTransport.html">hotCoreTransport</a></li>
@@ -92,7 +93,7 @@
                 </div>
                 <div class="bd">
                     <ul>
-                            <li><a href="#methods_hotCoreAuth.facebook">hotCoreAuth.facebook</a></li>
+                            <li><a href="#methods_exports">exports</a></li>
                     </ul>
                 </div>
             </div>
@@ -105,15 +106,15 @@
                     <h2 class="no-toc">Files</h2>
                 </div>
                 <div class="bd">
-                    <ul><li>hotplate/<ul><li>node_modules/<ul><li>hotCoreAuth/<ul><li>lib/<ul><li>auth/<ul><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html">facebook.js</a></li></ul></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html">hotCoreAuth.js</a></li></ul></li></ul></li><li>hotCoreClientFiles/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreClientFiles_lib_hotCoreClientFiles.js.html">hotCoreClientFiles.js</a></li></ul></li></ul></li><li>hotCoreMultiHome/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreMultiHome_lib_hotCoreMultiHome.js.html">hotCoreMultiHome.js</a></li></ul></li></ul></li><li>hotCorePage/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCorePage_lib_Vars.js.html">Vars.js</a></li></ul></li></ul></li><li>hotCoreTransport/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreTransport_lib_hotCoreTransport.js.html">hotCoreTransport.js</a></li></ul></li></ul></li></ul></li></ul></li></ul>
+                    <ul><li>hotplate/<ul><li>node_modules/<ul><li>hotCoreAuth/<ul><li>lib/<ul><li>auth/<ul><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html">facebook.js</a></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html">local.js</a></li></ul></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html">hotCoreAuth.js</a></li></ul></li></ul></li><li>hotCoreClientFiles/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreClientFiles_lib_hotCoreClientFiles.js.html">hotCoreClientFiles.js</a></li></ul></li></ul></li><li>hotCoreMultiHome/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreMultiHome_lib_hotCoreMultiHome.js.html">hotCoreMultiHome.js</a></li></ul></li></ul></li><li>hotCorePage/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCorePage_lib_Vars.js.html">Vars.js</a></li></ul></li></ul></li><li>hotCoreTransport/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreTransport_lib_hotCoreTransport.js.html">hotCoreTransport.js</a></li></ul></li></ul></li></ul></li></ul></li></ul>
                 </div>
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
-            <div class="content"><h4>Class hotCoreAuth.facebook</h4>
-<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l14"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:14</code></a></span>
+            <div class="content"><h4>File hotCoreAuth.facebook</h4>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:3</code></a></span>
 <div class="intro"></div>
 
 
@@ -123,16 +124,16 @@
     </ul>
     <div>
             <div id="methods">
-<a name="methods_hotCoreAuth.facebook"></a>
+<a name="methods_exports"></a>
 <div class="method item">
-     <strong class="name"><code>hotCoreAuth.facebook</code></strong>( <code>  </code> ) 
+     <strong class="name"><code>exports</code></strong>( <code>app, strategyName, stores </code> ) 
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l19"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:19</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l8"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:8</code></a>
     </span><br>
-    <p>Implements the ExpressJs routes to make the Facebook strategy work.<br>
-It implements:</p>
+    <p>Returns a function compatible with hotCoreAuth to implement Facebook authentication.
+It will set the following routes:</p>
 <ul>
 <li>Manager: <code>/auth/manager/facebook</code>, <code>/auth/manager/facebook/callback</code></li>
 <li>Signin: <code>/auth/signin/facebook</code>, <code>/auth/manager/signin/callback</code></li>
@@ -141,6 +142,24 @@ It implements:</p>
 <li>Resume: <code>/auth/resume/facebook</code>, <code>/auth/manager/resume/callback</code></li>
 </ul>
 
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>app</code> <strong>&lt;Object&gt;</strong>
+        <p>Express' <code>app</code> variable, used to create routes</p>
+
+        </li>
+        <li>
+            <code>strategyName</code> <strong>&lt;String&gt;</strong>
+        <p>The name of the strategy that needs to be setup (e.g. 'facebook')</p>
+
+        </li>
+        <li>
+            <code>stores</code> <strong>&lt;Object&gt;</strong>
+        <p>The hash of all available stores. Mainly passed to optimise</p>
+
+        </li>
+    </ul>
 </div>
             </div>
     </div>

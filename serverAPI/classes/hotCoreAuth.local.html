@@ -42,8 +42,8 @@
 
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
-            <h1><a href="../index.html">Hotplate&#x27;s API: hotCoreAuth</a></h1>
-            <!--<h1><a href="../index.html"><img src="../assets/css/logo.png" width="117" height="52">Hotplate&#x27;s API: hotCoreAuth</a></h1> -->
+            <h1><a href="../index.html">Hotplate&#x27;s API: hotCoreAuth.local</a></h1>
+            <!--<h1><a href="../index.html"><img src="../assets/css/logo.png" width="117" height="52">Hotplate&#x27;s API: hotCoreAuth.local</a></h1> -->
         </div>
         <div class="yui3-u-1-4 version">
             <em>API Docs for: 1.2.1</em>
@@ -87,6 +87,16 @@
                 </div>
             </div>
             
+            <div id="methods-on-page" class="sidebox on-page">
+                <div class="hd">
+                    <h2 class="no-toc">Methods On Page</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="#methods_exports">exports</a></li>
+                    </ul>
+                </div>
+            </div>
             
             
             
@@ -103,34 +113,57 @@
         </div>
 
         <div id="main" class="yui3-u">
-            <div class="content">
-<h2>hotCoreAuth</h2>
-<div class="intro"><p>Provides authentication abilities to Hotplate.
-TODO:</p>
-<ul>
-<li>Stores provided, with explanation of each</li>
-<li>Data management for each authentication system</li>
-<li>Defaults and configuration
-This module provides authentication abilities to your application by:</li>
-<li>Defining authentication stores to be used in your app</li>
-<li>Creating authentication routes to handle authentication using Passport</li>
-</ul>
-</div>
+            <div class="content"><h4>File hotCoreAuth.local</h4>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:3</code></a></span>
+<div class="intro"></div>
 
-<div class="yui3-g">
-    <div class="yui3-u-1-2">
-        <p>This module has the following files:</p>
-        <ul>
-            <li><a href="../classes/hotCoreAuth.html">hotCoreAuth</a></li>
-            <li><a href="../classes/hotCoreAuth.facebook.html">hotCoreAuth.facebook</a></li>
-            <li><a href="../classes/hotCoreAuth.local.html">hotCoreAuth.local</a></li>
-        </ul>
-    </div>
-    <div class="yui3-u-1-2">
+
+<div id="classdocs">
+    <ul>
+        <li><a href="#methods">Methods</a></li>
+    </ul>
+    <div>
+            <div id="methods">
+<a name="methods_exports"></a>
+<div class="method item">
+     <strong class="name"><code>exports</code></strong>( <code>app, strategyName, stores </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l8"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:8</code></a>
+    </span><br>
+    <p>Returns a function compatible with hotCoreAuth to implement Facebook authentication.
+It will set the following routes:</p>
+<ul>
+<li>Manager: <code>/auth/manager/local</code></li>
+<li>Signin: <code>/auth/signin/local</code></li>
+<li>Recover: <code>/auth/recover/local</code></li>
+<li>Register: <code>/auth/register/local</code></li>
+<li>Resume: <code>/auth/resume/local</code></li>
+</ul>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>app</code> <strong>&lt;Object&gt;</strong>
+        <p>Express' <code>app</code> variable, used to create routes</p>
+
+        </li>
+        <li>
+            <code>strategyName</code> <strong>&lt;String&gt;</strong>
+        <p>The name of the strategy that needs to be setup (e.g. 'facebook')</p>
+
+        </li>
+        <li>
+            <code>stores</code> <strong>&lt;Object&gt;</strong>
+        <p>The hash of all available stores. Mainly passed to optimise</p>
+
+        </li>
+    </ul>
+</div>
+            </div>
     </div>
 </div>
-<br><br>
-<span class="foundat">Module description found: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l22"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:22</code></a></span>
 </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "hotCoreAuth",
         "hotCoreAuth.facebook",
+        "hotCoreAuth.local",
         "hotCoreClientFiles",
         "hotCoreMultiHome",
         "hotCoreTransport"

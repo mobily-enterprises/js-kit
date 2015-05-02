@@ -73,12 +73,13 @@
             
             <div id="classes" class="sidebox">
                 <div class="hd">
-                    <h2 class="no-toc">Classes</h2>
+                    <h2 class="no-toc">Files</h2>
                 </div>
                 <div class="bd">
                     <ul>
                             <li><a href="../classes/hotCoreAuth.html">hotCoreAuth</a></li>
                             <li><a href="../classes/hotCoreAuth.facebook.html">hotCoreAuth.facebook</a></li>
+                            <li><a href="../classes/hotCoreAuth.local.html">hotCoreAuth.local</a></li>
                             <li><a href="../classes/hotCoreClientFiles.html">hotCoreClientFiles</a></li>
                             <li><a href="../classes/hotCoreMultiHome.html">hotCoreMultiHome</a></li>
                             <li><a href="../classes/hotCoreTransport.html">hotCoreTransport</a></li>
@@ -116,15 +117,15 @@
                     <h2 class="no-toc">Files</h2>
                 </div>
                 <div class="bd">
-                    <ul><li>hotplate/<ul><li>node_modules/<ul><li>hotCoreAuth/<ul><li>lib/<ul><li>auth/<ul><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html">facebook.js</a></li></ul></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html">hotCoreAuth.js</a></li></ul></li></ul></li><li>hotCoreClientFiles/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreClientFiles_lib_hotCoreClientFiles.js.html">hotCoreClientFiles.js</a></li></ul></li></ul></li><li>hotCoreMultiHome/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreMultiHome_lib_hotCoreMultiHome.js.html">hotCoreMultiHome.js</a></li></ul></li></ul></li><li>hotCorePage/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCorePage_lib_Vars.js.html">Vars.js</a></li></ul></li></ul></li><li>hotCoreTransport/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreTransport_lib_hotCoreTransport.js.html">hotCoreTransport.js</a></li></ul></li></ul></li></ul></li></ul></li></ul>
+                    <ul><li>hotplate/<ul><li>node_modules/<ul><li>hotCoreAuth/<ul><li>lib/<ul><li>auth/<ul><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html">facebook.js</a></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html">local.js</a></li></ul></li><li><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html">hotCoreAuth.js</a></li></ul></li></ul></li><li>hotCoreClientFiles/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreClientFiles_lib_hotCoreClientFiles.js.html">hotCoreClientFiles.js</a></li></ul></li></ul></li><li>hotCoreMultiHome/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreMultiHome_lib_hotCoreMultiHome.js.html">hotCoreMultiHome.js</a></li></ul></li></ul></li><li>hotCorePage/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCorePage_lib_Vars.js.html">Vars.js</a></li></ul></li></ul></li><li>hotCoreTransport/<ul><li>lib/<ul><li><a href="../files/hotplate_node_modules_hotCoreTransport_lib_hotCoreTransport.js.html">hotCoreTransport.js</a></li></ul></li></ul></li></ul></li></ul></li></ul>
                 </div>
             </div>
             
         </div>
 
         <div id="main" class="yui3-u">
-            <div class="content"><h4>Class hotCoreAuth</h4>
-<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l21"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:21</code></a></span>
+            <div class="content"><h4>File hotCoreAuth</h4>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l22"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:22</code></a></span>
 <div class="intro"><p>Authentication is based on Passport, and it's the most complex part of Hotplate.
 There are five actions connected to authentication:</p>
 <ul>
@@ -145,11 +146,11 @@ There are five actions connected to authentication:</p>
 <h1>How hotCoreAuth provides those functionalities</h1>
 <p>When it's run, <code>hotCoreAuth</code> will scan the configuration object <code>hotCoreAuth.strategies</code>: each key in the object is a strategy name. For example, for <code>local</code> <code>hotCoreAuth</code> will require <code>auth/facebook.js</code> which in turn will define:</p>
 <ul>
-<li>/auth/signin/facebook</li>
-<li>/auth/register/facebook</li>
-<li>/auth/recover/facebook</li>
-<li>/auth/manager/facebook</li>
-<li>/auth/resume/facebook</li>
+<li><code>/auth/signin/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
+<li><code>/auth/register/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
+<li><code>/auth/recover/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
+<li><code>/auth/manager/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
+<li><code>/auth/resume/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
 </ul>
 <p>Each URL will actually be managed completely by Passport.</p>
 <h2>Route definitions in <code>hotCoreAuth</code></h2>
@@ -199,7 +200,7 @@ There are five actions connected to authentication:</p>
 <li><code>info</code> -- additional information</li>
 </ul>
 <p>The next two lines will define two routes.</p>
-<p>The route <code>/auth/signin/facebook</code> is managed completely by Passport, which with <code>passport.authenticate('facebook-signin')</code> returns a valid Express route. This route, which will generally be opened in a new window in your client application, will redirect to <a href="http://facebook.com">facebook.com</a>, passing Facebook the <code>clientID</code>, <code>clientSecret</code> and <code>callbackURL</code>. At the end of the process, Facebook will then always redirect the user's browser to <code>/auth/signin/facebook/callback</code> (the callback URL provided earlier to Facebook), which is -- interestingly enough -- another URL managed by Passport.</p>
+<p>The route <code>/auth/signin/facebook</code> is managed completely by Passport, which with <code>passport.authenticate('facebook-signin')</code> returns a valid Express route. This route, which will generally be opened in a new window in your client application, will redirect to <a href="http://facebook.com">facebook.com</a>, passing Facebook the <code>clientID</code>, <code>clientSecret</code> and <code>callbackURL</code>. At the end of the process, Facebook will then always redirect the user's browser to <code>/auth/signin/facebook/callback</code> (the callback URL provided earlier to Facebook), which is -- needless to say -- another URL managed by Passport.</p>
 <p>This is where things get interesting.</p>
 <p>Facebook will connect to <code>/auth/signin/facebook/callback</code>, passing it information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This is when passport calls the authentication callback, with the parameters <code>req, accessToken, refreshToken, profile, done</code>.  If <code>profile</code> isn't defined, then it means that Facebook authentication failed. If <code>profile</code> is set, then authentication in Facebook did work. Keep in mind that a successful Facebook login doesn't mean that that Facebook profile is allowed to signin into your application.</p>
 <p>The route definition for the second URL can look a little confusing:</p>
@@ -284,13 +285,13 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
             <div id="methods">
 <a name="methods_makeResponder"></a>
 <div class="method item">
-     <strong class="name"><code>makeResponder</code></strong>( <code>req, res, next, strategyId, action </code> ) 
+     <strong class="name"><code>makeResponder</code></strong>( <code>req, res, next, strategyIdThe, action </code> ) 
     <br>
     <span class="foundat">
         
         <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l244"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:244</code></a>
     </span><br>
-    <p>Returns a function with signature function( err, user, profile ),
+    <p>Returns a function with signature <code>function( err, user, profile )</code>,
 which will serve the right response depending on the cookie
 called <code>strategyId + '-' + action</code></p>
 <p>It might redirect, close, redirect opener and close, return JSON, etc.</p>
@@ -299,22 +300,22 @@ called <code>strategyId + '-' + action</code></p>
     <ul class="params">
         <li>
             <code>req</code> <strong>&lt;Object&gt;</strong>
-        <p>Express' req()</p>
+        <p>Express' <code>req</code></p>
 
         </li>
         <li>
             <code>res</code> <strong>&lt;Object&gt;</strong>
-        <p>Express' res()</p>
+        <p>Express' <code>res</code></p>
 
         </li>
         <li>
             <code>next</code> <strong>&lt;Function&gt;</strong>
-        <p>Express' next()</p>
+        <p>Express' <code>next()</code></p>
 
         </li>
         <li>
-            <code>strategyId</code> <strong>&lt;String&gt;</strong>
-        <p>The make of the strategy (e.g. 'facebook', 'local')</p>
+            <code>strategyIdThe</code> <strong>&lt;String&gt;</strong>
+        <p>make of the strategy (e.g. 'facebook', 'local')</p>
 
         </li>
         <li>
@@ -332,7 +333,7 @@ called <code>strategyId + '-' + action</code></p>
                     
                     
                     <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l601"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:601</code></a></span>
+                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l700"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:700</code></a></span>
                     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
                 Also goes through the list of <code>AuthStrategies</code>, loads the right
                 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
@@ -349,14 +350,110 @@ called <code>strategyId + '-' + action</code></p>
                     <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l359"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:359</code></a></span>
                     <p>It returns the authentication stores
                 The stores returned are:</p>
-                <h2>users</h2>
-                <p>The users</p>
-                <h2>usersStrategies</h2>
-                <p>The strategies</p>
-                <h2>authStrategies</h2>
-                <p>The list of possible authentication strategies</p>
-                <h2>logins</h2>
-                <p>The list of all possible logins</p>
+                <h2><code>users</code></h2>
+                <p>The list of userss. Note that only very little information is stored about the user itself: this table only stores the <code>id</code> and the <code>recoverTonen</code> fields.</p>
+                <p>var Users = declare( HotStore, {</p>
+                <pre class="code prettyprint"><code>schema: new HotSchema({
+                  recoverToken:        { type: 'blob', searchable: true, notempty: true },
+                  recoverTokenCreated: { type: 'date', searchable: true, notempty: true },
+                }),
+                
+                // Nothing is searchable in users by default
+                onlineSearchSchema: new HotSchema({
+                }),
+                
+                storeName:  'users',
+                
+                publicURL: '/users/:id',
+                hotExpose: true,
+                </code></pre>
+                <p>});
+                stores.users = new Users();</p>
+                <h2><code>usersStrategies</code></h2>
+                <p>The list of strategies associated to a specific user.</p>
+                <pre class="code prettyprint"><code>var UsersStrategies = declare( HotStore, {
+                
+                  schema: new HotSchema({
+                    strategyId:  { type: 'blob', searchable: true, required: true, trim: 30 }  ,
+                    field1:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+                    field2:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+                    field3:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+                    field4:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+                  }),
+                
+                  // Nothing is searchable in usersStrategies by default
+                  onlineSearchSchema: new HotSchema({
+                  }),
+                
+                  storeName:  'usersStrategies',
+                
+                  publicURL: '/users/:userId/strategies/:id',
+                  hotExpose: true,
+                
+                  preserveCacheOnReset: true,
+                
+                  handleGet: true,
+                  handleGetQuery: true,
+                  handleDelete: true,
+                
+                  // Users are only allowed to use <code>delete</code>, <code>get</code> and <code>getQuery</code> on their own strategies
+                  // Also, users are only allowed to <code>delete</code> a strategy if it's not the last one remaining
+                  checkPermissions: function( request, method, cb ){ ... },
+                 
+                  // The field <code>field3</code> and <code>field4</code> are taken out of the equation, as they are &quot;secret&quot;
+                  extrapolateDoc: function( request, method, doc, cb ){ ... }
+                });
+                stores.usersStrategies = new UsersStrategies();
+                </code></pre>
+                <h2><code>authStrategies</code></h2>
+                <p>The strategies available. This store is a pseudo-store (it doesn't rely on data stored in a database).</p>
+                <pre class="code prettyprint"><code>var AuthStrategies = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
+                
+                  schema: new SimpleSchema({
+                    id:        { type: 'blob', isRequired: true, trim: 30 }  ,
+                  }),
+                
+                  handleGet: true,
+                  handleGetQuery: true,
+                
+                  storeName:  'authStrategies',
+                
+                  publicURL: '/authstrategies/:id',
+                  hotExpose: true,
+                
+                  // Fetch one strategy (if it's defined in hotCoreAuth.strategies)
+                  implementFetchOne: function( request, cb ){ },
+                
+                  // Return the strategies, depending on <code>hotCoreAuth.strategies</code>'s keys
+                  implementQuery: function( request, cb ){ },
+                });
+                
+                stores.authStrategies = new AuthStrategies();
+                </code></pre>
+                <h2><code>logins</code></h2>
+                <p>This is used so that an applicaton can know in advance if a user login is already taken. It does so by querying <code>usersStrategies</code></p>
+                <pre class="code prettyprint"><code>// This is used so that an applicaton can know in advance if a user login is already taken
+                var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
+                
+                  schema: new SimpleSchema({
+                    login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
+                  }),
+                
+                  storeName:  'logins',
+                
+                  DbLayer: SimpleDbLayer,   
+                
+                  handleGetQuery: true,
+                
+                  publicURL: '/logins/:id',
+                  hotExpose: true,
+                
+                  // Will look for <code>requests.options.conditions.login</code> in <code>usersStrategies</code>. If it's there,
+                  // will return it as a 1-element collection <code>[ { login: request.options.conditions.login } ]</code>
+                  implementQuery: function( request, cb ){ }
+                
+                });
+                stores.login = new Logins();</code></pre>
                 
                 </div>
                 
