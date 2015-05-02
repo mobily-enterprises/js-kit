@@ -86,6 +86,16 @@
                 </div>
             </div>
             
+            <div id="methods-on-page" class="sidebox on-page">
+                <div class="hd">
+                    <h2 class="no-toc">Methods On Page</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="#methods_makeResponder">makeResponder</a></li>
+                    </ul>
+                </div>
+            </div>
             
             <div id="events-on-page" class="sidebox on-page">
                 <div class="hd">
@@ -114,21 +124,8 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>Class hotCoreAuth</h4>
-<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:3</code></a></span>
-<div class="intro"><p>Provides authentication abilities to Hotplate.</p>
-<p>TODO:</p>
-<ul>
-<li>Stores provided, with explanation of each</li>
-<li>Data management for each authentication system</li>
-<li>Defaults and configuration</li>
-</ul>
-<p>This module provides authentication abilities to your application by:</p>
-<ul>
-<li>Defining authentication stores to be used in your app</li>
-<li>Creating authentication routes to handle authentication using Passport</li>
-</ul>
-<h1>The basics</h1>
-<p>Authentication is based on Passport, and it's the most complex part of Hotplate.
+<span class="foundat">Class defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l21"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:21</code></a></span>
+<div class="intro"><p>Authentication is based on Passport, and it's the most complex part of Hotplate.
 There are five actions connected to authentication:</p>
 <ul>
 <li>signin -- to actually login using existing credentials</li>
@@ -157,7 +154,7 @@ There are five actions connected to authentication:</p>
 <p>Each URL will actually be managed completely by Passport.</p>
 <h2>Route definitions in <code>hotCoreAuth</code></h2>
 <p>Understanding exactly what happens with hotCoreAuth is crucial to fully understand Passport. I will explain here how the <code>facebook-signin</code> operation happens, step by step.</p>
-<p>First of all, the configuration object <code>hotCoreAuth.strategies</code> will need to have <code>facebook</code> defined as followed:</p>
+<p>First of all, the configuration object <code>hotCoreAuth.strategies</code> will need to have <code>facebook</code> defined as follows:</p>
 <pre class="code prettyprint"><code>facebook: {
   clientID: 'XXXXXXXXXXXX',
   clientSecret: 'XXXXXXXXXX',
@@ -280,9 +277,54 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
 
 <div id="classdocs">
     <ul>
+        <li><a href="#methods">Methods</a></li>
         <li><a href="#events">Events</a></li>
     </ul>
     <div>
+            <div id="methods">
+<a name="methods_makeResponder"></a>
+<div class="method item">
+     <strong class="name"><code>makeResponder</code></strong>( <code>req, res, next, strategyId, action </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l244"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:244</code></a>
+    </span><br>
+    <p>Returns a function with signature function( err, user, profile ),
+which will serve the right response depending on the cookie
+called <code>strategyId + '-' + action</code></p>
+<p>It might redirect, close, redirect opener and close, return JSON, etc.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>req</code> <strong>&lt;Object&gt;</strong>
+        <p>Express' req()</p>
+
+        </li>
+        <li>
+            <code>res</code> <strong>&lt;Object&gt;</strong>
+        <p>Express' res()</p>
+
+        </li>
+        <li>
+            <code>next</code> <strong>&lt;Function&gt;</strong>
+        <p>Express' next()</p>
+
+        </li>
+        <li>
+            <code>strategyId</code> <strong>&lt;String&gt;</strong>
+        <p>The make of the strategy (e.g. 'facebook', 'local')</p>
+
+        </li>
+        <li>
+            <code>action</code> <strong>&lt;String&gt;</strong>
+        <p>The action (<code>signin</code>, <code>recover</code>, <code>register</code>, <code>resume</code>, <code>manager</code>)</p>
+
+        </li>
+    </ul>
+</div>
+            </div>
             <div id="events">
                 <a name="events_setRoutes"></a>
                 <div class="events item">
@@ -290,7 +332,7 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
                     
                     
                     <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l485"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:485</code></a></span>
+                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l601"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:601</code></a></span>
                     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
                 Also goes through the list of <code>AuthStrategies</code>, loads the right
                 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
@@ -304,7 +346,7 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
                     
                     
                     <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l244"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:244</code></a></span>
+                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l359"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:359</code></a></span>
                     <p>It returns the authentication stores
                 The stores returned are:</p>
                 <h2>users</h2>
