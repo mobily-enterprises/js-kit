@@ -125,7 +125,7 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>File hotCoreAuth</h4>
-<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l22"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:22</code></a></span>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l21"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:21</code></a></span>
 <div class="intro"><p>Authentication is based on Passport, and it's the most complex part of Hotplate.
 There are five actions connected to authentication:</p>
 <ul>
@@ -289,7 +289,7 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l244"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:244</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l242"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:242</code></a>
     </span><br>
     <p>Returns a function with signature <code>function( err, user, profile )</code>,
 which will serve the right response depending on the cookie
@@ -327,136 +327,108 @@ called <code>strategyId + '-' + action</code></p>
 </div>
             </div>
             <div id="events">
-                <a name="events_setRoutes"></a>
-                <div class="events item">
-                    <code>setRoutes</code> 
-                    
-                    
-                    <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l700"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:700</code></a></span>
-                    <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
-                Also goes through the list of <code>AuthStrategies</code>, loads the right
-                files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
-                This basically ensures that all strategies have the right URLs all set for them to work.</p>
-                
-                </div>
-                
-                <a name="events_stores"></a>
-                <div class="events item">
-                    <code>stores</code> 
-                    
-                    
-                    <br>
-                    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l359"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:359</code></a></span>
-                    <p>It returns the authentication stores
-                The stores returned are:</p>
-                <h2><code>users</code></h2>
-                <p>The list of userss. Note that only very little information is stored about the user itself: this table only stores the <code>id</code> and the <code>recoverTonen</code> fields.</p>
-                <p>var Users = declare( HotStore, {</p>
-                <pre class="code prettyprint"><code>schema: new HotSchema({
-                  recoverToken:        { type: 'blob', searchable: true, notempty: true },
-                  recoverTokenCreated: { type: 'date', searchable: true, notempty: true },
-                }),
-                
-                // Nothing is searchable in users by default
-                onlineSearchSchema: new HotSchema({
-                }),
-                
-                storeName:  'users',
-                
-                publicURL: '/users/:id',
-                hotExpose: true,
-                </code></pre>
-                <p>});
-                stores.users = new Users();</p>
-                <h2><code>usersStrategies</code></h2>
-                <p>The list of strategies associated to a specific user.</p>
-                <pre class="code prettyprint"><code>var UsersStrategies = declare( HotStore, {
-                
-                  schema: new HotSchema({
-                    strategyId:  { type: 'blob', searchable: true, required: true, trim: 30 }  ,
-                    field1:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
-                    field2:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
-                    field3:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
-                    field4:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
-                  }),
-                
-                  // Nothing is searchable in usersStrategies by default
-                  onlineSearchSchema: new HotSchema({
-                  }),
-                
-                  storeName:  'usersStrategies',
-                
-                  publicURL: '/users/:userId/strategies/:id',
-                  hotExpose: true,
-                
-                  preserveCacheOnReset: true,
-                
-                  handleGet: true,
-                  handleGetQuery: true,
-                  handleDelete: true,
-                
-                  // Users are only allowed to use <code>delete</code>, <code>get</code> and <code>getQuery</code> on their own strategies
-                  // Also, users are only allowed to <code>delete</code> a strategy if it's not the last one remaining
-                  checkPermissions: function( request, method, cb ){ ... },
-                 
-                  // The field <code>field3</code> and <code>field4</code> are taken out of the equation, as they are &quot;secret&quot;
-                  extrapolateDoc: function( request, method, doc, cb ){ ... }
-                });
-                stores.usersStrategies = new UsersStrategies();
-                </code></pre>
-                <h2><code>authStrategies</code></h2>
-                <p>The strategies available. This store is a pseudo-store (it doesn't rely on data stored in a database).</p>
-                <pre class="code prettyprint"><code>var AuthStrategies = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
-                
-                  schema: new SimpleSchema({
-                    id:        { type: 'blob', isRequired: true, trim: 30 }  ,
-                  }),
-                
-                  handleGet: true,
-                  handleGetQuery: true,
-                
-                  storeName:  'authStrategies',
-                
-                  publicURL: '/authstrategies/:id',
-                  hotExpose: true,
-                
-                  // Fetch one strategy (if it's defined in hotCoreAuth.strategies)
-                  implementFetchOne: function( request, cb ){ },
-                
-                  // Return the strategies, depending on <code>hotCoreAuth.strategies</code>'s keys
-                  implementQuery: function( request, cb ){ },
-                });
-                
-                stores.authStrategies = new AuthStrategies();
-                </code></pre>
-                <h2><code>logins</code></h2>
-                <p>This is used so that an applicaton can know in advance if a user login is already taken. It does so by querying <code>usersStrategies</code></p>
-                <pre class="code prettyprint"><code>// This is used so that an applicaton can know in advance if a user login is already taken
-                var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
-                
-                  schema: new SimpleSchema({
-                    login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
-                  }),
-                
-                  storeName:  'logins',
-                
-                  DbLayer: SimpleDbLayer,   
-                
-                  handleGetQuery: true,
-                
-                  publicURL: '/logins/:id',
-                  hotExpose: true,
-                
-                  // Will look for <code>requests.options.conditions.login</code> in <code>usersStrategies</code>. If it's there,
-                  // will return it as a 1-element collection <code>[ { login: request.options.conditions.login } ]</code>
-                  implementQuery: function( request, cb ){ }
-                
-                });
-                stores.login = new Logins();</code></pre>
-                
-                </div>
-                
+<a name="events_setRoutes"></a>
+<div class="events item">
+    <code>setRoutes</code> 
+    
+    
+    <br>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l638"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:638</code></a></span>
+    <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
+Also goes through the list of <code>AuthStrategies</code>, loads the right
+files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
+This basically ensures that all strategies have the right URLs all set for them to work.</p>
+
+</div>
+
+<a name="events_stores"></a>
+<div class="events item">
+    <code>stores</code> 
+    
+    
+    <br>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l357"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:357</code></a></span>
+    <p>It returns the authentication stores
+The stores returned are:</p>
+<h2><code>authStrategies</code></h2>
+<p>The strategies available. This store is a pseudo-store (it doesn't rely on data stored in a database). Its data is the keys of the configuration object <code>hotCoreAuth.strategies</code>, which is used to implement <code>get</code> and <code>getQuery</code>.</p>
+<pre class="code prettyprint"><code>var AuthStrategies = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
+
+  schema: new SimpleSchema({
+    id:        { type: 'blob', isRequired: true, trim: 30 }  ,
+  }),
+
+  handleGet: true,
+  handleGetQuery: true,
+
+  storeName:  'authStrategies',
+
+  publicURL: '/authstrategies/:id',
+  hotExpose: true,
+
+  // Fetch one strategy (if it's defined in hotCoreAuth.strategies)
+  implementFetchOne: function( request, cb ){ },
+
+  // Return the strategies, depending on <code>hotCoreAuth.strategies</code>'s keys
+  implementQuery: function( request, cb ){ },
+});
+
+stores.authStrategies = new AuthStrategies();
+</code></pre>
+<h2><code>users</code></h2>
+<p>The list of users. Note that only very little information is stored about the user itself: this table only stores the <code>id</code> and the <code>recoverToken</code> fields. It is not exposed to the client application at all: it's only created to be accessible via API within Hotplate itself.</p>
+<pre class="code prettyprint"><code>var Users = declare( HotStore, {
+
+  schema: new HotSchema({
+    id                 : { type: 'id' },
+    recoverToken       : { type: 'blob', searchable: true, notempty: true },
+    recoverTokenCreated: { type: 'date', searchable: true, notempty: true },
+  }),
+
+  storeName:  'users',
+  idProperty: 'id',
+});
+stores.users = new Users();
+</code></pre>
+<h2><code>usersStrategies</code></h2>
+<p>The list of strategies associated to a specific user. It implements <code>get</code>, <code>getQuery</code> and <code>delete</code>, and it only allows querying to the record owner (session.userId needs to match the query string's userId). It also doesn't allow a user to delete their last remaining strategy (otherwise they won't be allowed to log back in, nor to recover their access).</p>
+<p>Note that <code>field3</code> and <code>field4</code> are used by hotCoreAuth to store sensitive information, as they are never returned by the store.</p>
+<pre class="code prettyprint"><code>var UsersStrategies = declare( HotStore, {
+
+  schema: new HotSchema({
+    strategyId:  { type: 'blob', searchable: true, required: true, trim: 30 }  ,
+    field1:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+    field2:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+    field3:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+    field4:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+  }),
+
+  // Nothing is searchable in usersStrategies by default
+  onlineSearchSchema: new HotSchema({
+  }),
+
+  storeName:  'usersStrategies',
+
+  publicURL: '/users/:userId/strategies/:id',
+  hotExpose: true,
+
+  preserveCacheOnReset: true,
+
+  handleGet: true,
+  handleGetQuery: true,
+  handleDelete: true,
+
+  // Users are only allowed to use <code>delete</code>, <code>get</code> and <code>getQuery</code> on their own strategies
+  // Also, users are only allowed to <code>delete</code> a strategy if it's not the last one remaining
+  checkPermissions: function( request, method, cb ){ ... },
+ 
+  // The field <code>field3</code> and <code>field4</code> are taken out of the equation, as they are &quot;secret&quot;
+  extrapolateDoc: function( request, method, doc, cb ){ ... }
+});
+stores.usersStrategies = new UsersStrategies();</code></pre>
+
+</div>
+
             </div>
     </div>
 </div>

@@ -93,7 +93,8 @@
                 </div>
                 <div class="bd">
                     <ul>
-                            <li><a href="#methods_exports">exports</a></li>
+                            <li><a href="#methods_extraStores">extraStores</a></li>
+                            <li><a href="#methods_strategyRoutesMaker">strategyRoutesMaker</a></li>
                     </ul>
                 </div>
             </div>
@@ -124,15 +125,67 @@
     </ul>
     <div>
             <div id="methods">
-<a name="methods_exports"></a>
+<a name="methods_extraStores"></a>
 <div class="method item">
-     <strong class="name"><code>exports</code></strong>( <code>app, strategyName, stores </code> ) 
+     <strong class="name"><code>extraStores</code></strong>( <code>stores, done </code> ) 
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l8"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:8</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l27"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:27</code></a>
     </span><br>
-    <p>Returns a function compatible with hotCoreAuth to implement Facebook authentication.
+    <p>Adds <code>logins</code> to the list of stores returned by hotCoreAuth</p>
+<h2><code>logins</code></h2>
+<p>This is used so that an applicaton can know in advance if a user login is already taken. It does so by querying <code>usersStrategies</code>, where <code>strategyId</code> is 'local' and <code>field1</code> is <code>request.options.conditions.login</code>.</p>
+<pre class="code prettyprint"><code>// This is used so that an applicaton can know in advance if a user login is already taken
+var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
+
+  schema: new SimpleSchema({
+    login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
+  }),
+
+  storeName:  'logins',
+
+  handleGetQuery: true,
+
+  // This is descriptive only
+  queryConditions: { 
+    type: 'eq',
+    args: [ 'login', '#login' ]
+  },
+
+  publicURL: '/logins/:id',
+  hotExpose: true,
+
+  // Will look for <code>requests.options.conditions.login</code> in <code>usersStrategies</code>. If it's there,
+  // will return it as a 1-element collection <code>[ { login: request.options.conditions.login } ]</code>
+  implementQuery: function( request, cb ){ }
+
+});
+stores.login = new Logins();</code></pre>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>stores</code> <strong>&lt;Object&gt;</strong>
+        <p>The existing hotCoreAuth stores</p>
+
+        </li>
+        <li>
+            <code>done</code> <strong>&lt;Function&gt;</strong>
+        <p>Callback</p>
+
+        </li>
+    </ul>
+</div>
+<a name="methods_strategyRoutesMaker"></a>
+<div class="method item">
+     <strong class="name"><code>strategyRoutesMaker</code></strong>( <code>app, strategyName, done </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l109"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:109</code></a>
+    </span><br>
+    <p>A function that sets the routes to implement Local (username/password) authentication.
 It will set the following routes:</p>
 <ul>
 <li>Manager: <code>/auth/manager/local</code></li>
@@ -155,8 +208,8 @@ It will set the following routes:</p>
 
         </li>
         <li>
-            <code>stores</code> <strong>&lt;Object&gt;</strong>
-        <p>The hash of all available stores. Mainly passed to optimise</p>
+            <code>done</code> <strong>&lt;Function&gt;</strong>
+        <p>Callback</p>
 
         </li>
     </ul>
