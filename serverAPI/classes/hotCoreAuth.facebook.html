@@ -115,7 +115,12 @@
         <div id="main" class="yui3-u">
             <div class="content"><h4>File hotCoreAuth.facebook</h4>
 <span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:3</code></a></span>
-<div class="intro"></div>
+<div class="intro"><p>This file is a &quot;plugin&quot; for hotCoreAuth, and implements:</p>
+<ul>
+<li><code>strategyRoutesMaker( app, strategyName, done )</code></li>
+</ul>
+<p>Which will create the right routes so that Facebook authentication works.</p>
+</div>
 
 
 <div id="classdocs">
@@ -130,7 +135,7 @@
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l8"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:8</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_facebook.js.html#l32"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;facebook.js:32</code></a>
     </span><br>
     <p>Returns a function compatible with hotCoreAuth to implement Facebook authentication.
 It will set the following routes:</p>
@@ -141,6 +146,11 @@ It will set the following routes:</p>
 <li>Register: <code>/auth/register/facebook</code>, <code>/auth/manager/register/callback</code></li>
 <li>Resume: <code>/auth/resume/facebook</code>, <code>/auth/manager/resume/callback</code></li>
 </ul>
+<p>In usersStrategies:</p>
+<ul>
+<li><code>field1</code> is used to store the Facebook profile ID</li>
+</ul>
+<p>While managing the passwords, if the client sends <code>*</code> as the password, the old password is retained.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">

@@ -18,7 +18,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "hotCoreAuth",
             "name": "hotCoreAuth",
-            "description": "Provides authentication abilities to Hotplate.\nTODO:\n* Document each sub-module: Data management for each authentication system\n* Make all page-generating functions configurable\n* Document defaults and configuration\nThis module provides authentication abilities to your application by:\n* Defining authentication stores to be used in your app\n* Creating authentication routes to handle authentication using Passport"
+            "description": "Provides authentication abilities to Hotplate, including password recovery, registration, login, credential management, and in-app resume\n\nTODO:\n* Document defaults and configuration\n* Document recoverToken URL\n* Document pageElements and pageElementsPerPage events\n\nThis module provides authentication abilities to your application by:\n\n* Defining authentication stores to be used in your app\n* Creating authentication routes to handle authentication using Passport"
         },
         {
             "displayName": "hotCoreClientFiles",

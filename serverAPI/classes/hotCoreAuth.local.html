@@ -116,7 +116,13 @@
         <div id="main" class="yui3-u">
             <div class="content"><h4>File hotCoreAuth.local</h4>
 <span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l3"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:3</code></a></span>
-<div class="intro"></div>
+<div class="intro"><p>This file is a &quot;plugin&quot; for hotCoreAuth, and provides two methods:</p>
+<ul>
+<li><code>extraStores( stores, done )</code></li>
+<li><code>strategyRoutesMaker( app, strategyName, done )</code></li>
+</ul>
+<p>Which will add an extra store (<code>logins</code>) and will create the right routes so that local authentication works.</p>
+</div>
 
 
 <div id="classdocs">
@@ -131,7 +137,7 @@
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l27"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:27</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l38"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:38</code></a>
     </span><br>
     <p>Adds <code>logins</code> to the list of stores returned by hotCoreAuth</p>
 <h2><code>logins</code></h2>
@@ -183,7 +189,7 @@ stores.login = new Logins();</code></pre>
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l109"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:109</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_auth_local.js.html#l120"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;auth&#x2F;local.js:120</code></a>
     </span><br>
     <p>A function that sets the routes to implement Local (username/password) authentication.
 It will set the following routes:</p>
@@ -194,6 +200,12 @@ It will set the following routes:</p>
 <li>Register: <code>/auth/register/local</code></li>
 <li>Resume: <code>/auth/resume/local</code></li>
 </ul>
+<p>In usersStrategies:</p>
+<ul>
+<li><code>field1</code> is used to store the username</li>
+<li><code>field3</code> is used to store an encripted version of the password</li>
+</ul>
+<p>While managing the passwords, if the client sends <code>*</code> as the password, the old password is retained.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">

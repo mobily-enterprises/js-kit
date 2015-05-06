@@ -125,16 +125,17 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>File hotCoreAuth</h4>
-<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l21"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:21</code></a></span>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l20"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:20</code></a></span>
 <div class="intro"><p>Authentication is based on Passport, and it's the most complex part of Hotplate.
 There are five actions connected to authentication:</p>
 <ul>
 <li>signin -- to actually login using existing credentials</li>
-<li>register -- to register as a new user</li>
+<li>register -- to register as a new user, and automatically assign a strategy to them</li>
 <li>recover -- to reset credentials</li>
-<li>manager -- to manage credentials</li>
-<li>resume -- to resume an existing session if authentication is expired</li>
+<li>manager -- to manage credentials. This is used to associate a strategy to an existing (logged in) user</li>
+<li>resume -- to resume an existing session if authentication is expired.</li>
 </ul>
+<p>Note that while both <code>register</code> and <code>manager</code> associate a strategy to a user, <code>register</code> also <em>creates</em> a brand new user. Also, while both <code>signin</code> and <code>resume</code> basically check that</p>
 <p>There are currently two implemented strategies (although it's trivial to create more):</p>
 <ul>
 <li><code>local</code> -- using simply a combination of login and password</li>
@@ -169,7 +170,7 @@ There are five actions connected to authentication:</p>
     passport.use( 'facebook-signin', new FacebookStrategy({
       clientID: strategyConfig.clientID,
       clientSecret: strategyConfig.clientSecret,
-      callbackURL: callbackURLBase + &quot;/auth/signin/facebook/callback&quot;,
+      callbackURL: callbackURLBase + prefix( &quot;/auth/signin/facebook/callback&quot; ),
       passReqToCallback: true,
     },
 
@@ -246,31 +247,37 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
 <h2>Configuration parameters</h2>
 <pre class="code prettyprint"><code>{ hotCoreAuth: {
 
+  // The host/port parts of the URL, used are prefix for Oauth callbacks.
+  // This should be changed to your server's IP in production
   callbackURLBase: 'http://localhost:3000',
 
-  recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
+   // Seconds for which the recover URL works for
+  recoverURLexpiry: 60*30,
 
-  // Only local strategy enabled by default
+  // Strategies available
   strategies: {
     local: { },
   },
 
+  // Redirect URLs. This is used by makeResponder for the redirect and redirect-opener actions
+  // as well as /recover/:recoverToken (whick will redirect to <code>hotCoreAuth.redirectURLs.success.recover</code>)
+  // Note that <code>hotplate.routeUrlsPrefix</code> prefixes are honoured (as they should).
   redirectURLs: {
-    success: {
-      signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick' ),
-      recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/pick'),
-      register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ),'/auth/pick'),
-      manager: '/',
-    },
-
-    fail: {
-      signin: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
-      recover: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
-      register: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/auth/welcome' ),
-      manager: '/',
-    }
+  success: {
+    signin: prefix( '/auth/pick' ),
+    recover: prefix( '/auth/pick' ),
+    register: prefix( '/auth/pick' ),
+    manager: '/',
   },
-  responsePage: basicResponsePage,
+
+  fail: {
+    signin: prefix( '/auth/welcome' ),
+    recover: prefix( '/auth/welcome' ),
+    register: prefix(  '/auth/welcome' ),
+    manager: '/',
+  }
+},
+responsePage: basicResponsePage,
   appURL: path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), '/app' ),
 };</code></pre>
 </div>
@@ -289,7 +296,7 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l242"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:242</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l252"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:252</code></a>
     </span><br>
     <p>Returns a function with signature <code>function( err, user, profile )</code>,
 which will serve the right response depending on the cookie
@@ -333,7 +340,7 @@ called <code>strategyId + '-' + action</code></p>
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l638"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:638</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l648"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:648</code></a></span>
     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).<br>
 Also goes through the list of <code>AuthStrategies</code>, loads the right
 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
@@ -347,7 +354,7 @@ This basically ensures that all strategies have the right URLs all set for them 
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l357"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:357</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l367"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:367</code></a></span>
     <p>It returns the authentication stores
 The stores returned are:</p>
 <h2><code>authStrategies</code></h2>
