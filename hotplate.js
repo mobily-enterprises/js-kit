@@ -3,6 +3,7 @@ var async = require('async')
   , DeepObject = require("deepobject")
   , colorConsole = require('tracer').colorConsole()
   , debug = require('debug')('hotplate:hotplate')
+  , path = require( 'path')
   ;
 var hotplate = exports;
 
@@ -23,6 +24,9 @@ hotplate.hotEvents.emitCollectCollect = function(){
 // You can (and should) over-ride them in your server.js file
 hotplate.config.set( 'hotplate.moduleFilesPrefix', '/hotplate' ); // hotClientXXX modules will use it as base URL
 hotplate.config.set( 'hotplate.routeUrlsPrefix', '/pages' ); // hotCoreAuth uses it as base URL
+
+// Handy function to wrap URLs around routeUrlsPrefix
+hotplate.prefix = function( p ){ return path.join( hotplate.config.get( 'hotplate.routeUrlsPrefix' ), p ); };
 
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
