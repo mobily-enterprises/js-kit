@@ -11,42 +11,51 @@ DOCUMENT HOTPLATE
       [X] Make new generic theme that uses same template by reusing changes to previous theme
       [X] Find a way to have a README.md file per module, have most of the documentation there
       [X] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
-      [ ] Write full Hotplate documentation
+      [X] Get rid of appUrl and multiHomeURL, have only one appRoute used accordingly
+
+      SATURDAY 5/6
+       [ ] Prepare initial Hotplate documentation infrastructure
         [ ] Finish documentation and rewrite of hotCoreAuth
-          [ ] Document defaults and configuration, including custom return page functions
+          [X] Document defaults and configuration, including custom return page functions
           [ ] Document recoverToken URL
           [ ] Document pageElements and pageElementsPerPage events
+
+       SUNDAY 6/6
         [ ] Find neat way to write event data definitions and reference them
         [ ] Find a way to document hotplate itself as the first module
 
+
     [ ] DOCUMENTATION - API
       [ ] Document Hotplate itself
-      [ ] Document all server modules except hotCoreTransport, hotCorePage
+      [ ] Document all server modules except hotCoreTransport, hotCorePage, hotClientDojo
       [ ] Document hotCoreTransport
       [ ] Document hotCorePage
-      [ ] Document client blueprint
       [ ] Document hotClientDojo
+      [ ] Document client blueprint
 
     [ ] DOCUMENTATION - QUICKSTART GUIDES
         [ ] Make 2 empty canvas example applications, non-multi homed and multi homed
+        [ ] Check that the non-multi homed app works well with authentication
         [ ] Writing quickstart guide to get them started, explaining server
 
     [ ] Reach Nirvana with Dstore
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
-      [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields      
+      [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
       [ ] Client-side, make sure that when child table is updated, parent table looks for matching children and, if any, marks that one record as changed
 
   ----------------------
-  DEADLINE: 26 May 2015
+  DEADLINE: 26 June 2015
   ----------------------
 
 OMG Hotplate is finished?!?!?!?!?!?
 
+
+
 RELEASE!
 
   "MESSAGES"
-    
+
     [ ] GUI: THE BOX
       [X] Move "new message" form out of the top of the contacts info, make a button instead
       [X] Make sure that only the right tabs actually come out. For now, if empty leave blank (intnl msgs later)
@@ -86,9 +95,9 @@ RELEASE!
       *
       [X] Make sure email is quoted-printable decoded
       [X] Complete message viewing widget, so that it looks OK
-      
+
       *
-      [X] Finish off email viewer: 
+      [X] Finish off email viewer:
           [X] scroll only contents, not head
           [X] Take subject out if not present
           [X] Add spans to from
@@ -98,7 +107,7 @@ RELEASE!
       *
       [X] Get rid of computedFrom/computedTo, use incoming instead
       [X] Figure out why workspacesMessages records have bodyHtml, bodyText etc. empty
-      
+
       *
       [ ] Assign contact widget
         [ ] Write link to new contact
@@ -108,7 +117,7 @@ RELEASE!
         [ ] Use same picker, with search already activated, for the picker above
 
       [ ] For incoming, make it possible to change contactId for messageTo[0] (make log entry)
-      
+
       [ ] Place widget to change messageTo[0] in the main inbox, it's always useful there (first 24h)
 
 FROM:
@@ -118,7 +127,7 @@ messageId (obj)
 contactId (obj)
 =>
 if contactId:
-  * contactId 
+  * contactId
 if !contactId:
   * Select...
 * Link email to another existing contact (contact picker)
@@ -146,11 +155,11 @@ contactId
       *
       [ ] Place inbox in "Inbox" tab displaying only ones in `inInbox`, add `inInbox` attribute first (!)
       [ ] Add tab to "Inbox" for "archived", "All" messages (same widget, with extra option)
-      [ ] Make it possible to archive messages 
+      [ ] Make it possible to archive messages
 
       *
       [ ] Make it possible to reply to messages (include original, include subject) from list and single view
-     
+
       **
       [ ] Make it possible to see each recipient's status for outcoung messages
       [ ] Make it possible to see logs for specific recipients
@@ -194,7 +203,7 @@ contactId
     - Detach/attach user from contactId by inviting
 
 * Write a "log browser" for workspace owners and for God to see what happened, with filters
-  
+
   ---------------------
   DEADLINE: 25 June 2015
   ---------------------
@@ -248,7 +257,7 @@ STEP 1: "BOOKINGS"
 ---------------------------------------
 RELEASE BOOKINGDOJO AS IT IS, IN BETA
 ---------------------------------------
-  
+
 STEP 2: "ADVANCED BOOKINGS"
 
   * Ability to set available "activities" for a contact and all contacts, with cost
@@ -287,7 +296,7 @@ STEP 5: "ADVANCED MESSAGES AND TEMPLATES"
   * Ability to set "presence types" (dancer, security, paying guest) -- presentational only
   * Ability to send messages to different present types (all types in a booking)
   * Ability to set templates for messages of different types, with instant previews
-  
+
   ---------------------
   DEADLINE: 30 Jan 2015
   ---------------------
@@ -304,10 +313,10 @@ STEP 6: "CONTACTS -- INTEGRATION"
   ---------------------
 
 -------------------------------------------------------------
-DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
+March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 -------------------------------------------------------------
-
 [LATER, LONGER TERM]
+
   * Update JsonRestStores and querying so that "useRangeHeaders: true" and sortBy are no longer necessary
   * Use SOCKJS for instant messanging instead of polling (dealing with authentication and reconnection)
   * StoreSelect: add a way to go back to initial value even if it's no longer in select
@@ -333,14 +342,14 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   -- CLIENT: Finish the new warning bar!
   -- CLIENT: Make error printing MUCH nicer than a bloody alert() using the new great bar!
   -- CLIENT: Simplify IFs so that it only needs to cancel if it didn't validate, and do anything if it worked OK. Errors
-             and messages handled by generic function 
+             and messages handled by generic function
   -- C/S   : Complete the validation server-side and client-size properly (use the same validators as client side!)
   --SERVER: Make up log library to log ANYTHING with Workspace as a key (not just errors). Log ALL activity
   --CLIENT: Enable logging of all activity with Console.log (to be turned on, so wrap console.log in function)
     +++ THE INTERACTION GALORE (2 days)
   --CLIENT: Create initial Models on the client side for Mongo's data ('workspace')
   --CLIENT: Write more Models for future use/reference (won't work until implemented on server)
-    CLIENT: Change COMPLETELY the logic for forms. Make stores "NewWorkspaces" and "NewWorkspacesAsUser" 
+    CLIENT: Change COMPLETELY the logic for forms. Make stores "NewWorkspaces" and "NewWorkspacesAsUser"
   --SERVER: Write function part on server for workspace and username checking (store: "Workspaces" which only works with the
             right filter).
   --CLIENT: Actually check workspace names and user names using AJAX on the client side (don't allow submit if duplicate)
@@ -377,10 +386,10 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * CLIENT: Make LoginForm functional, needs to find out the workspace to redirect to from the URL bar using a path
   * SERVER: Finish (write) the picker
   * CLIENT: Add roundForm classes to CSS so that notFound and "error" don't have the loginForm class (silly)
-  * CLIENT: Make picker way prettier, 
+  * CLIENT: Make picker way prettier,
   * SERVER: Fix problem where if user is logged in, and creates a workspace, he is not added to the permissions (DB changed)
   * SERVER: Change req.XXXX set by workspaceName and workspaceId tokens so that they are under "app", to keep namespace clean
-            grep 'req\.[^sbqu]' `find .` Note: change workspaceId's parameter string into workspaceIdPages 
+            grep 'req\.[^sbqu]' `find .` Note: change workspaceId's parameter string into workspaceIdPages
   * SERVER: Tidy up code for middleware, put it in a different file.
   * SERVER: Get TOKENS (rename "key" in db and code) actually created when a user is added.
   * SERVER: Set the token as a global variable in the ws page. The key is worked out by User (from Session) + Workspace id (from page)
@@ -399,7 +408,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * SERVER: Find a _good_ way to keep the original error when throwing messages in db errors, maybe providing info to the user? Check
             logging too -- check that logging is happening properly (sent email to stack overflow)
   * SERVER: Uniform the way things are set, into req.application, regardless of what middleware is called
-            
+
   * SERVER: Check logging, and Check that things haven't bombed after latest extensive changes, and that logging still happens OK.
   * C/S   : Revise "protocol", make it a lot better and nicer so that the response is always, always the same (and extra "things" can
             be sent to the app in terms of what to refresh, for example). MAKE SURE THAT IT'S ALWAYS THE SAME FORMAT FOR EVERY ERROR
@@ -455,7 +464,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     In the end, it's a generic container publishing a topic with its object, so that others can piggyback
   * SERVER: Create generic function to parse the query launched by JsonRest queries (filter, range) use it for logs
   * CLIENT: Show a bunch of records (grid, etc.) using the data stores. Make sure there is proper error recovery with
-            reload if there are network issues. 
+            reload if there are network issues.
   * SERVER: Write a "Dashboard" page for the "system" workspace, with a tab that displays logs (filter by time, user, workspace, gravity)
             Improve logging accordingly (now that you can see them...)
   * Write utility functions to copy data taken from a JsonRest query into a form -- UNNECESSARY!
@@ -468,7 +477,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Write basic "Workspace-User settings" (user's settings for that specific workspace). Make fields part of DojoAuth's tables? (Hooks for that)
   * Strenghten existing forms in bd.js (add parametersAreThere as general functions from hotDojoAuth), validate email
   * Write basic "User settings" (General user-wide settings) and show name of logged in user at the top
-  * Change the protocol (sigh). Any get needs to return just the object or null. Maybe sendGetResponse, sendPostResponse? 
+  * Change the protocol (sigh). Any get needs to return just the object or null. Maybe sendGetResponse, sendPostResponse?
   * (Don't) Get rid of that stupid "self" in the user config. Use the proper user _id.
   * Make sure that changing a list in point A will also change the select box in point B immediately.
   * Change config so that it comes in a variable at load time. Somehow shove that into the store cache if possible
@@ -492,7 +501,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Improve ID checking for mongoDB ids, make them one-liners as they are in every single call
   * Fixed mystery of ghost collections created by Mongoose when app started. It was old indexes. ALSO deleted Access as a global Model
   * !! Change the "configuration" form so that if things change (see: version is higher), then it blanks. Note that
-    it cannot get registered as a tab, so it won't get the Comet signals etc. Good chance to check versions in general 
+    it cannot get registered as a tab, so it won't get the Comet signals etc. Good chance to check versions in general
     (increment __v when editing etc.)
   * DEFINITELY switch away from Mongoose
   * Write a builder function that creates get() and put() callbacks based on information <--- !!!
@@ -526,7 +535,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Add option to add the *adding* widget (before, after, none)
   * Make a widget to ask for confirmation -- incredibly, Dojo didn't have one
   * Add option for deletion confirmation via alert (on by default)
-  * Fix the "submit message" issue (change spot where it appears, or give the option of getting it to appear underneath so that 
+  * Fix the "submit message" issue (change spot where it appears, or give the option of getting it to appear underneath so that
     tiny inline forms will still work)
   * Fix the problem with EditingWidget if there is an error -- escape at EditableList must close all editing widgets
   * Make a widget that accepts one store, an editing widget, a displaying widget per item and a "style" (+button at the bottom, in-line
@@ -534,7 +543,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Select box: create a widget that allows user to pick one amongst one of the allowed line-record -- PLUS the current one!
   * Use Use the dgrid widgets and the select widget as engines for the settings screen, finally finally use it!
   * Fix the veeeery broken system that adds tabId to each request. Now it adds it to the header, which makes it impossible to use for
-    deletions. Use aspect.around() and make AppStoreNotify completely agnostic in terms of used store. Move the part about adding 
+    deletions. Use aspect.around() and make AppStoreNotify completely agnostic in terms of used store. Move the part about adding
     tabId to the dojo messages module.
   * Make it possible to place the buttons underneath the widget, aligned to the top, or aligned to the bottom
   * Make it easier to notify multiple stores if a mongoDB table changes, as it's very possible that one different stores will use
@@ -617,8 +626,8 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Rewrite Hotplate, so that it doesn't have dependencies anymore, it uses enhanced EventEmitter
   * Use "cachable" function for cachable hooks
   * Write a totally custom class rather than extending eventEmitter. Write it so that registering a function requires the module's name,
-   and invokeAll groups by moduleName. 
-  * In new Invoke, write the aggregating functions and allow invoking for a specific module! 
+   and invokeAll groups by moduleName.
+  * In new Invoke, write the aggregating functions and allow invoking for a specific module!
   * Simplify the return of moduleName in events, change hook.stores() so that it can return an object
   * Change everywhere with hotHooks and any invokation with grep -i invokeAll `find . -type f`
   * Check that everything actually works
@@ -666,7 +675,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Change UserStrategies into UsersStrategy & others
   * Change storeName to capital letters
   * Make things work (again)
-  * Finish rewriting hotCorePage 
+  * Finish rewriting hotCorePage
   * Make bookingdojo "simply work", publish it online
   * Set example application's store names to new standards
   * Make sure that Hotplate AND sample application has security checks when reading/writing records, check ALL of hotplate in general for sanity
@@ -682,7 +691,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     "add" like it happens in Observer.js (check if the Observer.js way is indeed sane)
     http://dojo-toolkit.33424.n3.nabble.com/Problem-with-aspect-around-store-methods-td3999790.html
   * Turn Jade into a proper module, with enriching Dojo mixin
-  * Fixup existing BD application: 
+  * Fixup existing BD application:
    - DONE only require() actually used modules in files
    - DONE modularise tab registration
    - DONE modularise password re-ask
@@ -707,7 +716,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Change clientPaths hook to clientPath, only one "public" path per module
   * Select items need to be ALL preloaded beforehand, overlay goes away once dgrid is ready.
   * Fix StoreSelect and EditableList so that they are overlayed properly. Also:
-    * With "refreshData", change "refresh" to clickable overlay 
+    * With "refreshData", change "refresh" to clickable overlay
     * catch dgrid errors with overlay if necessary
   * Improve overlay: "Loading", "ClickToReload" (with icons accordingly), make the dgrid widgets use it
   * DONE Write a detailed email to the Dojo guys, explaining exactly what I did:
@@ -771,13 +780,13 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Document JsonRestStores, paramIds is now optional, publicURL is what counts, id fields are assigned automatically
   - Check why adding an entry doesn't automatically position it at the end (reload after adding to see)
     DECIDED: only accept to add as "last" for ordered and unsorted ones. Later we can add in specific spots easily
-             but for unspecified it needs to be last 
+             but for unspecified it needs to be last
   * Fix stupid bug in JsonRestStores
   * Check why JsonRestStores sends double headers if on line 1048, _relocation is passed null rather than 'null', bad symptom
   * Test if comet does what it's meant to do when broadcasting all store cases
   * Fix the way parameters are passed in EditableList/editingWidget: not storeName and store, but storeName+storeParameters+storeExtraParameters
   * Test that I can nest however many times without losing URL parameters <-- Geeeeeeeeeeeesus
-  * Make it possible to pass ONE widget, for editing and adding, since they are (nearly) always the same 
+  * Make it possible to pass ONE widget, for editing and adding, since they are (nearly) always the same
   * Fix successfulsubmit, make it bubble from the editing widgets, and kill the bubbling from the main form. WAY: add "store"
   * Check what you are meant to do when you have a prop you can pass a widget that is also defined in the prototype,
     check that the prop-copying is in the right spot
@@ -841,7 +850,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     X Make up easy way to pass _children, it's a special case since it will only be loaded if autoload is set
     X Add a function to populate all _children for a table  that doesn't have autoload
     X Implement single-lookup autoload (for 1:1 relationships)
-    X Improve code and documentation on recursive code 
+    X Improve code and documentation on recursive code
     X Add a function to redo _searchData and _children for every child table of a record, just calls _completeRecord
     X Add recursive code to updates and deletes, write helper functions for that
     X Fix huge issue where there can be N lookup fields for the same table in a record, turn hashes into arrays and correct _getChildren
@@ -863,7 +872,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 
       X Finish _updateSelfWithSelfUppercase()
       X Make "delete" work (cases 5 and 6)
-      
+
       *
     - Implement searching in simpleDBLayer
       X Populate the searchable hash with all searchable array (plus the ones defined by hand), take TODO comment out
@@ -933,12 +942,12 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Understand why authentication manager doesn't show the tick anymore. This one was ridiculous. How did the CSS change?!?
   * Check ALL existing onlineSearchSchemas, make them work with new architecture, check sanity
   * Make sure that all small custom-created stores have logError set so that they log hotpate errors
-  * Convert existing code to new "nested" architecture. 
+  * Convert existing code to new "nested" architecture.
   * Re-Deploy app to NodeJitsu
 
   "PEDONE"
 
-  * 
+  *
     X Get existing application ready
     X Write initial form and stores
     X Plan work and TODO
@@ -973,7 +982,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     X Fix frame height so that iframe is as big as it needs to be
     X Check for ways to see if just "body" has loaded
 
-  * 
+  *
     X Ability to log from client side
     X Ability to see logs
 
@@ -995,13 +1004,13 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 
    X Change EditableList so that it's a container, placing list in centre and widgets where required
    X Check existing CSS for sanity
-  * 
+  *
     Make sure the following sets CLASSES and not styles:
     N ./hotDojoWidgets/client/AlertBar.js
     N ./hotCorePage/lib/Csses.js
     N ./hotDojoAdd/lib/hotDojoAdd.js
     N ./hotDojoDgridWidgets/lib/hotDojoDgridWidgets.js
-    
+
     X ./hotDojoWidgets/client/_StackFadingMixin.js [ html.style ]
     X ./hotDojoWidgets/client/_OverlayMixin.js (easy)
     N ./hotDojoDgridWidgets/client/EditableList.js
@@ -1026,11 +1035,11 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Have small 2px space for tabs, make email address a select from contacts' email addresses
   * Fix problem where after workspace creation config options do not include _children
   * Show a "tell us about you" and jump to userConfig (or embed widget in dialog box?) for new workspaces
-  * Make sure "tell us about you" stays on till a name and an email address is entered  
+  * Make sure "tell us about you" stays on till a name and an email address is entered
   * Redesign SimpleDbLayer/JsonRestStores so that they allow one-field stores implement isStarred with new way
-  * Make "contact type" not appear for companies 
-  * Make isStarred a generic class in JsonRestStores 
-  * Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)  
+  * Make "contact type" not appear for companies
+  * Make isStarred a generic class in JsonRestStores
+  * Make sure linkedUserId is properly protected and it all works (no longer gets overwritten)
   * Make any contact form update itself based on linkedUserId being there (contact category will disappear)
   * Understand how the hell mainAddressId (and other mainS) did NOT get overwritten without "protected"
     (Answer: SimpleDbLayer-Mongo was broken and wasn't unsetting _children, so they DID get overwritten...)
@@ -1040,7 +1049,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * In contact list, make sure contacts are not DnD-able (meaningless)
   * In contact list, mark contacts connected to users
   * In contact list, take the buttons out for linked contacts
-  * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)    
+  * Add permissions so that a user cannot change a linked contact unless it's their own (or it's God)
     MultiHomePermsMixin will do this automatically if field is called userId!
   * Fix issue with same-layer store, where cache needs to be updated in all of them and notifcations
   * Add "enabled" flag to stores that can have fields deleted
@@ -1050,12 +1059,12 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * See if there is an easy way to get store to give visual cue of reload after moving to rubbish bin
   * (dstore) Add dgrid events in store operations to get visual feedback back
   * Make sure there is a refresh every time there is any operation
-  * Make 'cached' option for stores, export it, construct the right one   
+  * Make 'cached' option for stores, export it, construct the right one
   * Fix messages, right now returning the same message over and over again, and avoid using __proto__
   * Turn Caching off altogether in app waiting for dstore to be fixed
   * Fix deletion, dnd source with dstore 0.4 must have changed
   * Make sure StoreSelect uses get() to get current element, rather than grid (L165)
-  * Make sort work again    
+  * Make sort work again
   * Add tracking code to _ManagerButton.js (it's now commented out)
   * Improve look of rubbish bin
   * Implement new dstores:
@@ -1073,7 +1082,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
       [X] PATCH: add defaultNewToStart an option in page variables so that cache memory stores behave correctly
       [X] FIX: Check how to place things in last spot, `null` currently doesn't work
 
-      [X] DO: Run the application, make it work again 
+      [X] DO: Run the application, make it work again
 
       [X] DO: Clone latest dgrid and latest dstore
       [X] FIX: Work out why in Observable, #243, you need `if ( object && store.getIdentity(object) == targetId) {`
@@ -1086,22 +1095,22 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
       [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
       [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
       [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
-      [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62 
-      
+      [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62
+
       [X] Create own repository for dstore, send pull request for status 201, commit with own stores properly
       [X] DO: Rewrite AppStoreNotify and change any topic.subscribe('storeRecordUpdate') to listening to store
       [X] DO: Write page with all query options, https://github.com/SitePen/dstore/pull/29#issuecomment-46746382
       [X] Check why email addresses don't get refreshed, Suppress reload for local changes after a put
       [X] Re-implement suppressRefresh, Check user registration screen
       [X] Make sure message attributes are copied onto events, with minimal manipulation through message life
-    Add configuration option to decide sorting of contacts, 
+    Add configuration option to decide sorting of contacts,
     Make "sorting of contact" setting the default in contact list at startup
     In workspace config, add option to have a default country code for SMSes and contact data entry
     Put the "name" back at the top of the app, taken from the contact, and check that it changes when changed
 
     In contact list, add a second view on contacts with all "starred" ones. Use body preprocessing.
     Add filter box on top of contacts
-    Check refreshes when there is filtering in contact box and an item is changed   
+    Check refreshes when there is filtering in contact box and an item is changed
     Make up filters for contacts, allow to search for them.
     Make refreshing on filter more intellingent, check for onChange and then issue refresh with scheduleRefresh
     Fix problem with special characters in search like @
@@ -1112,7 +1121,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     Re-enable 'remote' messages for whole stores
     Make the contact lookup refresh changes (especially since you can edit things with it)
     Polish up contact picker
-      [X] order by contactId.id 
+      [X] order by contactId.id
       [X] If possible, do not repeat details if ids match
       [X] Highlight primary email address, or (better) make it come up first (__positioning not working?)
       [X] Develop "default sorting" in JsonRestStores.
@@ -1156,23 +1165,23 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     X Add way to set 'from' via API rather than session
    SERVER. STORES/FIELDS FOR:
     X Add ability to configure twilio (God): add shared phone numbers, API key, API token
-    X Add ability to configure email (ws): 
+    X Add ability to configure email (ws):
       - Email address
        - SMTP (server, account, pw, port)
-       - IMAP (server, account, user, pw, port, interval) 
+       - IMAP (server, account, user, pw, port, interval)
     X Add "system message from" (ws)
     GUI
     X Add ability to configure twilio (God): API key, API token
     X Add ability to configure email (ws):
       X SMTP (email, name, server, account, pw, port)
-      X  IMAP (server, user, pw, port, interval) 
+      X  IMAP (server, user, pw, port, interval)
     - Add ability to configure twilio's numbers:
       X (God) Add shared phone number/subsystem pair as "shared", "available", "private" (to specific ws)
-      X (God) Render numbers better, make it work with 
+      X (God) Render numbers better, make it work with
       X (God) Make it generic, not just for Twilio, adding a "provider" field.
     X (God) Validate so that workspaceId is only allowed for 'private', validate type and provider
       X (ws) Ability to pick a public number, or a private one with matching workspaceId
-      X (ws) Make a store called WorkspacesSmsConfig, configure it via GUI 
+      X (ws) Make a store called WorkspacesSmsConfig, configure it via GUI
     X (ws) Add "from" to GUI to see who the message will be from (only name, not phone/email address)
     - Add program-side export of "from" set in GUI, use it
 **
@@ -1188,7 +1197,7 @@ DECEMBER 2015 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 
 * For debugging messages, each module does require('debug')('hotplate:hotModuleName') and then does
   debugging by issuing debug('...')
-  
+
 [X] Study node-imap module to see how it all works
 [X] Write first rough function to fetch messages via IMAP
 [X] Patch IMAP module so that it handles socket timeouts properly
@@ -1272,7 +1281,7 @@ X In SimpleSchema, attempt as 0 pukes -- check why, and set attempts to 0 so tha
 [X] Write plivo layer to actually send/receive the SMSes
 [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (email)
 [X] Make sure BookingDojo adds to workspacesMessages and workspacesMessagesTo for incoming messages (sms)
-X Improve debugging messages in workspacesMessages    
+X Improve debugging messages in workspacesMessages
 X Send TEXT version of email as well, taken by taking out tags from interface
 X Figure out how to send SANE, CLIENT-SAFE html from the email contents
 X Validate `to` in workspacesMessages (comma separated list) 'abc123,def456,ghi789'.match(/\w+(?=,|$)/g);
@@ -1299,7 +1308,7 @@ X Changed ownedByWorkspaceId into workspaceId
     [X] Take out onlineSearchSchema from WorkspacesUsers and UsersWorkspaces in hotCoreMultiHome.js
     [X] JRS TODO: take AND out if Object.keys( self.onlineSearchSchema.structure ).length is only 1
     [X] JRS TODO: Check what happens when sorting for a nested field with a 1:n relationship with table (?!)
-        http://stackoverflow.com/questions/29115466/what-does-sort-do-in-mongodb-when-sorting-by-a-sub-field-in-an-array 
+        http://stackoverflow.com/questions/29115466/what-does-sort-do-in-mongodb-when-sorting-by-a-sub-field-in-an-array
     [X] Change 'name' into 'type' in queries (double check that that's what it is in dstore)
 
     CLIENT-SIDE: AGGREGATE
@@ -1334,20 +1343,20 @@ X Changed ownedByWorkspaceId into workspaceId
 
     [X] Write initial "testing checklist", something that includes ALL cases including logout from different tab
 
-    CLIENT SIDE: TIDY UP AND FINALISE 
+    CLIENT SIDE: TIDY UP AND FINALISE
     [X] Change the API for the store-aware widgets so that it only gets storeParameters once
     [X] Improve API of ViewingWidget so that it can be call declaratively
     [X] Always use auto-updating templates
-    * 
+    *
     [X] Stop using global variables ANYWHERE in the program, each widget needs MINIMAL parameters
     [X] Take "region" out of the name of positioning, look for 'top', too confusing
     [X] Decide on string, GOOD naming convention for screens
 
-    * 
+    *
     [X] Check the whole of the client-side code for quality, consistency
     [X] Take out ANY useless require from every single file, only require actually used files
     [X] Document each screen's input variables
-    
+
     *
     [X] Work on TODOs in BookingDojo (parameter normalisation for two stores)
 
@@ -1369,7 +1378,7 @@ X Changed ownedByWorkspaceId into workspaceId
 
     *
     [X] Fix problem where changing email address doesn't refresh the grid
-    [X] Check silent errors problem with application. 
+    [X] Check silent errors problem with application.
     [X] Check why email address in config screen doesn't update
 
     *
@@ -1385,7 +1394,7 @@ X Changed ownedByWorkspaceId into workspaceId
     [X] Make ticket in dstore, with patck in Trackable.js, "MERC"
 
     FINISHING HOTPLATE
-    [X] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.) 
+    [X] Write Dojo mixin to make templating easier using published schema (it would be just. so. good.)
     [X] Turn Bookingdojo itself into a normal embeddable widget, get globals from bdMain instead
     [X] Make DEAD sure storeEnhanced is run before ANYTHING else by placing it in bd.js
 
@@ -1403,5 +1412,3 @@ STATUS OF "FIXING hotCoreAuth":
  [X] Return the order number to the client (as well as the names) in the artificial store
  [X] Fix problem where application is not even returned
  [X] Test authentication one last time
-
- 
