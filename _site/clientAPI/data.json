@@ -20,6 +20,20 @@
             "fors": {},
             "namespaces": {}
         },
+        "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/data/features.js": {
+            "name": "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/data/features.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
+        "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/util/toJavaScript.js": {
+            "name": "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/util/toJavaScript.js",
+            "modules": {},
+            "classes": {},
+            "fors": {},
+            "namespaces": {}
+        },
         "hotplate/node_modules/hotClientDojo/client/lib/dstore/tests/sorting.js": {
             "name": "hotplate/node_modules/hotClientDojo/client/lib/dstore/tests/sorting.js",
             "modules": {},
@@ -46,6 +60,44 @@
         },
         {
             "file": "hotplate/node_modules/hotClientDojo/client/lib/dgrid/demos/laboratory/util/toJavaScript.js",
+            "line": 18,
+            "params": [
+                {
+                    "name": "obj:",
+                    "description": "object to convert to JavaScript",
+                    "type": "Object|Array"
+                },
+                {
+                    "name": "options:",
+                    "description": "option bag object",
+                    "type": "Object"
+                },
+                {
+                    "name": "options.indent:",
+                    "description": "(integer) indentation level of output code",
+                    "type": "Number"
+                },
+                {
+                    "name": "options.includeEmpty:",
+                    "description": "if true, empty properties ('', null, undefined) will be included in output",
+                    "type": "Boolean"
+                },
+                {
+                    "name": "options.inline:",
+                    "description": "if true, print just properties, not wrapping braces",
+                    "type": "Boolean"
+                }
+            ],
+            "class": ""
+        },
+        {
+            "file": "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/data/features.js",
+            "line": 1,
+            "description": "REQUIRED\n\tid (Number): unique; sort key (any modules that depend on being loaded after another module should have a higher id)\n\tlabel (String): Display value for the feature\n\tmid (String): absolute mid of the module that provides the feature\n\tfeatureType (String): 'grid' or 'column', determining which tab of the UI it appears under\n\nOPTIONAL\n\tconfigLevel (String): if 'grid', feature will be applied to grid settings; otherwise feature will be applied to each\n\t\tcolumn's settings\n\tconfigModule (String): relative (to the 'widgets' folder) mid of the module that provides the configuration UI\n\tinfo (String): Tooltip text - longer description of the feature",
+            "class": ""
+        },
+        {
+            "file": "hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/util/toJavaScript.js",
             "line": 18,
             "params": [
                 {
@@ -114,6 +166,14 @@
         {
             "message": "Missing item type",
             "line": " hotplate/node_modules/hotClientDojo/client/lib/dgrid/demos/laboratory/util/toJavaScript.js:18"
+        },
+        {
+            "message": "Missing item type\nREQUIRED\n\tid (Number): unique; sort key (any modules that depend on being loaded after another module should have a higher id)\n\tlabel (String): Display value for the feature\n\tmid (String): absolute mid of the module that provides the feature\n\tfeatureType (String): 'grid' or 'column', determining which tab of the UI it appears under\n\nOPTIONAL\n\tconfigLevel (String): if 'grid', feature will be applied to grid settings; otherwise feature will be applied to each\n\t\tcolumn's settings\n\tconfigModule (String): relative (to the 'widgets' folder) mid of the module that provides the configuration UI\n\tinfo (String): Tooltip text - longer description of the feature",
+            "line": " hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/data/features.js:1"
+        },
+        {
+            "message": "Missing item type",
+            "line": " hotplate/node_modules/hotClientDojo/client/lib/dgrid.O/demos/laboratory/util/toJavaScript.js:18"
         },
         {
             "message": "Missing item type\n{id: 1, field1: 'one', field2: '1'},\n{id: 2, field1: 'one', field2: '2'},\n{id: 6, field1: 'one', field2: '3'}\n{id: 5, field1: 'two', field2: '3'},\n{id: 4, field1: 'two', field2: '4'},\n{id: 3, field1: 'two', field2: '5'},",
