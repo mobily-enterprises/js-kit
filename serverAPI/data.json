@@ -306,7 +306,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 310,
+            "line": 309,
             "description": "Returns a function with signature `function( err, user, profile )`,\nwhich will serve the right response depending on the cookie\ncalled `strategyId + '-' + action`\n\nIt might redirect, close, redirect opener and close, return JSON, etc.",
             "itemtype": "method",
             "name": "makeResponder",
@@ -342,7 +342,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 404,
+            "line": 403,
             "description": "It returns the authentication stores\nThe stores returned are:\n\n## `authStrategies`\n\nThe strategies available. This store is a pseudo-store (it doesn't rely on data stored in a database). Its data is the keys of the configuration object `hotCoreAuth.strategies`, which is used to implement `get` and `getQuery`.\n\n    var AuthStrategies = declare( JsonRestStores, JsonRestStores.HTTPMixin, {\n\n      schema: new SimpleSchema({\n        id:        { type: 'blob', isRequired: true, trim: 30 }  ,\n      }),\n\n      handleGet: true,\n      handleGetQuery: true,\n\n      storeName:  'authStrategies',\n\n      publicURL: '/authstrategies/:id',\n      hotExpose: true,\n\n      // Fetch one strategy (if it's defined in hotCoreAuth.strategies)\n      implementFetchOne: function( request, cb ){ },\n\n      // Return the strategies, depending on `hotCoreAuth.strategies`'s keys\n      implementQuery: function( request, cb ){ },\n    });\n\n    stores.authStrategies = new AuthStrategies();\n\n\n## `users`\n\nThe list of users. Note that only very little information is stored about the user itself: this table only stores the `id` and the `recoverToken` fields. It is not exposed to the client application at all: it's only created to be accessible via API within Hotplate itself.\n\n    var Users = declare( HotStore, {\n\n      schema: new HotSchema({\n        id                 : { type: 'id' },\n        recoverToken       : { type: 'blob', searchable: true, notempty: true },\n        recoverTokenCreated: { type: 'date', searchable: true, notempty: true },\n      }),\n\n      storeName:  'users',\n      idProperty: 'id',\n    });\n    stores.users = new Users();\n\n## `usersStrategies`\n\nThe list of strategies associated to a specific user. It implements `get`, `getQuery` and `delete`, and it only allows querying to the record owner (session.userId needs to match the query string's userId). It also doesn't allow a user to delete their last remaining strategy (otherwise they won't be allowed to log back in, nor to recover their access).\n\nNote that `field3` and `field4` are used by hotCoreAuth to store sensitive information, as they are never returned by the store.\n\n    var UsersStrategies = declare( HotStore, {\n\n      schema: new HotSchema({\n        strategyId:  { type: 'blob', searchable: true, required: true, trim: 30 }  ,\n        field1:      { type: 'blob', searchable: true, required: false, trim: 255 } ,\n        field2:      { type: 'blob', searchable: true, required: false, trim: 255 } ,\n        field3:      { type: 'blob', searchable: true, required: false, trim: 255 } ,\n        field4:      { type: 'blob', searchable: true, required: false, trim: 255 } ,\n      }),\n\n      // Nothing is searchable in usersStrategies by default\n      onlineSearchSchema: new HotSchema({\n      }),\n\n      storeName:  'usersStrategies',\n\n      publicURL: '/users/:userId/strategies/:id',\n      hotExpose: true,\n\n      preserveCacheOnReset: true,\n\n      handleGet: true,\n      handleGetQuery: true,\n      handleDelete: true,\n\n      // Users are only allowed to use `delete`, `get` and `getQuery` on their own strategies\n      // Also, users are only allowed to `delete` a strategy if it's not the last one remaining\n      checkPermissions: function( request, method, cb ){ ... },\n\n      // The field `field3` and `field4` are taken out of the equation, as they are \"secret\"\n      extrapolateDoc: function( request, method, doc, cb ){ ... }\n    });\n    stores.usersStrategies = new UsersStrategies();",
             "itemtype": "event",
             "name": "stores",
@@ -358,7 +358,7 @@
         },
         {
             "file": "hotplate/node_modules/hotCoreAuth/lib/hotCoreAuth.js",
-            "line": 685,
+            "line": 684,
             "description": "Sets recover URL `/recover/:recoverToken` (for token recovery).\nAlso goes through the list of `AuthStrategies`, loads the right\nfiles in `auth/{strategy name}.js` (e.g. {{#crossLink \"hotCoreAuth.facebook\"}}{{/crossLink}}), and runs them.\nThis basically ensures that all strategies have the right URLs all set for them to work.",
             "itemtype": "event",
             "name": "setRoutes",
