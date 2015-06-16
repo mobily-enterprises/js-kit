@@ -336,21 +336,6 @@ opener to the appropriate URL. Note that a basic <code>BasicRedirectOpenerRespon
 </ul>
 <p>This is probably the trickiest part of hotCoreAuth: here, <code>makeResponder( req, res, next, strategy, action )</code> is a function generator, which will return a function with the right signature <code>(err, user, profile )</code>.</p>
 <p>Basically, <code>makeResponder()</code> is the function that will respond to the client, having all of Express' request/response variables (<code>req, res, next</code>) and the login information (<code>user, profile</code>).</p>
-<h1>How <code>makeResponder()</code> works</h1>
-<p><code>makeResponder()</code> is how the authentication system communicates with the client application. The client can define what <code>makeResponder()</code> will do by setting a cookie. For example, if after the Facebook authentication (happening in a newly opened window) you want to redirect the opening tab, you should create a cookie called <code>facebook-signin</code> and assign it 'redirect-opener': this will ensure that <code>makeResponder()</code> will return a page crafted so that the &quot;opener&quot; is redirected, and the tab itself is closed.
-The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>XXXX-register</code>, <code>XXXX-resume</code>, <code>XXXX-manager</code> (where <code>XXXX</code> can be <code>facebook</code>, <code>local</code>, or any other authentication strategy.</p>
-<p>Here is a list of possible response types (that is, the cookie value):</p>
-<ul>
-<li><code>content</code></li>
-<li><code>close</code></li>
-<li><code>ajax</code></li>
-<li><code>redirect-opener</code></li>
-<li><code>redirect</code></li>
-</ul>
-<p>They are documented earlier in this file.</p>
-<p>The default action is <code>redirect</code>. The client application should set the relevant cookies at login time, before actioning any of the passport-related URLs.</p>
-<h2>Configuration parameters</h2>
-<p>hotCoreOut can be configured. Here is its basic confguration:</p>
 </div>
 
 
@@ -367,7 +352,7 @@ The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>X
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l310"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:310</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l288"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:288</code></a>
     </span><br>
     <p>The stock function that will return an HTML page responsible of 1) Closing the current window 2) Display <code>profile.message</code> if login failed and there is a message to display.
 This is probably too basic for a real use, but it works.</p>
@@ -407,7 +392,7 @@ hotplate.config.set('hotCoreAuth.closeResponsePage' ) = function( strategyId, ac
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l284"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:284</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l262"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:262</code></a>
     </span><br>
     <p>The stock function that will return an HTML page responsible of displaying content. Typically, this window should stay up for a few seconds, before self-closing.</p>
 <p>This is definitely too basic for <em>any</em> use, since all it does is display &quot;RESPONSE&quot;. You will definitely need to customise it so that it does something useful.</p>
@@ -448,7 +433,7 @@ hotplate.config.set('hotCoreAuth.closeResponsePage' ) = function( strategyId, ac
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l340"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:340</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l318"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:318</code></a>
     </span><br>
     <p>The stock function that will return an HTML page responsible of 1) Closing the current window 2) Redirect the opener to the hotCoreAuth.redirectURLs.success[action] URL (if authentication was successful) or display the error message.</p>
 <p>This is probably too basic for a real use, but it works.</p>
@@ -491,7 +476,7 @@ hotplate.config.set('hotCoreAuth.closeResponsePage' ) = function( strategyId, ac
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l775"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:775</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l753"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:753</code></a></span>
     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).
 Also goes through the list of <code>AuthStrategies</code>, loads the right
 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
@@ -505,7 +490,7 @@ This basically ensures that all strategies have the right URLs all set for them 
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l494"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:494</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l472"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:472</code></a></span>
     <p>It returns the authentication stores
 The stores returned are:</p>
 <h2><code>authStrategies</code></h2>
