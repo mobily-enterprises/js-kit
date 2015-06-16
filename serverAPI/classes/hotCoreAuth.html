@@ -93,7 +93,9 @@
                 </div>
                 <div class="bd">
                     <ul>
-                            <li><a href="#methods_makeResponder">makeResponder</a></li>
+                            <li><a href="#methods_closeResponsePage">closeResponsePage</a></li>
+                            <li><a href="#methods_contentResponsePage">contentResponsePage</a></li>
+                            <li><a href="#methods_redirectOpenerResponsePage">redirectOpenerResponsePage</a></li>
                     </ul>
                 </div>
             </div>
@@ -125,26 +127,139 @@
 
         <div id="main" class="yui3-u">
             <div class="content"><h4>File hotCoreAuth</h4>
-<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l17"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:17</code></a></span>
-<div class="intro"><p>Authentication is based on Passport, and it's the most complex part of Hotplate.
-There are five actions connected to authentication:</p>
+<span class="foundat">File defined in: <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l16"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:16</code></a></span>
+<div class="intro"><p>This file provides authentication abilities. This is the &quot;master&quot; file which will then load the required sub-modules (at the moment, <code>local</code> and <code>facebook</code>) for strategy-specific functionalities.</p>
+<p>While most of other authentication systems are based on username/password, and then allow you to associate other authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth <em>each login method is the equal</em>. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.</p>
+<h1>hotCoreAuth basics</h1>
+<p><code>hotCoreAuth</code> is a complex module that uses Passport to abstract how authentication works. All you need to do is configure hotCoreAuth so that it does what you want it to do. Here are the terms you need to know so that you can configure it correctly for your application.</p>
+<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-step authentication, and it wouldn't need Passport stricky speaking.</em></p>
+<p>There are five <em>actions</em> connected to authentication:</p>
 <ul>
-<li>signin -- to actually login using existing credentials</li>
-<li>register -- to register as a new user, and automatically assign a strategy to them</li>
-<li>recover -- to reset credentials</li>
-<li>manager -- to manage credentials. This is used to associate a strategy to an existing (logged in) user</li>
-<li>resume -- to resume an existing session if authentication is expired.</li>
+<li><code>signin</code> -- to actually login using existing credentials</li>
+<li><code>register</code> -- to register as a new user, and automatically assign a strategy to them</li>
+<li><code>recover</code> -- to reset credentials</li>
+<li><code>manager</code> -- to manage credentials. This is used to associate a new strategy to an existing (logged in) user</li>
+<li><code>resume</code> -- to resume an existing session if authentication is expired.</li>
 </ul>
-<p>Note that while both <code>register</code> and <code>manager</code> associate a strategy to a user, <code>register</code> also <em>creates</em> a brand new user. Also, while both <code>signin</code> and <code>resume</code> basically check that</p>
+<p>Note that while both <code>register</code> and <code>manager</code> associate a strategy to a user, <code>register</code> also <em>creates</em> a brand new user. Also, while both <code>signin</code> and <code>resume</code> basically check that the user is allowed to login, the difference is that with <code>login</code> the user is logging in, and in <code>resume</code> the user is resuming the use of the application once she has been logged out (and the application's page is still open).</p>
 <p>There are currently two implemented strategies (although it's trivial to create more):</p>
 <ul>
 <li><code>local</code> -- using simply a combination of login and password</li>
 <li><code>facebook</code> -- using Facebook's authentication scheme</li>
 </ul>
-<p>In hotCoreAuth, the operation that is about to be performed is defined by the pair <em>strategy-action</em>. For example, <code>local-signin</code>, or <code>facebook-recover</code>, etc.</p>
-<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-step authentication, and it wouldn't need Passport stricky speaking.</em></p>
-<p>While most of other authentication systems are based on username/password, and then allow you to associate other authentication methods to those username/password pairs, in hotCoreAuth <em>each login method is the same</em>. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.</p>
-<h1>How hotCoreAuth provides those functionalities</h1>
+<p>hotCoreAuth will create give authentication URLs for each strategy; for example for <code>facebook</code> it will create:</p>
+<ul>
+<li>GET <code>/auth/signin/facebook</code></li>
+<li>GET <code>/auth/register/facebook</code></li>
+<li>GET <code>/auth/recover/facebook</code></li>
+<li>GET <code>/auth/manager/facebook</code></li>
+<li>GET <code>/auth/resume/facebook</code></li>
+</ul>
+<p>For the <code>local</code> strategy, it will create:</p>
+<ul>
+<li>POST <code>/auth/signin/local</code></li>
+<li>POST <code>/auth/register/local</code></li>
+<li>POST <code>/auth/recover/local</code></li>
+<li>POST <code>/auth/manager/local</code></li>
+<li>POST <code>/auth/resume/local</code></li>
+</ul>
+<p>These URLs are the ones clients will have to use to complete the required action. Note that while some URLs will require a payload (for example, <code>local</code> will require <code>login</code> and <code>password</code> in their POST payload), others will deal with authentication without any data (users will be redirected to Facebook's login screen).</p>
+<p>In hotCoreAuth, the <em>operation</em> that is about to be performed is defined by the pair <em>strategy-action</em>. For example, <code>local-signin</code>, or <code>facebook-recover</code>, etc.</p>
+<p>What these URLs will respond with depends on the <em>response type</em>, which is decided by the client by setting a cookie named after the operation's name (for example <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>XXXX-register</code>, <code>XXXX-resume</code>, <code>XXXX-manager</code>, where <code>XXXX</code> can be <code>facebook</code>, <code>local</code>, or any other authentication strategy). For example, an ajax-based login screen based on local login will have something like this in code: <code>cookie( 'local-signin', 'ajax', { path: '/' } );</code>.</p>
+<p>Defining the response type is crucial for the application. If your application allows you to click on a &quot;Facebook&quot; link, which points straight to <code>/auth/signin/facebook</code>, once the Facebook authentication process is finished you will want to be redirected to either the &quot;login successful&quot; success page, or the &quot;login failed&quot; page. If you open a new browser window for authentication, once the Facebook process is finished, you will probably want to redirect the opening window to the correct URL.</p>
+<p>Here is a list of possible values <em>response types</em> (corresponding to the cookie's value):</p>
+<ul>
+<li>
+<p><code>content</code> -- The function returned by <code>hotCoreAuth.contentResponsePage</code> is run with parameters <code>strategyId, action, user, profile</code>, and the result is then served to the client. The (redefinable) stock function will simply display an HTML page with the word &quot;RESPONSE&quot; in it; the page will close (thanks to a Javascript timer) after 5 seconds. If you use this response type, you ought to redefine <code>hotCoreAuth.contentResponsePage</code> to something more meaningful.</p>
+</li>
+<li>
+<p><code>close</code> -- The function returned by <code>hotCoreAuth.closeResponsePage</code> is run with parameters <code>strategyId, action, user, profile</code>, and the result is then served to the client. The (redefinable) stock function will work like this: if <code>user</code> is set (login successful): the window is closed immediately. If <code>user</code> isn't set and <code>profile</code> has a <code>message</code> attribute, the message is displayed with a Javascript <code>alert()</code> and the window is then closed.</p>
+</li>
+<li>
+<p><code>ajax</code> -- If <code>user</code> is set, it returns a page with status 200, and -- as contents -- a JSON string like so: <code>{ user: user, profile: profile }</code>.  If <code>user</code> isn't set, it returns a page with status <code>403</code> and a JSON string like so: <code>{ message: error }</code> NOTE: Setting <code>ajax</code> as a response type only makes sense for local authentication, since the ajax information will be returned after a redirect, which will basically result in an HTML page containing successful or unsuccesful JONN data.</p>
+</li>
+<li>
+<p><code>redirect-opener</code> -- The function returned by <code>hotCoreAuth.redirectOpenerResponsePage</code> is run with parameters <code>strategyId, action, user, profile</code>, and the result is then served to the client. The (redefinable) stock function will work like this: if the user isn't set (login failed) and <code>profile.message</code> is set, it will display <code>profile.message</code> in a Javascript alert coming from the opener; otherwise (login is successful), it will redirect the opener window by setting its location to  hotCoreAuth.redirectURLs.success['action']. In any case, the current window will be closed.</p>
+</li>
+<li>
+<p><code>redirect</code> -- If <code>user</code> is set, the current window redirected to the URL set as <code>hotCoreAuth.redirectURLs.success['action']</code>. If <code>user</code> isn't set, <code>req.session.messages</code> is pushed <code>{ type: 'error', message: profile.message }</code> and  the window is redirected to <code>hotCoreAuth.redirectURLs.fail['action']</code>. Note that the new page will have access to the message via the session.</p>
+</li>
+</ul>
+<h1>Configuring hotCoreAuth</h1>
+<p>Once you are familiar with the concepts explained above, configuration of <code>hotCoreAuth</code> is very straightforward.</p>
+<pre class="code prettyprint"><code>hotplate.config.set('hotCoreAuth', {
+
+  callbackURLBase: 'http://localhost:3000',
+
+  recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
+
+  // Only local strategy enabled by default
+  strategies: {
+    local: { },
+  },
+
+  redirectURLs: {
+    success: {
+      signin: hotplate.prefix( '/auth/pick' ),
+      recover: hotplate.prefix( '/auth/pick' ),
+      register: hotplate.prefix( '/auth/pick' ),
+      manager: hotplate.prefix( '/' ),
+    },
+
+    fail: {
+      signin: hotplate.prefix( '/auth/welcome' ),
+      recover: hotplate.prefix( '/auth/welcome' ),
+      register: hotplate.prefix(  '/auth/welcome' ),
+      manager: hotplate.prefix( '/' ),
+    }
+  },
+  contentResponsePage: basicContentResponsePage,
+  closeResponsePage: basicCloseResponsePage,
+  redirectOpenerResponsePage: basicRedirectOpenerResponsePage,
+});
+</code></pre>
+<p>Here is an explanation of each option:</p>
+<ul>
+<li>
+<p><code>callbackURLBase</code>. It's the host/port parts of the URL used as prefix for Oauth callbacks.
+This should be changed to your server's IP in production</p>
+</li>
+<li>
+<p><code>recoverURLexpiry</code>. The number of seconds the recover URL will work for</p>
+</li>
+<li>
+<p><code>strategies</code>. The login strategies. By default, it's just <code>local</code> (which doesn't need parameters).
+In your application you might have:</p>
+<p>hotplate.config.set('hotCoreAuth.strategies', {
+facebook: {
+clientID: 'XXXXXXXXXXXXXXXXXX',
+clientSecret: 'YYYYYYYYYYYYYYYYYYYYYY',
+},
+local: {
+},</p>
+</li>
+<li>
+<p><code>redirectURLs</code>. These URLs are used by makeResponder for the redirect and redirect-opener actions
+as well as /recover/:recoverToken (whick will redirect to <code>hotCoreAuth.redirectURLs.success.recover</code>).
+Note that <code>hotplate.routeUrlsPrefix</code> prefixes are honoured thanks to the prefix() call (as they should).</p>
+</li>
+<li>
+<p><code>contentResponsePage</code>. The function that will generate the page content in case the response type is set
+as <code>content</code>. Note that a basic <code>basicContentResponsePage</code> function is set as default and can be used as
+a template.</p>
+</li>
+<li>
+<p><code>closeResponsePage</code>. The function that will generate the page responsible of closing the current window in case the response type is <code>close</code>. Note that a basic <code>basicCloseResponsePage</code> function is set as default and can be used as
+a template.</p>
+</li>
+<li>
+<p><code>redirectOpenerResponsePage</code>. The function that will generate the page responsible of redirecting the
+opener to the appropriate URL. Note that a basic <code>BasicRedirectOpenerResponsePage</code> function is set as default and can be used as a template</p>
+</li>
+</ul>
+<h1>hotCoreAuth internals: hotCoreAuth provides those functionalities</h1>
+<p>TODO: Move facebook configuration example somewhere more meaningful. Probably the facebook module page (with link to it)</p>
+<p>You don't need to know how hotCoreAuth works internally to use it; you will however need to know how it works if you intend to write extra modules for it.</p>
 <p>When it's run, <code>hotCoreAuth</code> will scan the configuration object <code>hotCoreAuth.strategies</code>: each key in the object is a strategy name. For example, for <code>local</code> <code>hotCoreAuth</code> will require <code>auth/facebook.js</code> which in turn will define:</p>
 <ul>
 <li><code>/auth/signin/facebook</code>, <code>/auth/resume/facebook/callback</code></li>
@@ -203,7 +318,7 @@ There are five actions connected to authentication:</p>
 <p>The next two lines will define two routes.</p>
 <p>The route <code>/auth/signin/facebook</code> is managed completely by Passport, which with <code>passport.authenticate('facebook-signin')</code> returns a valid Express route. This route, which will generally be opened in a new window in your client application, will redirect to <a href="http://facebook.com">facebook.com</a>, passing Facebook the <code>clientID</code>, <code>clientSecret</code> and <code>callbackURL</code>. At the end of the process, Facebook will then always redirect the user's browser to <code>/auth/signin/facebook/callback</code> (the callback URL provided earlier to Facebook), which is -- needless to say -- another URL managed by Passport.</p>
 <p>This is where things get interesting.</p>
-<p>Facebook will connect to <code>/auth/signin/facebook/callback</code>, passing it information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This is when passport calls the authentication callback, with the parameters <code>req, accessToken, refreshToken, profile, done</code>.  If <code>profile</code> isn't defined, then it means that Facebook authentication failed. If <code>profile</code> is set, then authentication in Facebook did work. Keep in mind that a successful Facebook login doesn't mean that that Facebook profile is allowed to signin into your application.</p>
+<p>Facebook will connect to <code>/auth/signin/facebook/callback</code>, passing it information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This is when passport calls the authentication callback, with the parameters <code>req, accessToken, refreshToken, profile, done</code>.  If <code>profile</code> isn't defined, then it means that Facebook authentication failed. If <code>profile</code> is set, then authentication in Facebook did work. Keep in mind that a successful Facebook login doesn't mean that that Facebook profile is allowed to signin into your application; it also means that <em>Facebook</em> has verified that the user has valid Facebook credentials.</p>
 <p>The route definition for the second URL can look a little confusing:</p>
 <pre class="code prettyprint"><code>app.get('/auth/signin/facebook/callback', function( req, res, next) {
   passport.authenticate('facebook-signin',  makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
@@ -222,103 +337,20 @@ There are five actions connected to authentication:</p>
 <p>This is probably the trickiest part of hotCoreAuth: here, <code>makeResponder( req, res, next, strategy, action )</code> is a function generator, which will return a function with the right signature <code>(err, user, profile )</code>.</p>
 <p>Basically, <code>makeResponder()</code> is the function that will respond to the client, having all of Express' request/response variables (<code>req, res, next</code>) and the login information (<code>user, profile</code>).</p>
 <h1>How <code>makeResponder()</code> works</h1>
-<p><code>makeResponder()</code> is how the authentication system communicates with the client application. Interaction here is tricky, because the type of response will depend on what the client is expecting. For example, if your application allows you to click on a &quot;Facebook&quot; link, which points straight to <code>/auth/signin/facebook</code>, once the Facebook authentication process is finished you will want to be redirected to either the &quot;login successful&quot; success page, or the &quot;login failed&quot; page. If you open a new browser window for authentication, once the Facebook process is finished, you will probably want to redirect the opening window to the correct URL.
-The client can define what <code>makeResponder()</code> will do by setting a cookie. For example, if after the Facebook authentication (happening in a newly opened window) you want to redirect the opening tab, you should create a cookie called <code>facebook-signin</code> and assign it 'redirect-opener': this will ensure that <code>makeResponder()</code> will return a page crafted so that the &quot;opener&quot; is redirected, and the tab itself is closed.
+<p><code>makeResponder()</code> is how the authentication system communicates with the client application. The client can define what <code>makeResponder()</code> will do by setting a cookie. For example, if after the Facebook authentication (happening in a newly opened window) you want to redirect the opening tab, you should create a cookie called <code>facebook-signin</code> and assign it 'redirect-opener': this will ensure that <code>makeResponder()</code> will return a page crafted so that the &quot;opener&quot; is redirected, and the tab itself is closed.
 The cookies can be: <code>XXXX-signin</code>, <code>XXXX-recover</code>, <code>XXXX-register</code>, <code>XXXX-resume</code>, <code>XXXX-manager</code> (where <code>XXXX</code> can be <code>facebook</code>, <code>local</code>, or any other authentication strategy.</p>
 <p>Here is a list of possible response types (that is, the cookie value):</p>
 <ul>
-<li>
-<p><code>content</code> -- The function returned by hotCoreAuth.responsePage is run with parameters <code>strategyId, action, user, profile</code>, and the result is then served to the client.</p>
-</li>
-<li>
-<p><code>close</code> -- If <code>user</code> is set, the window is closed immediately. If <code>user</code> isn't set and <code>profile</code> has a <code>message</code> attribute, the message is displayed with a Javascript <code>alert()</code> and the window is then closed.</p>
-</li>
-<li>
-<p><code>ajax</code> -- If <code>user</code> is set, it returns a page with status 200, and -- as contents -- a JSON string like so: <code>{ user: user, profile: profile }</code>.  If <code>user</code> isn't set, it returns a page with status <code>403</code> and a JSON string like so: <code>{ message: error }</code></p>
-</li>
-<li>
-<p><code>redirect-opener</code> -- If <code>user</code> is set, the current window is closed and the opening window (with the main login screen) is redirected to the URL set as <code>hotCoreAuth.redirectURLs.success['action']</code>. If <code>user</code> isn't set, <code>profile.message</code> is displayed as a javascript <code>alert()</code> and the current window is closed</p>
-</li>
-<li>
-<p><code>redirect</code> -- If <code>user</code> is set, the current window redirected to the URL set as <code>hotCoreAuth.redirectURLs.success['action']</code>. If <code>user</code> isn't set, <code>req.session.messages</code> is pushed <code>{ type: 'error', message: profile.message }</code> and  the window is redirected to <code>hotCoreAuth.redirectURLs.fail['action']</code>. Note that the new page will have access to the message via the session.</p>
-</li>
+<li><code>content</code></li>
+<li><code>close</code></li>
+<li><code>ajax</code></li>
+<li><code>redirect-opener</code></li>
+<li><code>redirect</code></li>
 </ul>
+<p>They are documented earlier in this file.</p>
 <p>The default action is <code>redirect</code>. The client application should set the relevant cookies at login time, before actioning any of the passport-related URLs.</p>
 <h2>Configuration parameters</h2>
 <p>hotCoreOut can be configured. Here is its basic confguration:</p>
-<pre class="code prettyprint"><code>hotplate.config.set('hotCoreAuth', {
-
-  callbackURLBase: 'http://localhost:3000',
-
-  recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
-
-  // Only local strategy enabled by default
-  strategies: {
-    local: { },
-  },
-
-  redirectURLs: {
-    success: {
-      signin: hotplate.prefix( '/auth/pick' ),
-      recover: hotplate.prefix( '/auth/pick' ),
-      register: hotplate.prefix( '/auth/pick' ),
-      manager: hotplate.prefix( '/' ),
-    },
-
-    fail: {
-      signin: hotplate.prefix( '/auth/welcome' ),
-      recover: hotplate.prefix( '/auth/welcome' ),
-      register: hotplate.prefix(  '/auth/welcome' ),
-      manager: hotplate.prefix( '/' ),
-    }
-  },
-  contentResponsePage: basicContentResponsePage,
-  closeResponsePage: basicCloseResponsePage,
-  redirectOpenerResponsePage: basicRedirectOpenerResponsePage,
-
-});
-</code></pre>
-<p>Here is an explanation of each option:</p>
-<ul>
-<li>
-<p><code>callbackURLBase</code>. It's the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server's IP in production</p>
-</li>
-<li>
-<p><code>recoverURLexpiry</code>. The number of seconds the recover URL will work for</p>
-</li>
-<li>
-<p><code>strategies</code>. The login strategies. By default, it's just <code>local</code> (which doesn't need parameters).
-In your application you might have:</p>
-<p>hotplate.config.set('hotCoreAuth.strategies', {
-facebook: {
-clientID: 'XXXXXXXXXXXXXXXXXX',
-clientSecret: 'YYYYYYYYYYYYYYYYYYYYYY',
-},
-local: {
-},</p>
-</li>
-<li>
-<p><code>redirectURLs</code>. These URLs are used by makeResponder for the redirect and redirect-opener actions
-as well as /recover/:recoverToken (whick will redirect to <code>hotCoreAuth.redirectURLs.success.recover</code>).
-Note that <code>hotplate.routeUrlsPrefix</code> prefixes are honoured thanks to the prefix() call (as they should).</p>
-</li>
-<li>
-<p><code>contentResponsePage</code>. The function that will generate the page content in case the response type is set
-as <code>content</code>. Note that a basic <code>basicContentResponsePage</code> function is set as default and can be used as
-a template.</p>
-</li>
-<li>
-<p><code>closeResponsePage</code>. The function that will generate the page responsible of closing the current window
-in case the response type is <code>close</code>. Note that a basic <code>basicCloseResponsePage</code> function is set as default and can be used as
-a template.</p>
-</li>
-<li>
-<p><code>redirectOpenerResponsePage</code>. The function that will generate the page responsible of redirecting the
-opener to the appropriate URL. Note that a basic <code>BasicRedirectOpenerResponsePage</code> function is set as default and can be used as
-a template</p>
-</li>
-</ul>
 </div>
 
 
@@ -329,36 +361,24 @@ a template</p>
     </ul>
     <div>
             <div id="methods">
-<a name="methods_makeResponder"></a>
+<a name="methods_closeResponsePage"></a>
 <div class="method item">
-     <strong class="name"><code>makeResponder</code></strong>( <code>req, res, next, strategyIdThe, action </code> ) 
+     <strong class="name"><code>closeResponsePage</code></strong>( <code>strategyIdThe, action, user, profile </code> ) 
     <br>
     <span class="foundat">
         
-        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l306"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:306</code></a>
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l310"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:310</code></a>
     </span><br>
-    <p>Returns a function with signature <code>function( err, user, profile )</code>,
-which will serve the right response depending on the cookie
-called <code>strategyId + '-' + action</code></p>
-<p>It might redirect, close, redirect opener and close, return JSON, etc.</p>
+    <p>The stock function that will return an HTML page responsible of 1) Closing the current window 2) Display <code>profile.message</code> if login failed and there is a message to display.
+This is probably too basic for a real use, but it works.</p>
+<p>To redefine it, just set the right hotplate configuration object in your application:
+hotplate.config.set('hotCoreAuth.closeResponsePage' ) = function( strategyId, action, user, profile ){
+...
+}</p>
+<p>.</p>
 
     <strong>Parameters:</strong>
     <ul class="params">
-        <li>
-            <code>req</code> <strong>&lt;Object&gt;</strong>
-        <p>Express' <code>req</code></p>
-
-        </li>
-        <li>
-            <code>res</code> <strong>&lt;Object&gt;</strong>
-        <p>Express' <code>res</code></p>
-
-        </li>
-        <li>
-            <code>next</code> <strong>&lt;Function&gt;</strong>
-        <p>Express' <code>next()</code></p>
-
-        </li>
         <li>
             <code>strategyIdThe</code> <strong>&lt;String&gt;</strong>
         <p>make of the strategy (e.g. 'facebook', 'local')</p>
@@ -367,6 +387,98 @@ called <code>strategyId + '-' + action</code></p>
         <li>
             <code>action</code> <strong>&lt;String&gt;</strong>
         <p>The action (<code>signin</code>, <code>recover</code>, <code>register</code>, <code>resume</code>, <code>manager</code>)</p>
+
+        </li>
+        <li>
+            <code>user</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the user object (a simple <code>{uid: XXXXXXX}<code>&#x60; object); otherwise,&lt;&#x2F;code&gt;false</code></p>
+
+        </li>
+        <li>
+            <code>profile</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the profile information (if available); otherwise, a simple object containing just a <code>message</code> attribute (for example <code>&#x60;{ message: &amp;quot;Login failed&amp;quot; }</code>)</p>
+
+        </li>
+    </ul>
+</div>
+<a name="methods_contentResponsePage"></a>
+<div class="method item">
+     <strong class="name"><code>contentResponsePage</code></strong>( <code>strategyIdThe, action, user, profile </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l284"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:284</code></a>
+    </span><br>
+    <p>The stock function that will return an HTML page responsible of displaying content. Typically, this window should stay up for a few seconds, before self-closing.</p>
+<p>This is definitely too basic for <em>any</em> use, since all it does is display &quot;RESPONSE&quot;. You will definitely need to customise it so that it does something useful.</p>
+<p>To redefine it, just set the right hotplate configuration object in your application:</p>
+<pre class="code prettyprint"><code>hotplate.config.set('hotCoreAuth.contentResponsePage' ) = function( strategyId, action, user, profile ){
+  ...
+}
+</code></pre>
+<p>.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>strategyIdThe</code> <strong>&lt;String&gt;</strong>
+        <p>make of the strategy (e.g. 'facebook', 'local')</p>
+
+        </li>
+        <li>
+            <code>action</code> <strong>&lt;String&gt;</strong>
+        <p>The action (<code>signin</code>, <code>recover</code>, <code>register</code>, <code>resume</code>, <code>manager</code>)</p>
+
+        </li>
+        <li>
+            <code>user</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the user object (a simple <code>{uid: XXXXXXX}<code>&#x60; object); otherwise,&lt;&#x2F;code&gt;false</code></p>
+
+        </li>
+        <li>
+            <code>profile</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the profile information (if available); otherwise, a simple object containing just a <code>message</code> attribute (for example <code>&#x60;{ message: &amp;quot;Login failed&amp;quot; }</code>)</p>
+
+        </li>
+    </ul>
+</div>
+<a name="methods_redirectOpenerResponsePage"></a>
+<div class="method item">
+     <strong class="name"><code>redirectOpenerResponsePage</code></strong>( <code>strategyIdThe, action, user, profile </code> ) 
+    <br>
+    <span class="foundat">
+        
+        <a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l340"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:340</code></a>
+    </span><br>
+    <p>The stock function that will return an HTML page responsible of 1) Closing the current window 2) Redirect the opener to the hotCoreAuth.redirectURLs.success[action] URL (if authentication was successful) or display the error message.</p>
+<p>This is probably too basic for a real use, but it works.</p>
+<p>To redefine it, just set the right hotplate configuration object in your application:</p>
+<pre class="code prettyprint"><code>hotplate.config.set('hotCoreAuth.redirectOpenerResponsePage' ) = function( strategyId, action, user, profile ){
+  ...
+}
+</code></pre>
+<p>.</p>
+
+    <strong>Parameters:</strong>
+    <ul class="params">
+        <li>
+            <code>strategyIdThe</code> <strong>&lt;String&gt;</strong>
+        <p>make of the strategy (e.g. 'facebook', 'local')</p>
+
+        </li>
+        <li>
+            <code>action</code> <strong>&lt;String&gt;</strong>
+        <p>The action (<code>signin</code>, <code>recover</code>, <code>register</code>, <code>resume</code>, <code>manager</code>)</p>
+
+        </li>
+        <li>
+            <code>user</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the user object (a simple <code>{uid: XXXXXXX}<code>&#x60; object); otherwise,&lt;&#x2F;code&gt;false</code></p>
+
+        </li>
+        <li>
+            <code>profile</code> <strong>&lt;Object&gt;</strong>
+        <p>If authentication was successful, the profile information (if available); otherwise, a simple object containing just a <code>message</code> attribute (for example <code>&#x60;{ message: &amp;quot;Login failed&amp;quot; }</code>)</p>
 
         </li>
     </ul>
@@ -379,7 +491,7 @@ called <code>strategyId + '-' + action</code></p>
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l681"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:681</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l775"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:775</code></a></span>
     <p>Sets recover URL <code>/recover/:recoverToken</code> (for token recovery).
 Also goes through the list of <code>AuthStrategies</code>, loads the right
 files in <code>auth/{strategy name}.js</code> (e.g. <a href="../classes/hotCoreAuth.facebook.html" class="crosslink">hotCoreAuth.facebook</a>), and runs them.
@@ -393,7 +505,7 @@ This basically ensures that all strategies have the right URLs all set for them 
     
     
     <br>
-    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l400"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:400</code></a></span>
+    <span class="foundat"><a href="../files/hotplate_node_modules_hotCoreAuth_lib_hotCoreAuth.js.html#l494"><code>hotplate&#x2F;node_modules&#x2F;hotCoreAuth&#x2F;lib&#x2F;hotCoreAuth.js:494</code></a></span>
     <p>It returns the authentication stores
 The stores returned are:</p>
 <h2><code>authStrategies</code></h2>
