@@ -1,7 +1,3 @@
----
-layout: page
----
-
 # Hotplate documentation
 
 Hotplate is based on a very simple core and several modules. The documentation will cover comprehensively every single aspect of Hotplate.
@@ -10,29 +6,29 @@ Hotplate is based on a very simple core and several modules. The documentation w
 
 Hotplate has several dependencies. It's important that you get acquainted to the modules Hotplate uses.
 
-* [Intro](/docs/intro) -- Introduction to Hotplate, its goals, and the core technologies it uses
-* [Dependencies](/docs/dependencies) -- The modules Hotplate depends on. Note that these are the in-house modules developed for Hotplate specifically (although they make sense as stand-alone modules)
+* [Intro](intro) -- Introduction to Hotplate, its goals, and the core technologies it uses
+* [Dependencies](dependencies) -- The modules Hotplate depends on. Note that these are the in-house modules developed for Hotplate specifically (although they make sense as stand-alone modules)
 
 ## Hotplate core
 
 Hotplate itself is a very small core (under 40 lines!) using underlying modules to do everything.
 
-* [Hotplate](/docs/hotplate)
+* [Hotplate](hotplate)
 
 ## Basic Hotplate application
 
 Hotplate is a normal module based on Express. However, it does expect a couple of extra things in your server file to work properly.
 
-* [Hotplate boilerplate](/docs/boilerplate) -- A boilerplate you can use as bases for your own applications.
-* [Hotplate sample application](/docs/sample) -- A sample application to show off some of Hotplate's features
+* [Hotplate boilerplate](boilerplate) -- A boilerplate you can use as bases for your own applications.
+* [Hotplate sample application](sample) -- A sample application to show off some of Hotplate's features
 
 ## Server modules
 
 Server modules are the ones that don't provide any cient-side code -- or, if they do, it's very basic Javascript code necessary to the module to function.
 
-* [hotCore](modules/hotCore) -- Will load all of the core modules
-* [hotCoreAuth](modules/hotCoreAuth) -- The authentication module
-* [hotCorePage](modules/hotCorePage) -- The page generation module
+* [hotCore](hotCore) -- Will load all of the core modules
+* [hotCoreAuth](hotCoreAuth) -- The authentication module
+* [hotCorePage](hotCorePage) -- The page generation module
 
 ## Client modules
 

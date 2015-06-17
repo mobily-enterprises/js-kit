@@ -2,18 +2,6 @@
 layout: page
 ---
 
----
-layout: page
----
-
----
-layout: page
----
-
----
-layout: page
----
-
 # Hotplate
 
 Hotplate itself i a very small core

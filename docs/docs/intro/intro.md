@@ -1,19 +1,3 @@
----
-layout: page
----
-
----
-layout: page
----
-
----
-layout: page
----
-
----
-layout: page
----
-
 Welcome to Hotplate
 ===================
 
