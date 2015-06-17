@@ -49,29 +49,27 @@
   <li>Creating authentication routes to handle authentication using Passport</li>
 </ul>
 
-<p>@module hotCoreAuth</p>
-
-<p>This file provides authentication abilities. This is the “master” file which will then load the required sub-modules (at the moment, <code>local</code> and <code>facebook</code>) for strategy-specific functionalities.</p>
+<p>This module requires sub-modules (at the moment, <code>local</code> and <code>facebook</code>) for strategy-specific functionalities.</p>
 
 <p>While most of other authentication systems are based on username/password, and then allow you to associate other authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth <em>each login method is the equal</em>. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.</p>
 
 <h1 id="hotcoreauth-basics">hotCoreAuth basics</h1>
 
-<p><code>hotCoreAuth</code> is a complex module that uses Passport to abstract how authentication works. All you need to do is configure hotCoreAuth so that it does what you want it to do. Here are the terms you need to know so that you can configure it correctly for your application.</p>
+<p>hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure.</p>
+
+<p>Here are the terms you need to know so that you can configure it correctly for your application.</p>
 
 <p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-step authentication, and it wouldn’t need Passport stricky speaking.</em></p>
 
 <p>There are five <em>actions</em> connected to authentication:</p>
 
 <ul>
-  <li><code>signin</code> – to actually login using existing credentials</li>
-  <li><code>register</code> – to register as a new user, and automatically assign a strategy to them</li>
-  <li><code>recover</code> – to reset credentials</li>
-  <li><code>manager</code> – to manage credentials. This is used to associate a new strategy to an existing (logged in) user</li>
-  <li><code>resume</code> – to resume an existing session if authentication is expired.</li>
+  <li><code>signin</code> – will actually login using existing credentials</li>
+  <li><code>resume</code> – will resume an existing session if authentication has expired</li>
+  <li><code>register</code> – will register as a new user, and automatically assign a strategy to them</li>
+  <li><code>manager</code> – will assign (or delete) authentication strategies to existing users</li>
+  <li><code>recover</code> – will reset credentials</li>
 </ul>
-
-<p>Note that while both <code>register</code> and <code>manager</code> associate a strategy to a user, <code>register</code> also <em>creates</em> a brand new user. Also, while both <code>signin</code> and <code>resume</code> basically check that the user is allowed to login, the difference is that with <code>login</code> the user is logging in, and in <code>resume</code> the user is resuming the use of the application once she has been logged out (and the application’s page is still open).</p>
 
 <p>There are currently two implemented strategies (although it’s trivial to create more):</p>
 
@@ -80,7 +78,7 @@
   <li><code>facebook</code> – using Facebook’s authentication scheme</li>
 </ul>
 
-<p>hotCoreAuth will create give authentication URLs for each strategy; for example for <code>facebook</code> it will create:</p>
+<p>hotCoreAuth will use submodules to create authentication URLs for the corresponding strategy; for example for <code>facebook</code>, the <code>facebook</code> module it will create:</p>
 
 <ul>
   <li>GET <code>/auth/signin/facebook</code></li>
@@ -90,7 +88,7 @@
   <li>GET <code>/auth/resume/facebook</code></li>
 </ul>
 
-<p>For the <code>local</code> strategy, it will create:</p>
+<p>For the <code>local</code> strategy, the <code>local</code> module will create:</p>
 
 <ul>
   <li>POST <code>/auth/signin/local</code></li>
@@ -508,7 +506,6 @@ stores.usersStrategies = new UsersStrategies();
 Also goes through the list of <code>AuthStrategies</code>, loads the right
 files in <code>auth/{strategy name}.js</code> (e.g. ), and runs them.
 This basically ensures that all strategies have the right URLs all set for them to work.</p>
-
 
 
       </section>

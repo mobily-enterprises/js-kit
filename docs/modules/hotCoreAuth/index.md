@@ -9,34 +9,32 @@ This module provides authentication abilities to your application by:
 * Defining authentication stores to be used in your app
 * Creating authentication routes to handle authentication using Passport
 
-@module hotCoreAuth
-
-This file provides authentication abilities. This is the "master" file which will then load the required sub-modules (at the moment, `local` and `facebook`) for strategy-specific functionalities.
+This module requires sub-modules (at the moment, `local` and `facebook`) for strategy-specific functionalities.
 
 While most of other authentication systems are based on username/password, and then allow you to associate other authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth _each login method is the equal_. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.
 
 # hotCoreAuth basics
 
-`hotCoreAuth` is a complex module that uses Passport to abstract how authentication works. All you need to do is configure hotCoreAuth so that it does what you want it to do. Here are the terms you need to know so that you can configure it correctly for your application.
+hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure.
+
+Here are the terms you need to know so that you can configure it correctly for your application.
 
 _NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a two-step authentication, and it wouldn't need Passport stricky speaking._
 
 There are five _actions_ connected to authentication:
 
-* `signin` -- to actually login using existing credentials
-* `register` -- to register as a new user, and automatically assign a strategy to them
-* `recover` -- to reset credentials
-* `manager` -- to manage credentials. This is used to associate a new strategy to an existing (logged in) user
-* `resume` -- to resume an existing session if authentication is expired.
-
-Note that while both `register` and `manager` associate a strategy to a user, `register` also _creates_ a brand new user. Also, while both `signin` and `resume` basically check that the user is allowed to login, the difference is that with `login` the user is logging in, and in `resume` the user is resuming the use of the application once she has been logged out (and the application's page is still open).
+* `signin` -- will actually login using existing credentials
+* `resume` -- will resume an existing session if authentication has expired
+* `register` -- will register as a new user, and automatically assign a strategy to them
+* `manager` -- will assign (or delete) authentication strategies to existing users
+* `recover` -- will reset credentials
 
 There are currently two implemented strategies (although it's trivial to create more):
 
 * `local` -- using simply a combination of login and password
 * `facebook` -- using Facebook's authentication scheme
 
-hotCoreAuth will create give authentication URLs for each strategy; for example for `facebook` it will create:
+hotCoreAuth will use submodules to create authentication URLs for the corresponding strategy; for example for `facebook`, the `facebook` module it will create:
 
 * GET `/auth/signin/facebook`
 * GET `/auth/register/facebook`
@@ -44,7 +42,7 @@ hotCoreAuth will create give authentication URLs for each strategy; for example 
 * GET `/auth/manager/facebook`
 * GET `/auth/resume/facebook`
 
-For the `local` strategy, it will create:
+For the `local` strategy, the `local` module will create:
 
 * POST `/auth/signin/local`
 * POST `/auth/register/local`
@@ -431,4 +429,3 @@ Sets recover URL `/recover/:recoverToken` (for token recovery).
 Also goes through the list of `AuthStrategies`, loads the right
 files in `auth/{strategy name}.js` (e.g. {{#crossLink "hotCoreAuth.facebook"}}{{/crossLink}}), and runs them.
 This basically ensures that all strategies have the right URLs all set for them to work.
-

@@ -17,7 +17,8 @@ Hotplate has several dependencies. It's important that you get acquainted to the
 
 Hotplate itself is a very small core (under 40 lines!) using underlying modules to do everything.
 
-* [Hotplate](/docs/hotplate)
+* [Hotplate](/docs/hotplate) -- Hotplate itself
+* [Hotplate's events](/docs/events) -- Hotplate's events
 
 ## Basic Hotplate application
 
