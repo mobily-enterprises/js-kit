@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Hotplate - documentation: Framework to create multi-homed SaaS with NodeJs, Express" />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="/global/header.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/stylesheet.css">
+
+    <title>Hotplate documentation</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+
+        <div class="main_menu">
+             <span><a href="/">Home</a></span>
+             <span><a href="/guide.html">Guide</a></span>
+             <span><a href="/docs">Documentation</a></span>
+        </div>
+
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/mercmobily/hotplate">View on GitHub</a>
+
+
+          <h1 id="project_title">Hotplate documentation</h1>
+          <h2 id="project_tagline">Framework to create multi-homed SaaS with NodeJs, Express</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/mercmobily/hotplate/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/mercmobily/hotplate/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+
+      <h1 id="hotplate-documentation">Hotplate documentation</h1>
+
+<p>Hotplate is based on a very simple core and several modules. The documentation will cover comprehensively every single aspect of Hotplate.</p>
+
+<h2 id="basic-concepts-and-dependencies">Basic concepts and dependencies</h2>
+
+<p>Hotplate has several dependencies. It’s important that you get acquainted to the modules Hotplate uses.</p>
+
+<ul>
+  <li><a href="intro">Intro</a> – Introduction to Hotplate, its goals, and the core technologies it uses</li>
+  <li><a href="dependencies">Dependencies</a> – The modules Hotplate depends on. Note that these are the in-house modules developed for Hotplate specifically (although they make sense as stand-alone modules)</li>
+</ul>
+
+<h2 id="hotplate-core">Hotplate core</h2>
+
+<p>Hotplate itself is a very small core (under 40 lines!) using underlying modules to do everything.</p>
+
+<ul>
+  <li><a href="hotplate">Hotplate</a></li>
+</ul>
+
+<h2 id="basic-hotplate-application">Basic Hotplate application</h2>
+
+<p>Hotplate is a normal module based on Express. However, it does expect a couple of extra things in your server file to work properly.</p>
+
+<ul>
+  <li><a href="boilerplate">Hotplate boilerplate</a> – A boilerplate you can use as bases for your own applications.</li>
+  <li><a href="sample">Hotplate sample application</a> – A sample application to show off some of Hotplate’s features</li>
+</ul>
+
+<h2 id="server-modules">Server modules</h2>
+
+<p>Server modules are the ones that don’t provide any cient-side code – or, if they do, it’s very basic Javascript code necessary to the module to function.</p>
+
+<ul>
+  <li><a href="hotCore">hotCore</a> – Will load all of the core modules</li>
+  <li><a href="hotCoreAuth">hotCoreAuth</a> – The authentication module</li>
+  <li><a href="hotCorePage">hotCorePage</a> – The page generation module</li>
+</ul>
+
+<h2 id="client-modules">Client modules</h2>
+
+<p>Client modules are the ones focused at providing a specific client-side library as well as providing all of the support functions to make sure that a client-side library adheres to the [Hotplate client blueprint].</p>
+
+<ul>
+  <li><a href="blueprints">Blueprints</a> – Blueprints that every client library should follow</li>
+  <li><a href="hotClientDojo">hotClientDojo</a> – Dojo support</li>
+</ul>
+
+
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Hotplate - documentation maintained by <a href="https://github.com/mercmobily">mercmobily</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+  </body>
+</html>

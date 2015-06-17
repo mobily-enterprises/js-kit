@@ -20,8 +20,7 @@
         <div class="main_menu">
              <span><a href="/">Home</a></span>
              <span><a href="/guide.html">Guide</a></span>
-             <span><a href="/serverAPI/index.html">Server API</a></span>
-             <span><a href="/clientAPI/index.html">Client API</a></span>
+             <span><a href="/docs">Documentation</a></span>
         </div>
 
         <header class="inner">
@@ -62,91 +61,6 @@ By 201X software I mean software that has the following features:</p>
   <li><strong>API-ready</strong>. Having an API needs to be as simple as flicking a switch. Rewriting the software logic for the API is the wrong route.</li>
   <li><strong>Logging</strong>. Everything, good or bad, needs to be logged</li>
 </ul>
-
-<p>I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don’t know, and I frankly don’t care. I wrote Hotplate because I felt that this is what software <em>should</em> be in 201X – which is now.</p>
-
-<h1 id="getting-into-it">Getting into it</h1>
-
-<p>Hotplate is written for Node. It’s a normal, no-frills Node-based framework that can work very happily alongside with ExpressJS application.</p>
-
-<p>Here are the technologies Hotplate is based on, bottom to top:</p>
-
-<h2 id="core-technologies">Core technologies</h2>
-
-<ul>
-  <li>
-    <p>Javascript. Too many resources to list. The book that got me started was <a href="http://www.amazon.com/dp/1847194141">Object-Oriented Javascript</a>. I think it’s great that it covers how constructors and objects work.</p>
-  </li>
-  <li>
-    <p><a href="http://nodejs.org/api/all.html">NodeJs</a>’s documentation. Not exactly tutorial style, but I find that actually going through Node’s own documentation is a great way to actually get to know Node. It starts with a simple, basic web server and then goes through all the nitty-gritty about Node. I personally read it once a month, just to freshen up (you end up using a tiny fraction of what’s in the docs)</p>
-  </li>
-  <li>
-    <p><a href="http://expressjs.com/">ExpressJs</a>’s <a href="http://expressjs.com/guide.html">guide</a> and <a href="http://expressjs.com/api.html">API</a>. Express is actually surprisingly simple and small. It doesn’t actually do <em>that</em> much, what everything it does is really important, and it does it well. It’s important to understand how middleware plugins work.</p>
-  </li>
-</ul>
-
-<h2 id="support-libraries">Support libraries</h2>
-
-<ul>
-  <li>
-    <p><a href="https://github.com/mercmobily/HTTPErrors">HTTPErrors</a>. A very simple module that creates constructor functions for every HTTP return code (actually, not just errors).</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/mercmobily/simpleDeclare">SimpleDeclare</a>. Javascript is a great language, but it lacks a simple way to declare object constructors and inheriting. A lot of node programmers actually do it by hand, writing <code>Class.prototype.someMethod = function(){ ... }</code>. I personally find that absolutely insane. SimpleDeclare solves this problem: it handles (multiple) inheritance, constructor methods, calling of inherited methods, and inheritance of constructor-wide methods. <a href="https://github.com/mercmobily/simpleDeclare/blob/master/declare.js">SimpleDeclare is really small</a>, but it does everything for you.</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/mercmobily/EventEmitterCollector">EventEmitterCollector</a>. In a world where signals are all about “fire and forget”, EventEmitterCollector will emit events and collect results. This is what the modular nature of Hotplate is based on.</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/mercmobily/JsonRestStores">JsonRestStores</a> (which uses <a href="https://github.com/mercmobily/SimpleSchema">SimpleSchema</a>). Hotplate is all about stores – really. JsonRestStores is a fundamental piece here: it allows you to create Json REST stores in no time, dealing with permissions, queries, error management, inherited stores, and so on. You should make yourself comfortable with JsonRestStores <em>while</em> studying Hotplate.</p>
-  </li>
-  <li>
-    <p><a href="https://github.com/mercmobily/simpledblayer">SimpleDbLayer</a>. Most stores are backed by database tables. In such cases, JsonRestStores will use SimpleDbLayer as the database layer. Note that SimpleDbLayer was created and specifically crafted for JsonRestStores. So, while the modules are independent, they are very closely related.</p>
-  </li>
-</ul>
-
-<h2 id="hotplates-documentation">Hotplate’s documentation</h2>
-
-<p>(Note: documentation is in progress)
-Hotplate comes with comprehensive documentation:</p>
-
-<ul>
-  <li>
-    <p>(0% complete) <a href="">Hotplate Quickstart</a> A guide that shows you how to create a first blank application, and “what is what” there</p>
-  </li>
-  <li>
-    <p>(30% complete) <a href="http://www.hotplatejs.com/serverAPI/index.html">Server API documentation</a>. It documents what each Hotplate module provides, from a server point of view.</p>
-  </li>
-  <li>
-    <p>(0% complete) <a href="http://www.hotplatejs.com/clientAPI/index.html">Client API documentation</a>. It documents what each Hotplate module provides to the clients (for example Dojo widgets).</p>
-  </li>
-</ul>
-
-<h1 id="current-status">Current status:</h1>
-
-<ul>
-  <li>Authentication: 100% – DONE</li>
-  <li>General code cleanup: 100% – DONE</li>
-  <li>Fixing hotCoreCometMessages for real time comet updates: 100% – DONE</li>
-  <li>Writing the messenging framework: 100% – DONE</li>
-  <li>Finish Hotplate itself and all related modules: 100% – DONE</li>
-  <li>
-    <blockquote>
-      <blockquote>
-        <blockquote>
-          <p>Write full documentation: 30%</p>
-        </blockquote>
-      </blockquote>
-    </blockquote>
-  </li>
-  <li>INITIAL RELEASE!</li>
-  <li>Write a sample application that uses EVERY feature in Hotplate: 80%</li>
-  <li>Write a small permission module: 0%</li>
-  <li>Write a Stripe payment module: 0%</li>
-  <li>FINAL RELEASE!</li>
-</ul>
-
-<p>CURRENT ETA: July 2015</p>
 
 
       </section>

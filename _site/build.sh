@@ -3,17 +3,35 @@
 rm hotplate
 ln -s ../hotplate hotplate
 
-echo Copying the guide over...
-cat _includes/top_page.txt hotplate/GUIDE.md  > guide.md
+#echo Copying README.md onto index.md...
+#cat _includes/top_page.txt hotplate/README.md  > index.md
 
-echo Copying README.md onto index.md...
-cat _includes/top_page.txt hotplate/README.md  > index.md
+cat _includes/top_page.txt hotplate/docs/index.md > docs/index.md
 
-echo Building server API...
-yuidoc -t _yuidocThemes/hotplate  -o serverAPI hotplate/node_modules/*/lib/
+for i in hotplate/docs/*;do
+  echo $i;
+  name=`echo $i | cut -d '/' -f 3`
+  dir=`echo $i | cut -d '/' -f 3`
 
-echo Building client API...
-yuidoc -t _yuidocThemes/hotplate  -o clientAPI hotplate/node_modules/*/client/
+  echo $name
+
+  if [ $name != 'index\.md' -a $name != 'modules' ];then
+    echo cp -pr $i docs/$dir
+    cp -pr $i docs/$dir
+  fi
+done
+
+for i in hotplate/docs/modules/*/*;do
+  module=`echo $i | cut -d '/' -f 4`
+  mkdir -p docs/$module
+  echo MODULE: $module
+  cat _includes/top_page.txt $i > docs/$module/index.md
+done
+
+#  mkdir documentation/$module
+#  cat _includes/top_page.txt $i > documentation/$module/index.md
+#done
+
 
 rm hotplate
 
