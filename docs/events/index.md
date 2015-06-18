@@ -11,7 +11,7 @@ Several hotplate modules emit and receive events. Normally, an event in Node.js 
 
 Here are the events fired in Hotplate.
 
-## stores
+## stores {#docs-stores}
 
 ### Input
 
@@ -55,6 +55,3 @@ An associative array where each key is the store name. It's important that the m
 
       done( null, stores );
     }))
-
-
-
