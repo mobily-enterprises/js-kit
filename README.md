@@ -71,4 +71,4 @@ Hotplate comes with comprehensive documentation:
 * Write a Stripe payment module: 0%
 * FINAL RELEASE!
 
-CURRENT ETA: July 2015
+CURRENT ETA: August '15
