@@ -16,6 +16,7 @@ done
 
 rm hotplate
 
+doctoc --maxlevel 1 docs
 
 echo Building side with Jekyll...
 jekyll build
