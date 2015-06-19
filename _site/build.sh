@@ -9,6 +9,8 @@ ln -s ../hotplate hotplate
 
 cp -pr hotplate/docs .
 
+doctoc --maxlevel 1 docs
+
 for i in `find docs -name \*md`;do
   echo $i;
   pagify $i
@@ -16,7 +18,6 @@ done
 
 rm hotplate
 
-doctoc --maxlevel 1 docs
 
 echo Building side with Jekyll...
 jekyll build
