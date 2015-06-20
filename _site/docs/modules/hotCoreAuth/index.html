@@ -42,11 +42,6 @@
 
       <h1 id="hotcoreauth">hotCoreAuth</h1>
 
-<!-- START doctoc -->
-<!-- END doctoc -->
-
-<h1 id="introduction">Introduction</h1>
-
 <p>This module provides authentication abilities to Hotplate, including password recovery, registration, login, credential management, and in-app resuming.</p>
 
 <p>This module provides authentication abilities to your application by:</p>
@@ -56,19 +51,19 @@
   <li>Creating authentication routes to handle authentication using Passport</li>
 </ul>
 
-<p>This module requires sub-modules (at the moment, <code>local</code> and <code>facebook</code>) for strategy-specific functionalities.</p>
+<p>This module requires splugins (at the moment, <code>local</code> and <code>facebook</code>) for strategy-specific functionalities.</p>
 
 <p>While most of other authentication systems are based on username/password, and then allow you to associate “extra” authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth <em>each login method is the equal</em>. The user record only has the user’s ID. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.</p>
 
 <h1 id="overview">Overview</h1>
 
-<p>hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as 2-step authentication systems (like Facebook).</p>
+<p>hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as two-legged authentication systems (like Facebook).</p>
 
 <p>hotCoreAut is powerful enough that can be in itself a good enough reason to use Hotplate.</p>
 
 <p>Here are the terms you need to know so that you can configure it correctly for your application.</p>
 
-<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-step authentication, and it wouldn’t need Passport stricky speaking.</em></p>
+<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-legged authentication, and it wouldn’t need Passport stricky speaking.</em></p>
 
 <p>There are five <em>actions</em> connected to authentication:</p>
 
@@ -87,7 +82,7 @@
   <li><code>facebook</code> – using Facebook’s authentication scheme. The credentials will consist of the Facebook user ID</li>
 </ul>
 
-<p>hotCoreAuth will use submodules to create authentication URLs for the corresponding strategy; for example for <code>facebook</code>, the <code>facebook</code> module it will create:</p>
+<p>hotCoreAuth will use plugins to create authentication URLs for the corresponding strategy; for example for <code>facebook</code>, the <code>facebook</code> module it will create:</p>
 
 <ul>
   <li>GET <code>/auth/signin/facebook</code></li>
@@ -123,9 +118,11 @@
     <p>a Facebook-based login screen will likely open a new window on <code>/auth/signin/facebook</code> to autenticate, and will want 1) that new window closed by the end of the authenticaton process 2) the parent window redirected to the application; so, it will have something like this in the code: <code>cookie( 'facebook-signin', 'redirect-opener', { path: '/' } );</code>;</p>
   </li>
   <li>
-    <p>a simpler Facebook-based login screen might not open a new window, and simply hop to the Faceook authentication page on <code>/auth/signin/facebook</code> to autenticate. In this case, the screen will want to know that after authentication the application will be redirected to the main application’s URL; so, it will have something like this in the code: <code>cookie( 'facebook-signin', 'redirect', { path: '/' } );</code>;</p>
+    <p>a simpler Facebook-based login screen might not open a new window, and simply link to the Faceook authentication page on <code>/auth/signin/facebook</code> to autenticate. In this case, after authentication the application should redirected to the main application’s URL; so, it will have something like this in the code: <code>cookie( 'facebook-signin', 'redirect', { path: '/' } );</code>;</p>
   </li>
 </ul>
+
+<p>The default action is <code>redirect</code>.</p>
 
 <p>The response type will depend on how the login screen wants to happen.</p>
 
@@ -161,7 +158,7 @@
     <p><code>users</code>. A simple store that contain just the IDs of the created users. <em>There is no username associated to a user!</em> A user is just an abstract entry: what really matters is the user ID.</p>
   </li>
   <li>
-    <p><code>usersStrategies</code>. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements <code>get</code>, <code>getQuery</code> and <code>delete</code>; the store has a public URL so that existing users can see how they are allowed to login, and delete a strategy if they wish. Each record contains the strategyId and four fields, which will contain strategy login information. For example the strategy <code>facebook</code> will have the Facebook’s userId as <code>field1</code>, whereas the <code>local</code> strategy will have the user’s login name in <code>field1</code> and the user’s password in <code>field3</code>. Note that <code>field3</code> and <code>field4</code> are considered ‘protected’ (which imply that they will not be returned by REST queries).</p>
+    <p><code>usersStrategies</code>. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements <code>get</code>, <code>getQuery</code> and <code>delete</code>; the store has a public URL so that existing users can see how they are allowed to login, and can delete a strategy if they wish. Each record contains the strategyId and four fields, which will contain strategy login information. For example the strategy <code>facebook</code> will have the Facebook’s userId as <code>field1</code>, whereas the <code>local</code> strategy will have the user’s login name in <code>field1</code> and the user’s password in <code>field3</code>. Note that <code>field3</code> and <code>field4</code> are considered ‘protected’ (which imply that they will not be returned by REST queries).</p>
   </li>
 </ul>
 
@@ -208,7 +205,7 @@
 <ul>
   <li>
     <p><code>callbackURLBase</code>. It’s the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server’s IP in production. This is necessary because 2-way authentication methods always end up redirecting to a specific URL.</p>
+This should be changed to your server’s IP in production. This is necessary because two-legged authentication methods always end up redirecting to a specific URL.</p>
   </li>
   <li>
     <p><code>recoverURLexpiry</code>. The number of seconds the recover URL will work for</p>
@@ -239,7 +236,7 @@ This should be changed to your server’s IP in production. This is necessary be
     <p><code>closeResponsePage</code>. The function that will generate the page responsible of closing the current window in case the response type is <code>close</code>. Note that a basic <code>basicCloseResponsePage</code> function is set as default and can be used as a template.</p>
   </li>
   <li>
-    <p><code>redirectOpenerResponsePage</code>. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic <code>BasicRedirectOpenerResponsePage</code> function is set as default and can be used as a template</p>
+    <p><code>redirectOpenerResponsePage</code>. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic <code>basicRedirectOpenerResponsePage</code> function is set as default and can be used as a template</p>
   </li>
 </ul>
 
@@ -269,7 +266,7 @@ This should be changed to your server’s IP in production. This is necessary be
 
 <p>There are two moments when strategies use their stragegy-specific plugins: during the event <code>setRoutes</code> and during the event <code>stores</code>.</p>
 
-<h3 id="extra-routes-defined-by-sub-modules">Extra routes defined by sub-modules</h3>
+<h3 id="extra-routes-defined-by-plugins">Extra routes defined by plugins</h3>
 
 <p>In Hotplate, a module defines routes by responding to the event <code>setRoutes</code>. However, the routes set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, <code>strategyRoutesMaker()</code>, which will be responsible of creating the necessary extra routes for that particular strategy.</p>
 
@@ -281,16 +278,16 @@ This should be changed to your server’s IP in production. This is necessary be
 <p>In case of Facebook, the routes created are:</p>
 
 <ul>
-  <li>Manager: <code>GET /auth/manager/facebook</code>, <code>/auth/manager/facebook/callback</code></li>
-  <li>Signin: <code>GET /auth/signin/facebook</code>, <code>/auth/manager/signin/callback</code></li>
-  <li>Recover: <code>GET /auth/recover/facebook</code>, <code>/auth/manager/recover/callback</code></li>
-  <li>Register: <code>GET /auth/register/facebook</code>, <code>/auth/manager/register/callback</code></li>
-  <li>Resume: <code>GET /auth/resume/facebook</code>, <code>/auth/manager/resume/callback</code></li>
+  <li>Manager: <code>GET /auth/manager/facebook</code>, <code>GET /auth/manager/facebook/callback</code></li>
+  <li>Signin: <code>GET /auth/signin/facebook</code>, <code>GET /auth/manager/signin/callback</code></li>
+  <li>Recover: <code>GET /auth/recover/facebook</code>, <code>GET /auth/manager/recover/callback</code></li>
+  <li>Register: <code>GET /auth/register/facebook</code>, <code>GET /auth/manager/register/callback</code></li>
+  <li>Resume: <code>GET /auth/resume/facebook</code>, <code>GET /auth/manager/resume/callback</code></li>
 </ul>
 
 <p>They do not need any parameters, as authentication will be fully handled by Facebook.</p>
 
-<h3 id="extra-stores-defined-by-sub-modules">Extra stores defined by sub-modules</h3>
+<h3 id="extra-stores-defined-by-plugins">Extra stores defined by plugins</h3>
 
 <p>In Hotplate, a module defines stores by responding to the event <code>stores</code>. However, the stores set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, <code>extraStores()</code>, which will be responsible of creating the necessary extra stores for that particular strategy.</p>
 
@@ -381,7 +378,7 @@ function customAuthentication( req, accessToken, refreshToken, profile, done ) {
     app.get('/auth/signin/facebook', passport.authenticate('facebook-signin'));
 </code></p>
 
-<p>This route is managed completely by Passport (<code>passport.authenticate('facebook-signin')</code> returns a valid Express route function). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the <code>clientID</code>, <code>clientSecret</code> and <code>callbackURL</code>. At the end of the process, Facebook will then always redirect the user’s browser to <code>/auth/signin/facebook/callback</code> (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and – if it did work – the profile information. This secound route is – needless to say – managed directly by Passport via the second route definition:</p>
+<p>This route is managed completely by Passport (<code>passport.authenticate('facebook-signin')</code> returns a valid Express route function). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the <code>clientID</code>, <code>clientSecret</code> and <code>callbackURL</code>. At the end of the process, Facebook will then always redirect the user’s browser to <code>/auth/signin/facebook/callback</code> (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and – if it did work – the profile information. This secound route is – needless to say – managed directly by Passport via the second route definition.</p>
 
 <h3 id="the-second-route">The second route</h3>
 
@@ -400,7 +397,7 @@ app.get('/auth/signin/facebook/callback', function( req, res, next) {
 
 <p>Considering that <code>passport.authenticate()</code> returns a function with the same signature (<code>req, res, next</code>), and it’s returning a function only so that Passport is framework-agnostic, for all intents and purposes, the second line could well read <code>passport.authenticate( req, res, next, 'facebook-signin',  function responder( err, user, profile ){ ... } );</code>.</p>
 
-<p>So, it could be read as:</p>
+<p>So, it could be read (in a simplified form) as:</p>
 
 <pre><code>app.get('/auth/signin/facebook/callback', function( req, res, next) {
   passport.authenticate(req, res, next, 'facebook-signin',  function responder( err, user, profile ){
@@ -411,7 +408,7 @@ app.get('/auth/signin/facebook/callback', function( req, res, next) {
 
 <p>That’s much more readable.</p>
 
-<p>Since <code>passport.authenticate()</code> has access to <code>req</code> and <code>res</code>, it has access to all of the information that came from Facebook (the <code>accessToken</code> and the <code>refreshToken</code>). So, <code>passport.authenticate()</code> is able to call the strategy authentication callback defined earlier, passing it the parameters <code>req, accessToken, refreshToken, profile, done</code>.  Using this callback, <code>passport.authenticate()</code> is able to know if authentication was successful or not (it will receive back <code>user</code> and <code>profile</code> from the calllback). At this point, <code>passport.authenticate()</code> will call the responder with the right parameters <code>user</code> and <code>profile</code>.</p>
+<p>Since <code>passport.authenticate()</code> has access to <code>req</code> and <code>res</code>, it has access to all of the information that came from Facebook (the <code>accessToken</code> and the <code>refreshToken</code>). So, <code>passport.authenticate()</code> is able to call the strategy authentication callback defined earlier, passing it the parameters <code>req, accessToken, refreshToken, profile, done</code>.  Using this callback, <code>passport.authenticate()</code> is able to know if the acquired user is actually allowed to access the site (it will receive back <code>user</code> and <code>profile</code> from the calllback). At this point, <code>passport.authenticate()</code> will call the responder with the right parameters <code>user</code> and <code>profile</code>.</p>
 
 <p>Note that in hotCoreAuth, the responder is actually generated by the function <code>makeResponder()</code>, which will respond with <code>res.send()</code> in accordance with the cookie set by the client, following hotCoreAuth specifications.</p>
 
@@ -669,7 +666,7 @@ stores.login = new Logins();
   <li>Resume: POST<code>/auth/resume/local</code></li>
 </ul>
 
-<p>This plugin is somewhat “atypical” in terms of hotCoreAuth and passport, because – unlike the others – it doesn’t require two step authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the <code>local</code> plugin is the only candidate for the <code>ajax</code> response type (although that’s not a must).</p>
+<p>This plugin is somewhat “atypical” in terms of hotCoreAuth and passport, because – unlike the others – it doesn’t require two-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the <code>local</code> plugin is the only candidate for the <code>ajax</code> response type (although that’s not a must).</p>
 
 <p>A ‘successful login’ for <code>local</code> means that there is a record in <code>usersStrategies</code> where <code>strategyId</code> is <code>local</code>, <code>field1</code> is <code>user</code> and (a hashed version of) <code>field2</code> is <code>password</code>.</p>
 

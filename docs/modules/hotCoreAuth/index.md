@@ -4,11 +4,6 @@ layout: page
 
 # hotCoreAuth
 
-<!-- START doctoc -->
-<!-- END doctoc -->
-
-# Introduction
-
 This module provides authentication abilities to Hotplate, including password recovery, registration, login, credential management, and in-app resuming.
 
 This module provides authentication abilities to your application by:
@@ -16,19 +11,19 @@ This module provides authentication abilities to your application by:
 * Defining authentication stores to be used in your app
 * Creating authentication routes to handle authentication using Passport
 
-This module requires sub-modules (at the moment, `local` and `facebook`) for strategy-specific functionalities.
+This module requires splugins (at the moment, `local` and `facebook`) for strategy-specific functionalities.
 
 While most of other authentication systems are based on username/password, and then allow you to associate "extra" authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth _each login method is the equal_. The user record only has the user's ID. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.
 
 # Overview
 
-hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as 2-step authentication systems (like Facebook).
+hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as two-legged authentication systems (like Facebook).
 
 hotCoreAut is powerful enough that can be in itself a good enough reason to use Hotplate.
 
 Here are the terms you need to know so that you can configure it correctly for your application.
 
-_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a two-step authentication, and it wouldn't need Passport stricky speaking._
+_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a two-legged authentication, and it wouldn't need Passport stricky speaking._
 
 There are five _actions_ connected to authentication:
 
@@ -43,7 +38,7 @@ There are currently two implemented strategies (although it's trivial to create 
 * `local` -- using simply a combination of login and password. The credentials will consist of a login/password pair
 * `facebook` -- using Facebook's authentication scheme. The credentials will consist of the Facebook user ID
 
-hotCoreAuth will use submodules to create authentication URLs for the corresponding strategy; for example for `facebook`, the `facebook` module it will create:
+hotCoreAuth will use plugins to create authentication URLs for the corresponding strategy; for example for `facebook`, the `facebook` module it will create:
 
 * GET `/auth/signin/facebook`
 * GET `/auth/register/facebook`
@@ -71,7 +66,9 @@ The response from the server will depend on the _response type_, which is decide
 
 * a Facebook-based login screen will likely open a new window on `/auth/signin/facebook` to autenticate, and will want 1) that new window closed by the end of the authenticaton process 2) the parent window redirected to the application; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect-opener', { path: '/' } );`;
 
-* a simpler Facebook-based login screen might not open a new window, and simply hop to the Faceook authentication page on `/auth/signin/facebook` to autenticate. In this case, the screen will want to know that after authentication the application will be redirected to the main application's URL; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect', { path: '/' } );`;
+* a simpler Facebook-based login screen might not open a new window, and simply link to the Faceook authentication page on `/auth/signin/facebook` to autenticate. In this case, after authentication the application should redirected to the main application's URL; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect', { path: '/' } );`;
+
+The default action is `redirect`.
 
 The response type will depend on how the login screen wants to happen.
 
@@ -95,7 +92,7 @@ hotCoreAuth provide three stores that will hold the authentication data:
 
 * `users`. A simple store that contain just the IDs of the created users. _There is no username associated to a user!_ A user is just an abstract entry: what really matters is the user ID.
 
-* `usersStrategies`. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements `get`, `getQuery` and `delete`; the store has a public URL so that existing users can see how they are allowed to login, and delete a strategy if they wish. Each record contains the strategyId and four fields, which will contain strategy login information. For example the strategy `facebook` will have the Facebook's userId as `field1`, whereas the `local` strategy will have the user's login name in `field1` and the user's password in `field3`. Note that `field3` and `field4` are considered 'protected' (which imply that they will not be returned by REST queries).
+* `usersStrategies`. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements `get`, `getQuery` and `delete`; the store has a public URL so that existing users can see how they are allowed to login, and can delete a strategy if they wish. Each record contains the strategyId and four fields, which will contain strategy login information. For example the strategy `facebook` will have the Facebook's userId as `field1`, whereas the `local` strategy will have the user's login name in `field1` and the user's password in `field3`. Note that `field3` and `field4` are considered 'protected' (which imply that they will not be returned by REST queries).
 
 This document details the specifications of these [stores](#docs-stores).
 
@@ -137,7 +134,7 @@ Once you are familiar with the concepts explained above, configuration of `hotCo
 Here is an explanation of each option:
 
 * `callbackURLBase`. It's the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server's IP in production. This is necessary because 2-way authentication methods always end up redirecting to a specific URL.
+This should be changed to your server's IP in production. This is necessary because two-legged authentication methods always end up redirecting to a specific URL.
 
 * `recoverURLexpiry`. The number of seconds the recover URL will work for
 
@@ -159,7 +156,7 @@ This should be changed to your server's IP in production. This is necessary beca
 
 * `closeResponsePage`. The function that will generate the page responsible of closing the current window in case the response type is `close`. Note that a basic `basicCloseResponsePage` function is set as default and can be used as a template.
 
-* `redirectOpenerResponsePage`. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic `BasicRedirectOpenerResponsePage` function is set as default and can be used as a template
+* `redirectOpenerResponsePage`. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic `basicRedirectOpenerResponsePage` function is set as default and can be used as a template
 
 The signature for `contentResponsePage`, `closeResponsePage` and `redirectResponsePage` is the same: `function( strategyId, action, user, profile)`. For example you might write:
 
@@ -185,7 +182,7 @@ Where `clientID` and `clientSecret` are provided by Facebook: to get them you wi
 
 There are two moments when strategies use their stragegy-specific plugins: during the event `setRoutes` and during the event `stores`.
 
-### Extra routes defined by sub-modules
+### Extra routes defined by plugins
 
 In Hotplate, a module defines routes by responding to the event `setRoutes`. However, the routes set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, `strategyRoutesMaker()`, which will be responsible of creating the necessary extra routes for that particular strategy.
 
@@ -195,15 +192,15 @@ When responding to `setRoutes`, hotCoreAuth will first set its own URLs (that is
 
 In case of Facebook, the routes created are:
 
-* Manager: `GET /auth/manager/facebook`, `/auth/manager/facebook/callback`
-* Signin: `GET /auth/signin/facebook`, `/auth/manager/signin/callback`
-* Recover: `GET /auth/recover/facebook`, `/auth/manager/recover/callback`
-* Register: `GET /auth/register/facebook`, `/auth/manager/register/callback`
-* Resume: `GET /auth/resume/facebook`, `/auth/manager/resume/callback`
+* Manager: `GET /auth/manager/facebook`, `GET /auth/manager/facebook/callback`
+* Signin: `GET /auth/signin/facebook`, `GET /auth/manager/signin/callback`
+* Recover: `GET /auth/recover/facebook`, `GET /auth/manager/recover/callback`
+* Register: `GET /auth/register/facebook`, `GET /auth/manager/register/callback`
+* Resume: `GET /auth/resume/facebook`, `GET /auth/manager/resume/callback`
 
 They do not need any parameters, as authentication will be fully handled by Facebook.
 
-### Extra stores defined by sub-modules
+### Extra stores defined by plugins
 
 In Hotplate, a module defines stores by responding to the event `stores`. However, the stores set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, `extraStores()`, which will be responsible of creating the necessary extra stores for that particular strategy.
 
@@ -289,7 +286,7 @@ If successful, the custom authentication functon will also set `req.session.logg
     app.get('/auth/signin/facebook', passport.authenticate('facebook-signin'));
 ````
 
-This route is managed completely by Passport (`passport.authenticate('facebook-signin')` returns a valid Express route function). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the `clientID`, `clientSecret` and `callbackURL`. At the end of the process, Facebook will then always redirect the user's browser to `/auth/signin/facebook/callback` (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This secound route is -- needless to say -- managed directly by Passport via the second route definition:
+This route is managed completely by Passport (`passport.authenticate('facebook-signin')` returns a valid Express route function). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the `clientID`, `clientSecret` and `callbackURL`. At the end of the process, Facebook will then always redirect the user's browser to `/auth/signin/facebook/callback` (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This secound route is -- needless to say -- managed directly by Passport via the second route definition.
 
 ### The second route
 
@@ -306,7 +303,7 @@ The scoping of this function can be a little confusing. A little simplification 
 
 Considering that `passport.authenticate()` returns a function with the same signature (`req, res, next`), and it's returning a function only so that Passport is framework-agnostic, for all intents and purposes, the second line could well read `passport.authenticate( req, res, next, 'facebook-signin',  function responder( err, user, profile ){ ... } );`.
 
-So, it could be read as:
+So, it could be read (in a simplified form) as:
 
     app.get('/auth/signin/facebook/callback', function( req, res, next) {
       passport.authenticate(req, res, next, 'facebook-signin',  function responder( err, user, profile ){
@@ -316,7 +313,7 @@ So, it could be read as:
 
 That's much more readable.
 
-Since `passport.authenticate()` has access to `req` and `res`, it has access to all of the information that came from Facebook (the `accessToken` and the `refreshToken`). So, `passport.authenticate()` is able to call the strategy authentication callback defined earlier, passing it the parameters `req, accessToken, refreshToken, profile, done`.  Using this callback, `passport.authenticate()` is able to know if authentication was successful or not (it will receive back `user` and `profile` from the calllback). At this point, `passport.authenticate()` will call the responder with the right parameters `user` and `profile`.
+Since `passport.authenticate()` has access to `req` and `res`, it has access to all of the information that came from Facebook (the `accessToken` and the `refreshToken`). So, `passport.authenticate()` is able to call the strategy authentication callback defined earlier, passing it the parameters `req, accessToken, refreshToken, profile, done`.  Using this callback, `passport.authenticate()` is able to know if the acquired user is actually allowed to access the site (it will receive back `user` and `profile` from the calllback). At this point, `passport.authenticate()` will call the responder with the right parameters `user` and `profile`.
 
 Note that in hotCoreAuth, the responder is actually generated by the function `makeResponder()`, which will respond with `res.send()` in accordance with the cookie set by the client, following hotCoreAuth specifications.
 
@@ -560,7 +557,7 @@ The plugin `hotCoreAuth/local` will create the following routes:
 * Register: POST`/auth/register/local`
 * Resume: POST`/auth/resume/local`
 
-This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require two step authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
+This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require two-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
 
 A 'successful login' for `local` means that there is a record in `usersStrategies` where `strategyId` is `local`, `field1` is `user` and (a hashed version of) `field2` is `password`.
 
