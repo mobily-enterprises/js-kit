@@ -44,9 +44,27 @@ You should now have a good read of how the server side modules work. You should 
 Server modules are the ones that don't provide any cient-side code -- or, if they do, it's very basic Javascript code necessary to the module to function.
 
 * [Hotplate's events](/docs/events) -- Hotplate's events' specifications
-* [hotCore](modules/hotCore) -- Will load all of the core modules
+* [hotCore]() --
 * [hotCoreAuth](modules/hotCoreAuth) -- The authentication module
-* [hotCorePage](modules/hotCorePage) -- The page generation module
+* [hotCoreClientFiles]() --
+* [hotCoreComet]() --
+* [hotCoreCommonValidators]() --
+* [hotCoreError]() --
+* [hotCoreErrorProtocol]() --
+* [hotCoreHandyCss]() --
+* [hotCoreJsonRestStores]() --
+* [hotCoreMultiHome]() --
+* [hotCorePage]() --
+* [hotCoreServerLogger]() --
+* [hotCoreSharedCode]() --
+* [hotCoreSharedValidators]() --
+* [hotCoreStoreConfig]() --
+* [hotCoreStoreExposer]() --
+* [hotCoreStoreIndexer]() --
+* [hotCoreStoreLogger]() --
+* [hotCoreStoreRegistry]() --
+* [hotCoreStoreVars]() --
+* [hotCoreTransport]() --
 
 ## Client modules
 
