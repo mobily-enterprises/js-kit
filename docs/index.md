@@ -30,8 +30,8 @@ Study carefully the 30 or so lines of code of Hotplate.
 
 Hotplate is a normal module based on Express. However, it does expect a couple of extra things in your server file to work properly.
 
-* [Hotplate simple application](/docs/boilerplateSingle) -- A boilerplate you can use as bases for your own applications.
-* [Hotplate multi-home application](/docs/boilerplateMultiHome) -- A boilerplate you can use as bases for your own multi-homed applications (where users can invite others to a workspace, or register themselves).
+* [Hotplate simple application]() -- NOT YET DONE. A boilerplate you can use as bases for your own applications.
+* [Hotplate multi-home application]() -- NOT YET DONE. A boilerplate you can use as bases for your own multi-homed applications (where users can invite others to a workspace, or register themselves).
 
 This documentation will point to the Hotplate modules the sample applications use. You should study these applications and make yourself familiar with Hotplate's modules and the way they are used in real life applcations.
 
@@ -72,8 +72,8 @@ Now that you know how the server does things, you should read how clients are su
 
 Client modules are the ones focused at providing a specific client-side library as well as providing all of the support functions to make sure that a client-side library adheres to the [Hotplate client blueprint].
 
-* [Blueprints](blueprints) -- Blueprints that every client library should follow
-* [hotClientDojo](hotClientDojo) -- Dojo support
+* [Blueprints]() -- NOT YET DOCUMENTED -- Blueprints that every client library should follow
+* [hotClientDojo]() -- NOT YET DOCUMENTED -- Dojo support
 
 ## Final words
 
