@@ -2,14 +2,6 @@
 layout: page
 ---
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
-
-- [Hotplate documentation](#hotplate-documentation)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 # Hotplate documentation
 
 Hotplate is based on a very simple core and several modules. The documentation will cover comprehensively every single aspect of Hotplate.

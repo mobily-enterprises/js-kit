@@ -42,18 +42,8 @@
 
       <h1 id="hotcoreauth">hotCoreAuth</h1>
 
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
-<ul>
-  <li><a href="#introduction">Introduction</a></li>
-  <li><a href="#overview">Overview</a></li>
-  <li><a href="#configuration">Configuration</a></li>
-  <li><a href="#writing-plugins-for-extra-strategies">Writing plugins for extra strategies</a></li>
-  <li><a href="#events-#docs-events">Events {#docs-events}</a></li>
-</ul>
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 <h1 id="introduction">Introduction</h1>
 
@@ -595,7 +585,7 @@ stores.login = new Logins();
 
 <p>The “recovery URL” contains the <code>recoveryToken</code>: this route will check the database looking for a user with a matching <code>recoverToken</code> in the <code>users</code> table: if found, the user will be set as logged in and the user will be redirected to <code>hotCoreAuth.redirectURLs.success.recover</code>.</p>
 
-<h3 id="routes-created-by-hotcoreauthfacebook">routes created by <code>hotCoreAuth/facebook</code></h3>
+<h3 id="routes-created-by-hotcoreauthauthfacebookjs">routes created by <code>hotCoreAuth/auth/facebook.js</code></h3>
 
 <p>The plugin <code>hotCoreAuth/facebook</code> will create the following “public” routes:</p>
 
@@ -607,9 +597,9 @@ stores.login = new Logins();
   <li>Resume: GET <code>/auth/resume/facebook</code></li>
 </ul>
 
-<p>These routes do not take any paramters. Your application should even just point there (in which case the <code>redirect</code> response type is recommended), or open a new window with them (usually using the <code>redirect-opener</code> response type).</p>
+<p>These routes do not take any paramters. Your application should either just point there (in which case the <code>redirect</code> response type is recommended), or open a new window with them (usually using the <code>redirect-opener</code> response type).</p>
 
-<p>It will also create the following “internal” routes (not to be used directly by the application):</p>
+<p>It will also create the following “redirect” routes (not to be used directly by the application):</p>
 
 <ul>
   <li>Manager: GET <code>/auth/manager/facebook/callback</code></li>
@@ -635,7 +625,9 @@ stores.login = new Logins();
 
 <p>In case of successful Facebook login, it will check whether <code>facebook</code> is already a login strategy associated to the user. If the user doesn’t yet have a <code>facebook</code> strategy associated to her, it will associate the Facebook profile ID with the user by adding a record to the store <code>usersStrategies</code>.</p>
 
-<p><em>Note</em>: the new strategy is added via a REST API call, like so: <code>usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id }</code> so that any notification mechanism (via comet) to existing users is actually triggered.</p>
+<p>This operation will fail if either the user already has a <code>facebook</code> strategy associated to her, or if that Facebook ID is already associated to a different account.</p>
+
+<p><em>Note</em>: the new strategy is added via a REST API call, like so: <code>usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id }</code> so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that <code>login</code> is now a viable strategy).</p>
 
 <p>The Facebook ID is stored in <code>field1</code> in the <code>userStrategies</code> store.</p>
 
@@ -667,7 +659,7 @@ stores.login = new Logins();
 
 <p>This route is totally equivalent to <code>/auth/signin/facebook</code>, since they do essentially the same thing. In terms of Hotplate, the difference is in the <em>response type</em>: since <code>signin</code> one is meant to be used from a login screen and <code>resume</code> is meant to be used within the application, the <em>response type</em> will definitely be different.</p>
 
-<h3 id="routes-created-by-hotcoreauthlocal">Routes created by <code>hotCoreAuth/local</code></h3>
+<h3 id="routes-created-by-hotcoreauthauthlocaljs">Routes created by <code>hotCoreAuth/auth/local.js</code></h3>
 
 <p>The plugin <code>hotCoreAuth/local</code> will create the following routes:</p>
 
@@ -679,22 +671,61 @@ stores.login = new Logins();
   <li>Resume: POST<code>/auth/resume/local</code></li>
 </ul>
 
+<p>This plugin is somewhat “atypical” in terms of hotCoreAuth and passport, because – unlike the others – it doesn’t require two step authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the <code>local</code> plugin is usable with the <code>ajax</code> response type (although that’s not a must).</p>
+
 <p>Here is the description of each one.</p>
 
 <h4 id="post-authmanagerlocal"><code>POST /auth/manager/local</code></h4>
 
-<p>This route will add a record to <code>usersStrategies</code> for the logged in user.</p>
+<p>This route will only work if the user is already logged in (checked via the session variable <code>req.session.loggedIn</code>) since it’s meant to be used to <em>add</em> a new strategy to a logged in user.</p>
+
+<p>This route will either add a new <code>local</code> strategy for the user (using given <code>login</code> and <code>password</code>), or it will update the existing <code>local</code> strategy information with the provided <code>login</code> and <code>password</code>.</p>
 
 <p>Input:
 * <code>login</code> – the login name to be changed
 * <code>password</code> – the password to be set for that login name. If the password is <code>*</code>, then it’s left unchanged.</p>
 
-<p>In usersStrategies:</p>
+<p>The record in <code>usersStrategies</code> will have <code>field1</code> set as the login name, and <code>field3</code> as an encrypted version of the user’s password.</p>
 
-<ul>
-  <li><code>field1</code> is used to store the username</li>
-  <li><code>field3</code> is used to store an encripted version of the password</li>
-</ul>
+<p><em>Note</em>: if <code>local</code> wasn’t an allowed strategy for the user (that is, a new record is being added to <code>usersStrategies</code>), the new strategy is added via a REST API call, like so: <code>usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }</code> so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that <code>login</code> is now a viable strategy).</p>
+
+<h4 id="get-authsigninlocal"><code>GET /auth/signin/local</code></h4>
+
+<p>This route will only work if the user is <em>not</em> logged in (checked via the session variable <code>req.session.loggedIn</code>) since it’s meant to be used to actually login.</p>
+
+<p>In case of successful login, it will set <code>req.session.loggedIn</code> and <code>req.session.userId</code>. A ‘successful login’ here means that there is a record in <code>usersStrategies</code> where <code>strategyId</code> is <code>local</code>, <code>field1</code> is <code>user</code> and (hashed) <code>field2</code> is <code>password</code> .</p>
+
+<p>Input:
+* <code>login</code> – the login name used to sign in
+* <code>password</code> – the password</p>
+
+<h4 id="get-authrecoverlocal"><code>GET /auth/recover/local</code></h4>
+
+<p>FIXME</p>
+
+<p>This route will only work if the user is <em>not</em> logged in (checked via the session variable <code>req.session.loggedIn</code>) since it’s meant to be used to recover access to the application.</p>
+
+<p>In case of successful Facebook login, it will update the <code>users</code> table setting the fields <code>user.recoverToken</code> and <code>user.recoverTokenCreated</code>.</p>
+
+<p>The token will then be used by the route <code>/recover/:recoverToken</code> to let the user back in.</p>
+
+<p>When recovering, the signal XXXXXXXX (TODO: decide name and emit it!) is emitted, to notify the application which will, in turn, be responsible of sending the user the secret recovery URL (my SMS, email, smoke signals, etc.).</p>
+
+<h4 id="get-authregisterlocal"><code>GET /auth/register/local</code></h4>
+
+<p>FIXME</p>
+
+<p>This route will only work if the user is not already logged in (checked via the session variable <code>req.session.loggedIn</code>).</p>
+
+<p>In case of successful Facebook login, it will first check that that Facebook ID isn’t already used in the application; if it isn’t, it will associate the Facebook profile ID with the user by adding a record to the store <code>usersStrategies</code>.</p>
+
+<p>The Facebook ID is stored in <code>field1</code> in the <code>userStrategies</code> store.</p>
+
+<h4 id="get-authresumelocal"><code>GET /auth/resume/local</code></h4>
+
+<p>FIXME</p>
+
+<p>This route is totally equivalent to <code>/auth/signin/facebook</code>, since they do essentially the same thing. In terms of Hotplate, the difference is in the <em>response type</em>: since <code>signin</code> one is meant to be used from a login screen and <code>resume</code> is meant to be used within the application, the <em>response type</em> will definitely be different.</p>
 
 
       </section>

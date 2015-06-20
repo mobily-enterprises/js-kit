@@ -9,7 +9,7 @@ ln -s ../hotplate hotplate
 
 cp -pr hotplate/docs .
 
-doctoc --maxlevel 1 docs
+# doctoc --maxlevel 1 docs
 
 for i in `find docs -name \*md`;do
   echo $i;
