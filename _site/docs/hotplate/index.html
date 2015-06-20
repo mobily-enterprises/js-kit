@@ -42,7 +42,93 @@
 
       <h1 id="hotplate">Hotplate</h1>
 
-<p>Hotplate itself i a very small core</p>
+<p>Hotplate itself i a very small core, surrounded by several powerful modules; each module is meant to do one thing, and do it well.</p>
+
+<p>To show how small it is, here is Hotplate’s full source code:</p>
+
+<p>````
+var async = require(‘async’)
+  , EventEmitterCollector = require(“eventemittercollector”)
+  , DeepObject = require(“deepobject”)
+  , colorConsole = require(‘tracer’).colorConsole()
+  , path = require( ‘path’)
+  ;
+var hotplate = exports;</p>
+
+<p>// Hotplate’s core functionality
+hotplate.require = function( m ){ return require( m ); };
+hotplate.cachable = async.memoize;
+hotplate.hotEvents = new EventEmitterCollector();
+hotplate.config = new DeepObject();
+hotplate.critical = colorConsole.error.bind( colorConsole );
+hotplate.prefix = function( p ){
+  return path.join( hotplate.config.get( ‘hotplate.routeUrlsPrefix’ ), p );
+};</p>
+
+<p>// Hotplate’s sane defaults
+// You can (and should) over-ride them in your server.js file</p>
+
+<p>// Basic Hotplate prefixes for locations
+hotplate.config.set( ‘hotplate.moduleFilesPrefix’, ‘/hotplate’ ); // hotClientXXX modules will use it as base URL
+hotplate.config.set( ‘hotplate.routeUrlsPrefix’, ‘/pages’ ); // hotCoreAuth uses it as base URL</p>
+
+<p>// Db settings
+hotplate.config.set( ‘hotplate.db’, null );
+hotplate.config.set( ‘hotplate.DbLayerMixin’, function(){ } );
+hotplate.config.set( ‘hotplate.SchemaMixin’, function(){ } );
+````</p>
+
+<p>I will go through every section right now.</p>
+
+<h1 id="the-required-modules">The required modules</h1>
+
+<p><code>
+var async = require('async')
+  , EventEmitterCollector = require("eventemittercollector")
+  , DeepObject = require("deepobject")
+  , colorConsole = require('tracer').colorConsole()
+  , path = require( 'path')
+  ;
+var hotplate = exports;
+</code></p>
+
+<p>Here:</p>
+
+<ul>
+  <li><code>async</code> is used to “borrow” its powerful <code>memoize()</code> function, that is mapped as <code>hotplate.memoize()</code>.</li>
+  <li><a href="https://github.com/mercmobily/EventEmitterCollector">EventEmitterCollector</a> is used to create the object <code>hotplate.hotEvents</code>, which is the heart of every Hotplate application</li>
+  <li><a href="https://github.com/mercmobily/deepobject">DeepObject</a> is used to create the object <code>hotplate.config</code>, which will store configuration for every module in Hotplate</li>
+  <li><code>colorConsole</code> is used  to create the <code>hotplate.critical()</code> function, that will log a critical condition</li>
+  <li><code>path</code> is used to use <code>path.join()</code> in the <code>hotplate.prefix()</code> function`</li>
+</ul>
+
+<h1 id="api">API</h1>
+
+<h2 id="docs-api-require"><code>hotplate.require( moduleName )</code></h2>
+
+<p>hotplate.require = function( m ){ return require( m ); };</p>
+
+<h2 id="docs-api-cachable"><code>hotplate.cachable( function )</code></h2>
+
+<p>hotplate.cachable = async.memoize;</p>
+
+<h2 id="docs-api-hotEvents"><code>hotplate.hotEvents</code></h2>
+
+<p>hotplate.hotEvents = new EventEmitterCollector();</p>
+
+<h2 id="docs-api-config"><code>hotplate.config</code></h2>
+
+<p>hotplate.config = new DeepObject();</p>
+
+<h2 id="docs-api-critical"><code>hotplate.critical( parameters )</code></h2>
+
+<p>hotplate.critical = colorConsole.error.bind( colorConsole );</p>
+
+<h2 id="docs-api-prefix"><code>hotplate.prefix( routeString )</code></h2>
+
+<p>hotplate.prefix = function( p ){
+  return path.join( hotplate.config.get( ‘hotplate.routeUrlsPrefix’ ), p );
+};</p>
 
 
       </section>

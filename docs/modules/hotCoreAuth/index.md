@@ -17,13 +17,13 @@ While most of other authentication systems are based on username/password, and t
 
 # Overview
 
-hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as two-legged authentication systems (like Facebook).
+hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as three-legged authentication systems (like Facebook).
 
 hotCoreAut is powerful enough that can be in itself a good enough reason to use Hotplate.
 
 Here are the terms you need to know so that you can configure it correctly for your application.
 
-_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a two-legged authentication, and it wouldn't need Passport stricky speaking._
+_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a three-legged authentication, and it wouldn't need Passport stricky speaking._
 
 There are five _actions_ connected to authentication:
 
@@ -134,7 +134,7 @@ Once you are familiar with the concepts explained above, configuration of `hotCo
 Here is an explanation of each option:
 
 * `callbackURLBase`. It's the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server's IP in production. This is necessary because two-legged authentication methods always end up redirecting to a specific URL.
+This should be changed to your server's IP in production. This is necessary because three-legged authentication methods always end up redirecting to a specific URL.
 
 * `recoverURLexpiry`. The number of seconds the recover URL will work for
 
@@ -557,7 +557,7 @@ The plugin `hotCoreAuth/local` will create the following routes:
 * Register: POST`/auth/register/local`
 * Resume: POST`/auth/resume/local`
 
-This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require two-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
+This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require three-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
 
 A 'successful login' for `local` means that there is a record in `usersStrategies` where `strategyId` is `local`, `field1` is `user` and (a hashed version of) `field2` is `password`.
 

@@ -57,13 +57,13 @@
 
 <h1 id="overview">Overview</h1>
 
-<p>hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as two-legged authentication systems (like Facebook).</p>
+<p>hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as three-legged authentication systems (like Facebook).</p>
 
 <p>hotCoreAut is powerful enough that can be in itself a good enough reason to use Hotplate.</p>
 
 <p>Here are the terms you need to know so that you can configure it correctly for your application.</p>
 
-<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a two-legged authentication, and it wouldn’t need Passport stricky speaking.</em></p>
+<p><em>NOTE: <code>hotCoreAuth</code> uses passport for every authentication strategy, including <code>local</code>. This is done mainly for consistency: <code>local</code> is not a three-legged authentication, and it wouldn’t need Passport stricky speaking.</em></p>
 
 <p>There are five <em>actions</em> connected to authentication:</p>
 
@@ -205,7 +205,7 @@
 <ul>
   <li>
     <p><code>callbackURLBase</code>. It’s the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server’s IP in production. This is necessary because two-legged authentication methods always end up redirecting to a specific URL.</p>
+This should be changed to your server’s IP in production. This is necessary because three-legged authentication methods always end up redirecting to a specific URL.</p>
   </li>
   <li>
     <p><code>recoverURLexpiry</code>. The number of seconds the recover URL will work for</p>
@@ -666,7 +666,7 @@ stores.login = new Logins();
   <li>Resume: POST<code>/auth/resume/local</code></li>
 </ul>
 
-<p>This plugin is somewhat “atypical” in terms of hotCoreAuth and passport, because – unlike the others – it doesn’t require two-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the <code>local</code> plugin is the only candidate for the <code>ajax</code> response type (although that’s not a must).</p>
+<p>This plugin is somewhat “atypical” in terms of hotCoreAuth and passport, because – unlike the others – it doesn’t require three-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the <code>local</code> plugin is the only candidate for the <code>ajax</code> response type (although that’s not a must).</p>
 
 <p>A ‘successful login’ for <code>local</code> means that there is a record in <code>usersStrategies</code> where <code>strategyId</code> is <code>local</code>, <code>field1</code> is <code>user</code> and (a hashed version of) <code>field2</code> is <code>password</code>.</p>
 

@@ -44,6 +44,8 @@
 
 <p>Hotplate is based on a very simple core and several modules. The documentation will cover comprehensively every single aspect of Hotplate.</p>
 
+<p>You should read this documentation top to bottom, following the instruction in this guide.</p>
+
 <h2 id="basic-concepts-and-dependencies">Basic concepts and dependencies</h2>
 
 <p>Hotplate has several dependencies. It’s important that you get acquainted to the modules Hotplate uses.</p>
@@ -53,13 +55,17 @@
   <li><a href="/docs/dependencies">Dependencies</a> – The modules Hotplate depends on. Note that these are the in-house modules developed for Hotplate specifically (although they make sense as stand-alone modules)</li>
 </ul>
 
+<p>You should be at least familiar with Hotplate’s dependences, especially SimpleDeclare, JsonRestStores and SimpleDbLayer. You don’t need to master them (JsonRestStores is really quite bit on its own), but at least know the main syntax.</p>
+
 <h2 id="hotplate-core">Hotplate core</h2>
 
-<p>Hotplate itself is a very small core (under 40 lines!) using underlying modules to do everything.</p>
+<p>Hotplate itself is a very small core (under 40 lines!) using underlying modules to do everything.
+You should be very familiar with the way Hotplate does things; the main ones are fire-and-respond event handling with EventEmitterCollecotr and configuration with DeepObject.</p>
+
+<p>Study carefully the 30 or so lines of code of Hotplate.</p>
 
 <ul>
   <li><a href="/docs/hotplate">Hotplate</a> – Hotplate itself</li>
-  <li><a href="/docs/events">Hotplate’s events</a> – Hotplate’s events</li>
 </ul>
 
 <h2 id="basic-hotplate-application">Basic Hotplate application</h2>
@@ -67,21 +73,30 @@
 <p>Hotplate is a normal module based on Express. However, it does expect a couple of extra things in your server file to work properly.</p>
 
 <ul>
-  <li><a href="/docs/boilerplate">Hotplate boilerplate</a> – A boilerplate you can use as bases for your own applications.</li>
-  <li><a href="/docs/sample">Hotplate sample application</a> – A sample application to show off some of Hotplate’s features</li>
+  <li><a href="/docs/boilerplateSingle">Hotplate simple application</a> – A boilerplate you can use as bases for your own applications.</li>
+  <li><a href="/docs/boilerplateMultiHome">Hotplate multi-home application</a> – A boilerplate you can use as bases for your own multi-homed applications (where users can invite others to a workspace, or register themselves).</li>
 </ul>
 
+<p>This documentation will point to the Hotplate modules the sample applications use. You should study these applications and make yourself familiar with Hotplate’s modules and the way they are used in real life applcations.</p>
+
 <h2 id="server-modules">Server modules</h2>
+
+<p>At this stage, you should be familiar with the basic boilerplate applications and should have an idea on how Hotplate modules work.</p>
+
+<p>You should now have a good read of how the server side modules work. You should read every one of these files, even if you don’t know everything by heart and don’t tinker with every single bit of information. However, the more you <em>do</em> tinker, the better.</p>
 
 <p>Server modules are the ones that don’t provide any cient-side code – or, if they do, it’s very basic Javascript code necessary to the module to function.</p>
 
 <ul>
+  <li><a href="/docs/events">Hotplate’s events</a> – Hotplate’s events’ specifications</li>
   <li><a href="modules/hotCore">hotCore</a> – Will load all of the core modules</li>
   <li><a href="modules/hotCoreAuth">hotCoreAuth</a> – The authentication module</li>
   <li><a href="modules/hotCorePage">hotCorePage</a> – The page generation module</li>
 </ul>
 
 <h2 id="client-modules">Client modules</h2>
+
+<p>Now that you know how the server does things, you should read how clients are supposed to work. Each client library should follow a <em>blueprint</em>, which is what Hotplate expects from a client-side library.</p>
 
 <p>Client modules are the ones focused at providing a specific client-side library as well as providing all of the support functions to make sure that a client-side library adheres to the [Hotplate client blueprint].</p>
 
@@ -90,6 +105,11 @@
   <li><a href="hotClientDojo">hotClientDojo</a> – Dojo support</li>
 </ul>
 
+<h2 id="final-words">Final words</h2>
+
+<p>There is a lot to learn, and – more often than not – there is <em>one</em> specific way of doing things. At this stage, however, you should be able to write complete, reactive, store-based web applications in 4 hours rather than 40 (or, 1 day rather than a week and a half).</p>
+
+<p>If you are reading this and you haven’t studied the material below, then it’s time to stop cheating and read up!</p>
 
 
       </section>
