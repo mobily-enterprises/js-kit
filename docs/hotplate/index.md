@@ -8,7 +8,6 @@ Hotplate itself i a very small core, surrounded by several powerful modules; eac
 
 To show how small it is, here is Hotplate's full source code:
 
-````
     var async = require('async')
       , EventEmitterCollector = require("eventemittercollector")
       , DeepObject = require("deepobject")
@@ -38,21 +37,18 @@ To show how small it is, here is Hotplate's full source code:
     hotplate.config.set( 'hotplate.db', null );
     hotplate.config.set( 'hotplate.DbLayerMixin', function(){ } );
     hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
-````
 
 I will go through every section right now.
 
 # The required modules
 
-````
-var async = require('async')
-  , EventEmitterCollector = require("eventemittercollector")
-  , DeepObject = require("deepobject")
-  , colorConsole = require('tracer').colorConsole()
-  , path = require( 'path')
-  ;
-var hotplate = exports;
-````
+    var async = require('async')
+      , EventEmitterCollector = require("eventemittercollector")
+      , DeepObject = require("deepobject")
+      , colorConsole = require('tracer').colorConsole()
+      , path = require( 'path')
+      ;
+    var hotplate = exports;
 
 Here:
 

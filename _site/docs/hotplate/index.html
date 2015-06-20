@@ -46,16 +46,15 @@
 
 <p>To show how small it is, here is Hotplate’s full source code:</p>
 
-<p>````
-    var async = require(‘async’)
-      , EventEmitterCollector = require(“eventemittercollector”)
-      , DeepObject = require(“deepobject”)
-      , colorConsole = require(‘tracer’).colorConsole()
-      , path = require( ‘path’)
-      ;
-    var hotplate = exports;</p>
+<pre><code>var async = require('async')
+  , EventEmitterCollector = require("eventemittercollector")
+  , DeepObject = require("deepobject")
+  , colorConsole = require('tracer').colorConsole()
+  , path = require( 'path')
+  ;
+var hotplate = exports;
 
-<pre><code>// Hotplate's core functionality
+// Hotplate's core functionality
 hotplate.require = function( m ){ return require( m ); };
 hotplate.cachable = async.memoize;
 hotplate.hotEvents = new EventEmitterCollector();
@@ -75,22 +74,21 @@ hotplate.config.set( 'hotplate.routeUrlsPrefix', '/pages' ); // hotCoreAuth uses
 // Db settings
 hotplate.config.set( 'hotplate.db', null );
 hotplate.config.set( 'hotplate.DbLayerMixin', function(){ } );
-hotplate.config.set( 'hotplate.SchemaMixin', function(){ } ); ````
+hotplate.config.set( 'hotplate.SchemaMixin', function(){ } );
 </code></pre>
 
 <p>I will go through every section right now.</p>
 
 <h1 id="the-required-modules">The required modules</h1>
 
-<p><code>
-var async = require('async')
+<pre><code>var async = require('async')
   , EventEmitterCollector = require("eventemittercollector")
   , DeepObject = require("deepobject")
   , colorConsole = require('tracer').colorConsole()
   , path = require( 'path')
   ;
 var hotplate = exports;
-</code></p>
+</code></pre>
 
 <p>Here:</p>
 
