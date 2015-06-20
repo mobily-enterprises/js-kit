@@ -1,30 +1,32 @@
 # hotCoreAuth
 
-This module provides authentication abilities to Hotplate, including password recovery, registration, login, credential management, and in-app resume.
+This module provides authentication abilities to Hotplate, including password recovery, registration, login, credential management, and in-app resuming.
 
 This module provides authentication abilities to your application by:
 
 * Defining authentication stores to be used in your app
 * Creating authentication routes to handle authentication using Passport
 
-This module requires sub-modules (at the moment, `local` and `facebook`) for strategy-specific functionalities.
+This module requires splugins (at the moment, `local` and `facebook`) for strategy-specific functionalities.
 
-While most of other authentication systems are based on username/password, and then allow you to associate other authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth _each login method is the equal_. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.
+While most of other authentication systems are based on username/password, and then allow you to associate "extra" authentication methods to those username/password pairs (Oauth, etc.), in hotCoreAuth _each login method is the equal_. The user record only has the user's ID. You might decide to sign up with your Facebook profile, and never bother with setting username/password or vice-versa.
 
 # Overview
 
-hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as 2-step authentication systems (like Facebook).
+hotCoreAuth uses Passport to abstract how authentication works. Once you have configured hotCoreAuth, your application will have a fully functional authentication infrastructure that works with login/password pair as well as three-legged authentication systems (like Facebook).
+
+hotCoreAut is powerful enough that can be in itself a good enough reason to use Hotplate.
 
 Here are the terms you need to know so that you can configure it correctly for your application.
 
-_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a two-step authentication, and it wouldn't need Passport stricky speaking._
+_NOTE: `hotCoreAuth` uses passport for every authentication strategy, including `local`. This is done mainly for consistency: `local` is not a three-legged authentication, and it wouldn't need Passport stricky speaking._
 
 There are five _actions_ connected to authentication:
 
 * `signin` -- will actually login using existing credentials
 * `resume` -- will resume an existing session if authentication has expired
 * `register` -- will register as a new user, and automatically assign a strategy to them
-* `manager` -- will assign (or delete) authentication strategies to existing users
+* `manager` -- will assign authentication strategies to existing users
 * `recover` -- will reset credentials
 
 There are currently two implemented strategies (although it's trivial to create more):
@@ -32,7 +34,7 @@ There are currently two implemented strategies (although it's trivial to create 
 * `local` -- using simply a combination of login and password. The credentials will consist of a login/password pair
 * `facebook` -- using Facebook's authentication scheme. The credentials will consist of the Facebook user ID
 
-hotCoreAuth will use submodules to create authentication URLs for the corresponding strategy; for example for `facebook`, the `facebook` module it will create:
+hotCoreAuth will use plugins to create authentication URLs for the corresponding strategy; for example for `facebook`, the `facebook` module it will create:
 
 * GET `/auth/signin/facebook`
 * GET `/auth/register/facebook`
@@ -48,9 +50,9 @@ For the `local` strategy, the `local` module will create:
 * POST `/auth/manager/local`
 * POST `/auth/resume/local`
 
-These URLs are the ones clients will have to use to complete the required action. Note that while some URLs will require a payload (for example, `local` will require `login` and `password` in their POST payload), others will deal with authentication without any data (users will be redirected to Facebook's login screen).
+These URLs are the ones clients will have to use to complete the required action. Note that while some URLs will require a payload (for example, `local` will require `login` and `password` in their POST payload), others will deal with authentication without any data (users will be redirected to Facebook's login screen). The [routes](#docs-routes) section explains in detail what routes are created and how to interact with them.
 
-This document details the specifications of these [routes](#docs-routes).
+These routes are the only way to add an authentication strategy to a user via REST calls.
 
 In hotCoreAuth, the _operation_ that is about to be performed is defined by the pair _strategy-action_ (for example `local-signin`, or `facebook-recover`, etc.).
 
@@ -60,9 +62,11 @@ The response from the server will depend on the _response type_, which is decide
 
 * a Facebook-based login screen will likely open a new window on `/auth/signin/facebook` to autenticate, and will want 1) that new window closed by the end of the authenticaton process 2) the parent window redirected to the application; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect-opener', { path: '/' } );`;
 
-* a simpler Facebook-based login screen might not open a new window, and simply hop to the Faceook authentication page on `/auth/signin/facebook` to autenticate. In this case, the screen will want to know that after authentication the application will be redirected to the main application's URL; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect', { path: '/' } );`;
+* a simpler Facebook-based login screen might not open a new window, and simply link to the Faceook authentication page on `/auth/signin/facebook` to autenticate. In this case, after authentication the application should redirected to the main application's URL; so, it will have something like this in the code: `cookie( 'facebook-signin', 'redirect', { path: '/' } );`;
 
-The response type will depend on how the login screen wants to happen once logging in is done.
+The default action is `redirect`.
+
+The response type will depend on how the login screen wants to happen.
 
 Here is a list of possible _response types_ (corresponding to the cookie's value):
 
@@ -73,15 +77,18 @@ Here is a list of possible _response types_ (corresponding to the cookie's value
 * `ajax` -- If `user` is set, it returns a page with status 200, and -- as contents -- a JSON string like so: `{ user: user, profile: profile }`.  If `user` isn't set, it returns a page with status `403` and a JSON string like so: `{ message: error }` NOTE: Setting `ajax` as a response type only makes sense for local authentication, since the ajax information will be returned after a redirect, which will basically result in an HTML page containing successful or unsuccesful JSON data. This response type is useful to the login/password strategy, that can have a response straight away.
 
 * `redirect-opener` -- The function returned by `hotCoreAuth.redirectOpenerResponsePage` is run with parameters `strategyId, action, user, profile`, and the result is then served to the client. The (redefinable) stock function will work like this: if the user isn't set (login failed) and `profile.message` is set, it will display `profile.message` in a Javascript alert coming from the opener; otherwise (login is successful), it will redirect the opener window by setting its location to  hotCoreAuth.redirectURLs.success['action']. In any case, the current window will be closed. This response type is useful when a login page opens the authentication URL in a new window, and wants the opening window to be redirected to the application after authentication.
+
 * `redirect` -- If `user` is set, the current window redirected to the URL set as `hotCoreAuth.redirectURLs.success['action']`. If `user` isn't set, `req.session.messages` is pushed `{ type: 'error', message: profile.message }` and  the window is redirected to `hotCoreAuth.redirectURLs.fail['action']`. Note that the new page will have access to the message via the session. This response type is useful when a login page is simply a link to the authentication URL and wants to redirect to the application after authentication.
+
+You can see the signatures of the `responsePage` functions in the [configuration section](#configuration) of this document.
 
 hotCoreAuth provide three stores that will hold the authentication data:
 
 * `authStrategies` A pseudo-store, basically containing the keys of the configuration object `hotCoreAuth.strategies`. It implements `get` and `getQuery`.
 
-* `users`. A simple store that contain just the IDs of the created users. _There is no username associated to a user!_ A user is just an abstract entry: what really matters the the ID.
+* `users`. A simple store that contain just the IDs of the created users. _There is no username associated to a user!_ A user is just an abstract entry: what really matters is the user ID.
 
-* `usersStrategies`. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements `get`, `getQuery` and `delete`; the store has a public URL so that existing users to change how they are allowed to login. Each record contains the strategyId and four fields, which will contain strategy information. For example the strategy `facebook` will have the Facebook's userId as `field1`, whereas the `local` strategy will have the user's login name in `field1` and the user's password in `field3`. Note that `field3` and `field4` are considered 'protected' (which imply that they will not be returned by REST queries).
+* `usersStrategies`. The list of strategies associated to a specific user. Basically, it defines how a user can actually login. It implements `get`, `getQuery` and `delete`; the store has a public URL so that existing users can see how they are allowed to login, and can delete a strategy if they wish. Each record contains the strategyId and four fields, which will contain strategy login information. For example the strategy `facebook` will have the Facebook's userId as `field1`, whereas the `local` strategy will have the user's login name in `field1` and the user's password in `field3`. Note that `field3` and `field4` are considered 'protected' (which imply that they will not be returned by REST queries).
 
 This document details the specifications of these [stores](#docs-stores).
 
@@ -123,13 +130,13 @@ Once you are familiar with the concepts explained above, configuration of `hotCo
 Here is an explanation of each option:
 
 * `callbackURLBase`. It's the host/port parts of the URL used as prefix for Oauth callbacks.
-This should be changed to your server's IP in production
+This should be changed to your server's IP in production. This is necessary because three-legged authentication methods always end up redirecting to a specific URL.
 
 * `recoverURLexpiry`. The number of seconds the recover URL will work for
 
-* `strategies`. The login strategies. By default, it's just `local` (which doesn't need parameters).
-In your application you might have:
+* `strategies`. The login strategies available to your application. By default, it's just `local` (which doesn't need parameters). In your application you might have:
 
+````
     hotplate.config.set('hotCoreAuth.strategies', {
       facebook: {
         clientID: 'XXXXXXXXXXXXXXXXXX',
@@ -137,28 +144,28 @@ In your application you might have:
       },
       local: {
       },
+````
 
-* `redirectURLs`. These URLs are used by makeResponder for the redirect and redirect-opener actions as well as /recover/:recoverToken (which will redirect to `hotCoreAuth.redirectURLs.success.recover`). Note that `hotplate.routeUrlsPrefix` prefixes are honoured thanks to the prefix() call (as they should).
+* `redirectURLs`. These URLs are used for the redirect and redirect-opener actions as well as `/recover/:recoverToken` (which will redirect to `hotCoreAuth.redirectURLs.success.recover`). Note that `hotplate.routeUrlsPrefix` prefixes are honoured thanks to the `hotplate.prefix()` call (as they should).
 
 * `contentResponsePage`. The function that will generate the page content in case the response type is set as `content`. Note that a basic `basicContentResponsePage` function is set as default and can be used as a template.
 
 * `closeResponsePage`. The function that will generate the page responsible of closing the current window in case the response type is `close`. Note that a basic `basicCloseResponsePage` function is set as default and can be used as a template.
 
-* `redirectOpenerResponsePage`. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic `BasicRedirectOpenerResponsePage` function is set as default and can be used as a template
+* `redirectOpenerResponsePage`. The function that will generate the page responsible of redirecting the opener to the appropriate URL. Note that a basic `basicRedirectOpenerResponsePage` function is set as default and can be used as a template
 
-The signature for `contentResponsePage`, `closeResponsePage` and `redirectResponsePage` is the same: `steategyId`, `action`, `user`, `profile`. For example you might write:
+The signature for `contentResponsePage`, `closeResponsePage` and `redirectResponsePage` is the same: `function( strategyId, action, user, profile)`. For example you might write:
 
     hotplate.config.set('hotCoreAuth.contentResponsePage' ) = function( strategyId, action, user, profile ){
         ...
         return 'some response that will be sent over';
       }
 
-If `user` is `false`, authentication failed. Note that they don't have access to `res`: they simply return the page that will be returned to the client. The string can be generated in whichever way.
+If `user` is `false`, authentication failed. Note that these functions don't have access to `res`: they simply return the page that will be returned to the client.
 
+# Writing plugins for extra strategies
 
-# How hotCoreAuth works
-
-Writing extra strategies for hotCoreAuth requires you to know some of its internals.
+Writing plugins for extra strategies requires you to know some of hotCoreAuth internals.
 
 When it's run, `hotCoreAuth` will scan the configuration object `hotCoreAuth.strategies`, an object where each key is a strategy name. The value associated to the key will be its configuraton. For example:
 
@@ -171,33 +178,41 @@ Where `clientID` and `clientSecret` are provided by Facebook: to get them you wi
 
 There are two moments when strategies use their stragegy-specific plugins: during the event `setRoutes` and during the event `stores`.
 
-### Extra routes defined by sub-modules
+### Extra routes defined by plugins
 
-In `setRoutes`, hotCoreAuth will set its own URLs (that is, the recover URL) and will then cyclically `require()` _all_ modules defined in `hotCoreAuth.strategies`, appending `.js` to the strategy's name; for example the module `auth/facebook.js` will be loaded, and the `strategyRoutesMaker` attribute of the module will be called (since it's actually a function reponsible of creating the appropriate routes for the `facebook` strategy). `strategyRoutesMaker()` has the following signature:
+In Hotplate, a module defines routes by responding to the event `setRoutes`. However, the routes set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, `strategyRoutesMaker()`, which will be responsible of creating the necessary extra routes for that particular strategy.
+
+When responding to `setRoutes`, hotCoreAuth will first set its own URLs (that is, the recover URL) and will then cyclically `require()` _all_ modules defined in `hotCoreAuth.strategies`, appending `.js` to the strategy's name; for example the module `auth/facebook.js` will be loaded, and the `strategyRoutesMaker` attribute of the module will be called (since it's actually a function reponsible of creating the appropriate routes for the `facebook` strategy). `strategyRoutesMaker()` has the following signature:
 
     strategyRoutesMaker( app, strategyName, function( err ) { } );
 
 In case of Facebook, the routes created are:
 
-* Manager: `GET /auth/manager/facebook`, `/auth/manager/facebook/callback`
-* Signin: `GET /auth/signin/facebook`, `/auth/manager/signin/callback`
-* Recover: `GET /auth/recover/facebook`, `/auth/manager/recover/callback`
-* Register: `GET /auth/register/facebook`, `/auth/manager/register/callback`
-* Resume: `GET /auth/resume/facebook`, `/auth/manager/resume/callback`
+* Manager: `GET /auth/manager/facebook`, `GET /auth/manager/facebook/callback`
+* Signin: `GET /auth/signin/facebook`, `GET /auth/manager/signin/callback`
+* Recover: `GET /auth/recover/facebook`, `GET /auth/manager/recover/callback`
+* Register: `GET /auth/register/facebook`, `GET /auth/manager/register/callback`
+* Resume: `GET /auth/resume/facebook`, `GET /auth/manager/resume/callback`
 
 They do not need any parameters, as authentication will be fully handled by Facebook.
 
-### Extra stores defined by sub-modules
+### Extra stores defined by plugins
 
+In Hotplate, a module defines stores by responding to the event `stores`. However, the stores set by hotCoreAuth depend on the strategy plugins you have enabled. Strategy plugins export a function, `extraStores()`, which will be responsible of creating the necessary extra stores for that particular strategy.
 
+When responding to `stores`, hotCoreAuth will first set its own URLs (that is, `authStrategies`, `users`, `usersStrategies`) and will then cyclically `require()` _all_ modules defined in `hotCoreAuth.strategies`, appending `.js` to the strategy's name; for example the module `auth/local.js` will be loaded, and the `extraStores` attribute of the module will be called (since it's actually a function reponsible of creating the appropriate stores for the `local` strategy). `extraStores()` has the following signature:
 
-## hotCoreAuth's routes and Passport
+    strategyRoutesMaker( stores, function( err ) { } );
+
+In case of `local`, the extra store `logins` is created: that's a read-only store that will allow users to check if a user name is already taken.
+
+## hotCoreAuth's routes with Passport
 
 The authentication routes are all managed by Passport, "the" powerful authentication module for Node.js.
 
 Here is what happens for Facebook.
 
-For `signin`, `facebook.js` will first define a `named strategy` called `facebook-signin`, as well as define two routes:
+For `signin`, `facebook.js` will first define a `named strategy` called `facebook-signin`, as well as define two routes. Here is the full (but redacted for brevity) source code:
 
     // STRATEGY DEFINITION
     strategyConfig = hotplate.config.get( 'hotCoreAuth.strategies.facebook' );
@@ -258,6 +273,8 @@ With this code you are registering a named strategy called `facebook-signin` wit
 * `user` -- if authentication was successful, the simple Hotplate user object; if it didn't, 'false'
 * `info` -- if authentication was successful ( that is, `user !== false`), the Facebook profile information; if it didn't, an object with a `message` attribute: `{ message: 'The authentication problem' }`.
 
+If successful, the custom authentication functon will also set `req.session.loggedIn` and `req.session.userId` (the default session variables for Hotplate)
+
 ### The first route
 
 ````
@@ -265,7 +282,7 @@ With this code you are registering a named strategy called `facebook-signin` wit
     app.get('/auth/signin/facebook', passport.authenticate('facebook-signin'));
 ````
 
-This route is managed completely by Passport ( `passport.authenticate('facebook-signin')` returns a valid Express route). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the `clientID`, `clientSecret` and `callbackURL`. At the end of the process, Facebook will then always redirect the user's browser to `/auth/signin/facebook/callback` (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This route is -- needless to say -- managed directly by Passport via the second route definition:
+This route is managed completely by Passport (`passport.authenticate('facebook-signin')` returns a valid Express route function). This route, which will generally be opened in a new window in your client application, will redirect to facebook.com, passing on the `clientID`, `clientSecret` and `callbackURL`. At the end of the process, Facebook will then always redirect the user's browser to `/auth/signin/facebook/callback` (the callback URL provided earlier to Facebook), passing along information relevant to authentication: namely whether it worked or not, and -- if it did work -- the profile information. This secound route is -- needless to say -- managed directly by Passport via the second route definition.
 
 ### The second route
 
@@ -274,28 +291,49 @@ This route is managed completely by Passport ( `passport.authenticate('facebook-
       passport.authenticate('facebook-signin',  makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
     });
 
-This is when passport calls the authentication callback defined earlier, with the parameters `req, accessToken, refreshToken, profile, done`.  If `profile` isn't defined, then it means that Facebook authentication failed. If `profile` is set, then authentication in Facebook did work. Keep in mind that a successful Facebook login doesn't mean that that Facebook profile is allowed to signin into your application; it also means that _Facebook_ has verified that the user has valid Facebook credentials. There are certaintly many valid Facebook users who do not have a corresponding user in your application.
-
-The scoping of this function can be a little confusing. A little simplification would make it read like so:
+The scoping of this function can be a little confusing. A little simplification would make it read like so (since `makeResponder()` returns a function):
 
     app.get('/auth/signin/facebook/callback', function( req, res, next) {
       passport.authenticate('facebook-signin',  function responder( err, user, profile ){ ... }  )(req, res, next);
     });
 
-Where:
+Considering that `passport.authenticate()` returns a function with the same signature (`req, res, next`), and it's returning a function only so that Passport is framework-agnostic, for all intents and purposes, the second line could well read `passport.authenticate( req, res, next, 'facebook-signin',  function responder( err, user, profile ){ ... } );`.
 
-* `passport.authenticate()` returns an Express style route function that accepts as parameters the usual triplet `(req, res, next)`. For all intents and purposes, the second line could well read `passport.authenticate( req, res, next, 'facebook-signin',  function responder( err, user, profile ){ ... } );``
-*  passport.authenticate() will call the custom authentication function with the parameters`req, accessToken, refreshToken, profile, done`. The custom authentication function will be responsible of calling `done( err, user, profile )`: if the Facebook user is not allowed, it will call `done()`  with `user` being `false`;  if the Facebook user is allowed, it will call `done()` with `user` being the user record, and `profile` being the Facebook profile. If successful, the custom authentication functon will also set `req.session.loggedIn` and `req.session.userId` (the default session variables for Hotplate)
-* As you have probably guessed, when `password.authenticate()` calls `done()`, will actually call the `responder( err, user, profile )` which has access to everything: `req`, `res`, `next`, `user`, `profile`.
-* In hotCoreAuth, the responder is actually generated by the function `makeResponder()`, which will respond with `res.send()` in accordance with the cookie set by the client, following hotCoreAuth specifications.
+So, it could be read (in a simplified form) as:
+
+    app.get('/auth/signin/facebook/callback', function( req, res, next) {
+      passport.authenticate(req, res, next, 'facebook-signin',  function responder( err, user, profile ){
+        ...
+      });
+    });
+
+That's much more readable.
+
+Since `passport.authenticate()` has access to `req` and `res`, it has access to all of the information that came from Facebook (the `accessToken` and the `refreshToken`). So, `passport.authenticate()` is able to call the strategy authentication callback defined earlier, passing it the parameters `req, accessToken, refreshToken, profile, done`.  Using this callback, `passport.authenticate()` is able to know if the acquired user is actually allowed to access the site (it will receive back `user` and `profile` from the calllback). At this point, `passport.authenticate()` will call the responder with the right parameters `user` and `profile`.
+
+Note that in hotCoreAuth, the responder is actually generated by the function `makeResponder()`, which will respond with `res.send()` in accordance with the cookie set by the client, following hotCoreAuth specifications.
 
 ## Writing your own strategy
 
-To write your own strategy, take `facebook` as a starting point and change it so that it uses the right Passport backend.
+To write your own strategy, take `facebook` as a starting point and change it so that it uses the right Passport backend. It's only 300 lines of code, most of which you will be able to reuse.
 
 Use the information in this section of the module's manual to get the module right. It's not essential to know _everything_ I covered, but it will certainly help you understand the code you write.
 
 # Events {#docs-events}
+
+## [pageElements](/docs/events#docs-pageElements) {#docs-pageElements}
+
+This event is used to make sure that each page defines the following Javascript variables:
+
+* `strategyIds` -- the available strategy IDs managed by the server. Taken from  `Object.keys( hotplate.config.get('hotCoreAuth.strategies')`
+* `successURLs` -- the URLs to use in case of success. Taken from `hotplate.config.get('hotCoreAuth.redirectURLs.success')`.
+* `failURLs` -- the URLs to use in case of success. Taken from `hotplate.config.get('hotCoreAuth.redirectURLs.success')`.
+
+## [pageElementsPerPage](/docs/events#docs-pageElements) {#docs-pageElements}
+
+This event is used to make sure that if req.userId is set, then rendered pages will have:
+
+* `userId` -- The userId taken from `req.session.userId`
 
 ## [stores](/docs/events#docs-stores) {#docs-stores}
 
@@ -387,10 +425,48 @@ Note that `field3` and `field4` are used by hotCoreAuth to store sensitive infor
     });
     stores.usersStrategies = new UsersStrategies();
 
+### Stores created by `hotCoreAuth/local`
+
+#### `logins` {#docs-stores-usersstrategies}
+
+The strategies available. This store retis a pseudo-store (it doesn't rely on data stored in a database, and it's inherited from `JsonRestStores`+`JsonRestStores.HTTPMixin`). THe store takes its data from the [userStrategies](#docs-stores-usersstrategies) store: the list of logins are the records where `strategyId` is `local`, and the login names are stores in `field1`).
+
+Here is the definition:
+
+    // This is used so that an applicaton can know in advance if a user login is already taken
+    var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
+
+      schema: new SimpleSchema({
+        login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
+      }),
+
+      storeName:  'logins',
+
+      handleGetQuery: true,
+
+      publicURL: '/logins/:id',
+      hotExpose: true,
+
+      // This is descriptive only
+      queryConditions: {
+        type: 'eq',
+        args: [ 'login', '#login' ]
+      },
+
+      implementQuery: function( request, cb ){
+        // return records from the `usersStrategies` store, filtering by `strategyId`
+        // (needs to be `local`) and `field` (needs to match the `login` passed)
+      },
+
+    });
+    stores.login = new Logins();
+
+As you can see, the store only implements `handleGetQuery`, and in a very limited way. Note that `queryConditions` is defined, but it's only there to let clients know how querying works.
+
 ## [routes](/docs/events#docs-routes) {#docs-routes}
 
 
-### GET /recover/:recoverToken
+### `GET /recover/:recoverToken`
 
 The URL that will validate recovery validation.
 
@@ -400,8 +476,129 @@ _TODO: event is not fired yet. Still need to test procedure. Will do when "user 
 
 The "recovery URL" contains the `recoveryToken`: this route will check the database looking for a user with a matching `recoverToken` in the `users` table: if found, the user will be set as logged in and the user will be redirected to `hotCoreAuth.redirectURLs.success.recover`.
 
-### URLs created by `hotCoreAuth/facebook`
+### Routes created by `hotCoreAuth/auth/facebook.js`
 
-The plugin `hotCoreAuth/facebook` will create the following routes:
+The plugin `hotCoreAuth/facebook` will create the following "public" routes:
 
-### URLs created by `hotCoreAuth/local`
+* Manager: GET `/auth/manager/facebook`
+* Signin: GET `/auth/signin/facebook`
+* Recover: GET `/auth/recover/facebook`
+* Register: GET `/auth/register/facebook`
+* Resume: GET `/auth/resume/facebook`
+
+These routes do not take any paramters. Your application should either just point there (in which case the `redirect` response type is recommended), or open a new window with them (usually using the `redirect-opener` response type).
+
+It will also create the following "redirect" routes (not to be used directly by the application):
+
+* Manager: GET `/auth/manager/facebook/callback`
+* Signin: GET `/auth/signin/facebook.callback`
+* Recover: GET `/auth/recover/callback/facebook`
+* Register: GET `/auth/register/facebook/callback`
+* Resume: GET `/auth/resume/facebook/callback`
+
+The public routes will always:
+
+1. Redirect to Facebook, which will display the user a login/password screen.
+1. Operate on the database and manipulate the session variable if needed
+1. Return the information to the user; the response will depend on the _response type_ cookie set by the login form (and, therefore, by the _ResponsePage_ functions set by the user).
+
+A 'successful login' in `facebook` means that there is a record in `usersStrategies` where `strategyId` is `facebook`, and `field1` corresponds to the acquired Facebook ID.
+
+The difference in these routes is in what they do in the second step. Here is the detail.
+
+#### `GET /auth/manager/facebook`
+
+This route will only work if the user is already logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to _add_ a new strategy to a logged in user.
+
+In case of successful Facebook authenticaton, it will check whether `facebook` is already a login strategy associated to the user. If the user doesn't yet have a `facebook` strategy associated to her, it will associate the Facebook profile ID with the user by adding a record to the store `usersStrategies`. The Facebook ID is stored in `field1` in the `userStrategies` store.
+
+This operation will fail if either the user already has a `facebook` strategy associated to her, or if that Facebook ID is already associated to a different account.
+
+_Note_: the new strategy is added via a REST API call, like so: `usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id }` so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that `login` is now a viable strategy).
+
+
+#### `GET /auth/signin/facebook`
+
+This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to actually login.
+
+In case of successful login, it will set `req.session.loggedIn` and `req.session.userId`.
+
+#### `GET /auth/recover/facebook`
+
+This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to recover access to the application.
+
+In case of successful Facebook authentication, it will update the `users` table setting the fields `user.recoverToken` and `user.recoverTokenCreated`. The token is the same one used by the route `/recover/:recoverToken` to let the user back in. Also the signal XXXXXXXX (TODO: decide name and emit it!) is emitted, to notify the application which will, in turn, be responsible of sending the user the secret recovery URL (by SMS, email, smoke signals, etc.).
+
+#### `GET /auth/register/facebook`
+
+This route will only work if the user is not already logged in (checked via the session variable `req.session.loggedIn`).
+
+In case of successful login, it will create a new entry in `users`, and a corresponding record in `usersStrategies` where `field1` has the acquired Facebook ID. It will also set `req.session.loggedIn` and `req.session.userId`.
+
+This route will fail if that Facebook ID isn't already used by another user in the application.
+
+#### `GET /auth/resume/facebook`
+
+This route is totally equivalent to `/auth/signin/facebook`.
+
+In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
+
+### Routes created by `hotCoreAuth/auth/local.js`
+
+The plugin `hotCoreAuth/local` will create the following routes:
+
+* Manager: POST `/auth/manager/local`
+* Signin: POST`/auth/signin/local`
+* Recover: POST`/auth/recover/local`
+* Register: POST`/auth/register/local`
+* Resume: POST`/auth/resume/local`
+
+This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require three-legged authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
+
+A 'successful login' for `local` means that there is a record in `usersStrategies` where `strategyId` is `local`, `field1` is `user` and (a hashed version of) `field2` is `password`.
+
+Here is the description of each one.
+
+#### `POST /auth/manager/local`
+
+This route will only work if the user is already logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to _add_ a new strategy to a logged in user.
+
+Input:
+
+* `login` -- the login name to be changed
+* `password` -- the password to be set for that login name. If the password is `*`, then it's left unchanged. This is used when users want to change their login name without re-submitting the password
+
+This route will either add a new `local` strategy for the user (using given `login` and `password`), or it will update the existing `local` strategy information with the provided `login` and `password`. Note that it's also possible to just update the username, without re-submitting the password, by setting the password as `*`. The record in `usersStrategies` will have `field1` set as the login name, and `field3` as a hashed version of the user's password.
+
+Ths route willl fail if the login is already in use by another user;
+
+_Note_: if `local` wasn't an allowed strategy for the user (that is, a new record is being added to `usersStrategies`), the new strategy is added via a REST API call, like so: `usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }` so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that `login` is now a viable strategy).
+
+#### `GET /auth/signin/local`
+
+This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to actually login.
+
+In case of successful login, it will set `req.session.loggedIn` and `req.session.userId`.
+
+Input:
+
+* `login` -- the login name used to sign in
+* `password` -- the password
+
+#### `GET /auth/recover/local`
+
+This route is exactly the same as Facebook's equivalent `recover` route.
+
+#### `GET /auth/register/local`
+
+This route will only work if the user is not already logged in (checked via the session variable `req.session.loggedIn`).
+
+This route wll create a new empty user, as well as a corresponding record in `usersStrategies` which will have `field1` set as the login name, and `field3` as a hashed version of the user's password. It will also set `req.session.loggedIn` and `req.session.userId`.
+
+This route will fail if the username is already taken or it's empty.
+
+#### `GET /auth/resume/local`
+
+This route is totally equivalent to `/auth/signin/local`.
+
+In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
