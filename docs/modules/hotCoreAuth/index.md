@@ -483,7 +483,7 @@ _TODO: event is not fired yet. Still need to test procedure. Will do when "user 
 
 The "recovery URL" contains the `recoveryToken`: this route will check the database looking for a user with a matching `recoverToken` in the `users` table: if found, the user will be set as logged in and the user will be redirected to `hotCoreAuth.redirectURLs.success.recover`.
 
-### routes created by `hotCoreAuth/auth/facebook.js`
+### Routes created by `hotCoreAuth/auth/facebook.js`
 
 The plugin `hotCoreAuth/facebook` will create the following "public" routes:
 
@@ -503,11 +503,13 @@ It will also create the following "redirect" routes (not to be used directly by 
 * Register: GET `/auth/register/facebook/callback`
 * Resume: GET `/auth/resume/facebook/callback`
 
-All of these routes will always:
+The public routes will always:
 
 1. Redirect to Facebook, which will display the user a login/password screen.
 1. Operate on the database and manipulate the session variable if needed
-1. Return the information to the user; the response will depend on the _response type_ cookie set by the login form as well as the _ResponsePage_ functions set by the user.
+1. Return the information to the user; the response will depend on the _response type_ cookie set by the login form (and, therefore, by the _ResponsePage_ functions set by the user).
+
+A 'successful login' in `facebook` means that there is a record in `usersStrategies` where `strategyId` is `facebook`, and `field1` corresponds to the acquired Facebook ID.
 
 The difference in these routes is in what they do in the second step. Here is the detail.
 
@@ -515,41 +517,38 @@ The difference in these routes is in what they do in the second step. Here is th
 
 This route will only work if the user is already logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to _add_ a new strategy to a logged in user.
 
-In case of successful Facebook login, it will check whether `facebook` is already a login strategy associated to the user. If the user doesn't yet have a `facebook` strategy associated to her, it will associate the Facebook profile ID with the user by adding a record to the store `usersStrategies`.
+In case of successful Facebook authenticaton, it will check whether `facebook` is already a login strategy associated to the user. If the user doesn't yet have a `facebook` strategy associated to her, it will associate the Facebook profile ID with the user by adding a record to the store `usersStrategies`. The Facebook ID is stored in `field1` in the `userStrategies` store.
 
 This operation will fail if either the user already has a `facebook` strategy associated to her, or if that Facebook ID is already associated to a different account.
 
 _Note_: the new strategy is added via a REST API call, like so: `usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id }` so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that `login` is now a viable strategy).
 
-The Facebook ID is stored in `field1` in the `userStrategies` store.
 
 #### `GET /auth/signin/facebook`
 
 This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to actually login.
 
-In case of successful Facebook login, it will set `req.session.loggedIn` and `req.session.userId`. A 'successful login' here means that there is a record in `usersStrategies` where `strategyId` is `facebook`, and `field1` corresponds to the acquired Facebook ID.
+In case of successful login, it will set `req.session.loggedIn` and `req.session.userId`.
 
 #### `GET /auth/recover/facebook`
 
 This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to recover access to the application.
 
-In case of successful Facebook login, it will update the `users` table setting the fields `user.recoverToken` and `user.recoverTokenCreated`.
-
-The token will then be used by the route `/recover/:recoverToken` to let the user back in.
-
-When recovering, the signal XXXXXXXX (TODO: decide name and emit it!) is emitted, to notify the application which will, in turn, be responsible of sending the user the secret recovery URL (my SMS, email, smoke signals, etc.).
+In case of successful Facebook authentication, it will update the `users` table setting the fields `user.recoverToken` and `user.recoverTokenCreated`. The token is the same one used by the route `/recover/:recoverToken` to let the user back in. Also the signal XXXXXXXX (TODO: decide name and emit it!) is emitted, to notify the application which will, in turn, be responsible of sending the user the secret recovery URL (by SMS, email, smoke signals, etc.).
 
 #### `GET /auth/register/facebook`
 
 This route will only work if the user is not already logged in (checked via the session variable `req.session.loggedIn`).
 
-In case of successful Facebook login, it will first check that that Facebook ID isn't already used in the application; if it isn't, it will associate the Facebook profile ID with the user by adding a record to the store `usersStrategies`.
+In case of successful login, it will create a new entry in `users`, and a corresponding record in `usersStrategies` where `field1` has the acquired Facebook ID. It will also set `req.session.loggedIn` and `req.session.userId`.
 
-The Facebook ID is stored in `field1` in the `userStrategies` store.
+This route will fail if that Facebook ID isn't already used by another user in the application.
 
 #### `GET /auth/resume/facebook`
 
-This route is totally equivalent to `/auth/signin/facebook`, since they do essentially the same thing. In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
+This route is totally equivalent to `/auth/signin/facebook`.
+
+In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
 
 ### Routes created by `hotCoreAuth/auth/local.js`
 
@@ -561,7 +560,9 @@ The plugin `hotCoreAuth/local` will create the following routes:
 * Register: POST`/auth/register/local`
 * Resume: POST`/auth/resume/local`
 
-This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require two step authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is usable with the `ajax` response type (although that's not a must).
+This plugin is somewhat "atypical" in terms of hotCoreAuth and passport, because -- unlike the others -- it doesn't require two step authentication: the response is provided by these URLs directly, rather than by a callback URL. This means that the `local` plugin is the only candidate for the `ajax` response type (although that's not a must).
+
+A 'successful login' for `local` means that there is a record in `usersStrategies` where `strategyId` is `local`, `field1` is `user` and (a hashed version of) `field2` is `password`.
 
 Here is the description of each one.
 
@@ -569,13 +570,14 @@ Here is the description of each one.
 
 This route will only work if the user is already logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to _add_ a new strategy to a logged in user.
 
-This route will either add a new `local` strategy for the user (using given `login` and `password`), or it will update the existing `local` strategy information with the provided `login` and `password`.
-
 Input:
-* `login` -- the login name to be changed
-* `password` -- the password to be set for that login name. If the password is `*`, then it's left unchanged.
 
-The record in `usersStrategies` will have `field1` set as the login name, and `field3` as an encrypted version of the user's password.
+* `login` -- the login name to be changed
+* `password` -- the password to be set for that login name. If the password is `*`, then it's left unchanged. This is used when users want to change their login name without re-submitting the password
+
+This route will either add a new `local` strategy for the user (using given `login` and `password`), or it will update the existing `local` strategy information with the provided `login` and `password`. Note that it's also possible to just update the username, without re-submitting the password, by setting the password as `*`. The record in `usersStrategies` will have `field1` set as the login name, and `field3` as a hashed version of the user's password.
+
+Ths route willl fail if the login is already in use by another user;
 
 _Note_: if `local` wasn't an allowed strategy for the user (that is, a new record is being added to `usersStrategies`), the new strategy is added via a REST API call, like so: `usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }` so that any notification mechanism (via comet) to existing users is actually triggered (e.g. the interface will be able to know that `login` is now a viable strategy).
 
@@ -583,37 +585,27 @@ _Note_: if `local` wasn't an allowed strategy for the user (that is, a new recor
 
 This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to actually login.
 
-In case of successful login, it will set `req.session.loggedIn` and `req.session.userId`. A 'successful login' here means that there is a record in `usersStrategies` where `strategyId` is `local`, `field1` is `user` and (hashed) `field2` is `password` .
+In case of successful login, it will set `req.session.loggedIn` and `req.session.userId`.
 
 Input:
+
 * `login` -- the login name used to sign in
 * `password` -- the password
 
-
 #### `GET /auth/recover/local`
 
-FIXME
-
-This route will only work if the user is _not_ logged in (checked via the session variable `req.session.loggedIn`) since it's meant to be used to recover access to the application.
-
-In case of successful Facebook login, it will update the `users` table setting the fields `user.recoverToken` and `user.recoverTokenCreated`.
-
-The token will then be used by the route `/recover/:recoverToken` to let the user back in.
-
-When recovering, the signal XXXXXXXX (TODO: decide name and emit it!) is emitted, to notify the application which will, in turn, be responsible of sending the user the secret recovery URL (my SMS, email, smoke signals, etc.).
+This route is exactly the same as Facebook's equivalent `recover` route.
 
 #### `GET /auth/register/local`
 
-FIXME
-
 This route will only work if the user is not already logged in (checked via the session variable `req.session.loggedIn`).
 
-In case of successful Facebook login, it will first check that that Facebook ID isn't already used in the application; if it isn't, it will associate the Facebook profile ID with the user by adding a record to the store `usersStrategies`.
+This route wll create a new empty user, as well as a corresponding record in `usersStrategies` which will have `field1` set as the login name, and `field3` as a hashed version of the user's password. It will also set `req.session.loggedIn` and `req.session.userId`.
 
-The Facebook ID is stored in `field1` in the `userStrategies` store.
+This route will fail if the username is already taken or it's empty.
 
 #### `GET /auth/resume/local`
 
-FIXME
+This route is totally equivalent to `/auth/signin/local`.
 
-This route is totally equivalent to `/auth/signin/facebook`, since they do essentially the same thing. In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
+In terms of Hotplate, the difference is in the _response type_: since `signin` one is meant to be used from a login screen and `resume` is meant to be used within the application, the _response type_ will definitely be different.
