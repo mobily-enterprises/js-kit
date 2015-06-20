@@ -13,37 +13,34 @@ DOCUMENT HOTPLATE
       [X] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
       [X] Get rid of appUrl and multiHomeURL, have only one appRoute used accordingly
 
-      THURSDAY 18/6
-       [ ] Prepare initial Hotplate documentation infrastructure
-         [X] Find neat way to write event data definitions and reference them
-
-         [ ] Finish documentation and rewrite of hotCoreAuth
-           [X] Restructure the whole document splitting the USE and the WRITING A MODULE
-           [X] Document defaults and configuration, including custom return page functions
-           [X] Clean up and check hotCoreAuth in general, looking for mistakes and wrong output
-           [X] Document all stores created by hotCoreAuth properly
-           [X] Document recoverToken URL
-           [ ] Document how sub-modules can create extra URLs and extra stores
-           [x] Document extra stores and extra URLs created by submodules
-           [ ] Document pageElements and pageElementsPerPage events
-           [ ] Run a final check of hotCoreAuth, finalise it documenting missing parts
-
-       FRIDAY 19/6
-        [ ] Document hotplate itself properly.
+      [X] Prepare initial Hotplate documentation infrastructure
+        [X] Find neat way to write event data definitions and reference them
+        [X] Finish documentation and rewrite of hotCoreAuth
+        [X] Restructure the whole document splitting the USE and the WRITING A MODULE
+        [X] Document defaults and configuration, including custom return page functions
+        [X] Clean up and check hotCoreAuth in general, looking for mistakes and wrong output
+        [X] Document all stores created by hotCoreAuth properly
+        [X] Document recoverToken URL
+        [X] Document how sub-modules can create extra URLs and extra stores
+        [X] Document pageElements and pageElementsPerPage events
+        [X] Document extra stores created by submodules
+        [X] Generate TOC
+        [X] Document extra URLs created by submodules
+        [X] Run a final check of hotCoreAuth, finalise it documenting missing parts
 
     [ ] DOCUMENTATION - API
-      [ ] Document all server modules except hotCoreTransport, hotCorePage, hotClientDojo
+      [.] Document hotplate itself properly.
       [ ] Document hotCoreTransport
       [ ] Document hotCorePage
-      [ ] Document hotClientDojo
+      [ ] Document all remaining server modules
       [ ] Document client blueprint
-      [ ] Document client-dojo
+      [ ] Document hotClientDojo
 
     [ ] DOCUMENTATION - QUICKSTART GUIDES
-        [ ] Make 2 empty canvas example applications, non-multi homed and multi homed
-        [ ] Make another empty app for multi-page applications
-        [ ] Check that the non-multi homed app works well with authentication
-        [ ] Write quickstart guide to get them started, explaining server
+      [ ] Make 2 empty canvas example applications, non-multi homed and multi homed
+      [ ] Make another empty app for multi-page applications
+      [ ] Check that authentication works 1000% OK
+      [ ] Write quickstart guide to get them started, explaining server
 
     [ ] Reach Nirvana with Dstore
       [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
@@ -56,7 +53,6 @@ DOCUMENT HOTPLATE
   ----------------------
 
 OMG Hotplate is finished?!?!?!?!?!?
-
 
 
 RELEASE!
