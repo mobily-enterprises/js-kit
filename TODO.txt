@@ -1,32 +1,5 @@
-
-
 DOCUMENT HOTPLATE
 -----------------
-
-    [ ] DOCUMENTATION INFRASTRUCTURE
-      [U] Fix path problem with current documentation
-      [X] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
-      [X] Figure out the "gist" of how YUIDOC works right now for client and server
-      [X] Install new YUIDOC
-      [X] Make new generic theme that uses same template by reusing changes to previous theme
-      [X] Find a way to have a README.md file per module, have most of the documentation there
-      [X] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
-      [X] Get rid of appUrl and multiHomeURL, have only one appRoute used accordingly
-
-      [X] Prepare initial Hotplate documentation infrastructure
-        [X] Find neat way to write event data definitions and reference them
-        [X] Finish documentation and rewrite of hotCoreAuth
-        [X] Restructure the whole document splitting the USE and the WRITING A MODULE
-        [X] Document defaults and configuration, including custom return page functions
-        [X] Clean up and check hotCoreAuth in general, looking for mistakes and wrong output
-        [X] Document all stores created by hotCoreAuth properly
-        [X] Document recoverToken URL
-        [X] Document how sub-modules can create extra URLs and extra stores
-        [X] Document pageElements and pageElementsPerPage events
-        [X] Document extra stores created by submodules
-        [X] Generate TOC
-        [X] Document extra URLs created by submodules
-        [X] Run a final check of hotCoreAuth, finalise it documenting missing parts
 
     [ ] DOCUMENTATION - API
       [.] Document hotplate itself properly.
@@ -1415,3 +1388,28 @@ STATUS OF "FIXING hotCoreAuth":
  [X] Return the order number to the client (as well as the names) in the artificial store
  [X] Fix problem where application is not even returned
  [X] Test authentication one last time
+
+[X] DOCUMENTATION INFRASTRUCTURE
+  [U] Fix path problem with current documentation
+  [X] Have a look at http://samwize.com/2014/01/31/the-best-documentation-generator-for-node/
+  [X] Figure out the "gist" of how YUIDOC works right now for client and server
+  [X] Install new YUIDOC
+  [X] Make new generic theme that uses same template by reusing changes to previous theme
+  [X] Find a way to have a README.md file per module, have most of the documentation there
+  [X] Re-do patch for YUIDOC to change name, maybe make PR to make it configurable
+  [X] Get rid of appUrl and multiHomeURL, have only one appRoute used accordingly
+
+  [X] Prepare initial Hotplate documentation infrastructure
+    [X] Find neat way to write event data definitions and reference them
+    [X] Finish documentation and rewrite of hotCoreAuth
+    [X] Restructure the whole document splitting the USE and the WRITING A MODULE
+    [X] Document defaults and configuration, including custom return page functions
+    [X] Clean up and check hotCoreAuth in general, looking for mistakes and wrong output
+    [X] Document all stores created by hotCoreAuth properly
+    [X] Document recoverToken URL
+    [X] Document how sub-modules can create extra URLs and extra stores
+    [X] Document pageElements and pageElementsPerPage events
+    [X] Document extra stores created by submodules
+    [X] Generate TOC
+    [X] Document extra URLs created by submodules
+    [X] Run a final check of hotCoreAuth, finalise it documenting missing parts
