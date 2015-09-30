@@ -2,10 +2,31 @@ DOCUMENT HOTPLATE
 -----------------
 
     [ ] DOCUMENTATION - API
-      [.] Document hotplate itself properly.
-      [ ] Document hotCoreTransport
-      [ ] Document hotCorePage
-      [ ] Document all remaining server modules
+      [x] Document hotplate itself properly.
+
+    [ ] Document modules:
+      [ ] hotCore
+      [X] hotCoreAuth
+      [ ] hotCoreClientFiles
+      [ ] hotCoreComet
+      [ ] hotCoreCommonValidators
+      [ ] hotCoreError
+      [ ] hotCoreErrorProtocol
+      [ ] hotCoreHandyCss
+      [ ] hotCoreJsonRestStores
+      [ ] hotCoreMultiHome
+      [ ] hotCorePage
+      [ ] hotCoreServerLogger
+      [ ] hotCoreSharedCode
+      [ ] hotCoreSharedValidators
+      [ ] hotCoreStoreConfig
+      [ ] hotCoreStoreExposer
+      [ ] hotCoreStoreIndexer
+      [ ] hotCoreStoreLogger
+      [ ] hotCoreStoreRegistry
+      [ ] hotCoreStoreVars
+      [ ] hotCoreTransport
+
       [ ] Document client blueprint
       [ ] Document hotClientDojo
 
@@ -16,7 +37,7 @@ DOCUMENT HOTPLATE
       [ ] Write quickstart guide to get them started, explaining server
 
     [ ] Reach Nirvana with Dstore
-      [C] Change dstore so that it can search in _children as well [Kris Zip's doing it]
+      [C] Change dstore so that it can search in _children as well [Kris Zip's doing it] https://github.com/SitePen/dstore/issues/91
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
       [ ] Client-side, make sure that when child table is updated, parent table looks for matching children and, if any, marks that one record as changed
@@ -192,6 +213,15 @@ contactId
   ---------------------
   DEADLINE: 30 June 2015
   ---------------------
+
+
+
+
+
+
+
+
+
 
 "GET PAID!"
   * Add accounting for SMSes: add credit, check credit before sending, check credit in queue
