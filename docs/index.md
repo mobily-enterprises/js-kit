@@ -26,8 +26,8 @@ Study carefully the 30 or so lines of code of Hotplate.
 
 Hotplate is a normal module based on Express. However, it does expect a couple of extra things in your server file to work properly.
 
-* [Hotplate simple application](/docs/boilerplateSingle) -- A boilerplate you can use as bases for your own applications.
-* [Hotplate multi-home application](/docs/boilerplateMultiHome) -- A boilerplate you can use as bases for your own multi-homed applications (where users can invite others to a workspace, or register themselves).
+* [Hotplate simple application]() -- NOT YET DONE. A boilerplate you can use as bases for your own applications.
+* [Hotplate multi-home application]() -- NOT YET DONE. A boilerplate you can use as bases for your own multi-homed applications (where users can invite others to a workspace, or register themselves).
 
 This documentation will point to the Hotplate modules the sample applications use. You should study these applications and make yourself familiar with Hotplate's modules and the way they are used in real life applcations.
 
@@ -40,9 +40,27 @@ You should now have a good read of how the server side modules work. You should 
 Server modules are the ones that don't provide any cient-side code -- or, if they do, it's very basic Javascript code necessary to the module to function.
 
 * [Hotplate's events](/docs/events) -- Hotplate's events' specifications
-* [hotCore](modules/hotCore) -- Will load all of the core modules
+* [hotCore]() -- NOT YET DOCUMENTED
 * [hotCoreAuth](modules/hotCoreAuth) -- The authentication module
-* [hotCorePage](modules/hotCorePage) -- The page generation module
+* [hotCoreClientFiles]() -- NOT YET DOCUMENTED
+* [hotCoreComet]() -- NOT YET DOCUMENTED
+* [hotCoreCommonValidators]() -- NOT YET DOCUMENTED
+* [hotCoreError]() -- NOT YET DOCUMENTED
+* [hotCoreErrorProtocol]() -- NOT YET DOCUMENTED
+* [hotCoreHandyCss]() -- NOT YET DOCUMENTED
+* [hotCoreJsonRestStores]() -- NOT YET DOCUMENTED
+* [hotCoreMultiHome]() -- NOT YET DOCUMENTED
+* [hotCorePage]() -- NOT YET DOCUMENTED
+* [hotCoreServerLogger]() -- NOT YET DOCUMENTED
+* [hotCoreSharedCode]() -- NOT YET DOCUMENTED
+* [hotCoreSharedValidators]() -- NOT YET DOCUMENTED
+* [hotCoreStoreConfig]() -- NOT YET DOCUMENTED
+* [hotCoreStoreExposer]() -- NOT YET DOCUMENTED
+* [hotCoreStoreIndexer]() -- NOT YET DOCUMENTED
+* [hotCoreStoreLogger]() -- NOT YET DOCUMENTED
+* [hotCoreStoreRegistry]() -- NOT YET DOCUMENTED
+* [hotCoreStoreVars]() -- NOT YET DOCUMENTED
+* [hotCoreTransport]() -- NOT YET DOCUMENTED
 
 ## Client modules
 
@@ -50,8 +68,8 @@ Now that you know how the server does things, you should read how clients are su
 
 Client modules are the ones focused at providing a specific client-side library as well as providing all of the support functions to make sure that a client-side library adheres to the [Hotplate client blueprint].
 
-* [Blueprints](blueprints) -- Blueprints that every client library should follow
-* [hotClientDojo](hotClientDojo) -- Dojo support
+* [Blueprints]() -- NOT YET DOCUMENTED -- Blueprints that every client library should follow
+* [hotClientDojo]() -- NOT YET DOCUMENTED -- Dojo support
 
 ## Final words
 

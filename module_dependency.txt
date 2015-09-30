@@ -3,7 +3,7 @@ MODULE DEPENDENCY IN HOTPLATE
 
 hotCoreError.js
   logger = require('hotCoreServerLogger')
-  sendResponse = hotplate.require('hotCoreErrorProtocol').sendResponse;
+  sendResponse = require('hotCoreErrorProtocol').sendResponse;
 
 hotCoreStoreVars.js
   hotCoreStoreRegistry = require('hotCoreStoreRegistry')
@@ -41,7 +41,6 @@ logger (All modules that actually log)
   hotCoreError.js
   hotDojoAppContainer.js
   hotDojoAuth.js
-  
+
 hotCoreErrorProtocol
   hotCoreError.js
-

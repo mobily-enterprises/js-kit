@@ -19,7 +19,7 @@ An associative array where each key is the store name. It's important that the m
 
 ### Example
 
-    hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cachable( function( done ){
+    hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( function( done ){
 
       var stores = {}
 
