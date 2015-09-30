@@ -7,8 +7,7 @@ var async = require('async')
 var hotplate = exports;
 
 // Hotplate's core functionality
-hotplate.require = function( m ){ return require( m ); };
-hotplate.cachable = async.memoize;
+hotplate.cacheable = async.memoize;
 hotplate.hotEvents = new EventEmitterCollector();
 hotplate.config = new DeepObject();
 hotplate.critical = colorConsole.error.bind( colorConsole );
