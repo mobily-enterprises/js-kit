@@ -1,5 +1,6 @@
-DOCUMENT HOTPLATE
------------------
+
+BACKGROUND: HOTPLATE DOCUMENTATION
+----------------------------------
 
     [ ] DOCUMENTATION - API
       [x] Document hotplate itself properly.
@@ -41,15 +42,6 @@ DOCUMENT HOTPLATE
       [ ] Implement queryConditions in dstore: if defined, filtering will be based on those fields
       [ ] Check that hotplate all works with new filtering, without ever doing a refresh (!!!)
       [ ] Client-side, make sure that when child table is updated, parent table looks for matching children and, if any, marks that one record as changed
-
-  ----------------------
-  DEADLINE: 26 June 2015
-  ----------------------
-
-OMG Hotplate is finished?!?!?!?!?!?
-
-
-RELEASE!
 
   "MESSAGES"
 
