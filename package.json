@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.56",
+  "version": "0.3.57",
   "private": false,
   "repository": {
     "type": "git",
@@ -62,7 +62,7 @@
     "hotCoreStoreIndexer",
     "hotCoreStoreLogger",
     "hotCoreStoreRegistry",
-    "hotCoreTransport",
+    "hotCoreTransport"
   ],
   "bugs": {
     "url": "https://github.com/mercmobily/hotplate/issues"
