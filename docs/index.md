@@ -48,7 +48,7 @@ Server modules are the ones that don't provide any cient-side code -- or, if the
 * [hotCoreError]() -- NOT YET DOCUMENTED
 * [hotCoreErrorProtocol]() -- NOT YET DOCUMENTED
 * [hotCoreHandyCss]() -- NOT YET DOCUMENTED
-* [hotCoreJsonRestStores]() -- NOT YET DOCUMENTED
+* [hotCoreStore]() -- NOT YET DOCUMENTED
 * [hotCoreMultiHome]() -- NOT YET DOCUMENTED
 * [hotCorePage]() -- NOT YET DOCUMENTED
 * [hotCoreServerLogger]() -- NOT YET DOCUMENTED

@@ -14,7 +14,7 @@ BACKGROUND: HOTPLATE DOCUMENTATION
       [ ] hotCoreError
       [ ] hotCoreErrorProtocol
       [ ] hotCoreHandyCss
-      [ ] hotCoreJsonRestStores
+      [ ] hotCoreStore
       [ ] hotCoreMultiHome
       [ ] hotCorePage
       [ ] hotCoreServerLogger
@@ -546,7 +546,7 @@ March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Make it possible to place the buttons underneath the widget, aligned to the top, or aligned to the bottom
   * Make it easier to notify multiple stores if a mongoDB table changes, as it's very possible that one different stores will use
     the same table (e.g. users seen by admins and by normal users). MOVE IT to a different hotplate module
-  * Redo the function that loads modules in hotplate.js, it's a giant mess right now. Use it for hotCoreJsonRestStores.js
+  * Redo the function that loads modules in hotplate.js, it's a giant mess right now. Use it for hotCoreStore.js
   * Get rid of the "error" variable in hotError, use allhttperrors instead (like you should)
   * Change that workspaceIdCall into workspaceId
   * Change jsonreststores-mongo so that it deals with sub-stores properly
@@ -682,7 +682,7 @@ March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
   * Change config stores so that important parameters CAN be required, maybe use DbLayer to add them
   * See what to do w/ shared code/validators: possibly create another global "Validators" array with just the Validators func (what about dups?)
   * Check escaping of special characters in hotCorePage, if a variable has [[BODY]] what happens?
-  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreJsonRestStores)
+  * Make sure that tab messages are broadcast when workspaceId not in field (implement TODO in hotCoreStore)
   * Make sure that indexes are created/set automatically by simpleSchema library (or DB layer library?)
   * Update docs about indexing for dbLayer, JsonRestStores
   * Check hotDojoCometMessages/client/messages.js and hotDojoStores/client/AppStoreNotify.js: "add" needs to check if it's not within
@@ -924,7 +924,7 @@ March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
 
     X ./node_modules/hotCoreStoreConfig/lib/hotCoreStoreConfig.js
     X ./node_modules/hotCoreStoreLogger/lib/hotCoreStoreLogger.js
-    X ./node_modules/hotCoreJsonRestStores/lib/hotCoreJsonRestStores.js
+    X ./node_modules/hotCoreStore/lib/hotCoreStore.js
   * Whatever this meant: Make sure that JsonRestStores in Hotplate does the broadcast based on the table name. Schema is the same
   * Make sure that, when called by API, GetQuery allows searching for anything in either the searchSchema or the main schema
   * Document simpledbschema and JsonRestStores
@@ -992,7 +992,7 @@ March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
     X Rewrite server-side request scheduler
 
     X Add fields to the contacts: when saving, make sure that main contact, main address and email are stored
-    X Check _broadcast in hotCoreJsonRestStores, after HUGE refactoring, reordering eats records on different tab
+    X Check _broadcast in hotCoreStore, after HUGE refactoring, reordering eats records on different tab
     X Make sure that local app gets notified of change in record if an email is changed/repositioned (!)
     X Fix ordering in main screen, seems off, contacts added at the end (fingers crossed it's nothing serious)
     X Change hotCoreMultiHome.js so that workspaceName is handled by layer
@@ -1091,7 +1091,7 @@ March 2016 IS WHEN THE BOOKING SYSTEM IS ACTUALLY FINISHED
       [X] FIX: Make sure that Rest.js emits right event, create/update depending on HTTP response
       [X] FIX: Reposition mustn't be called on putExisting unless beforeId is specified
       [X] DO: Rewrite code to only force refresh when actually needed (maybe patch dstore with shouldRefresh)
-      [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreJsonRestStores.js (work out what is sent first)
+      [X] FIX: headers in Rest.js and JsonRestStores.js and hotCoreStore.js (work out what is sent first)
       [X] CHECK: Application making sure that everything happens as it should, reordering/moving/editing etc.
       [X] CHECK: If user is booted out, it still asks for password to let them back in, Resume.js line 62
 
