@@ -42,24 +42,11 @@ Server modules are the ones that don't provide any cient-side code -- or, if the
 * [Hotplate's events](/docs/events) -- Hotplate's events' specifications
 * [hotCore]() -- NOT YET DOCUMENTED
 * [hotCoreAuth](modules/hotCoreAuth) -- The authentication module
-* [hotCoreClientFiles]() -- NOT YET DOCUMENTED
 * [hotCoreComet]() -- NOT YET DOCUMENTED
-* [hotCoreCommonValidators]() -- NOT YET DOCUMENTED
 * [hotCoreError]() -- NOT YET DOCUMENTED
-* [hotCoreErrorProtocol]() -- NOT YET DOCUMENTED
-* [hotCoreHandyCss]() -- NOT YET DOCUMENTED
 * [hotCoreStore]() -- NOT YET DOCUMENTED
 * [hotCoreMultiHome]() -- NOT YET DOCUMENTED
-* [hotCorePage]() -- NOT YET DOCUMENTED
 * [hotCoreServerLogger]() -- NOT YET DOCUMENTED
-* [hotCoreSharedCode]() -- NOT YET DOCUMENTED
-* [hotCoreSharedValidators]() -- NOT YET DOCUMENTED
-* [hotCoreStoreConfig]() -- NOT YET DOCUMENTED
-* [hotCoreStoreExposer]() -- NOT YET DOCUMENTED
-* [hotCoreStoreIndexer]() -- NOT YET DOCUMENTED
-* [hotCoreStoreLogger]() -- NOT YET DOCUMENTED
-* [hotCoreStoreRegistry]() -- NOT YET DOCUMENTED
-* [hotCoreStoreVars]() -- NOT YET DOCUMENTED
 * [hotCoreTransport]() -- NOT YET DOCUMENTED
 
 ## Client modules
