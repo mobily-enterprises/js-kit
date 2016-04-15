@@ -19,8 +19,8 @@ var dummy
 
   , passport = require('passport')
   , FacebookStrategy = require('passport-facebook').Strategy
-  , hotCoreAuth = require('hotplate/node_modules/hotCoreAuth')
-  , hotCoreStore = require('hotplate/node_modules/hotCoreStore')
+  , hotCoreAuth = require('hotplate/core_modules/hotCoreAuth')
+  , hotCoreStore = require('hotplate/core_modules/hotCoreStore')
   , request = require( 'request')
 ;
 
@@ -126,12 +126,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       }
 
       // Check that the user doesn't already have "facebook" as a strategy
-      stores.usersStrategies.dbLayer.selectByHash( { conditions: { userId: req.session.userId, strategyId: 'facebook' } }, function( err, res ){
+      stores.usersStrategies.dbLayer.selectByHash( { userId: req.session.userId, strategyId: 'facebook' }, function( err, res ){
         if( err ) return done( err, false );
         if( res.length ) return done( null, false, { message: "User already has a Facebook login setup" } );
 
         // Check that _that_ specific facebook ID is not associated to an account
-        stores.usersStrategies.dbLayer.selectByHash( { conditions: { field1: profile.id } }, { children: true }, function( err, res ){
+        stores.usersStrategies.dbLayer.selectByHash( { field1: profile.id }, { children: true }, function( err, res ){
           if( err ) return done( err, false );
           if( res.length ) return  done( null, false, { message: "Facebook profile already linked to another account" } );
 
@@ -193,7 +193,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
          return done( null, false, { message: "Facebook didn't return a profile ID, procedure aborted" } );
       }
 
-      stores.usersStrategies.dbLayer.selectByHash( { conditions: { strategyId: 'facebook', field1: profile.id } }, { children: true }, function( err, res ){
+      stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'facebook', field1: profile.id }, { children: true }, function( err, res ){
         if( err ) return done( err, null );
 
         if( ! res.length ) return done( null, false, { message: "Your Facebook user is not registered" } );
@@ -259,7 +259,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       }
 
       // Check that _that_ specific facebook ID is not associated to an account
-      stores.usersStrategies.dbLayer.selectByHash( { conditions: { strategyId: 'facebook', field1: profile.id } }, { children: true }, function( err, res ){
+      stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'facebook', field1: profile.id }, { children: true }, function( err, res ){
         if( err ) return done( err, null );
 
         if( res.length ) return done( null, false, { message: "Facebook profile already registered" } );

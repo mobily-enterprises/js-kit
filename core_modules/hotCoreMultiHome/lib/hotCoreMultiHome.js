@@ -108,7 +108,7 @@ var dummy
 
   , async = require('async')
 
-  , hotCoreStore = require( 'hotCoreStore' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
   , debug = require('debug')('hotplate:hotCoreMultiHome')
 ;
 

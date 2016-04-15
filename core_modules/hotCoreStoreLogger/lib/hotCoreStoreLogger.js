@@ -4,7 +4,7 @@ var dummy
   , hotplate = require('hotplate')
 
   , declare = require('simpledeclare')
-  , hotCoreStore = require('hotplate/node_modules/hotCoreStore')
+  , hotCoreStore = require('hotplate/core_modules/hotCoreStore')
   , debug = require('debug')('hotplate:hotCoreStoreLogger')
 ;
 

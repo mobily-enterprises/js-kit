@@ -23,8 +23,8 @@ var dummy
   , LocalStrategy = require('passport-local').Strategy
   , hat = require('hat')
   , bcrypt = require('bcrypt')
-  , hotCoreAuth = require('hotplate/node_modules/hotCoreAuth')
-  , hotCoreStore = require('hotplate/node_modules/hotCoreStore')
+  , hotCoreAuth = require('hotplate/core_modules/hotCoreAuth')
+  , hotCoreStore = require('hotplate/core_modules/hotCoreStore')
 ;
 
 var SALT_WORK_FACTOR = 15;
@@ -57,7 +57,7 @@ exports.extraStores = function( stores, done ){
 
       var self = this;
 
-      stores.usersStrategies.dbLayer.selectByHash( { conditions: { strategyId: 'local', field1: request.options.conditionsHash.login } }, { children: true }, function( err, res ){
+      stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'local', field1: request.options.conditionsHash.login }, { children: true }, function( err, res ){
         if( err ) return cb( err );
 
         // Return the login

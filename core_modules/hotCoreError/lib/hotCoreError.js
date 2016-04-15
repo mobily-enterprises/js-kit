@@ -6,7 +6,7 @@ var util = require('util')
   , hotplate = require('hotplate')
   , path = require('path')
   , e = require('allhttperrors')
-  , logger = require('hotCoreServerLogger')
+  , logger = require('hotplate/core_modules/hotCoreServerLogger')
   , debug = require('debug')('hotplate:hotCoreError')
 ;
 

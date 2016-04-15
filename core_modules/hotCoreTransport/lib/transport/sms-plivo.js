@@ -20,9 +20,9 @@ var dummy
   , SimpleSchema = require( 'simpleschema' )
   , JsonRestStores = require( 'jsonreststores' )
 
-  , hotCoreStore = require( 'hotCoreStore' )
-  , hotCoreTransport = require( 'hotCoreTransport')
-  , hotCoreServerLogger = require( 'hotCoreServerLogger' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
+  , hotCoreTransport = require( 'hotplate/core_modules/hotCoreTransport')
+  , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
   , crypto = require('crypto')
   , logger = hotCoreServerLogger
 

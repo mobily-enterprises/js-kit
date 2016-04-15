@@ -9,10 +9,10 @@ var dummy
   , SimpleDbLayer = require( 'simpledblayer' )
   , SimpleSchema = require( 'simpleschema' )
   , JsonRestStores = require( 'jsonreststores' )
-  , hotCoreStore = require( 'hotCoreStore' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
 
-  , hotCoreStoreConfig = require( 'hotCoreStoreConfig' )
-  , hotCoreStore = require( 'hotCoreStore' )
+  , hotCoreStoreConfig = require( 'hotplate/core_modules/hotCoreStoreConfig' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
   , debug = require('debug')('hotplate:hotCoreComet')
 ;
 

@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.63",
+  "version": "0.3.65",
   "private": false,
   "repository": {
     "type": "git",
@@ -10,16 +10,6 @@
   },
 
   "dependencies": {
-    "hotCore": "*",
-    "hotCoreAuth": "*",
-    "hotCoreComet": "*",
-    "hotCoreError": "*",
-    "hotCoreStore": "*",
-    "hotCoreStoreConfig": "*",
-    "hotCoreStoreLogger": "*",
-    "hotCoreMultiHome": "*",
-    "hotCoreServerLogger": "*",
-    "hotCoreTransport": "*",
     "eventemittercollector": "0.3.x",
     "allhttperrors": "0.3.x",
     "jsonreststores": "0.3.x",
@@ -46,18 +36,6 @@
     "mimelib": "~0.2.19",
     "base64-stream": "~0.1.2"
   },
-  "bundleDependencies": [
-    "hotCore",
-    "hotCoreAuth",
-    "hotCoreComet",
-    "hotCoreError",
-    "hotCoreStore",
-    "hotCoreStoreConfig",
-    "hotCoreStoreLogger",
-    "hotCoreMultiHome",
-    "hotCoreServerLogger",
-    "hotCoreTransport"
-  ],
   "bugs": {
     "url": "https://github.com/mercmobily/hotplate/issues"
   }

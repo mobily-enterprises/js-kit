@@ -11,8 +11,8 @@ var dummy
   , SimpleSchema = require( 'simpleschema' )
   , JsonRestStores = require( 'jsonreststores' )
 
-  , hotCoreStore = require( 'hotCoreStore' )
-  , hotCoreServerLogger = require( 'hotCoreServerLogger' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
+  , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
 ;
 
 
@@ -26,6 +26,8 @@ var basicContentResponsePage = function( strategyId, action, user, profile ){
   response += "<html><body><script type=\"text/javascript\">setTimeout(function(){ window.close() }, 5000);</script>RESPONSE</body></html>";
   return response;
 };
+
+var stores = {}
 
 
 /**
@@ -188,7 +190,6 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
 
 hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( function( done ){
 
-  var stores = {}
 
   hotCoreStore.get( function( err, s ){
     if( err ) return done( err );
@@ -372,98 +373,77 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
 }))
 
 
-/**
-Sets recover URL `/recover/:recoverToken` (for token recovery).
-Also goes through the list of `AuthStrategies`, loads the right
-files in `auth/{strategy name}.js` (e.g. {{#crossLink "hotCoreAuth.facebook"}}{{/crossLink}}), and runs them.
-This basically ensures that all strategies have the right URLs all set for them to work.
-*/
+var checkToken = exports.checkToken = function( token, cb ){
+
+  stores.users.dbLayer.selectByHash( { recoverToken: token }, function( err, result, total ){
+    if( err ) return cb( err );
+
+    // No joy: token isn't there
+    if( total == 0 ) return cb( null, false, "Token not found" );
+
+    var user = result[ 0 ];
+
+    // The token's date is invalid
+    if( ! user.recoverTokenCreated ) return cb( null, false, "Token seems expired" );
+
+    // Get the important variables
+    var tokenAgeInSeconds = Math.round( ( (new Date() ) - user.recoverTokenCreated ) / 1000 );
+    var recoverURLexpiry = hotplate.config.get( 'hotCoreAuth.recoverURLexpiry' );
+    var tokenIsGood = tokenAgeInSeconds < recoverURLexpiry;
+
+    if( tokenIsGood ){
+      return cb( null, true, user.id );
+    } else {
+      return cb( null, false, "Token is expired" );
+    }
+  });
+}
+
+var clearToken = exports.clearToken = function( userId, cb ){
+
+  // Clear the token for that user
+  stores.users.dbLayer.updateById( userId, { recoverToken: null, recoverTokenCreated: null }, function( err ){
+    if( err ) return cb( err );
+
+    cb( null );
+  });
+}
+
+var createToken = exports.createToken = function( userId, cb ){
+
+  // Make up the token, add it to the users table
+  var token = require('crypto').randomBytes(48).toString( 'base64' ).replace(/[^a-zA-Z0-9]/g,'').substr(0,25)
+  stores.users.dbLayer.updateById( userId, { recoverToken: token, recoverTokenCreated: new Date() }, function( err ){
+    if( err ) return cb( err );
+
+    cb( null, token );
+  });
+}
+
+
 hotplate.hotEvents.onCollect( 'setRoutes', function( app, done ){
 
-  hotCoreStore.getAllStores( function( err, stores ){
-    if( err ) return done( err );
+  // Calls `strategy.strategyRoutesMaker()` for each extra strategy-related routes
+  async.eachSeries(
+    Object.keys( hotplate.config.get('hotCoreAuth.strategies', {} )),
+    function( strategyName, cb ){
 
-    app.get( hotplate.prefix( '/recover/:recoverToken' ), function( req, res, next ){
+      var strategyRoutesMaker = require( './auth/' + strategyName ).strategyRoutesMaker;
+      if( ! strategyRoutesMaker ) return cb( null );
 
-      stores.users.dbLayer.selectByHash( { conditions: { recoverToken: req.params[ 'recoverToken' ] } }, { children: true }, function( err, result ){
-        if( err ) return done( err );
+      var strategyConfig = hotplate.config.get('hotCoreAuth.strategies' )[ strategyName ];
+      strategyRoutesMaker( app, strategyConfig, function( err ){
+        if( err ) return cb( err );
 
-        if( result.length == 0 ){
-          // Artificially create a TokenInvalid error, and next( err ) it
-          var error = new Error();
-          error.name = "TokenInvalidError";
-          error.message = "Token not valid!";
-          req.hotError = error;
-          return next( error );
-        }
-
-        var user = result[0];
-
-        if( ! user.recoverTokenCreated ){
-
-          // Artificially create a TokenDateInvalid error, and next( err ) it
-          var error = new Error();
-          error.name = "TokenDateInvalidError";
-          error.message = "Token date invalid!";
-          req.hotError = error;
-          return next( error );
-        }
-
-        // Get the important variables
-        var tokenAgeInSeconds = Math.round( ( (new Date() ) - user.recoverTokenCreated ) / 1000 );
-        var recoverURLexpiry = hotplate.config.get( 'hotCoreAuth.recoverURLexpiry' );
-
-        var tokenIsGood = tokenAgeInSeconds < recoverURLexpiry;
-
-        if( ! tokenIsGood ){
-
-          // Artificially create a TokenExpired error, and next( err ) it
-          var error = new Error();
-          error.name = "TokenExpiredError";
-          error.message = "Token expired!";
-          req.hotError = error;
-          return next( error );
-        }
-
-        delete user.recoverToken;
-        delete user.recoverTokenCreated;
-
-        stores.users.dbLayer.updateById( user.id, { recoverToken: undefined, recoverTokenCreated: undefined }, function( err ){
-          if( err ) return next( err );
-
-          // Log the user in using the token!
-          req.session.loggedIn = true;
-          req.session.userId = user.id;
-
-          // Redirect to the right URL
-          res.redirect( hotplate.config.get('hotCoreAuth.redirectURLs.success.recover') );
-        });
+        // That's it -- end of the function.
+        cb( null);
       });
-    });
+    },
+    function( err ){
+      if( err ) return done( err );
 
-    // Calls `strategy.strategyRoutesMaker()` for each extra strategy-related routes
-    async.eachSeries(
-      Object.keys( hotplate.config.get('hotCoreAuth.strategies', {} )),
-      function( strategyName, cb ){
-
-        var strategyRoutesMaker = require( './auth/' + strategyName ).strategyRoutesMaker;
-        if( ! strategyRoutesMaker ) return cb( null );
-
-        var strategyConfig = hotplate.config.get('hotCoreAuth.strategies' )[ strategyName ];
-        strategyRoutesMaker( app, strategyConfig, function( err ){
-          if( err ) return cb( err );
-
-          // That's it -- end of the function.
-          cb( null);
-        });
-      },
-      function( err ){
-        if( err ) return done( err );
-
-        done( null );
-      }
-    );
-
-  });
+      done( null );
+    }
+  );
 
 });

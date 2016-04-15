@@ -12,8 +12,8 @@ var dummy
   , SimpleSchema = require( 'simpleschema' )
   , JsonRestStores = require( 'jsonreststores' )
 
-  , hotCoreStore = require( 'hotCoreStore' )
-  , hotCoreServerLogger = require( 'hotCoreServerLogger' )
+  , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
+  , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
   , logger = hotCoreServerLogger
 ;
 
