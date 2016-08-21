@@ -494,10 +494,10 @@ function startTransportCron(){
       // TODO: Add case where it could be "delivering" and it's very old
       var now = new Date();
       stores.messagesTo.dbLayer.select(
-        { conditions: { type: 'and', args: [
+        { type: 'and', args: [
           { type: 'lt', args: [ 'attemptAfter', now ] },
           { type: 'eq', args: [ 'status', 'todeliver' ] },
-        ] } },
+        ] },
         { useCursor: true , 'delete': false, children: true },
         function( err, cursor, total, grandTotal ){
 
