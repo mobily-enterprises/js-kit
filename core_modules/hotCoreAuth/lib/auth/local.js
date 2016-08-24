@@ -25,6 +25,7 @@ var dummy
   , bcrypt = require('bcrypt')
   , hotCoreAuth = require('hotplate/core_modules/hotCoreAuth')
   , hotCoreStore = require('hotplate/core_modules/hotCoreStore')
+  , e = require( 'allhttperrors' )
 ;
 
 var SALT_WORK_FACTOR = 15;
@@ -113,7 +114,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( ! req.session.loggedIn ) return  done( null, false );
+      if( ! req.session.loggedIn ) return done( new e.UnauthorizedError() );
 
       // Check that there isn't one already there
       stores.usersStrategies.dbLayer.selectByHash( { userId: req.session.userId, strategyId: 'local' }, { children: true }, function( err, res ){
@@ -147,7 +148,13 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             stores.usersStrategies.dbLayer.updateById( foundStrategyId, { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
               if( err ) return done( err, null );
 
-              return done( null, { id: req.session.userId } );
+              var returnObject = { id: req.session.userId };
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
+                if( err ) return done( err, null );
+
+
+                return done( null, returnObject );
+              });
             });
 
           // It's a new entry: add a new record
@@ -156,11 +163,16 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
               if( err ) return done( err, null );
 
-              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { userId: res.userId, login: login, password: password }, function( err ){
-
+              // Allow other modules to enrich the returnObject if they like
+              var returnObject = { id: res.userId };
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
                 if( err ) return done( err, null );
-                return done( null, { id: res.userId } );
+
+
+                // That's it: return!
+                return done( null, returnObject );
               });
+
             });
           }
         });
@@ -184,19 +196,21 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( new e.ForbiddenError() );
 
       stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase(), field3: password }, function( err, res ){
         if( err ) return done( err, null );
 
         if( ! res.length ) return done( null, false );
-
-        hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { userId: res[0].userId, login: login, password: password }, function( err ){
+  
+        // Allow other modules to enrich the returnObject if they like
+        var returnObject = { id: res[ 0 ].userId };
+        hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){
           if( err ) return done( err, null );
 
           req.session.loggedIn = true;
           req.session.userId = res[0].userId;
-          done( null, { id: res[ 0 ].userId } );
+          done( null, returnObject );
         });
       });
 
@@ -218,7 +232,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( new e.ForbiddenError() ); 
 
       // The profile MUST contain an ID
       if( login == '' ){
@@ -242,10 +256,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             req.session.userId = res.userId;
 
 
-            hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { userId: user.id, login: login, password: password }, function( err ){
+            // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: user.id };
+            hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
               if( err ) return done( err, null );
 
-              done( null, { id: user.id } );
+              done( null, returnObject );
             });
           });
         });

@@ -154,7 +154,7 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
         } else {
           var error = 'Authentication error';
           if( typeof( profile.message) !== 'undefined' ) error =  profile.message;
-          res.json( 403, { message: error } );
+          res.json( 401, { message: error } );
         }
       break;
 

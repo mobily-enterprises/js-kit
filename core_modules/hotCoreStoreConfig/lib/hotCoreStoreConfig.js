@@ -20,6 +20,11 @@ var getConfigRecords = exports.getConfigRecords = function( workspaceId, userId,
 
   var results = {};
 
+  // If they are both empty, simply return an empty result.
+  // This will the flow of calling function easier
+  if( ! workspaceId && ! userId ) return cb( null, results );
+
+
   getConfigStores( function( err, configStores ){
 
     async.each(
@@ -57,7 +62,7 @@ var getConfigRecords = exports.getConfigRecords = function( workspaceId, userId,
         if( store.idProperty == 'workspaceId' || store.idProperty == 'userId' || store.idProperty == 'globalId'){
 
           debug("ONE-RECORD config store -- getting it (or creating it if missing)");
-          store.dbLayer.selectByHash( { conditions: filter }, { children: true }, function( err, docs ){
+          store.dbLayer.selectByHash( filter, { children: true }, function( err, docs ){
             if( err ) return cb( err );
 
             // TODO: Add warning for docs.length > 1
@@ -99,7 +104,7 @@ var getConfigRecords = exports.getConfigRecords = function( workspaceId, userId,
 
         } else {
           debug("COLLECTION config store -- getting it");
-          store.dbLayer.selectByHash( { conditions: filter }, { children: true }, function( err, docs ){
+          store.dbLayer.selectByHash( filter, { children: true }, function( err, docs ){
             if( err ) return cb( err );
 
             results[ store.storeName ] = docs;

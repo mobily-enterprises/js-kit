@@ -118,7 +118,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
     function facebookManager( req, accessToken, refreshToken, profile, done ) {
 
       // User is not logged in: nothing to do
-      if( ! req.session.loggedIn ) return done( null, false );
+      if( ! req.session.loggedIn ) return done( null, false, { message: "You must be logged in" } );
 
       // The profile MUST contain an ID
       if( typeof( profile ) === 'undefined' || ! profile.id ){
@@ -139,10 +139,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
           stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id, field3: accessToken, field4: refreshToken }, function( err, res ){
             if( err ) return  done( err, false );
 
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+            // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: res.userId };
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { returnObject: returnObject, userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
               if( err ) return done( err, null );
 
-              done( null, { id: res.userId }, profile );
+              done( null, returnObject, profile );
             });
           });
         });
@@ -183,7 +185,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
     function facebookSignin( req, accessToken, refreshToken, profile, done ) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { alreadyLoggedIn: true } );
 
       //console.log( "ACCESS TOKEN: ", accessToken );
       //console.log( "REFRESH TOKEN: ", refreshToken );
@@ -202,12 +204,14 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
           if( err ) return done( err, null );
 
-          hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'signin', { userId: res[0].userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+          // Allow other modules to enrich the returnObject if they like
+          var returnObject = { id: res[0].userId };
+          hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'signin', { returnObject: returnObject, userId: res[0].userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
             if( err ) return done( err, null );
 
             req.session.loggedIn = true;
             req.session.userId = res[0].userId;
-            done( null, { id: res[0].userId }, profile  );
+            done( null, returnObject, profile  );
 	  })
 	})
       })
@@ -251,7 +255,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       //console.log( "PROFILE: ", profile );
 
       // User is already logged in: nothing to do
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { alreadyLoggedIn: true } );
 
       // The profile MUST contain an ID
       if( typeof( profile ) === 'undefined' || ! profile.id ){
@@ -275,10 +279,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
             req.session.loggedIn = true;
             req.session.userId = res.userId;
 
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+            // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: res.userId };
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { returnObject: returnObject, userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
               if( err ) return done( err, null );
 
-              done( null, { id: res.userId }, profile );
+              done( null, returnObject, profile );
             });
           });
         });
