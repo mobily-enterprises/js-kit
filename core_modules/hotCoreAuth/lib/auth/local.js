@@ -137,7 +137,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             editingSelf = ( itsEdit == true && res[0].id.toString() == foundStrategyId.toString()  );
           }
 
-          if( res.length > 0 && !editingSelf ) return done( null, false, { message: "Login name taken!" } );
+          if( res.length > 0 && !editingSelf ) return done( null, false, { message: "Login name taken!", code: "LOGIN_TAKEN" } );
 
           // It's an edit: overwrite existing values
           if( itsEdit ){
@@ -196,12 +196,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( new e.ForbiddenError() );
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
 
       stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase(), field3: password }, function( err, res ){
         if( err ) return done( err, null );
 
-        if( ! res.length ) return done( null, false );
+        if( ! res.length ) return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
   
         // Allow other modules to enrich the returnObject if they like
         var returnObject = { id: res[ 0 ].userId };
@@ -232,18 +232,19 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( new e.ForbiddenError() ); 
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
+
 
       // The profile MUST contain an ID
       if( login == '' ){
-         return done( null, false, { message: "Username cannot be empty" } );
+         return done( null, false, { message: "Username cannot be empty", code: "USERNAME_EMPTY" } );
       }
 
       // Check that the login  isn't already there
       stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'local', field1: login.toLowerCase() }, { children: true }, function( err, res ){
         if( err ) return done( err );
 
-        if( res.length ) return done( null, false, { message: "Username taken" } );
+        if( res.length ) return done( null, false, { message: "Username taken", code: "LOGIN_TAKEN" } );
 
         stores.users.dbLayer.insert( {}, function( err, user ){
           if( err ) return done( err );
