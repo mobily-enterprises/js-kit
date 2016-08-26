@@ -38,7 +38,7 @@ exports.extraStores = function( stores, done ){
   var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
 
     schema: new SimpleSchema({
-      login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
+      login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true, validator:  hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} )  },
     }),
 
     storeName:  'logins',
@@ -115,6 +115,14 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
     function(req, login, password, done) {
 
       if( ! req.session.loggedIn ) return done( new e.UnauthorizedError() );
+
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login ); 
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
+
 
       // Check that there isn't one already there
       stores.usersStrategies.dbLayer.selectByHash( { userId: req.session.userId, strategyId: 'local' }, { children: true }, function( err, res ){
@@ -198,6 +206,13 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
       if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
 
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login );
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
+
       stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase(), field3: password }, function( err, res ){
         if( err ) return done( err, null );
 
@@ -234,6 +249,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
       if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
 
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login );
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
 
       // The profile MUST contain an ID
       if( login == '' ){
