@@ -13,6 +13,8 @@ var dummy
 
   , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
   , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
+  , e = require( 'allhttperrors' )
+
 ;
 
 
@@ -148,14 +150,7 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
       break;
 
       case 'ajax':
-
-        if( user ){
-          res.json( 200, { user: user, profile: profile } );
-        } else {
-          var error = 'Authentication error';
-          if( typeof( profile.message) !== 'undefined' ) error =  profile.message;
-          res.json( 401, { message: error } );
-        }
+          res.json( 200, { strategyId: strategyId, action: action, user: user, profile: profile } );
       break;
 
       case 'redirect-opener':
@@ -241,6 +236,8 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
 
       checkPermissions: function( request, method, cb ){
 
+       if( !request.session.loggedIn ) return cb( new e.UnauthorizedError() );
+
         switch( method ){
           case 'get':
           case 'getQuery':
@@ -250,6 +247,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
           break;
 
           case 'delete':
+
             // Only their own strategies
             if( request.session.userId != request.params.userId ) return cb( null, false );
 
