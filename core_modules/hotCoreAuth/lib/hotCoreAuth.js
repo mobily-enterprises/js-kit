@@ -66,6 +66,7 @@ hotplate.config.set('hotCoreAuth', {
   callbackURLBase: 'http://localhost:3000',
 
   recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
+  recoverRedirectOnSuccess: '/',
 
   defaultResponseType: 'ajax',
 
@@ -439,6 +440,34 @@ hotplate.hotEvents.onCollect( 'setRoutes', function( app, done ){
     },
     function( err ){
       if( err ) return done( err );
+
+
+      // Make up route to recover the password.
+      app.get( hotplate.prefix( '/auth/recoverPage/:token'), function (req, res, next) {
+
+        req.session = {};
+
+        var token = req.params['token'];
+
+        checkToken(token, function (err, tokenIsGood, errorMessageOrUserId) {
+          if (err) return next(err);
+          if (!tokenIsGood) return next(new e.UnprocessableEntityError(errorMessageOrUserId));
+
+          // The token is good: clear it, set the session, and redirect
+          clearToken(errorMessageOrUserId, function (err) {
+            if (err) return next(err);
+
+            // Log the user in using the token!
+            req.session.loggedIn = true;
+            req.session.userId = errorMessageOrUserId;
+
+            // Redirect to the recoverRedirectOnSuccess URL
+            res.redirect( hotplate.config.get( 'hotCoreAuth.recoverRedirectOnSuccess') );
+          })
+        });
+      });
+
+
 
       done( null );
     }
