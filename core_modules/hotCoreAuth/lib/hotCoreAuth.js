@@ -77,16 +77,16 @@ hotplate.config.set('hotCoreAuth', {
 
   redirectURLs: {
     success: {
-      signin: hotplate.prefix( '/auth/pick' ),
-      recover: hotplate.prefix( '/auth/pick' ),
-      register: hotplate.prefix( '/auth/pick' ),
+      signin: hotplate.prefix( '/' ),
+      recover: hotplate.prefix( '/' ),
+      register: hotplate.prefix( '/' ),
       manager: hotplate.prefix( '/' ),
     },
 
     fail: {
-      signin: hotplate.prefix( '/auth/welcome' ),
-      recover: hotplate.prefix( '/auth/welcome' ),
-      register: hotplate.prefix(  '/auth/welcome' ),
+      signin: hotplate.prefix( '/' ),
+      recover: hotplate.prefix( '/' ),
+      register: hotplate.prefix(  '/' ),
       manager: hotplate.prefix( '/' ),
     }
   },
@@ -112,6 +112,8 @@ hotplate.config.set('hotCoreAuth', {
 exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxResponse ) {
 
   return function(err, user, profile ) {
+    if( err ) return next( err );
+
 
     var responseType, strategies;
 
