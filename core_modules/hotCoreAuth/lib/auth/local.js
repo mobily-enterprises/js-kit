@@ -45,7 +45,7 @@ exports.extraStores = function( stores, done ){
 
     handleGetQuery: true,
 
-    publicURL: '/logins/:id',
+    publicURL: '/auth/logins/:id',
     hotExpose: true,
 
    // This is descriptive only
@@ -66,9 +66,7 @@ exports.extraStores = function( stores, done ){
         cb( null, [ { login: request.options.conditionsHash.login } ] );
 
       });
-
     },
-
   });
   stores.logins = new Logins();
 
