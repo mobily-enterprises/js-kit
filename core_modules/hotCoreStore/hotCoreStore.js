@@ -35,6 +35,7 @@ exports.get = hotplate.cacheable( function( done ){
     // Creates a basic DB store based on that layer
   var BasicDbStore = declare( [ JsonRestStores, JsonRestStores.SimpleDbLayerMixin, JsonRestStores.HTTPMixin ], {
     DbLayer: DbLayer,
+    chainErrors: 'all'
   });
 
   // Creates a basic DB store based on that layer

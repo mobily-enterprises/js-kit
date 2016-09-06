@@ -45,6 +45,10 @@ While managing the passwords, if the client sends `*` as the password, the old p
 @method exports
 @param {Object} stores The hash of all available stores. Mainly passed to optimise
 */
+
+var DEFAULT_PROFILE_FIELDS = [ 'id','name','age_range','link','gender','locale','picture','timezone','updated_time','verified','email' ];
+var DEFAULT_SCOPE = [ 'public_profile', 'user_friends' ];
+
 exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
   hotCoreStore.getAllStores( function( err, stores ){
@@ -55,28 +59,11 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
     function checkFacebookToken( token, cb ){
 
-      var params1 = { qs: { access_token: token, fields: strategyConfig.fieldList }, json: true };
+      var fields = strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS;
+      if( Array.isArray( fields ) ) fields = fields.join( ',' );
+
+      var params1 = { qs: { access_token: token, fields: fields }, json: true };
       var params2 = { qs: { access_token: token }, json: true };
-
-/*
-{ id: '10208329837673835',
-  name: 'Luigi Vitelli',
-  first_name: 'Luigi',
-  last_name: 'Vitelli',
-  age_range: { min: 21 },
-  link: 'https://www.facebook.com/app_scoped_user_id/10208329837673835/',
-  gender: 'male',
-  locale: 'en_US',
-  picture:
-   { data:
-      { is_silhouette: false,
-        url: 'https://scontent.xx.fbcdn.net/hprofile-xla1/v/t1.0-1/p50x50/12321463_10207848221353728_979511593533803433_n.jpg?oh=a2f5e1349c7beb9b505e918a9d528122&oe=5784A276' } },
-  timezone: 2,
-  updated_time: '2016-01-28T16:19:12+0000',
-  verified: true,
-  email: 'luigi.vitelli23@gmail.com' }
-*/
-
 
       request.get( 'https://graph.facebook.com/me', params1, function( err, response, profile ){
         if( err ) return cb( err );
@@ -109,6 +96,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
           callbackURL: callbackURLBase + hotplate.prefix( "/auth/manager/facebook/callback" ),
+          profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
         facebookManager
@@ -118,31 +106,36 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
     function facebookManager( req, accessToken, refreshToken, profile, done ) {
 
       // User is not logged in: nothing to do
-      if( ! req.session.loggedIn ) return done( null, false );
+      if( ! req.session.loggedIn ) return done( null, false, { message: "You must be logged in", code: "NOT_LOGGED_IN" } );
 
       // The profile MUST contain an ID
       if( typeof( profile ) === 'undefined' || ! profile.id ){
-         return done( null, false, { message: "Facebook didn't return a profile ID, procedure aborted" } );
+         return done( null, false, { message: "Facebook didn't return a profile ID, procedure aborted", code: "NO_PROFILE" } );
       }
 
       // Check that the user doesn't already have "facebook" as a strategy
       stores.usersStrategies.dbLayer.selectByHash( { userId: req.session.userId, strategyId: 'facebook' }, function( err, res ){
-        if( err ) return done( err, false );
-        if( res.length ) return done( null, false, { message: "User already has a Facebook login setup" } );
+        if( err ) return done( err );
+
+
+        if( res.length ) return done( null, false, { message: "User already has a Facebook login setup", code: "ALREADY_LINKED" } );
 
         // Check that _that_ specific facebook ID is not associated to an account
         stores.usersStrategies.dbLayer.selectByHash( { field1: profile.id }, { children: true }, function( err, res ){
-          if( err ) return done( err, false );
-          if( res.length ) return  done( null, false, { message: "Facebook profile already linked to another account" } );
+          if( err ) return done( err );
+
+          if( res.length ) return  done( null, false, { message: "Facebook profile already linked to another account", code: "ALREADY_LINKED_OTHER_USER" } );
 
           // This is an apiPost so that change is passed through comet to the clients
           stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'facebook', field1: profile.id, field3: accessToken, field4: refreshToken }, function( err, res ){
-            if( err ) return  done( err, false );
+            if( err ) return  done( err );
 
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
-              if( err ) return done( err, null );
+            // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: res.userId };
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { returnObject: returnObject, userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+              if( err ) return done( err );
 
-              done( null, { id: res.userId }, profile );
+              done( null, returnObject, profile );
             });
           });
         });
@@ -150,7 +143,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
     }
 
 
-    app.get( hotplate.prefix( '/auth/manager/facebook/web' ), passport.authenticate('facebook-manager'));
+    app.get( hotplate.prefix( '/auth/manager/facebook/web' ), passport.authenticate('facebook-manager', { scope: strategyConfig.profileScope || DEFAULT_SCOPE }));
     app.get( hotplate.prefix( '/auth/manager/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-manager',  makeResponder( req, res, next, 'facebook', 'manager')  )( req, res, next );
     });
@@ -175,6 +168,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
           callbackURL: callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" ),
+          profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
         facebookSignin
@@ -183,37 +177,76 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
     function facebookSignin( req, accessToken, refreshToken, profile, done ) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
+
+      var userId;
 
       //console.log( "ACCESS TOKEN: ", accessToken );
       //console.log( "REFRESH TOKEN: ", refreshToken );
       //console.log( "PROFILE: ", profile );
       // The profile MUST contain an ID
       if( typeof( profile ) === 'undefined' || ! profile.id ){
-         return done( null, false, { message: "Facebook didn't return a profile ID, procedure aborted" } );
+         return done( null, false, { message: "Facebook didn't return a profile ID, procedure aborted", code: "NO_PROFILE" } );
       }
 
       stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'facebook', field1: profile.id }, { children: true }, function( err, res ){
         if( err ) return done( err, null );
 
-        if( ! res.length ) return done( null, false, { message: "Your Facebook user is not registered" } );
+        // No user was found. At this point, a user will be created
+        // on the spot, and it will be associated this facebook strategy.
+        // This is crucial, to make sure that "login" with Facebook
+        // works regardless
+        if( ! res.length ){
 
-        stores.usersStrategies.dbLayer.updateByHash( { strategyId: 'facebook', field1: profile.id }, { field3: accessToken }, function( err, n ){
 
-          if( err ) return done( err, null );
+          // if strictLogin is enabled, then a profile MUST be linked
+          // beforehand, or it won't work.
+          if( strategyConfig.strictLogin ){
+            return done( null, false, { message: "Your Facebook user is not registered", code: "NOT_LINKED" } );
+          }
 
-          hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'signin', { userId: res[0].userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+          // Add a user. It's really about creating an ID
+          stores.users.dbLayer.insert( {}, function( err, user ){
+            if( err ) return done( err, null );
+
+            stores.usersStrategies.dbLayer.insert( { userId: user.id, strategyId: 'facebook', field1: profile.id, field3: accessToken, field4: refreshToken }, function( err, res ){
+              if( err ) return done( err, null );
+
+              userId = user.id;
+
+              finishOff('register');
+            });
+          });
+        } else {
+
+          // Update the access token
+          stores.usersStrategies.dbLayer.updateByHash( { strategyId: 'facebook', field1: profile.id }, { field3: accessToken }, function( err, n ){
+            if( err ) return done( err, null );
+
+            userId = res[0].userId;
+
+            finishOff('signin');
+          });
+        }
+
+        function finishOff( action ){
+
+          // Allow other modules to enrich the returnObject if they like
+          var returnObject = { id: userId };
+          hotplate.hotEvents.emitCollect( 'auth', 'facebook', action, { returnObject: returnObject, userId: userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
             if( err ) return done( err, null );
 
             req.session.loggedIn = true;
-            req.session.userId = res[0].userId;
-            done( null, { id: res[0].userId }, profile  );
-	  })
-	})
+            req.session.userId = userId;
+
+            done( null, returnObject, profile  );
+          });
+        }
+
       })
     }
 
-    app.get( hotplate.prefix( '/auth/signin/facebook/web' ), passport.authenticate('facebook-signin'));
+    app.get( hotplate.prefix( '/auth/signin/facebook/web' ), passport.authenticate('facebook-signin',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE } ));
     app.get( hotplate.prefix( '/auth/signin/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-signin',  makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
     });
@@ -238,6 +271,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
           callbackURL: callbackURLBase + hotplate.prefix( "/auth/register/facebook/callback" ),
+          profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
         passportRegister
@@ -251,7 +285,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       //console.log( "PROFILE: ", profile );
 
       // User is already logged in: nothing to do
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
 
       // The profile MUST contain an ID
       if( typeof( profile ) === 'undefined' || ! profile.id ){
@@ -260,32 +294,34 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
       // Check that _that_ specific facebook ID is not associated to an account
       stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'facebook', field1: profile.id }, { children: true }, function( err, res ){
-        if( err ) return done( err, null );
+        if( err ) return done( err );
 
-        if( res.length ) return done( null, false, { message: "Facebook profile already registered" } );
+        if( res.length ) return done( null, false, { message: "Facebook profile already registered", code: "ALREADY_LINKED_OTHER_USER" } );
 
         // Add a user. It's really about creating an ID
         stores.users.dbLayer.insert( {}, function( err, user ){
-          if( err ) return done( err, null );
+          if( err ) return done( err );
 
           stores.usersStrategies.dbLayer.insert( { userId: user.id, strategyId: 'facebook', field1: profile.id, field3: accessToken, field4: refreshToken }, function( err, res ){
-            if( err ) return done( err, null );
+            if( err ) return done( err );
 
-            // User just registered: make her "logged in"
-            req.session.loggedIn = true;
-            req.session.userId = res.userId;
+           // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: res.userId };
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { returnObject: returnObject, userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+              if( err ) return done( err );
 
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
-              if( err ) return done( err, null );
-
-              done( null, { id: res.userId }, profile );
+              // User just registered: make her "logged in"
+              req.session.loggedIn = true;
+              req.session.userId = res.userId;
+           
+              done( null, returnObject, profile );
             });
           });
         });
       });
     }
 
-    app.get( hotplate.prefix( '/auth/register/facebook/web' ), passport.authenticate('facebook-register'));
+    app.get( hotplate.prefix( '/auth/register/facebook/web' ), passport.authenticate('facebook-register', { scope: strategyConfig.profileScope || DEFAULT_SCOPE }));
     app.get( hotplate.prefix( '/auth/register/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-register',  makeResponder( req, res, next, 'facebook', 'register')  )(req, res, next);
     });

@@ -25,6 +25,7 @@ var dummy
   , bcrypt = require('bcrypt')
   , hotCoreAuth = require('hotplate/core_modules/hotCoreAuth')
   , hotCoreStore = require('hotplate/core_modules/hotCoreStore')
+  , e = require( 'allhttperrors' )
 ;
 
 var SALT_WORK_FACTOR = 15;
@@ -37,14 +38,14 @@ exports.extraStores = function( stores, done ){
   var Logins = declare( JsonRestStores, JsonRestStores.HTTPMixin, {
 
     schema: new SimpleSchema({
-      login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true },
+      login     : { type: 'string', required: true, lowercase: true, trim: 30, searchable: true, validator:  hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} )  },
     }),
 
     storeName:  'logins',
 
     handleGetQuery: true,
 
-    publicURL: '/logins/:id',
+    publicURL: '/auth/logins/:id',
     hotExpose: true,
 
    // This is descriptive only
@@ -65,9 +66,7 @@ exports.extraStores = function( stores, done ){
         cb( null, [ { login: request.options.conditionsHash.login } ] );
 
       });
-
     },
-
   });
   stores.logins = new Logins();
 
@@ -113,7 +112,15 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( ! req.session.loggedIn ) return  done( null, false );
+      if( ! req.session.loggedIn ) return done( new e.UnauthorizedError() );
+
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login ); 
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
+
 
       // Check that there isn't one already there
       stores.usersStrategies.dbLayer.selectByHash( { userId: req.session.userId, strategyId: 'local' }, { children: true }, function( err, res ){
@@ -136,7 +143,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             editingSelf = ( itsEdit == true && res[0].id.toString() == foundStrategyId.toString()  );
           }
 
-          if( res.length > 0 && !editingSelf ) return done( null, false, { message: "Login name taken!" } );
+          if( res.length > 0 && !editingSelf ) return done( null, false, { message: "Login name taken!", code: "LOGIN_TAKEN" } );
 
           // It's an edit: overwrite existing values
           if( itsEdit ){
@@ -147,7 +154,13 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             stores.usersStrategies.dbLayer.updateById( foundStrategyId, { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
               if( err ) return done( err, null );
 
-              return done( null, { id: req.session.userId } );
+              var returnObject = { id: req.session.userId };
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
+                if( err ) return done( err, null );
+
+
+                return done( null, returnObject );
+              });
             });
 
           // It's a new entry: add a new record
@@ -156,11 +169,16 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
               if( err ) return done( err, null );
 
-              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { userId: res.userId, login: login, password: password }, function( err ){
-
+              // Allow other modules to enrich the returnObject if they like
+              var returnObject = { id: res.userId };
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
                 if( err ) return done( err, null );
-                return done( null, { id: res.userId } );
+
+
+                // That's it: return!
+                return done( null, returnObject );
               });
+
             });
           }
         });
@@ -184,19 +202,28 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
+
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login );
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
 
       stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase(), field3: password }, function( err, res ){
         if( err ) return done( err, null );
 
-        if( ! res.length ) return done( null, false );
-
-        hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { userId: res[0].userId, login: login, password: password }, function( err ){
+        if( ! res.length ) return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
+  
+        // Allow other modules to enrich the returnObject if they like
+        var returnObject = { id: res[ 0 ].userId };
+        hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){
           if( err ) return done( err, null );
 
           req.session.loggedIn = true;
           req.session.userId = res[0].userId;
-          done( null, { id: res[ 0 ].userId } );
+          done( null, returnObject );
         });
       });
 
@@ -218,18 +245,25 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
     function(req, login, password, done) {
 
-      if( req.session.loggedIn ) return done( null, false );
+      if( req.session.loggedIn ) return done( null, false, { message: "User is already logged in", code: "ALREADY_LOGGED_IN" } );
+
+      // Check that the login conforms to the required validator
+      var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
+      var message = vf( {}, login );
+      if( message ) {
+        return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
+      }
 
       // The profile MUST contain an ID
       if( login == '' ){
-         return done( null, false, { message: "Username cannot be empty" } );
+         return done( null, false, { message: "Username cannot be empty", code: "USERNAME_EMPTY" } );
       }
 
       // Check that the login  isn't already there
       stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'local', field1: login.toLowerCase() }, { children: true }, function( err, res ){
         if( err ) return done( err );
 
-        if( res.length ) return done( null, false, { message: "Username taken" } );
+        if( res.length ) return done( null, false, { message: "Username taken", code: "LOGIN_TAKEN" } );
 
         stores.users.dbLayer.insert( {}, function( err, user ){
           if( err ) return done( err );
@@ -242,10 +276,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             req.session.userId = res.userId;
 
 
-            hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { userId: user.id, login: login, password: password }, function( err ){
+            // Allow other modules to enrich the returnObject if they like
+            var returnObject = { id: user.id };
+            hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
               if( err ) return done( err, null );
 
-              done( null, { id: user.id } );
+              done( null, returnObject );
             });
           });
         });

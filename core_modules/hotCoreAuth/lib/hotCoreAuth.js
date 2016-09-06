@@ -13,6 +13,8 @@ var dummy
 
   , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
   , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
+  , e = require( 'allhttperrors' )
+
 ;
 
 
@@ -64,6 +66,7 @@ hotplate.config.set('hotCoreAuth', {
   callbackURLBase: 'http://localhost:3000',
 
   recoverURLexpiry: 60*30, // Seconds for which the recover URL works for
+  recoverRedirectOnSuccess: '/',
 
   defaultResponseType: 'ajax',
 
@@ -74,16 +77,16 @@ hotplate.config.set('hotCoreAuth', {
 
   redirectURLs: {
     success: {
-      signin: hotplate.prefix( '/auth/pick' ),
-      recover: hotplate.prefix( '/auth/pick' ),
-      register: hotplate.prefix( '/auth/pick' ),
+      signin: hotplate.prefix( '/' ),
+      recover: hotplate.prefix( '/' ),
+      register: hotplate.prefix( '/' ),
       manager: hotplate.prefix( '/' ),
     },
 
     fail: {
-      signin: hotplate.prefix( '/auth/welcome' ),
-      recover: hotplate.prefix( '/auth/welcome' ),
-      register: hotplate.prefix(  '/auth/welcome' ),
+      signin: hotplate.prefix( '/' ),
+      recover: hotplate.prefix( '/' ),
+      register: hotplate.prefix(  '/' ),
       manager: hotplate.prefix( '/' ),
     }
   },
@@ -109,6 +112,8 @@ hotplate.config.set('hotCoreAuth', {
 exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxResponse ) {
 
   return function(err, user, profile ) {
+    if( err ) return next( err );
+
 
     var responseType, strategies;
 
@@ -148,14 +153,7 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
       break;
 
       case 'ajax':
-
-        if( user ){
-          res.json( 200, { user: user, profile: profile } );
-        } else {
-          var error = 'Authentication error';
-          if( typeof( profile.message) !== 'undefined' ) error =  profile.message;
-          res.json( 403, { message: error } );
-        }
+          res.json( 200, { strategyId: strategyId, action: action, user: user, profile: profile } );
       break;
 
       case 'redirect-opener':
@@ -241,6 +239,8 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
 
       checkPermissions: function( request, method, cb ){
 
+       if( !request.session.loggedIn ) return cb( new e.UnauthorizedError() );
+
         switch( method ){
           case 'get':
           case 'getQuery':
@@ -250,6 +250,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
           break;
 
           case 'delete':
+
             // Only their own strategies
             if( request.session.userId != request.params.userId ) return cb( null, false );
 
@@ -441,6 +442,34 @@ hotplate.hotEvents.onCollect( 'setRoutes', function( app, done ){
     },
     function( err ){
       if( err ) return done( err );
+
+
+      // Make up route to recover the password.
+      app.get( hotplate.prefix( '/auth/recoverPage/:token'), function (req, res, next) {
+
+        req.session = {};
+
+        var token = req.params['token'];
+
+        checkToken(token, function (err, tokenIsGood, errorMessageOrUserId) {
+          if (err) return next(err);
+          if (!tokenIsGood) return next(new e.UnprocessableEntityError(errorMessageOrUserId));
+
+          // The token is good: clear it, set the session, and redirect
+          clearToken(errorMessageOrUserId, function (err) {
+            if (err) return next(err);
+
+            // Log the user in using the token!
+            req.session.loggedIn = true;
+            req.session.userId = errorMessageOrUserId;
+
+            // Redirect to the recoverRedirectOnSuccess URL
+            res.redirect( hotplate.config.get( 'hotCoreAuth.recoverRedirectOnSuccess') );
+          })
+        });
+      });
+
+
 
       done( null );
     }
