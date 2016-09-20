@@ -88,11 +88,12 @@ hotplate.config.set('hotCoreAuth', {
       recover: hotplate.prefix( '/' ),
       register: hotplate.prefix(  '/' ),
       manager: hotplate.prefix( '/' ),
-    }
+    },
   },
   contentResponsePage: basicContentResponsePage,
   closeResponsePage: basicCloseResponsePage,
   redirectOpenerResponsePage: basicRedirectOpenerResponsePage,
+  always200OnAjaxResponse: false,
 });
 
 /**
@@ -153,7 +154,18 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
       break;
 
       case 'ajax':
-          res.json( 200, { strategyId: strategyId, action: action, user: user, profile: profile } );
+          var returnedStatus;
+          var returnedObject = { strategyId: strategyId, action: action, user: user, profile: profile };
+
+          if( ! user && !hotplate.config.get( 'hotCoreAuth.always200OnAjaxResponse') ){
+            returnedStatus = 401;
+            returnedObject.message = profile.message;
+            returnedObject.code = profile.code;
+          } else {
+            returnedStatus = 200;
+          }
+
+          res.json( returnedStatus, returnedObject );
       break;
 
       case 'redirect-opener':
