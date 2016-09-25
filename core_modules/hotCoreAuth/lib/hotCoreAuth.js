@@ -154,18 +154,25 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
       break;
 
       case 'ajax':
-          var returnedStatus;
+
+        var returnedStatus, returnedObject;;
+
+        // Authentication failed: the `profile` parameter actually represents an object
+        // with `message` and `code` (both optional).
+        // Return that.
+        if( !user ){
+          returnedStatus = 401;
+          var returnedObject = { strategyId: strategyId, action: action };
+          if( profile.message ) returnedObject.message = profile.message;
+          if( profile.code ) returnedObject.code = profile.code;
+
+        // Authentication worked: return everything merrily
+        } else {
+          returnedStatus = 200;
           var returnedObject = { strategyId: strategyId, action: action, user: user, profile: profile };
+        }
 
-          if( ! user && !hotplate.config.get( 'hotCoreAuth.always200OnAjaxResponse') ){
-            returnedStatus = 401;
-            returnedObject.message = profile.message;
-            returnedObject.code = profile.code;
-          } else {
-            returnedStatus = 200;
-          }
-
-          res.json( returnedStatus, returnedObject );
+        res.json( returnedStatus, returnedObject );
       break;
 
       case 'redirect-opener':
