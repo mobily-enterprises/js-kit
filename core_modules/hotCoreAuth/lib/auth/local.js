@@ -116,7 +116,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
       // Check that the login conforms to the required validator
       var vf = hotplate.config.get( 'hotCoreAuth.strategies.local.defaultLoginValidator', function(){} );
-      var message = vf( {}, login ); 
+      var message = vf( {}, login );
       if( message ) {
         return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
       }
@@ -215,7 +215,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
         if( err ) return done( err, null );
 
         if( ! res.length ) return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
-  
+
         // Allow other modules to enrich the returnObject if they like
         var returnObject = { id: res[ 0 ].userId };
         hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){

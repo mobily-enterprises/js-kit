@@ -23,7 +23,7 @@ var dummy
 
   This is definitely too basic for _any_ use, since all it does is display "RESPONSE". You will definitely need to customise it so that it does something useful.
 */
-var basicContentResponsePage = function( strategyId, action, user, profile ){
+var basicContentResponsePage = function( strategyId, action, user, info ){
   var response = '';
   response += "<html><body><script type=\"text/javascript\">setTimeout(function(){ window.close() }, 5000);</script>RESPONSE</body></html>";
   return response;
@@ -33,14 +33,14 @@ var stores = {}
 
 
 /**
-  The stock function that will return an HTML page responsible of 1) Closing the current window 2) Display `profile.message` if login failed and there is a message to display.
+  The stock function that will return an HTML page responsible of 1) Closing the current window 2) Display `info.message` if login failed and there is a message to display.
   This is probably too basic for a real use, but it works.
 */
-var basicCloseResponsePage = function( strategyId, action, user, profile ){
+var basicCloseResponsePage = function( strategyId, action, user, info ){
   // If !user, and there is a message, display that message
-  if( ! user && typeof( profile.message) !== 'undefined'  ){
+  if( ! user && typeof( info.message) !== 'undefined'  ){
     // FIXME: http://stackoverflow.com/questions/17141863/escaping-error-message-in-javascript
-    return '<html><script>window.opener.alert("' + profile.message + '");window.close();</script></html>';
+    return '<html><script>window.opener.alert("' + info.message + '");window.close();</script></html>';
   } else {
     return '<html><script>window.close();</script></html>';
   }
@@ -51,10 +51,10 @@ var basicCloseResponsePage = function( strategyId, action, user, profile ){
   The stock function that will return an HTML page responsible of 1) Closing the current window 2) Redirect the opener to the hotCoreAuth.redirectURLs.success[action] URL (if authentication was successful) or display the error message.
 ttribute (for example ``{ message: "Login failed" }`)
 */
-var basicRedirectOpenerResponsePage = function( strategyId, action, user, profile ){
-  if( ! user && typeof( profile.message) !== 'undefined'  ){
+var basicRedirectOpenerResponsePage = function( strategyId, action, user, info ){
+  if( ! user && typeof( info.message) !== 'undefined'  ){
     // FIXME: http://stackoverflow.com/questions/17141863/escaping-error-message-in-javascript
-    return '<html><script>window.opener.alert("' + profile.message + '");window.close();</script></html>';
+    return '<html><script>window.opener.alert("' + info.message + '");window.close();</script></html>';
   } else {
     var redirectURL = hotplate.config.get('hotCoreAuth.redirectURLs.success.' + action) || '/';
     return '<html><script>window.opener.location = "' + redirectURL + '";window.close();</script></html>';
@@ -97,7 +97,7 @@ hotplate.config.set('hotCoreAuth', {
 });
 
 /**
-  Returns a function with signature `function( err, user, profile )`,
+  Returns a function with signature `function( err, user, info )`,
   which will serve the right response depending on the cookie
   called `strategyId + '-' + action`
 
@@ -112,7 +112,7 @@ hotplate.config.set('hotCoreAuth', {
 */
 exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxResponse ) {
 
-  return function(err, user, profile ) {
+  return function(err, user, info ) {
     if( err ) return next( err );
 
 
@@ -129,9 +129,9 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
     // Force to "ajax" response type if so commanded
     if( forceAjaxResponse ) responseType = 'ajax';
 
-    // Defaults to an empty profile object
-    if( typeof( profile ) === 'undefined' ){
-      profile = {};
+    // Defaults to an empty info object
+    if( typeof( info ) === 'undefined' ){
+      info = {};
     }
 
     // Error: just return/next that
@@ -142,43 +142,26 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
       case 'content':
         // Work out the page's content by calling the user-set hotCoreAuth/contentResponsePage function
         var contentFunction = hotplate.config.get( 'hotCoreAuth.contentResponsePage' );
-        var content = contentFunction( strategyId, action, user, profile );
+        var content = contentFunction( strategyId, action, user, info );
         res.send( content );
       break;
 
       case 'close':
         // Work out the page's content by calling the user-set hotCoreAuth/contentResponsePage function
         var contentFunction = hotplate.config.get( 'hotCoreAuth.closeResponsePage' );
-        var content = contentFunction( strategyId, action, user, profile );
+        var content = contentFunction( strategyId, action, user, info );
         res.send( content );
       break;
 
       case 'ajax':
-
-        var returnedStatus, returnedObject;;
-
-        // Authentication failed: the `profile` parameter actually represents an object
-        // with `message` and `code` (both optional).
-        // Return that.
-        if( !user ){
-          returnedStatus = 401;
-          var returnedObject = { strategyId: strategyId, action: action };
-          if( profile.message ) returnedObject.message = profile.message;
-          if( profile.code ) returnedObject.code = profile.code;
-
-        // Authentication worked: return everything merrily
-        } else {
-          returnedStatus = 200;
-          var returnedObject = { strategyId: strategyId, action: action, user: user, profile: profile };
-        }
-
-        res.json( returnedStatus, returnedObject );
+        // Simply return the object, with the correct HTTP error if needed
+        res.json( user ? 200 : 401, { strategyId: strategyId, action: action, user: user, info: info } );
       break;
 
       case 'redirect-opener':
         // Work out the page's content by calling the user-set hotCoreAuth/contentResponsePage function
         var contentFunction = hotplate.config.get( 'hotCoreAuth.redirectOpenerResponsePage' );
-        var content = contentFunction( strategyId, action, user, profile );
+        var content = contentFunction( strategyId, action, user, info );
         res.send( content );
       break;
 
@@ -191,9 +174,9 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
         } else {
 
           // Add the error to the session messages
-          if( typeof( profile.message) !== 'undefined'  ){
+          if( typeof( info.message) !== 'undefined'  ){
             req.session.messages = req.session.messages || [];
-            req.session.messages.push( { type: 'error', message: profile.message } );
+            req.session.messages.push( { type: 'error', message: info.message } );
           }
 
           var redirectURL = hotplate.config.get('hotCoreAuth.redirectURLs.fail.' + action) || '/';
