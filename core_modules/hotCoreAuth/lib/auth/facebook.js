@@ -313,7 +313,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
               // User just registered: make her "logged in"
               req.session.loggedIn = true;
               req.session.userId = res.userId;
-           
+
               done( null, returnObject, profile );
             });
           });
