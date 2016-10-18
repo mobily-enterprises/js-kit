@@ -55,7 +55,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
     if( err ) return done( err );
 
     // Work out callbackURLBase which needs to be honoured
-    var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+    //var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
 
     function checkFacebookToken( token, cb ){
 
@@ -95,7 +95,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
         {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
-          callbackURL: callbackURLBase + hotplate.prefix( "/auth/manager/facebook/callback" ),
+          //callbackURL: callbackURLBase + hotplate.prefix( "/auth/manager/facebook/callback" ),
           profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
@@ -142,11 +142,20 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       });
     }
 
+    app.get( hotplate.prefix( '/auth/manager/facebook/web' ), function( req, res, next ){
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/manager/facebook/callback" )
+      passport.authenticate('facebook-manager',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE, callbackURL: callbackURL } )( req, res, next );
+    });
 
-    app.get( hotplate.prefix( '/auth/manager/facebook/web' ), passport.authenticate('facebook-manager', { scope: strategyConfig.profileScope || DEFAULT_SCOPE }));
+
     app.get( hotplate.prefix( '/auth/manager/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-manager',  makeResponder( req, res, next, 'facebook', 'manager')  )( req, res, next );
     });
+
     app.post( hotplate.prefix( '/auth/manager/facebook/postcheck'), function( req, res, next ){
 
       checkFacebookToken( req.body.accessToken, function( err, profile ){
@@ -167,7 +176,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
         {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
-          callbackURL: callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" ),
+          //callbackURL: callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" ),
           profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
@@ -246,7 +255,14 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       })
     }
 
-    app.get( hotplate.prefix( '/auth/signin/facebook/web' ), passport.authenticate('facebook-signin',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE } ));
+    app.get( hotplate.prefix( '/auth/signin/facebook/web' ), function( req, res, next ){
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" )
+      passport.authenticate('facebook-signin',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE, callbackURL: callbackURL } )( req, res, next );
+    });
     app.get( hotplate.prefix( '/auth/signin/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-signin',  makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
     });
@@ -270,15 +286,15 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
         {
           clientID: strategyConfig.clientID,
           clientSecret: strategyConfig.clientSecret,
-          callbackURL: callbackURLBase + hotplate.prefix( "/auth/register/facebook/callback" ),
+          //callbackURL: callbackURLBase + hotplate.prefix( "/auth/register/facebook/callback" ),
           profileFields: strategyConfig.profileFields || DEFAULT_PROFILE_FIELDS,
           passReqToCallback: true,
         },
-        passportRegister
+        facebookRegister
       )
     );
 
-    function passportRegister( req, accessToken, refreshToken, profile, done ) {
+    function facebookRegister( req, accessToken, refreshToken, profile, done ) {
 
       //console.log( "ACCESS TOKEN: ", accessToken );
       //console.log( "REFRESH TOKEN: ", refreshToken );
@@ -321,7 +337,15 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       });
     }
 
-    app.get( hotplate.prefix( '/auth/register/facebook/web' ), passport.authenticate('facebook-register', { scope: strategyConfig.profileScope || DEFAULT_SCOPE }));
+    app.get( hotplate.prefix( '/auth/register/facebook/web' ), function( req, res, next ){
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/register/facebook/callback" )
+      passport.authenticate('facebook-register',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE, callbackURL: callbackURL } )( req, res, next );
+    });
+
     app.get( hotplate.prefix( '/auth/register/facebook/callback' ), function( req, res, next) {
       passport.authenticate('facebook-register',  makeResponder( req, res, next, 'facebook', 'register')  )(req, res, next);
     });
@@ -330,7 +354,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       checkFacebookToken( req.body.accessToken, function( err, profile ){
         if( err ) return next( err );
 
-        passportRegister( req, req.body.accessToken, req.body.refreshToken, profile, makeResponder( req, res, next, 'facebook', 'register' ) );
+        facebookRegister( req, req.body.accessToken, req.body.refreshToken, profile, makeResponder( req, res, next, 'facebook', 'register' ) );
       });
     });
 
