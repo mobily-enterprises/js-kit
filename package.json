@@ -8,7 +8,6 @@
     "type": "git",
     "url": "git://github.com/mercmobily/hotplate.git"
   },
-
   "dependencies": {
     "eventemittercollector": "0.3.x",
     "allhttperrors": "0.3.x",
@@ -30,7 +29,7 @@
     "twilio": "~2.9.0",
     "nodemailer": "~2.3.0",
     "imap": "~0.8.14",
-    "request": "~2.69.0",
+    "request": "~2.74.0",
     "sanitize-caja": "~0.1.2",
     "html-to-text": "~2.0.0",
     "mimelib": "~0.2.19",
