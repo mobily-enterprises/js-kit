@@ -153,7 +153,14 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
 
     app.get( hotplate.prefix( '/auth/manager/facebook/callback' ), function( req, res, next) {
-      passport.authenticate('facebook-manager',  makeResponder( req, res, next, 'facebook', 'manager')  )( req, res, next );
+
+      // Why callbackURL is mandatory IN THE CALLBACK escapes me...
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/manager/facebook/callback" );
+      passport.authenticate('facebook-manager',  { callbackURL: callbackURL }, makeResponder( req, res, next, 'facebook', 'manager')  )( req, res, next );
     });
 
     app.post( hotplate.prefix( '/auth/manager/facebook/postcheck'), function( req, res, next ){
@@ -260,11 +267,19 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
       if( typeof callbackURLBase === 'function') {
         callbackURLBase = callbackURLBase( req );
       }
-      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" )
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" );
       passport.authenticate('facebook-signin',  { scope: strategyConfig.profileScope || DEFAULT_SCOPE, callbackURL: callbackURL } )( req, res, next );
     });
+
     app.get( hotplate.prefix( '/auth/signin/facebook/callback' ), function( req, res, next) {
-      passport.authenticate('facebook-signin',  makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
+
+      // Why callbackURL is mandatory IN THE CALLBACK escapes me...
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/signin/facebook/callback" );
+      passport.authenticate('facebook-signin',  { callbackURL: callbackURL }, makeResponder( req, res, next, 'facebook', 'signin')  )(req, res, next);
     });
     app.post( hotplate.prefix( '/auth/signin/facebook/postcheck' ), function( req, res, next ){
 
@@ -347,7 +362,16 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
     });
 
     app.get( hotplate.prefix( '/auth/register/facebook/callback' ), function( req, res, next) {
-      passport.authenticate('facebook-register',  makeResponder( req, res, next, 'facebook', 'register')  )(req, res, next);
+
+
+      // Why callbackURL is mandatory IN THE CALLBACK escapes me...
+      var callbackURLBase = hotplate.config.get( 'hotCoreAuth.callbackURLBase' );
+      if( typeof callbackURLBase === 'function') {
+        callbackURLBase = callbackURLBase( req );
+      }
+      var callbackURL = callbackURLBase + hotplate.prefix( "/auth/register/facebook/callback" );
+
+      passport.authenticate('facebook-register', { callbackURL: callbackURL }, makeResponder( req, res, next, 'facebook', 'register')  )(req, res, next);
     });
     app.post( hotplate.prefix( '/auth/register/facebook/postcheck'), function( req, res, next ){
 
