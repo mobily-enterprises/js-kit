@@ -14,7 +14,6 @@ var dummy
   , hotCoreStore = require( 'hotplate/core_modules/hotCoreStore' )
   , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
   , e = require( 'allhttperrors' )
-
 ;
 
 
