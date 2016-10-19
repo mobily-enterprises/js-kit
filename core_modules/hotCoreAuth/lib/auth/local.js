@@ -143,42 +143,54 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
             editingSelf = ( itsEdit == true && res[0].id.toString() == foundStrategyId.toString()  );
           }
 
-          if( res.length > 0 && !editingSelf ) return done( null, false, { message: "Login name taken!", code: "LOGIN_TAKEN" } );
+          if( res.length > 0 && !editingSelf ) return done( new e.BadRequestError( { message: "Username taken" } ) );
+
 
           // It's an edit: overwrite existing values
           if( itsEdit ){
 
             // If the password is a '*', then it will retain the existing password
-            if( password == '*' ) password = existingPassword;
+            if( password == '*' ){
+               finishOff( existingPassword );
+            } else {
+              bcrypt.hash( password, 10, function( err, hash ){
+                if( err ) return done( err );
+                finishOff( hash );
+              });
+            }
 
-            stores.usersStrategies.dbLayer.updateById( foundStrategyId, { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
-              if( err ) return done( err, null );
+            function finishOff( password ){
 
-              var returnObject = { id: req.session.userId };
-              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
+              stores.usersStrategies.dbLayer.updateById( foundStrategyId, { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
                 if( err ) return done( err, null );
 
+                var returnObject = { id: req.session.userId };
+                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
+                  if( err ) return done( err, null );
 
-                return done( null, returnObject );
+                  return done( null, returnObject );
+                });
               });
-            });
+            }
 
           // It's a new entry: add a new record
           } else {
 
-            stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
-              if( err ) return done( err, null );
+            bcrypt.hash( password, 10, function( err, hash ){
 
-              // Allow other modules to enrich the returnObject if they like
-              var returnObject = { id: res.userId };
-              hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
+              stores.usersStrategies.apiPost( { userId: req.session.userId, strategyId: 'local', field1: login.toLowerCase(), field3: hash }, function( err, res ){
                 if( err ) return done( err, null );
 
+                // Allow other modules to enrich the returnObject if they like
+                var returnObject = { id: res.userId };
+                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
+                  if( err ) return done( err, null );
 
-                // That's it: return!
-                return done( null, returnObject );
+                  // That's it: return!
+                  return done( null, returnObject );
+                });
+
               });
-
             });
           }
         });
@@ -211,22 +223,26 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
         return done( new e.BadRequestError( { errors: [ { field: 'login', message: message } ] } ) );
       }
 
-      stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase(), field3: password }, function( err, res ){
+      stores.usersStrategies.dbLayer.selectByHash( { field1: login.toLowerCase() }, function( err, res ){
         if( err ) return done( err, null );
-
         if( ! res.length ) return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
 
-        // Allow other modules to enrich the returnObject if they like
-        var returnObject = { id: res[ 0 ].userId };
-        hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){
+        bcrypt.compare( password, res[0].field3, function( err, same ){
           if( err ) return done( err, null );
 
-          req.session.loggedIn = true;
-          req.session.userId = res[0].userId;
-          done( null, returnObject );
+          if( ! same && password != res[0].field3 ) return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
+
+          // Allow other modules to enrich the returnObject if they like
+          var returnObject = { id: res[ 0 ].userId };
+          hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){
+            if( err ) return done( err, null );
+
+            req.session.loggedIn = true;
+            req.session.userId = res[0].userId;
+            done( null, returnObject );
+          });
         });
       });
-
     }
     ));
 
@@ -263,25 +279,28 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
       stores.usersStrategies.dbLayer.selectByHash( { strategyId: 'local', field1: login.toLowerCase() }, { children: true }, function( err, res ){
         if( err ) return done( err );
 
-        if( res.length ) return done( null, false, { message: "Username taken", code: "LOGIN_TAKEN" } );
+        if( res.length ) return done( new e.BadRequestError( { message: "Username taken" } ) );
 
         stores.users.dbLayer.insert( {}, function( err, user ){
           if( err ) return done( err );
 
-          stores.usersStrategies.dbLayer.insert( { userId: user.id, strategyId: 'local', field1: login.toLowerCase(), field3: password }, function( err, res ){
+          bcrypt.hash( password, 10, function( err, hash ){
             if( err ) return done( err );
 
-            // User just registered: make her "logged in"
-            req.session.loggedIn = true;
-            req.session.userId = res.userId;
+            stores.usersStrategies.dbLayer.insert( { userId: user.id, strategyId: 'local', field1: login.toLowerCase(), field3: hash }, function( err, res ){
+              if( err ) return done( err );
 
+              // User just registered: make her "logged in"
+              req.session.loggedIn = true;
+              req.session.userId = res.userId;
 
-            // Allow other modules to enrich the returnObject if they like
-            var returnObject = { id: user.id };
-            hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
-              if( err ) return done( err, null );
+              // Allow other modules to enrich the returnObject if they like
+              var returnObject = { id: user.id };
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
+                if( err ) return done( err, null );
 
-              done( null, returnObject );
+                done( null, returnObject );
+              });
             });
           });
         });
