@@ -54,8 +54,10 @@ exports.BasicPermissionsMixin = declare( Object, {
 
   _checkUserId: function( request, cb ){
 
+    var self = this;
+
     // User is not logged in: fail
-    if( ! request.session.userId ) return cb( new self.UnauthorizedError() );
+    if( ! request.session.userId || ! request.session.loggedIn) return cb( new self.UnauthorizedError() );
 
     // The request doesn't include a userId: pass it through (nothing to compare against)
     if( ! request.params.userId ) return cb( null, true );
@@ -70,6 +72,7 @@ exports.BasicPermissionsMixin = declare( Object, {
   },
 
   checkPermissions: function f( request, method, cb ){
+    var self = this;
 
     this.inheritedAsync( f, arguments, function( err, res ){
       if( err ) return cb( err );
