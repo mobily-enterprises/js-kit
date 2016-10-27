@@ -123,6 +123,8 @@ exports.hotCoreErrorHandler = function( err, req, res, next){
     req.hotError = err; // FIXME
     hotplate.config.get('hotCoreError.errorPage')(req, res, next);
 
+    console.log("Returned page with error because of:", require('util').inspect( err, { depth: 10 } ) );
+
   // If it was a JSON request, do a sendResponse following the protocol
   } else {
     var sendResponse = hotplate.config.get('hotCoreError.sendAjaxErrorResponse' );
