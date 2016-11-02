@@ -234,8 +234,12 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
           // Allow other modules to enrich the returnObject if they like
           var returnObject = { id: res[ 0 ].userId };
-          hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err ){
-            if( err ) return done( err, null );
+          hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err, preventLogin ){
+            if( err ) return done( err );
+
+            if( preventLogin.onlyResults().indexOf( true ) != -1 ){
+              return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
+            }
 
             req.session.loggedIn = true;
             req.session.userId = res[0].userId;

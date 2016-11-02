@@ -249,8 +249,13 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
           // Allow other modules to enrich the returnObject if they like
           var returnObject = { id: userId };
-          hotplate.hotEvents.emitCollect( 'auth', 'facebook', action, { returnObject: returnObject, userId: userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+          hotplate.hotEvents.emitCollect( 'auth', 'facebook', action, { returnObject: returnObject, userId: userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err, preventLogin ){
             if( err ) return done( err, null );
+
+            // Authentication was artificially prevented by callback
+            if( preventLogin.onlyResults().indexOf( true ) != -1 ){
+              return done( null, false, { message: "Login failed", code: "LOGIN_FAILED"} );
+            }
 
             req.session.loggedIn = true;
             req.session.userId = userId;
