@@ -21,3 +21,6 @@ By 201X software I mean software that has the following features:
 I realise that in 202X (that is, 2020 to 2030) writing software will be different. What is cool now, will be taken 100% for granted in 2025. Or maybe Javascript will be dead. I don't know, and I frankly don't care. I wrote Hotplate because I felt that this is what software _should_ be in 201X -- which is now.
 
 To know more about this great module, have a look at [Hotplate's official documentation](http://www.hotplatejs.com/docs).
+
+TODO:
+* Add to documentation ability of hotCoreAuth's auth hooks to prevent login
