@@ -49,65 +49,57 @@ exports.get = hotplate.cacheable( function( done ){
 /*                  Permission mixins                       */
 /* ******************************************************** */
 
-/* To WRITE (put, post, delete), userId needs to match logged in user */
-exports.BasicPermissionsMixin = declare( Object, {
 
-  _checkUserId: function( request, cb ){
+var _onlyUserId = function( request, where, cb ){
+  var self = this;
 
-    var self = this;
+  // User is not logged in: fail
+  if( ! request.session.userId || ! request.session.loggedIn) return cb( new self.UnauthorizedError() );
 
-    // User is not logged in: fail
-    if( ! request.session.userId || ! request.session.loggedIn) return cb( new self.UnauthorizedError() );
 
-    // The request doesn't include a userId: pass it through (nothing to compare against)
-    if( ! request.params.userId ) return cb( null, true );
+  // The request doesn't include a userId: pass it through (nothing to compare against)
+  if( ! request[ where ].userId ){
+    return cb( new Error( "This permission needs to be used on a store with userId defined. Store: " + this.storeName ) );
+  }
 
-    // userId is different to session's: fail
-    if( request.params.userId.toString() !== request.session.userId.toString() ){
-      return cb( null, false );
-    }
-
-    // Any other cases: pass
+  // userId is different to session's: fail
+  if( request[ where ].userId.toString() !== request.session.userId.toString() ){
+    return cb( null, false );
+  } else {
     cb( null, true );
-  },
+  }
+};
+
+
+/* To WRITE (put, post, delete), userId needs to match logged in user */
+// Was: BasicPermissionsMixin
+exports.OnlyUserIdCanWrite = declare( Object, {
+
+  _onlyUserId: _onlyUserId,
 
   checkPermissions: function f( request, method, cb ){
     var self = this;
 
-    this.inheritedAsync( f, arguments, function( err, res ){
+    self.inheritedAsync( f, arguments, function( err, res ){
       if( err ) return cb( err );
       if( ! res ) return cb( null, false );
 
-      // getXXX methods are not handled
-      if( method === 'get' || method === 'getQuery' ) return cb( null, true );
+      // Only putXXX methods are handled
+      if( method != 'put' && method != 'post' && method != 'delete' ) return cb( null, true );
 
-      self._checkUserId( request, cb );
+      self._onlyUserId( request, 'body', cb );
     });
   },
 
 });
+exports.BasicPermissionsMixin = exports.OnlyUserIdCanWrite;
+
 
 /* To READ (get, getQuery), userId needs to match logged in user */
-exports.PrivateUserDataPermissionsMixin = declare( Object, {
+// Was: PrivateUserDataPermissionsMixin
+exports.OnlyUserIdCanRead = declare( Object, {
 
-  _checkUserIdForJsonRestStores: function( request, cb ){
-    var self = this;
-
-    // User is not logged in: fail
-    if( ! request.session.userId ) return cb( new self.UnauthorizedError() );
-
-    // The request doesn't include a userId: pass it through (nothing to compare against)
-    if( ! request.params.userId ) return cb( null, true );
-
-    // userId is different to session's: fail
-    if( request.params.userId.toString() !== request.session.userId.toString() ){
-      return cb( null, false );
-    }
-
-    // Any other cases: pass
-    cb( null, true );
-
-  },
+  _onlyUserId: _onlyUserId,
 
   checkPermissions: function f( request, method, cb ){
     var self = this;
@@ -119,12 +111,13 @@ exports.PrivateUserDataPermissionsMixin = declare( Object, {
       // Only getXXX methods are handled
       if( method !== 'get' && method !== 'getQuery' ) return cb( null, true );
 
-      self._checkUserIdForJsonRestStores( request, cb );
+      self._onlyUserId( request, 'params', cb );
 
     });
   },
 
 });
+exports.PrivateUserDataPermissionsMixin = exports.OnlyUserIdCanRead;
 
 
 /* ******************************************************** */
