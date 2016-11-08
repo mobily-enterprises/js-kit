@@ -50,21 +50,27 @@ exports.get = hotplate.cacheable( function( done ){
 /* ******************************************************** */
 
 
-var _onlyUserId = function( request, where, cb ){
+var _onlyUserId = function( request, method, cb ){
   var self = this;
 
   // User is not logged in: fail
   if( ! request.session.userId || ! request.session.loggedIn) return cb( new self.UnauthorizedError() );
 
-
-  // The request doesn't include a userId: pass it through (nothing to compare against)
-  if( ! request[ where ].userId ){
+  // The request is for a store that doesn't have a userId: refuse to work completely
+  if( ! this.schema.structure.userId ){
     return cb( new Error( "This permission needs to be used on a store with userId defined. Store: " + this.storeName ) );
   }
 
+  // The request doesn't include a userId: fail (nothing to compare against)
+  var userId = method == request.data.doc ? request.data.doc.userid : request.body.userId;
+  if( ! userId ){
+    return cb( null, false, "userId missing in doc, permission denied" );
+  }
+
   // userId is different to session's: fail
-  if( request[ where ].userId.toString() !== request.session.userId.toString() ){
-    return cb( null, false );
+  if( userId.toString() !== request.session.userId.toString() ){
+    return cb( null, false, 'This operation can only be completed by the record\'s owner' );
+
   } else {
     cb( null, true );
   }
@@ -80,14 +86,14 @@ exports.OnlyUserIdCanWrite = declare( Object, {
   checkPermissions: function f( request, method, cb ){
     var self = this;
 
-    self.inheritedAsync( f, arguments, function( err, res ){
+    self.inheritedAsync( f, arguments, function( err, res, message ){
       if( err ) return cb( err );
-      if( ! res ) return cb( null, false );
+      if( ! res ) return cb( null, false, message );
 
       // Only putXXX methods are handled
       if( method != 'put' && method != 'post' && method != 'delete' ) return cb( null, true );
 
-      self._onlyUserId( request, 'body', cb );
+      self._onlyUserId( request, method, cb );
     });
   },
 
@@ -104,14 +110,14 @@ exports.OnlyUserIdCanRead = declare( Object, {
   checkPermissions: function f( request, method, cb ){
     var self = this;
 
-    this.inheritedAsync( f, arguments, function( err, res ){
+    this.inheritedAsync( f, arguments, function( err, res, message ){
       if( err ) return cb( err );
-      if( ! res ) return cb( null, false );
+      if( ! res ) return cb( null, false, message );
 
       // Only getXXX methods are handled
-      if( method !== 'get' && method !== 'getQuery' ) return cb( null, true );
+      if( method !== 'get' ) return cb( null, true );
 
-      self._onlyUserId( request, 'params', cb );
+      self._onlyUserId( request, method, cb );
 
     });
   },
