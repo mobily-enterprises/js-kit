@@ -22,8 +22,9 @@ var getConfigRecords = exports.getConfigRecords = function( workspaceId, userId,
 
   // If they are both empty, simply return an empty result.
   // This will the flow of calling function easier
-  if( ! workspaceId && ! userId ) return cb( null, results );
-
+  // 24/11/2016: This was an idiotic thing to do, some config stores
+  // have no userId and no workpaceId as they are global
+  //if( ! workspaceId && ! userId ) return cb( null, results );
 
   getConfigStores( function( err, configStores ){
 
