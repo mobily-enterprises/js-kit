@@ -24,8 +24,6 @@ exports.get = hotplate.cacheable( function( done ){
   // Simple schema
   var BasicSchema =  declare( [ SimpleSchema, hotplate.config.get( 'hotplate.SchemaMixin') ] );
 
-  // Enhanced schema (legacy)
-  var HotSchema = BasicSchema;
 
   // Sets the DB Layer
   var DbLayer = declare([ SimpleDbLayer, hotplate.config.get('hotplate.DbLayerMixin') ], {
@@ -38,8 +36,9 @@ exports.get = hotplate.cacheable( function( done ){
     chainErrors: 'all'
   });
 
-  // Creates a basic DB store based on that layer
-  var HotStore = declare( [ BasicDbStore ], { enableComet: true } );
+  // Legacy names
+  var HotSchema = BasicSchema;
+  var HotStore = BasicDbStore;
 
   done( null, { BasicSchema: BasicSchema, HotSchema: HotSchema, BasicDbStore: BasicDbStore, HotStore: HotStore } );
 
