@@ -203,9 +203,11 @@
         for (var i = 0; i < this.data.subscribers.length; ++i) {
           console.log("Considering sending to subscriber", i - 1 );
 
-          if( message.tabId && message.tabId != this.data.tabId ){
-            console.log("Won't be sending it as it's from self!" );
+          if( ! message.fromTabId ||  message.fromTabId != this.data.tabId ){
+            console.log("OK sending..." );
             this.data.subscribers[ i ].wsMessage( message );
+          } else {
+            console.log("Won't be sending it as it's from self!" );
           }
         }
       },
