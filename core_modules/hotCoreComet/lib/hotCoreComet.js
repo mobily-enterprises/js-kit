@@ -23,7 +23,7 @@ var consolelog = debug;
 
 hotplate.config.set('hotCoreComet', {
   makeSessionData: function( req, cb  ){ return cb( null, {} ); },
-  makeDefaultRegistrations: function( req, tabId, sessionData, cb  ){ return cb( null, [] ); }
+  makeDefaultSubscriptions: function( req, tabId, sessionData, cb  ){ return cb( null, [] ); }
 });
 
 
@@ -103,77 +103,6 @@ exports.enableCometEvents = function( Store ){
   return declare( [ Store, exports.HotCometEventsMixin ] );
 }
 
-
-
-/*
-TODO:
-
-SATURDAY:
-  X Have list of ACTIVE connections
-  X Get signed cookies to see if it's authenticated
-  X Create tab if it doesn't exist yet
-  X Implement message queue for client too,
-
-
-SUNDAY: MESSAGES AND REGISTRATIONS
-X Add events when a new connection is created, so that a new tab is added if needed, have "lastPoll" for tabs
-X Set userId in makeSessionData, using https://www.base64decode.org/
-X . Make sure "ping" doesn't get echoed
-X . Update lastSync after each call
-X . Improve tabId creation
-X Implement store/DB for message queue: method to send message, and queue that gets woken up
-X Manage console.log
-
-MONDAY:
-X Implement registration with type, p1, p2, p3, p4, hash, to be added to the DB
-X Make sure each registration is hashed, never twice the same for same tabid
-X Delete registrations when tab dies
-X Have configurable default registrations at tab creation
-X Check that recursion won't kill it in case of high traffic for a tab
-
-
-TUESDAY
-
-- Make broadcasting happen
-  X Have mixin to broadcast a change of data, or (better) use simpleDbLayer's events
-  X Implement broadcasting data to registered tabs depending on event for chat
-
-- Finish off chat with Alan
-  X Scroll up once chat page is rendered
-  X Make message appear after typing after emitting local/remote message
-  X Broadcast message from server for chat messages
-  X Make sure right conversation goes to the right
-  X Ensure that chat looks 100% OK, input box at bottom
-  X Make better way of making a constructor "Cometable", must be last thing
-  X Get rid of the toasts that make it hard to use
-
-LEFT TODO:
-- NPM release transient modules
-- Take "nested" tabsubscriptions out of tabs, useless
-- Split client widgets, one for connection and one as be bahaviour
-- Add widget to send tabId, make it work server-side, clarify fromTabId use/contract
-- Turn on/off client messages, improve them
-- Add _good_ debug messages on senders, so that it's EASY to see open tabs, connections, etc.
-- Add logging calls where necessary, like hotCoreTransport, go through all code
-- Build in default messanger for stores in hotCoreComet, it's a template for others
-- Ensure disconnection on logging out and logging in
-- Add noise when message comes
-- Implement "load older messages" to load previous ones
-- Add widget to show that connection is down
-- Add name to bubbles and to top
-- Add support for unread messages in conversations
-- Make sure conversations get re-ordered or re-loaded when a message arrives
-- Make "Tony is typing" also work, using subscriptions (first adapter using them)
-- Fix photo so that it's actually the photo (if there) OR a letter if no photo
-- Make button go to the far right
-- Write function to check if a user is online or not
-- Add button to flag a message
-- Have list of users appear to the left if the screen size allows it (not on phones)
-- Flag messages as "inappropriate"
-- Make sure things are reloaded if "reset"
-- Send email to user when a message is added if they are offline
-*/
-
 var currentlyDeliveringTab = {};
 var stores = {};
 
@@ -222,8 +151,7 @@ function emitAndSendMessages( cometMessage, cb ){
 };
 
 
-
-function makeRegistrationHash( r ){
+function makeSubscriptionHash( r ){
   consolelog("Making hash for:", r );
   var s = r.handle + r.p1 + r.p2 + r.p3 + r.p4;
   consolelog("String to hash:", s );
@@ -329,24 +257,6 @@ function sendMessagesInTab( tabId, cb ){
   });
 }
 
-/*
-hotplate.hotEvents.onCollect( 'comet-batch-sent', 'hotCoreComet', function( info, cb ){
-  consolelog( "comet-batch-sent received. Messages were successfully delivered to tabId", info.tabId );
-
-
-  consolelog( "Checking that there aren't any more", info.tabId );
-  stores.tabMessages.dbLayer.selectByHash( { tabId: info.tabId }, function( err, tabMessages ){
-    if( err ) return;
-
-    if( tabMessages.length ) {
-      consolelog( "There are! Running sendMessagesInTab for that tab again:",info.tabId, tabMessages.length );
-      sendMessagesInTab( info.tabId, function(){} );
-    }
-  });
-});
-*/
-
-
 
 intervalHandles.push( setInterval( function(){
 
@@ -389,7 +299,7 @@ function killTab( tabId ){
   if( connections[ tabId ] && connections[ tabId ].ws ) delete connections[ tabId ].ws;
   delete connections[ tabId ];
 
-  stores.tabRegistrations.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
+  stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
     stores.tabMessages.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
       stores.tabs.dbLayer.deleteById( tabId, function( err ){
       });
@@ -397,21 +307,6 @@ function killTab( tabId ){
   });
 
 }
-
-/*
-intervalHandles.push( setInterval( function(){
-
-  consolelog("Sending that test message...");
-  stores.tabs.dbLayer.select( { }, { children: false }, function( err, tabs ){
-    if( err ) return;
-
-    tabs.forEach( (tab) => {
-      sendMessage( { tabId: tab.id, greeting: "Greetings from the server" }, function(err){ if( err ) consolelog("ERROR!", err ) } );
-    });
-  });
-
-}, 3000 ) );
-*/
 
 var connections = exports.connections = {};
 
@@ -428,26 +323,26 @@ function ensureTab( tabId, ws, sessionData, cb ){
       consolelog("tabId already there, nothing to add");
       return cb( null, false );
     } else {
-      consolelog("Before adding tabId to the db, adding the registrations...");
+      consolelog("Before adding tabId to the db, adding the Subscriptions...");
 
-      var makeDefaultRegistrations = hotplate.config.get('hotCoreComet.makeDefaultRegistrations');
-      makeDefaultRegistrations( ws.upgradeReq, tabId, sessionData, function( err, defaultRegistrations ){
+      var makeDefaultSubscriptions = hotplate.config.get('hotCoreComet.makeDefaultSubscriptions');
+      makeDefaultSubscriptions( ws.upgradeReq, tabId, sessionData, function( err, defaultSubscriptions ){
         if( err ){
           consolelog("Error creating connection data for ", tabId );
           return;
         }
 
-        consolelog("Default registrations:", defaultRegistrations );
+        consolelog("Default subscriptions:", defaultSubscriptions );
 
         async.eachSeries(
-          defaultRegistrations,
+          defaultSubscriptions,
 
-          function( registration, cb ){
-            consolelog("Adding registration: ", registration);
+          function( subscription, cb ){
+            consolelog("Adding subscription: ", subscription);
 
-            registration.tabId = tabId;
-            registration.hash = makeRegistrationHash( registration );
-            stores.tabRegistrations.dbLayer.insert( registration, function( err, record ){
+            subscription.tabId = tabId;
+            subscription.hash = makeSubscriptionHash( subscription );
+            stores.tabSubscriptions.dbLayer.insert( subscription, function( err, record ){
               if( err ) return cb( err );
 
               return cb( null );
@@ -456,9 +351,9 @@ function ensureTab( tabId, ws, sessionData, cb ){
 
           function( err ){
             if( err ){
-              consolelog("There was an error trying to add registrations. Deleting the ones already added, and quitting");
-              stores.tabRegistrations.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
-                if( err ) consolelog("Error deleting pending after error creating registrations", tabId, err)
+              consolelog("There was an error trying to add subscriptions. Deleting the ones already added, and quitting");
+              stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
+                if( err ) consolelog("Error deleting pending after error creating subscriptions", tabId, err)
               });
               return cb( err );
             }
@@ -467,7 +362,7 @@ function ensureTab( tabId, ws, sessionData, cb ){
             stores.tabs.dbLayer.insert( { id: tabId }, function( err, record ){
               if( err ){
                 consolelog("There was an error trying to add the tab. Deleting the ones already added, and quitting");
-                stores.tabRegistrations.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
+                stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
                   if( err ) consolelog("Error deleting pending after error creating tab", tabId, err );
                 });
                 return cb( err );
@@ -568,7 +463,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
             break;
 
             case 'register':
-              consolelog("Adding registraton");
+              consolelog("Adding subscription");
 
               var msg = {
                 tabId: message.tabId,
@@ -578,23 +473,23 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               if( typeof message.p2 !== 'undefined' ) msg.p2 = message.p2;
               if( typeof message.p3 !== 'undefined' ) msg.p3 = message.p3;
               if( typeof message.p4 !== 'undefined' ) msg.p4 = message.p4;
-              msg.hash = makeRegistrationHash( msg );
+              msg.hash = makeSubscriptionHash( msg );
 
-              stores.tabRegistrations.dbLayer.selectByHash( { tabId: tabId }, function( err, total ){
-                if( err ) consolelog("Error counting registrations for tabId", tabId, err );
+              stores.tabSubscriptions.dbLayer.selectByHash( { tabId: tabId }, function( err, total ){
+                if( err ) consolelog("Error counting subscriptions for tabId", tabId, err );
                 if( total > 30 ){
-                  consolelog("Too many registrations", tabid, total );
+                  consolelog("Too many subscriptions", tabid, total );
                   return;
                 }
 
-                stores.tabRegistrations.dbLayer.selectByHash( { hash: msg.hash }, function( err, total ){
+                stores.tabSubscriptions.dbLayer.selectByHash( { hash: msg.hash }, function( err, total ){
                   if( err ) consolelog("Error registering:", msg, err );
                   if( total ){
                     consolelog("Handle already registered!");
                     return;
                   }
 
-                  stores.tabRegistrations.dbLayer.insert( msg, function( err, registerRecord ){
+                  stores.tabSubscriptions.dbLayer.insert( msg, function( err, registerRecord ){
                     if( err ) consolelog("Error registering:", msg, err );
 
                     // *************************************
@@ -716,7 +611,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
     stores.tabMessages = new TabMessages();
 
     // Internal store, only used via API
-    var TabRegistrations = declare( BasicDbStore, {
+    var TabSubscriptions = declare( BasicDbStore, {
 
       schema: new BasicSchema({
         added : { type: 'date', protected: true, searchable: true, default: function() { return new Date() } },
@@ -730,10 +625,10 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
       }),
 
       paramIds: [ 'id' ],
-      storeName: 'tabRegistrations',
+      storeName: 'tabSubscriptions',
 
     });
-    stores.tabRegistrations = new TabRegistrations();
+    stores.tabSubscriptions = new TabSubscriptions();
 
     done( null, stores );
   });
