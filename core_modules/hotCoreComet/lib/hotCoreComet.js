@@ -147,22 +147,31 @@ TUESDAY
   X Make better way of making a constructor "Cometable", must be last thing
   X Get rid of the toasts that make it hard to use
 
-WEDNESDAY/THURSDAY
-- Finish off/2
-  - Take "nested" out of tabs
-  - Split widgets, one for connection and one as be bahaviour
-  - Turn on/off client messages, improve them
-  - Add _good_ debug messages on senders, so that it's EASY to see open tabs, connections, etc.
-  - Add logging calls where necessary, like hotCoreTransport, go through all code
-  - Build in default messanger for stores in hotCoreComet, it's a template for others
-  - Ensure disconnection on logging out and logging in
-  - Add noise when message comes
-  - Implement "load older messages" to load previous ones
-  - Add widget to show that connection is down
-  - Add name
-  - Make "Tony is typing" also work, using subscriptions (first adapter using them)
-  - Fix photo so that it's actually the photo OR a letter if no photo
-  - Make button go to the far right
+LEFT TODO:
+- NPM release transient modules
+- Take "nested" tabsubscriptions out of tabs, useless
+- Split client widgets, one for connection and one as be bahaviour
+- Add widget to send tabId, make it work server-side, clarify fromTabId use/contract
+- Turn on/off client messages, improve them
+- Add _good_ debug messages on senders, so that it's EASY to see open tabs, connections, etc.
+- Add logging calls where necessary, like hotCoreTransport, go through all code
+- Build in default messanger for stores in hotCoreComet, it's a template for others
+- Ensure disconnection on logging out and logging in
+- Add noise when message comes
+- Implement "load older messages" to load previous ones
+- Add widget to show that connection is down
+- Add name to bubbles and to top
+- Add support for unread messages in conversations
+- Make sure conversations get re-ordered or re-loaded when a message arrives
+- Make "Tony is typing" also work, using subscriptions (first adapter using them)
+- Fix photo so that it's actually the photo (if there) OR a letter if no photo
+- Make button go to the far right
+- Write function to check if a user is online or not
+- Add button to flag a message
+- Have list of users appear to the left if the screen size allows it (not on phones)
+- Flag messages as "inappropriate"
+- Make sure things are reloaded if "reset"
+- Send email to user when a message is added if they are offline
 */
 
 var currentlyDeliveringTab = {};
