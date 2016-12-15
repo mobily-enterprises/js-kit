@@ -61,7 +61,6 @@
 
 
     var messageIdGenerator = 0;
-
     var object = Hotplate.cometClient = {
 
       /* Properties */
@@ -74,6 +73,7 @@
         protocol: '',
         reopenDelay: 5000,
         resendDelay: 5000,
+        pingInterval: 20000,
         socket: null,
         messageQueue: {},
       },
@@ -260,18 +260,11 @@
         this.data.subscribers.splice(index, 1);
       },
 
-
     }
-
-    //window.addEventListener('online', function(){  object.data.browserStatus='online'; } );
-    //window.addEventListener('offline', function(){ object.data.browserStatus='offline'; } );
-
-    // FALLBACK
-    // Attempt to send messages every 2 seconds in case the queue gets stuck and a retry is warranted
 
     setInterval( function(){
       object._ws_sendQueue();
-    }, 1000 * 2 );
+    }, object.data.resendDelay );
 
 
     // This will send a ping *roughly* every minute -- as long as
@@ -279,7 +272,7 @@
     // to grow and grow, and eventually when the connection is open again
     // it will ping again
     var CHECKINTERVAL = 5;
-    var PINGEVERY = 20;
+    var PINGEVERY = object.data.pingInterval;
     var secondsFromLastPing = 0;
     setInterval( function(){
       console.log("Checking if I should be sending ping out...")
