@@ -298,9 +298,9 @@ intervalHandles.push( setInterval( function(){
     consolelog( 'Tabs to kill:', oldTabs.map( ( item ) => { return item.id } ) );
 
     oldTabs.forEach( function( tab ) {
-      consolelog( 'Calling killTab for ', item.id );
+      consolelog( 'Calling killTab for ', tab.id );
 
-      killTab( item.id );
+      killTab( tab.id );
     })
   });
 
@@ -326,13 +326,13 @@ intervalHandles.push( setInterval( function(){
 
 
 function killTab( tabId ){
-  consolelog( 'Actually killing tab:', tab.id );
+  consolelog( 'Actually killing tab:', tabId );
 
 
-  consolelog( 'Checking if the connection is still up for tab', tab.id );
+  consolelog( 'Checking if the connection is still up for tab', tabId );
   var ws = connections[ tabId ] && connections[ tabId ].ws;
   if( ws ){
-    consolelog( 'Connection is still up. Killing connection/deleting for tab', tab.id );
+    consolelog( 'Connection is still up. Killing connection/deleting for tab', tabId );
     ws.close();
     delete connections[ tabId ].ws
   }
