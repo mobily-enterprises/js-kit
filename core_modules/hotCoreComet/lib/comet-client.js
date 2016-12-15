@@ -1,8 +1,17 @@
 
   if( typeof Hotplate == 'undefined' ) Hotplate = {};
 
+
   (function() {
     // 'use strict';
+
+
+    var consolelog = function(){
+      if( Hotplate && Hotplate.debugCometClient ) {
+        console.log.apply( console, arguments );
+      }
+    }
+
 
     function hashCode( s ){
       var hash = 0, i, chr, len;
@@ -43,23 +52,6 @@
     }
 
 
-    /*
-    // TESTING: Attempt to send messages every 10 seconds
-    setInterval( function(){
-      object.sendWs( { greetings: "Hello from the client"});
-      console.log("***************************Messages in queue:", Object.keys( object.data.messageQueue).length );
-    }.bind(this), 2000 );
-    */
-
-
-    /*
-    // TESTING: Attempt to send messages every 10 seconds
-    setInterval( function(){
-      object.sendWs( { type: 'register', handle: "group-message", p1:"the-group-id" } );
-    }.bind(this), 2000 );
-    */
-
-
     var messageIdGenerator = 0;
     var object = Hotplate.cometClient = {
 
@@ -81,34 +73,34 @@
       /* Methods */
 
       _ws_onOpen: function( e ){
-        console.log("Websocket opened");
+        consolelog("Websocket opened");
 
         var originalStatus =  this.data.status;
         if( originalStatus != 'neveropened' ){
-          console.log("It wasn't the first time! ");
+          consolelog("It wasn't the first time! This means that this is a re-opening after closure.");
         }
 
-        console.log("Setting status to 'open'");
+        consolelog("Setting status to 'open'");
         this.data.status = "open";
 
         this._ws_sendQueue();
       },
 
       _ws_onError: function( e ){
-        console.log("Websocket received an error:", e );
+        consolelog("Websocket received an error:", e );
       },
 
       _ws_onClose: function( e ){
-        console.log("Websocket closed, reattempting opening later");
+        consolelog("Websocket closed, reattempting opening later");
         this.data.status = 'closed';
 
         this._ws_reopenLater();
       },
 
       _ws_reopenLater: function(){
-        console.log("Reopening in these many milliseconds:", this.data.reopenDelay );
+        consolelog("Reopening in these many milliseconds:", this.data.reopenDelay );
         setTimeout( function(){
-          console.log("Reopening now!" );
+          consolelog("Reopening now!" );
           this.open();
         }.bind(this), this.data.reopenDelay );
       },
@@ -117,12 +109,12 @@
       _ws_onMessage: function( e ){
         var message = e.data;
 
-        console.log("Message received from server!", this.data.virgin);
+        consolelog("Message received from server!");
 
         try {
           message = JSON.parse( message );
         } catch( e ){
-          console.log("Message malformatted, quitting...");
+          consolelog("Message malformatted, quitting...");
           return;
         }
 
@@ -131,13 +123,14 @@
         // Subsequent 'reset' messages will be important as they mean
         // that the server sees the connection as a fresh one
         if( message.type == 'reset' && this.data.virgin ){
-          console.log("It's a reset on a virgin connection: no longer virgin, but kidnapped", this.data.virgin );
+          consolelog("It's a reset on a virgin connection: was still waiting for first reset, which has arrived" );
+          consolelog("Reset message won't be broadcast" );
           this.data.virgin = false;
           this.data.messageQueue = {};
           return;
         }
 
-        console.log("Reset came from a non-virgin connection!", this.data.virgin);
+        consolelog("Reset came from a non-virgin connection!", this.data.virgin);
 
         // A 'reset' from the server at this point is surely because WE
         // were inactive for a long time. A 'reset' will imply that the messageQueue
@@ -147,30 +140,30 @@
         }
 
         // A message arrived: broadcast it to subscribers
-        console.log("Broadcasting message to subscribing elements..." );
+        consolelog("Broadcasting message to subscribing elements..." );
         this._ws_notifySubscribers( message );
       },
 
       _ws_sendQueue: function(){
 
-        console.log("Entered sending queue...")
+        consolelog("Entered sending queue...")
         if( this.inSendQueue ){
-          console.log("Got out of sending queue since it's already there");
+          consolelog("Got out of sending queue since it's already going");
           return;
         }
 
         if( this.data.status != 'open') {
-          console.log("Got out of sending queue since status is not open");
+          consolelog("Got out of sending queue since status is not open");
           return;
         }
 
         if( Object.keys( this.data.messageQueue ).length == 0 ){
-          console.log("Nothing to send, quitting");
+          consolelog("Nothing to send, quitting");
           this.inSendQueue = false;
           return;
         }
 
-        console.log("ACTUALLY entered sending queue, broadcasting messages: ", Object.keys( this.data.messageQueue ).length );
+        consolelog("There are messages in the queue. Broadcasting these many:", Object.keys( this.data.messageQueue ).length );
 
         for( var k in this.data.messageQueue ){
 
@@ -179,12 +172,13 @@
 
           // Try and send it
           try {
-            console.log("Attempting to send...", message );
+            consolelog("Attempting to send...", message );
             this.data.socket.send( JSON.stringify( message ) );
+            consolelog("Sending to socket successful!", message );
             this.data.lastSync = new Date();
             delete this.data.messageQueue[ 'm-' + message.messageId ];
           } catch( e ){
-            console.log("Error sending message!", message.messageId, err );
+            consolelog("Error sending message!", message.messageId, err );
             break;
           }
 
@@ -193,22 +187,15 @@
       },
 
       _ws_ping: function() {
-        this.data.socket.send( JSON.stringify( { type: 'ping', messageId: messageIdGenerator++, tabId: this.data.tabId } ) );
+        this.data.socket.send( JSON.stringify( { type: 'ping', messageId: messageIdGenerator++ } ) );
         this.data.lastSync = new Date();
       },
 
       _ws_notifySubscribers: function( message ) {
 
-        console.log("Sending message to local subscribers:", this.data.subscribers.length, message )
+        consolelog("Sending message to local subscribers:", this.data.subscribers.length, message )
         for (var i = 0; i < this.data.subscribers.length; ++i) {
-          console.log("Considering sending to subscriber", i - 1 );
-
-          if( ! message.fromTabId ||  message.fromTabId != this.data.tabId ){
-            console.log("OK sending..." );
-            this.data.subscribers[ i ].wsMessage( message );
-          } else {
-            console.log("Won't be sending it as it's from self!" );
-          }
+          this.data.subscribers[ i ].wsMessage( message );
         }
       },
 
@@ -217,9 +204,9 @@
 
         this.data.url = url || this.data.url;
         this.data.protocol = this.data.protocol || protocol;
-
         var finalUrl = this.data.url+"?tabId=" + this.data.tabId;
-        console.log("Opening:", finalUrl, this.data.protocol );
+
+        consolelog("Opening:", finalUrl, this.data.protocol );
 
         this.data.socket = new WebSocket( finalUrl, this.data.protocol );
         this.data.socket.onerror = this._ws_onError.bind( this );
@@ -229,30 +216,29 @@
       },
 
       sendWs: function( message ){
-        console.log("Putting message in sending queue...", message );
+        consolelog("Putting message in sending queue...", message );
 
-        message.tabId = this.data.tabId;
         message.messageId = messageIdGenerator++;
         message.added = new Date();
 
         this.data.messageQueue[ 'm-' + message.messageId ] = message;
 
-        console.log("Sending messages in queue...", message );
+        consolelog("Running sendQueue, which will send this message...", message );
         this._ws_sendQueue();
       },
 
       sendLocal: function( message ){
-        console.log("Sending message to local subscribers...")
-        console.log( message );
+        consolelog("Sending message to local subscribers...", message )
         this._ws_notifySubscribers( message );
       },
 
       addSubscriber: function( subscriber ){
-        console.log("Adding subscriber:", subscriber.is );
+        consolelog("Adding subscriber:", subscriber.is );
         this.data.subscribers.push( subscriber );
       },
 
       deleteSubscriber: function( subscriber ){
+        consolelog("Deleting subscriber:", subscriber.is );
         var index = this.data.subscribers.indexOf(this);
         if (index < 0) {
           return;
@@ -271,19 +257,19 @@
     // the connection is open. If not, secondsFromLastPing will continue
     // to grow and grow, and eventually when the connection is open again
     // it will ping again
-    var CHECKINTERVAL = 5;
+    var CHECKINTERVAL = 5000;
     var PINGEVERY = object.data.pingInterval;
     var secondsFromLastPing = 0;
     setInterval( function(){
-      console.log("Checking if I should be sending ping out...")
+      consolelog("Checking if I should be sending ping out...")
       if( object.data.status == 'open' && secondsFromLastPing >= PINGEVERY ){
-        console.log("I should! Connection is open and", secondsFromLastPing, 'is bigger than', PINGEVERY )
+        consolelog("I should! Connection is open and", secondsFromLastPing, 'is bigger than', PINGEVERY )
         object._ws_ping();
         secondsFromLastPing = 0;
       } else {
-        console.log("Nope! Either connection is not open or", secondsFromLastPing, 'is smaller than', PINGEVERY )
+        consolelog("Nope! Either connection is not open or", secondsFromLastPing, 'is smaller than', PINGEVERY )
         secondsFromLastPing += CHECKINTERVAL;
       }
-    }, 1000 * CHECKINTERVAL );
+    }, CHECKINTERVAL );
 
   })();

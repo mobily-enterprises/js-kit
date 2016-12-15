@@ -1,5 +1,13 @@
 "use strict";
 
+
+/*
+
+* the client has no idea of tabIds in messages. All the client knows is that it has a tabid, and that
+  it will try and include it in forms.
+
+*/
+
 var dummy
   , hotplate = require('hotplate')
 
@@ -16,9 +24,12 @@ var dummy
   , debug = require('debug')('hotplate:hotCoreComet')
   , WebSocketServer = require('ws').Server
   , crypto = require('crypto')
+  , hotCoreServerLogger = require( 'hotplate/core_modules/hotCoreServerLogger' )
+  , logger = hotCoreServerLogger
 ;
 
 var consolelog = debug;
+
 
 
 hotplate.config.set('hotCoreComet', {
@@ -39,19 +50,14 @@ process.on( 'hotplateShutdown', function(){
 });
 
 
-/* ******************************************************** */
-/* The basic stores, ready-to-use with the selected DB etc. */
-/* ******************************************************** */
-
-
 exports.HotCometEventsMixin  = declare( Object,{
 
-
   prepareBody: function f( request, method, body, cb ){
-    if( body.tabId ){
-      request.data.tabId = body.tabId;
-      delete body.tabId;
-      console.log("Request.data now:", request.data );
+    if( body.fromTabId ){
+      consolelog("fromTabId found in body, getting it out and enrighing request.data")
+      request.data.fromTabId = body.fromTabId;
+      delete body.fromTabId;
+      consolelog("Request.data now:", request.data );
     }
     this.inheritedAsync( f, arguments, function( err, preparedBody ){
       if( err ) return cb( err );
@@ -65,14 +71,10 @@ exports.HotCometEventsMixin  = declare( Object,{
 
     var storeName = this.storeName;
 
-    console.log("AFTEREVERYTHING IN THE STORE HAS THIS BEFORE INHERITEDASYNC:", request.data.preparedDoc)
-
     this.inheritedAsync( f, arguments, function( err, res ){
       if( err ) return cb( err );
 
-      console.log("AFTEREVERYTHING IN THE STORE HAS THIS RECORD AFTER INHERITEDASYNC:", request.data.preparedDoc)
-
-      // Do not deal with getQuery
+      // Do not deal with get-like queries
       if( method == 'getQuery' || method == 'get') return cb( null );
 
       stores.tabs.dbLayer.select( { }, function( err, tabs ){
@@ -91,19 +93,19 @@ exports.HotCometEventsMixin  = declare( Object,{
           if( request.putNew ) message.new = true;
         }
 
-        console.log("MESSAGE RECORD ABOUT TO SEND FOLLOWING UP:", message );
 
         var cometEvent = {
-          tabId: request.data.tabId,
           message: message,
           sessionData: request.session,
           stores: stores,
           connections: connections,
           tabs: tabs,
+          fromTabId: request.data.fromTabId,
           fromClient: false
         };
 
-        // TODO: Try and work out tabId from headers if possible, behaviour will possibly do that
+        consolelog("Store is comet-emabled. Will emit the following comet-event:", cometEvent );
+
         emitAndSendMessages( cometEvent, function( err ){
           if( err ) consolelog("Error runnign emitAndSendMessages:", err );
 
@@ -115,6 +117,8 @@ exports.HotCometEventsMixin  = declare( Object,{
 });
 
 
+// This is important for stores that have afterEverything change the returned data, and
+// want to make sure that the mixin's afterEverything is run last
 exports.enableCometEvents = function( Store ){
   return declare( [ Store, exports.HotCometEventsMixin ] );
 }
@@ -122,42 +126,46 @@ exports.enableCometEvents = function( Store ){
 var currentlyDeliveringTab = {};
 var stores = {};
 
+//logger.log( { error: err, system: true, logLevel: 3, message: "Error while adding message to the queue table" } );
 
-var sendMessage = exports.sendMessage = function( message, cb ){
 
-  consolelog("Sending message:", message );
-  stores.tabMessages.dbLayer.insert( { message: message, tabId: message.tabId }, function( err, messageRecord ){
+var sendMessage = exports.sendMessage = function( tabId, message, cb ){
+
+  consolelog("Adding message to the tabMessages table:", message, "for tabid:", tabId );
+  stores.tabMessages.dbLayer.insert( { message: message, tabId: tabId }, function( err, messageRecord ){
     if( err ) return cb( err );
 
-    consolelog("Message added to list, triggering sendMessagesInTab()...");
+    consolelog("Message added to list, triggering sendMessagesInTab() so that it's sent out immediately.");
 
-    sendMessagesInTab( message.tabId, function(){} );
+    sendMessagesInTab( tabId, function(){} );
     return cb( null );
   });
 };
 
 
-function emitAndSendMessages( cometMessage, cb ){
+function emitAndSendMessages( cometEvent, cb ){
 
-  console.log("EMITTING comet-message");
+  consolelog("EMITTING comet-event, and then sending messages to the stores depending on what comes back");
 
-  hotplate.hotEvents.emitCollect( 'comet-message', cometMessage, function( err, messagesToSend ){
+  hotplate.hotEvents.emitCollect( 'comet-event', cometEvent, function( err, entriesToSend ){
     if( err ) return cb( err );
 
-    messagesToSend = messagesToSend.onlyResults().reduce(function( a, b ){  return a.concat( b ); }, [] );
+    entriesToSend = entriesToSend.onlyResults().reduce(function( a, b ){  return a.concat( b ); }, [] );
 
-    console.log( 'Messages to send:', messagesToSend );
+    consolelog( 'Total list of messages to send:', entriesToSend );
 
     async.eachSeries(
-      messagesToSend,
+      entriesToSend,
 
-      function( message, cb ){
-        console.log("Sending message:", message );
-        sendMessage( message, cb );
+      function( entry, cb ){
+        consolelog("Sending message:", entry, "to tabId", entry.to );
+        sendMessage( entry.to, entry.message, cb );
       },
 
       function( err ){
         if( err ) return cb( err );
+
+        consolelog("All messages added to the queue!" );
 
         cb( null );
       }
@@ -168,7 +176,7 @@ function emitAndSendMessages( cometMessage, cb ){
 
 
 function makeSubscriptionHash( r ){
-  consolelog("Making hash for:", r );
+  consolelog("Making hash for subscription:", r );
   var s = r.handle + r.p1 + r.p2 + r.p3 + r.p4;
   consolelog("String to hash:", s );
   return crypto.createHash("sha256").update(s).digest("base64");
@@ -176,16 +184,16 @@ function makeSubscriptionHash( r ){
 
 function sendMessagesInTab( tabId, cb ){
 
-  consolelog("Entered sendMessagesInTab for tab", tabId);
+  consolelog("Entered sendMessagesInTab for tab:", tabId);
 
   // Semaphore. Only one instance of this is to run at any given time
   if( currentlyDeliveringTab[ tabId ] ){
     consolelog("Already running for tab ", tabId);
-    return;
+    return cb( null );
   }
   currentlyDeliveringTab[ tabId ] = true;
 
-  consolelog("Looking up tab...");
+  consolelog("Looking up tab", tabId);
   stores.tabs.dbLayer.selectById( tabId, function( err, tab ){
     if( err ){
       delete currentlyDeliveringTab[ tabId ];
@@ -193,19 +201,20 @@ function sendMessagesInTab( tabId, cb ){
     }
     if( ! tab ){
       delete currentlyDeliveringTab[ tabId ];
-      return new Error("tabId not found!");
+      logger.log( { system: true, logLevel: 3, message: "sendMessagesInTab was called, but the tab wasn't found", data: { tabId: tabid } }  );
+      return cb( null );
     }
 
 
+    consolelog("Fetching messages for the tab...", tabId);
     stores.tabMessages.dbLayer.selectByHash( { tabId: tabId }, function( err, tabMessages ){
       if( err ){
         delete currentlyDeliveringTab[ tabId ];
         return cb( err );
       }
 
-
       if( !tabMessages.length ){
-        consolelog("No messages to be delivered, that's it...");
+        consolelog("No messages to be delivered.", tabId);
         delete currentlyDeliveringTab[ tabId ];
         return cb( null );
       }
@@ -218,7 +227,7 @@ function sendMessagesInTab( tabId, cb ){
 
         function( record, cb ){
 
-          consolelog("Checking the connection...");
+          consolelog("Checking the connection...", tabId);
 
           // If the connection is not there, all good but "false" (delivery failed)
           var ws = connections[ record.tabId ] && connections[ record.tabId ].ws;
@@ -281,10 +290,17 @@ intervalHandles.push( setInterval( function(){
   //debug( "Cleaning up expired tabs and tab messages..." );
 
   stores.tabs.dbLayer.select( { type: 'lte', args: [ 'lastSync', new Date( new Date() - IDLETABLIFESPAN ) ] }, { multi: true }, function( err, oldTabs ){
-    consolelog( 'Err and howMany tabs to kill: ', err, oldTabs.length );
+    if( err ){
+      logger.log( { error: err, system: true, logLevel: 3, message: "Error while getting tabs" } );
+      return;
+    }
+
+    consolelog( 'Tabs to kill:', oldTabs.map( ( item ) => { return item.id } ) );
 
     oldTabs.forEach( function( tab ) {
-      killTab( tab.id );
+      consolelog( 'Calling killTab for ', item.id );
+
+      killTab( item.id );
     })
   });
 
@@ -310,14 +326,25 @@ intervalHandles.push( setInterval( function(){
 
 
 function killTab( tabId ){
+  consolelog( 'Actually killing tab:', tab.id );
+
+
+  consolelog( 'Checking if the connection is still up for tab', tab.id );
   var ws = connections[ tabId ] && connections[ tabId ].ws;
-  if( ws ) ws.close();
-  if( connections[ tabId ] && connections[ tabId ].ws ) delete connections[ tabId ].ws;
-  delete connections[ tabId ];
+  if( ws ){
+    consolelog( 'Connection is still up. Killing connection/deleting for tab', tab.id );
+    ws.close();
+    delete connections[ tabId ].ws
+  }
 
   stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
+    if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tabSubscriptions", data: { tabId: tabId }  } );
+
     stores.tabMessages.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
+      if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tabMessages", data: { tabId: tabId }  } );
+
       stores.tabs.dbLayer.deleteById( tabId, function( err ){
+        if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tab", data: { tabId: tabId }  } );
       });
     });
   });
@@ -328,68 +355,61 @@ var connections = exports.connections = {};
 
 function ensureTab( tabId, ws, sessionData, cb ){
 
+  consolelog("Ensuring that tabId is there:", tabId)
   stores.tabs.dbLayer.selectById( tabId, function( err, record ){
-    consolelog("Ensuring that tabId is there:", tabId)
-    if( err ){
-      consolelog("Error looking up tabId in database", err );
-      return;
-    }
+    if( err ) return cb( err );
 
     if( record ){
       consolelog("tabId already there, nothing to add");
       return cb( null, false );
-    } else {
-      consolelog("Before adding tabId to the db, adding the Subscriptions...");
+    }
 
-      var makeDefaultSubscriptions = hotplate.config.get('hotCoreComet.makeDefaultSubscriptions');
-      makeDefaultSubscriptions( ws.upgradeReq, tabId, sessionData, function( err, defaultSubscriptions ){
-        if( err ){
-          consolelog("Error creating connection data for ", tabId );
-          return;
-        }
+    consolelog("Before adding tabId to the db, adding the Subscriptions...");
+    var makeDefaultSubscriptions = hotplate.config.get('hotCoreComet.makeDefaultSubscriptions');
+    makeDefaultSubscriptions( ws.upgradeReq, tabId, sessionData, function( err, defaultSubscriptions ){
+      if( err ) return cb( err );
 
-        consolelog("Default subscriptions:", defaultSubscriptions );
+      consolelog("Default subscriptions:", defaultSubscriptions );
 
-        async.eachSeries(
-          defaultSubscriptions,
+      async.eachSeries(
+        defaultSubscriptions,
 
-          function( subscription, cb ){
-            consolelog("Adding subscription: ", subscription);
+        function( subscription, cb ){
+          consolelog("Adding subscription: ", subscription);
 
-            subscription.tabId = tabId;
-            subscription.hash = makeSubscriptionHash( subscription );
-            stores.tabSubscriptions.dbLayer.insert( subscription, function( err, record ){
-              if( err ) return cb( err );
+          subscription.tabId = tabId;
+          subscription.hash = makeSubscriptionHash( subscription );
+          stores.tabSubscriptions.dbLayer.insert( subscription, function( err, record ){
+            if( err ) return cb( err );
 
-              return cb( null );
+            return cb( null );
+          });
+        },
+
+        function( err ){
+          if( err ){
+            consolelog("There was an error trying to add subscriptions. Deleting the ones already added, and quitting");
+            stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
+              if( err ) consolelog("Error deleting pending after error creating subscriptions", tabId, err)
             });
-          },
+            return cb( err );
+          }
 
-          function( err ){
+          consolelog("Adding tabId to the db...");
+          stores.tabs.dbLayer.insert( { id: tabId }, function( err, record ){
             if( err ){
-              consolelog("There was an error trying to add subscriptions. Deleting the ones already added, and quitting");
+              consolelog("There was an error trying to add the tab. Deleting the ones already added, and quitting");
               stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
-                if( err ) consolelog("Error deleting pending after error creating subscriptions", tabId, err)
+                if( err ) consolelog("Error deleting pending after error creating tab", tabId, err );
               });
               return cb( err );
             }
 
-            consolelog("Adding tabId to the db...");
-            stores.tabs.dbLayer.insert( { id: tabId }, function( err, record ){
-              if( err ){
-                consolelog("There was an error trying to add the tab. Deleting the ones already added, and quitting");
-                stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err, record ){
-                  if( err ) consolelog("Error deleting pending after error creating tab", tabId, err );
-                });
-                return cb( err );
-              }
-
-              cb( null, true );
-            });
-          }
-        );
-      });
-    }
+            cb( null, true );
+          });
+        }
+      );
+    });
   });
 }
 
@@ -408,7 +428,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
     var makeSessionData = hotplate.config.get('hotCoreComet.makeSessionData');
     makeSessionData( ws.upgradeReq, function( err, sessionData ){
       if( err ){
-        consolelog("Error creating connection data for ", tabId );
+        logger.log( { error: err, system: true, logLevel: 3, message: "Error while creating session data" } );
         ws.close();
         return;
       }
@@ -416,7 +436,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
       ensureTab( tabId, ws, sessionData, function( err, tabIsNew ){
         if( err ){
-          consolelog("Error looking up or creating tab!", err);
+          logger.log( { error: err, system: true, logLevel: 3, message: "Error while running ensureTab" } );
           ws.close();
           return;
         }
@@ -428,14 +448,23 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
         // If tab is new, send a reset message
         if( tabIsNew ){
           consolelog("It's a new tab! Starting with a fresh 'reset' message")
-          sendMessage( { type: 'reset', tabId: tabId }, function( err ){} );
+          sendMessage( tabId, { type: 'reset' }, function( err ){
+            if( err ){
+              logger.log( { error: err, system: true, logLevel: 3, message: "Error while sending 'reset' message to tab" } );
+            }
+          } );
         } else {
           consolelog("It's an existing tab! Since client is reconnecting, checking that queue is empty")
-          sendMessagesInTab( tabId, function(){} );
+          sendMessagesInTab( tabId, function( err ){
+            if( err ){
+              logger.log( { error: err, system: true, logLevel: 3, message: "Error while sending messages in tab", data: { tabId: tabId } } );
+            }
+          } );
         }
 
+
         ws.on('close', function connection(ws) {
-          consolelog("Closing tabId:", tabId );
+          consolelog("Connection from tab closed:", tabId );
 
           // Do not delete connections[ tabId ] as it's still needed to get session information
           // even if the connection is down
@@ -451,19 +480,21 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
         ws.on('message', function incoming( message ) {
           consolelog("\n\n\n");
-          consolelog('Received:', require('util').inspect( message, { depth: 10 } ) );
+          consolelog('Received message from a socket:', message );
 
           try {
             message = JSON.parse( message );
           } catch( e ){
-            consolelog("Could not interpret message!")
+            logger.log( { system: false, logLevel: 2, message: "Could not parse message", data: { message: message }  } );
             return;
           }
 
           // Update lastSync since a message was received
           consolelog('Updating lastSync for that tab', tabId );
           stores.tabs.dbLayer.updateById( tabId, { lastSync: new Date() }, function( err ){
-            if( err ) consolelog("Error updating lastSync!");
+            if( err ){
+              logger.log( { error: err, system: true, logLevel: 3, message: "Could not parse message", data: { message: message }  } );
+            }
           });
 
 
@@ -475,7 +506,11 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
             case 'ping':
               consolelog("Not propagating it since it's only a ping message. However, triggering check for messages in queue");
-              sendMessagesInTab( message.tabId, function(){} );
+              sendMessagesInTab( message.tabId, function( err ){
+                if( err ){
+                  logger.log( { error: err, system: true, logLevel: 3, message: "Error while sending messages in tab", data: { tabId: tabId } } );
+                }
+              });
             break;
 
             case 'register':
@@ -492,21 +527,30 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               msg.hash = makeSubscriptionHash( msg );
 
               stores.tabSubscriptions.dbLayer.selectByHash( { tabId: tabId }, function( err, total ){
-                if( err ) consolelog("Error counting subscriptions for tabId", tabId, err );
+                if( err ){
+                  logger.log( { error: err, system: true, logLevel: 3, message: "Could not count subscriptions for tabId", data: { tabId: tabId } } );
+                  return;
+                }
+
                 if( total > 30 ){
                   consolelog("Too many subscriptions", tabid, total );
                   return;
                 }
 
                 stores.tabSubscriptions.dbLayer.selectByHash( { hash: msg.hash }, function( err, total ){
-                  if( err ) consolelog("Error registering:", msg, err );
+                  if( err ){
+                    logger.log( { error: err, system: true, logLevel: 3, message: "Error finding hash", data: { hash: msg.hash } } );
+                    return;
+                  }
                   if( total ){
                     consolelog("Handle already registered!");
                     return;
                   }
 
                   stores.tabSubscriptions.dbLayer.insert( msg, function( err, registerRecord ){
-                    if( err ) consolelog("Error registering:", msg, err );
+                    if( err ){
+                      logger.log( { error: err, system: true, logLevel: 3, message: "Error registering:", data: { message: msg } } );
+                    }
 
                     // *************************************
                     // This function ends here
@@ -519,14 +563,14 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
             break;
 
             default:
-              console.log("It's a proper message, propagating it now...");
+              consolelog("It's a proper message, propagating it now...");
               // Emit the comet event. This may result in
               stores.tabs.dbLayer.select( { }, function( err, tabs ){
                 if( err ){
+                  logger.log( { error: err, system: true, logLevel: 3, message: "Error getting tabs before emitting comet message:" } );
                   consolelog("Error getting tabs before emitting comet message", err );
                   return;
                 }
-
 
                 emitAndSendMessages({
                   message: message,
@@ -536,7 +580,9 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
                   tabs: tabs,
                   fromClient: true,
                 }, function( err ){
-                  if( err ) consolelog("Error running emitAndSendMessages:", err );
+                  if( err ){
+                    logger.log( { error: err, system: true, logLevel: 3, message: "Error running emitAndSendMessages" } );
+                  }
 
                   // *************************************
                   // This function ends here
@@ -592,6 +638,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
       storeName:  'tabs',
       paramIds: [ 'id' ],
 
+      /*
       nested: [
         {
           type: 'multiple',
@@ -599,11 +646,10 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
           join: { tabId: 'tabId'},
         },
       ]
+      */
 
     });
     stores.tabs = new Tabs();
-
-
 
     // Internal store, only used via API
     var TabMessages = declare( BasicDbStore, {
@@ -668,10 +714,10 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
 
         [ 'simpledblayer-update-one', 'simpledblayer-delete-one', 'simpledblayer-insert', ].forEach( (op) => {
 
-          console.log("Adding listener for", store.storeName, "for op:", op );
+          consolelog("Adding listener for", store.storeName, "for op:", op );
           store.dbLayer.onCollect( op, function( info, cb ){
 
-            console.log("LISTENER FOR OP:", op, require('util').inspect( info, { dpeth: 2 }  ) );
+            consolelog("LISTENER FOR OP:", op, require('util').inspect( info, { dpeth: 2 }  ) );
 
             // TODO: You already have the session as options.request.session
             var makeSessionData = hotplate.config.get('hotCoreComet.makeSessionData');
@@ -692,7 +738,7 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
                   storeName: store.storeName,
                 };
 
-                console.log("MESSAGE RECORD ABOUT TO SEND FOLLOWING UP:", message );
+                consolelog("MESSAGE RECORD ABOUT TO SEND FOLLOWING UP:", message );
 
                 // TODO: Try and work out tabId from headers if possible, behaviour will possibly do that
                 emitAndSendMessages({
