@@ -46,16 +46,29 @@ process.on( 'hotplateShutdown', function(){
 
 exports.HotCometEventsMixin  = declare( Object,{
 
+
+  prepareBody: function f( request, method, body, cb ){
+    if( body.tabId ){
+      request.data.tabId = body.tabId;
+      delete body.tabId;
+      console.log("Request.data now:", request.data );
+    }
+    this.inheritedAsync( f, arguments, function( err, preparedBody ){
+      if( err ) return cb( err );
+
+      cb( null, preparedBody );
+
+    } );
+  },
+
   afterEverything: function f( request, method, cb ){
 
     var storeName = this.storeName;
 
     console.log("AFTEREVERYTHING IN THE STORE HAS THIS BEFORE INHERITEDASYNC:", request.data.preparedDoc)
 
-
     this.inheritedAsync( f, arguments, function( err, res ){
       if( err ) return cb( err );
-
 
       console.log("AFTEREVERYTHING IN THE STORE HAS THIS RECORD AFTER INHERITEDASYNC:", request.data.preparedDoc)
 
@@ -80,15 +93,18 @@ exports.HotCometEventsMixin  = declare( Object,{
 
         console.log("MESSAGE RECORD ABOUT TO SEND FOLLOWING UP:", message );
 
-        // TODO: Try and work out tabId from headers if possible, behaviour will possibly do that
-        emitAndSendMessages({
+        var cometEvent = {
+          tabId: request.data.tabId,
           message: message,
           sessionData: request.session,
           stores: stores,
           connections: connections,
           tabs: tabs,
           fromClient: false
-        }, function( err ){
+        };
+
+        // TODO: Try and work out tabId from headers if possible, behaviour will possibly do that
+        emitAndSendMessages( cometEvent, function( err ){
           if( err ) consolelog("Error runnign emitAndSendMessages:", err );
 
           cb( null );
