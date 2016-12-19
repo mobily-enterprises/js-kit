@@ -195,6 +195,7 @@
 
         consolelog("Sending message to local subscribers:", this.data.subscribers.length, message )
         for (var i = 0; i < this.data.subscribers.length; ++i) {
+          if( message.type == 'reset' ) this.data.subscribers[ i ].wsReset();
           this.data.subscribers[ i ].wsMessage( message );
         }
       },
