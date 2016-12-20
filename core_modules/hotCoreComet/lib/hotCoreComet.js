@@ -353,6 +353,7 @@ function killTab( tabId ){
     consolelog( 'Connection is still up. Killing connection/deleting for tab', tabId );
     ws.close();
     delete connections[ tabId ].ws
+    delete connections[ tabId ];
   }
 
   stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
@@ -492,7 +493,8 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
           consolelog("Connection from tab closed:", tabId );
 
           // Do not delete connections[ tabId ] as it's still needed to get session information
-          // even if the connection is down
+          // when dispatching messages to tabs even if the connection is down temporarily.
+          // The entry in connections[ tabId ] can only really be killed once the tab is killed
 
           // Do NOT delete the entry from tabs -- it could be a temporary
           // disconnection!
@@ -526,7 +528,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
           // Just making sure a user is not forging it, never trust anything from the client
           message.tabId = tabId;
 
-          console.log("Message type:", message.type );
+          consolelog("Message type:", message.type );
           switch( message.type ){
 
             case 'ping':
@@ -663,7 +665,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   // Will only deal with "recordChange"
   if( message.type != 'store-change'){
-    console.log("It's not a store-change, ignoring it");
+    consolelog("It's not a store-change, ignoring it");
     return cb( null, [] );
   }
 
@@ -747,6 +749,8 @@ hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data,
   Object.keys( connections ).forEach( ( tabId ) => {
 
     var sessionData = connections[ tabId ];
+    consolelog("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
+
 
     if( sessionData && sessionData.userId && sessionData.userId.toString() == data.userId.toString() ){
       consolelog("Found a tab belonging to the user. Disconnecting it.")
