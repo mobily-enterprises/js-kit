@@ -62,7 +62,7 @@
         subscribers:  [],
         tabId: maketabId(),
         url: '',
-        protocol: '',
+        protocol: undefined,
         reopenDelay: 5000,
         resendDelay: 5000,
         pingInterval: 20000,
@@ -195,16 +195,15 @@
 
         consolelog("Sending message to local subscribers:", this.data.subscribers.length, message )
         for (var i = 0; i < this.data.subscribers.length; ++i) {
-          if( message.type == 'reset' ) this.data.subscribers[ i ].wsReset();
-          this.data.subscribers[ i ].wsMessage( message );
+          var subscriber = this.data.subscribers[ i ];
+          if( subscriber.wsReset && message.type == 'reset' ) subscriber.wsReset( message );
+          if( subscriber.wsMessage ) subscriber.wsMessage( message );
         }
       },
 
 
-      open: function( url, protocol ){
+      open: function(){
 
-        this.data.url = url || this.data.url;
-        this.data.protocol = this.data.protocol || protocol;
         var finalUrl = this.data.url+"?tabId=" + this.data.tabId;
 
         consolelog("Opening:", finalUrl, this.data.protocol );
@@ -214,6 +213,10 @@
         this.data.socket.onopen = this._ws_onOpen.bind( this );
         this.data.socket.onclose = this._ws_onClose.bind( this );
         this.data.socket.onmessage = this._ws_onMessage.bind( this );
+      },
+
+      close: function(){
+        this.data.socket.close();
       },
 
       sendWs: function( message ){
