@@ -161,6 +161,70 @@ var sendMessage = exports.sendMessage = function( tabId, message, cb ){
 };
 
 
+var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, selector, makeMessage, options, cb ){
+  consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
+
+  var r = [];
+
+  ce.tabs.forEach( ( tab ) => {
+
+    consolelog("Considering tab:", tab );
+
+    // Don't echo message back to own tab, unless options.includeOwnTab is true
+    if( !options.includeOwnTab && tab.id == ce.fromTabId ) {
+      consolelog("STOP! tabIds match...");
+      return;
+    }
+
+
+    var tabSession = ce.connections[ tab.id ];
+    consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+    if( selector( ce, tab, tabSession ) ){
+      consolelog("Selector passed, dispatching a message!")
+      var newMessage = makeMessage( ce, tab, ce.message );
+      consolelog("Will dispatch: ", ce.message )
+      r.push({ to: tab.id, message: newMessage });
+    } else {
+      consolelog("Selector didn't pass, NOT dispatching a message!")
+    }
+  });
+
+  return cb( null, r );
+}
+
+var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, subsFilter, selector, makeMessage, options, cb ){
+  consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
+
+  var r = [];
+
+  stores.tabSubscriptions.dbLayer.selectByHash( subsFilter, function( err, subs, total ){
+    if( err ) {
+      logger.log( { error: err, system: true, logLevel: 3, message: "Error getting subscriptions", data: { filter: filter } } );
+      return cb( err );;
+    }
+
+    consolelog("Subscription matching the filter:", subs );
+    subs.forEach( ( sub ) => {
+      consolelog("Considering sub:", sub );
+      var tabSession = ce.connections[ sub.tabId ];
+      consolelog("Websocket session for the subscribing tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+      if( selector( ce, sub, tabSession ) ){
+        consolelog("Selector passed, dispatching a message!")
+        var newMessage = makeMessage( ce, sub, ce.message );
+        consolelog("Will dispatch: ", newMessage, "to", sub.tabId );
+        r.push({ to: sub.tabId, message: newMessage });
+      } else {
+        consolelog("Selector didn't pass, NOT dispatching a message!")
+      }
+    });
+
+    return cb( null, r );
+  });
+}
+
+
+
+
 function emitAndSendMessages( cometEvent, cb ){
 
   consolelog("EMITTING comet-event, and then sending messages to the stores depending on what comes back");
@@ -655,7 +719,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
 
 
-// Relaying comet-event of type `store-change` to owner tabs
+
 hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   var consolelog = require('debug')('hotplate:hotCoreComet');
@@ -663,105 +727,72 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   consolelog("IN LISTENER TO NOTIFY USERS ABOUT OWN RECORD" );
 
-  // Will only deal with "recordChange"
-  if( message.type != 'store-change'){
-    consolelog("It's not a store-change, ignoring it");
+  if( message.type != 'store-change' ){
+    consolelog("It's not a recordChange about chatMessages, ignoring it");
     return cb( null, [] );
-  }
+  };
 
-  // Will only deal with "recordChange"
-  if( message.op != 'put' && message.op != 'post'  ){
-    console.log("Only `put` and `post` operations are managed! Ignoring it");
+  if( ce.fromClient ){
+    consolelog("Message coming straight from client, ignoring (needs to come from the server)");
     return cb( null, [] );
-  }
+  };
 
-
-  consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
-  consolelog("Record:", message.record );
-
-  // Will only deal with records where userId is there
-  var record = message.record;
-  if( record && record.userId ) var userId = record.userId;
-
-  // Record doesn't have userId: quit
-  if( ! userId ){
-    consolelog("Record must have a userId fields, ignoring it");
-    return cb( null, [] );
-  }
-
-  consolelog("This record is owned by:", userId );
-
-  // Make up shorter variables
   var message = ce.message;
+  var record = message.record;
+  if( !record ){
+    consolelog("'record' property missing in message, ignornig");
+    return cb( null, [] );
+  };
+
   var sessionData = ce.sessionData;
-  var cometStores = ce.stores;
-  var connections = ce.connections;
-  var tabs = ce.tabs;
-  var fromTabId = !! ce.fromTabId;
-  var fromClient = !! ce.fromClient;
+  var userId = sessionData.userId;
+  if( !userId ){
+    consolelog("Emitting user is not logged in, ignoring");
+    return cb( null, [] );
+  };
 
 
-  consolelog("Going through tabs, looking for ones owned by userId")
-  consolelog("Tabs:", tabs );
-  var r = [];
-  tabs.forEach( ( tab ) =>{
-
-    consolelog("Comparing:", tab.id, ce.fromTabId );
-    // Don't echo message back to own tab
-    if( tab.id == ce.fromTabId ) {
-      consolelog("STOP! tabIds match...");
-      return;
-    }
-
-    var tabSession = connections[ tab.id ];
+  function selector( ce, tab ){
+    var tabSession = ce.connections[ tab.id ];
+    if( !tabSession ) return false;
 
     consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+    console.log("Comparison data:", tabSession.userId, record.userId  );
+    console.log("Comparison tests:", !!tabSession, tabSession.userId.toString() == record.userId.toString() );
+    return tabSession.userId.toString() == record.userId.toString();
+  };
+  function makeMessage( ce, tab, message  ){
+    return message;
+  };
 
-    if( tabSession && ( tabSession.userId == userId ) ){
-      consolelog("Tab is owned by the user! The message WILL BE SENT to this tab!" );
-      r.push({
-        to: tab.id,
-        message: {
-          type: 'store-change',
-          record: message.record,
-          storeName: message.storeName,
-          op: message.op,
-        }
-      })
-    } else {
-      consolelog("User IDs DO NOT match, nothing to do." );
-    }
-  });
-
-  consolelog("Returning entries:", r );
-  return cb( null, r );
+  // Will cycle throigh all tabs and dispatch a message after transforming it
+  // with makeMessage
+  conditionalTabDispatch( ce, selector, makeMessage, { includeOwnTab: true }, cb );
 });
 
 
-
 hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data, done) {
-  consolelog("Auth strategy, acton, data: ", strategyId, action, data );
+  console.log("Auth strategy, acton, data: ", strategyId, action, data );
 
   if( action != 'signin' && action != 'signout' ) return done( null );
 
-  consolelog("User ", data.userId, " did ", action, ". Checking connections, disconnecting the ones belonging to them");
+  console.log("User ", data.userId, " did ", action, ". Checking connections, disconnecting the ones belonging to them");
 
   Object.keys( connections ).forEach( ( tabId ) => {
 
     var sessionData = connections[ tabId ];
-    consolelog("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
-
+    console.log("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
 
     if( sessionData && sessionData.userId && sessionData.userId.toString() == data.userId.toString() ){
-      consolelog("Found a tab belonging to the user. Disconnecting it.")
+      console.log("Found a tab belonging to the user. Disconnecting it.")
 
       var ws = sessionData.ws;
       if( ws ){
-        consolelog( 'Connection is still up. Killing connection/deleting for tab', tabId );
+        console.log( 'Connection is still up. Killing connection/deleting for tab', tabId );
         ws.close();
         delete connections[ tabId ].ws
       } else {
-        consolelog( 'Was not connected in the first place...' );
+        console.log( 'Was not connected in the first place...' );
       }
     }
   });
