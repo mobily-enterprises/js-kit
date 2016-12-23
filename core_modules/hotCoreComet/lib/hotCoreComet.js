@@ -123,9 +123,10 @@ exports.HotCometEventsMixin  = declare( Object,{
         var ce = cometEvent;
         consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
 
-
         emitAndSendMessages( cometEvent, function( err ){
-          if( err ) consolelog("Error runnign emitAndSendMessages:", err );
+          if( err ){
+            logger.log( { error: err, system: true, logLevel: 3, message: "Error on emitting comet event", data: { cometEvent: cometEvent } } );
+          }
 
           cb( null );
         });
@@ -171,19 +172,21 @@ var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, sele
     consolelog("Considering tab:", tab );
 
     // Don't echo message back to own tab, unless options.includeOwnTab is true
-    if( !options.includeOwnTab && tab.id == ce.fromTabId ) {
+    if( !options.includeOwnTab && tab.id.toString() == ce.fromTabId.toString() ) {
       consolelog("STOP! tabIds match...");
       return;
+    } else {
+      consolelog("Sending to tab ", tab.id, "since it's not a match with ", ce.fromTabId );
     }
-
 
     var tabSession = ce.connections[ tab.id ];
     consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
     if( selector( ce, tab, tabSession ) ){
       consolelog("Selector passed, dispatching a message!")
       var newMessage = makeMessage( ce, tab, ce.message );
-      consolelog("Will dispatch: ", ce.message )
+      consolelog("Will dispatch: ", newMessage )
       r.push({ to: tab.id, message: newMessage });
+      //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
     } else {
       consolelog("Selector didn't pass, NOT dispatching a message!")
     }
@@ -213,6 +216,7 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
         var newMessage = makeMessage( ce, sub, ce.message );
         consolelog("Will dispatch: ", newMessage, "to", sub.tabId );
         r.push({ to: sub.tabId, message: newMessage });
+        //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
       } else {
         consolelog("Selector didn't pass, NOT dispatching a message!")
       }
@@ -231,6 +235,8 @@ function emitAndSendMessages( cometEvent, cb ){
 
   hotplate.hotEvents.emitCollect( 'comet-event', cometEvent, function( err, entriesToSend ){
     if( err ) return cb( err );
+
+    //console.log("Raw, unflattened return from emitCollect:", require('util').inspect( entriesToSend, { depth: 5 } )  );
 
     entriesToSend = entriesToSend.onlyResults().reduce(function( a, b ){  return a.concat( b ); }, [] );
 
@@ -692,6 +698,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
                   connections: connections,
                   tabs: tabs,
                   fromClient: true,
+                  fromTabId: tabId, 
                 }, function( err ){
                   if( err ){
                     logger.log( { error: err, system: true, logLevel: 3, message: "Error running emitAndSendMessages" } );

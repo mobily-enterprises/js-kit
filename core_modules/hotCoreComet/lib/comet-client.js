@@ -216,6 +216,7 @@
       },
 
       close: function(){
+        debugger;
         this.data.socket.close();
       },
 
