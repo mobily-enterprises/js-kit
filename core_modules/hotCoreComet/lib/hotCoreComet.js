@@ -698,7 +698,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
                   connections: connections,
                   tabs: tabs,
                   fromClient: true,
-                  fromTabId: tabId, 
+                  fromTabId: tabId,
                 }, function( err ){
                   if( err ){
                     logger.log( { error: err, system: true, logLevel: 3, message: "Error running emitAndSendMessages" } );
@@ -763,10 +763,11 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
     var tabSession = ce.connections[ tab.id ];
     if( !tabSession ) return false;
 
+    // TODO: work out WHY Alan had server errors as tabSession.userId wasn't set
     consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
     console.log("Comparison data:", tabSession.userId, record.userId  );
-    console.log("Comparison tests:", !!tabSession, tabSession.userId.toString() == record.userId.toString() );
-    return tabSession.userId.toString() == record.userId.toString();
+    console.log("Comparison tests:", !!tabSession, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
+    return tabSession.userId && tabSession.userId.toString() == record.userId.toString();
   };
   function makeMessage( ce, tab, message  ){
     return message;
