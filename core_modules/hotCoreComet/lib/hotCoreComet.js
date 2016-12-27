@@ -163,36 +163,59 @@ var sendMessage = exports.sendMessage = function( tabId, message, cb ){
 
 
 var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, selector, makeMessage, options, cb ){
+
+
+
   consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
 
   var r = [];
 
-  ce.tabs.forEach( ( tab ) => {
+  async.eachSeries(
+    ce.tabs,
 
-    consolelog("Considering tab:", tab );
+    function( tab, cb ){
 
-    // Don't echo message back to own tab, unless options.includeOwnTab is true
-    if( !options.includeOwnTab && tab.id.toString() == ce.fromTabId.toString() ) {
-      consolelog("STOP! tabIds match...");
-      return;
-    } else {
-      consolelog("Sending to tab ", tab.id, "since it's not a match with ", ce.fromTabId );
+      // Don't echo message back to own tab, unless options.includeOwnTab is true
+      if( !options.includeOwnTab && tab.id && ce.fromTabId && tab.id.toString() == ce.fromTabId.toString() ) {
+        consolelog("STOP! tabIds match...");
+        return cb( null );
+      } else {
+        consolelog("Sending to tab ", tab.id, "since it's not a match with ", ce.fromTabId );
+      }
+
+      var tabSession = ce.connections[ tab.id ];
+      consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+
+      selector( ce, tab, tabSession, function( err, result ) {
+        if( err ){
+          logger.log( { error: err, system: true, logLevel: 3, message: "Error running selector", data: { ce: ce, tab: tab, tabSession: tabSession } } );
+          return cb( null );;
+        }
+
+        if( result ){
+          consolelog("Selector passed, dispatching a message!")
+          makeMessage( ce, tab, ce.message, function( err, newMessage){
+            consolelog("Will dispatch: ", newMessage )
+            r.push({ to: tab.id, message: newMessage });
+            cb( null );
+          });
+          //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
+        } else {
+          consolelog("Selector didn't pass, NOT dispatching a message!")
+          cb( null );
+        }
+
+      });
+
+    },
+    function( err ){
+      if( err ){
+        logger.log( { error: err, system: true, logLevel: 3, message: "Error in conditionalTabDispatch's each cycle", data: { ce: ce, tabs: tabs, tabSession: tabSession } } );
+      }
+
+      cb( null, r );
     }
-
-    var tabSession = ce.connections[ tab.id ];
-    consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
-    if( selector( ce, tab, tabSession ) ){
-      consolelog("Selector passed, dispatching a message!")
-      var newMessage = makeMessage( ce, tab, ce.message );
-      consolelog("Will dispatch: ", newMessage )
-      r.push({ to: tab.id, message: newMessage });
-      //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
-    } else {
-      consolelog("Selector didn't pass, NOT dispatching a message!")
-    }
-  });
-
-  return cb( null, r );
+  );
 }
 
 var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, subsFilter, selector, makeMessage, options, cb ){
@@ -207,22 +230,42 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
     }
 
     consolelog("Subscription matching the filter:", subs );
-    subs.forEach( ( sub ) => {
-      consolelog("Considering sub:", sub );
-      var tabSession = ce.connections[ sub.tabId ];
-      consolelog("Websocket session for the subscribing tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
-      if( selector( ce, sub, tabSession ) ){
-        consolelog("Selector passed, dispatching a message!")
-        var newMessage = makeMessage( ce, sub, ce.message );
-        consolelog("Will dispatch: ", newMessage, "to", sub.tabId );
-        r.push({ to: sub.tabId, message: newMessage });
-        //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
-      } else {
-        consolelog("Selector didn't pass, NOT dispatching a message!")
-      }
-    });
+    async.eachSeries(
+      subs,
+      function( sub, cb ){
+        consolelog("Considering sub:", sub );
+        var tabSession = ce.connections[ sub.tabId ];
+        consolelog("Websocket session for the subscribing tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+        selector( ce, sub, tabSession, function( err, result ){
+          if( err ){
+            logger.log( { error: err, system: true, logLevel: 3, message: "Error running selector", data: { ce: ce, tab: tab, tabSession: tabSession } } );
+            return cb( null );;
+          }
 
-    return cb( null, r );
+          if( result ){
+            consolelog("Selector passed, dispatching a message!")
+            makeMessage( ce, sub, ce.message, function( err, newMessage){
+              consolelog("Will dispatch: ", newMessage )
+              r.push({ to: sub.tabId, message: newMessage });
+              cb( null );
+            });
+            //console.log("R at this point is:", require('util').inspect( r, { depth: 5 }  )  );
+          } else {
+            consolelog("Selector didn't pass, NOT dispatching a message!")
+            cb( null );
+          }
+
+        });
+
+      },
+      function( err ){
+        if( err ){
+          logger.log( { error: err, system: true, logLevel: 3, message: "Error in conditionalSubDispatch's each cycle", data: { ce: ce, subs: subs, tabSession: tabSession } } );
+        }
+
+        return cb( null, r );
+      }
+    )
   });
 }
 
@@ -759,18 +802,18 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
   };
 
 
-  function selector( ce, tab ){
+  function selector( ce, tab, tabSession, cb ){
     var tabSession = ce.connections[ tab.id ];
-    if( !tabSession ) return false;
+    if( !tabSession ) return cb( null, false );
 
     // TODO: work out WHY Alan had server errors as tabSession.userId wasn't set
     consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
     console.log("Comparison data:", tabSession.userId, record.userId  );
     console.log("Comparison tests:", !!tabSession, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
-    return tabSession.userId && tabSession.userId.toString() == record.userId.toString();
+    return cb( null, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
   };
-  function makeMessage( ce, tab, message  ){
-    return message;
+  function makeMessage( ce, tab, message, cb  ){
+    return cb( null, message );
   };
 
   // Will cycle throigh all tabs and dispatch a message after transforming it
