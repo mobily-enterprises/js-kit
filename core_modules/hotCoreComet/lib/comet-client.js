@@ -82,6 +82,7 @@
 
         consolelog("Setting status to 'open'");
         this.data.status = "open";
+        this._ws_notifyStatusChange('open');
 
         this._ws_sendQueue();
       },
@@ -93,6 +94,7 @@
       _ws_onClose: function( e ){
         consolelog("Websocket closed, reattempting opening later");
         this.data.status = 'closed';
+        this._ws_notifyStatusChange('closed');
 
         this._ws_reopenLater();
       },
@@ -190,6 +192,17 @@
         this.data.socket.send( JSON.stringify( { type: 'ping', messageId: messageIdGenerator++ } ) );
         this.data.lastSync = new Date();
       },
+
+
+      _ws_notifyStatusChange: function( status ) {
+
+        consolelog("Sending status change local subscribers:", status )
+        for (var i = 0; i < this.data.subscribers.length; ++i) {
+          var subscriber = this.data.subscribers[ i ];
+          if( subscriber.wsStatusChange ) subscriber.wsStatusChange( status );
+        }
+      },
+
 
       _ws_notifySubscribers: function( message ) {
 
