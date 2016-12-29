@@ -475,14 +475,18 @@ function killTab( tabId ){
     delete connections[ tabId ];
   }
 
-  stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
+  stores.tabSubscriptions.dbLayer.deleteByHash( { tabId: tabId.toString() }, { multi: true }, function( err, n ){
     if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tabSubscriptions", data: { tabId: tabId }  } );
+    else consolelog("Deleted: ", n );
 
-    stores.tabMessages.dbLayer.deleteByHash( { tabId: tabId }, function( err ){
+    stores.tabMessages.dbLayer.deleteByHash( { tabId: tabId }, { multi: true }, function( err, n ){
       if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tabMessages", data: { tabId: tabId }  } );
+      else consolelog("Deleted: ", n );
 
-      stores.tabs.dbLayer.deleteById( tabId, function( err ){
+      stores.tabs.dbLayer.deleteById( tabId, function( err, n ){
         if( err ) logger.log( { error: err, system: true, logLevel: 3, message: "Error while killing tab", data: { tabId: tabId }  } );
+        else consolelog("Deleted: ", n );
+
       });
     });
   });
@@ -1095,9 +1099,11 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
       hotExpose: true,
 
       implementFetchOne: function (request, cb) {
-        consolelog("Checking online status of:", request.params.userId );
+        consolelog("*************************Checking online status of:", request.params.userId );
+        consolelog("Connections:", connections );
         for( var k in connections ){
           var $c = connections[ k ];
+
           consolelog("CHECKING: ", request.params.userId, $c.userId, $c.loggedIn, $c.ws && $c.ws.readyState );
           if( $c && $c.userId && $c.loggedIn && request.params.userId.toString() == $c.userId.toString() && $c.ws && $c.ws.readyState == 1 ){
             consolelog("Returning YES!");
