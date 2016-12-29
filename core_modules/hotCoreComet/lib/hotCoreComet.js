@@ -622,7 +622,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
       consolelog("\n\n\n");
       consolelog('Received message from a socket:', message );
 
-      console.log("***********************Dealing now with the message...")
+      consolelog("***********************Dealing now with the message...")
       try {
         message = JSON.parse( message );
       } catch( e ){
