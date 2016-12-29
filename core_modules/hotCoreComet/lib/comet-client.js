@@ -27,11 +27,6 @@
     function objectHash( o ) {
       return hashCode( JSON.stringify( o ) ) ;
     }
-    /*
-        window.addEventListener('online', function(){  object.data.browserStatus='online'; } );
-        window.addEventListener('offline', function(){ object.data.browserStatus='offline'; } );
-    */
-
 
     // http://stackoverflow.com/a/27747377/829771
     function maketabId(){
@@ -68,6 +63,8 @@
         pingInterval: 20000,
         socket: null,
         messageQueue: {},
+        ready: false,
+        _readyCheckerHandle: null,
       },
 
       /* Methods */
@@ -75,8 +72,7 @@
       _ws_onOpen: function( e ){
         consolelog("Websocket opened");
 
-        var originalStatus =  this.data.status;
-        if( originalStatus != 'neveropened' ){
+        if( this.data.status != 'neveropened' ){
           consolelog("It wasn't the first time! This means that this is a re-opening after closure.");
         }
 
@@ -84,7 +80,12 @@
         this.data.status = "open";
         this._ws_notifyStatusChange('open');
 
-        this._ws_sendQueue();
+        this._readyCheckerHandle = setTimeout( function(){
+          consolelog("Checking if this.data is ready after opening connection...")
+          if( ! this.data.ready ){
+            this.close();
+          }
+        }.bind( this ), 5000 );
       },
 
       _ws_onError: function( e ){
@@ -94,7 +95,14 @@
       _ws_onClose: function( e ){
         consolelog("Websocket closed, reattempting opening later");
         this.data.status = 'closed';
+        this.data.ready = false;
         this._ws_notifyStatusChange('closed');
+
+        // Clear the timeout set to check if `newtab` or `existingtab` eventually arrive
+        if( this._readyCheckerHandle ){
+          clearTimeout( this._readyCheckerHandle );
+          this._readyCheckerHandle = null;
+        }
 
         this._ws_reopenLater();
       },
@@ -111,7 +119,7 @@
       _ws_onMessage: function( e ){
         var message = e.data;
 
-        consolelog("Message received from server!");
+        consolelog("Message received from server!", message );
 
         try {
           message = JSON.parse( message );
@@ -120,25 +128,54 @@
           return;
         }
 
-        // Kidnap the first 'reset' message, since it was
-        // due to the fact that this is a fresh connection.
-        // Subsequent 'reset' messages will be important as they mean
-        // that the server sees the connection as a fresh one
-        if( message.type == 'reset' && this.data.virgin ){
-          consolelog("It's a reset on a virgin connection: was still waiting for first reset, which has arrived" );
-          consolelog("Reset message won't be broadcast" );
-          this.data.virgin = false;
-          this.data.messageQueue = {};
+        consolelog("Message type", message.type );
+
+
+        // newtab and existingtab are special messages
+        if( message.type == 'newtab' || message.type == 'existingtab'){
+
+          // Clear the timeout set to check if `newtab` or `existingtab` eventually arrive
+          if( this._readyCheckerHandle ){
+            clearTimeout( this._readyCheckerHandle );
+            this._readyCheckerHandle = null;
+          }
+
+          // It's a new tab: set data.ready
+          // ALSO, for non-virgin tabs, call `reset` on listeners and zapped
+          // message queue
+          if( message.type == 'newtab'){
+
+            consolelog("Setting data.ready to true")
+            // Set ready and clear the message queue regardless
+            this.data.ready = true;
+
+            // It's a virgin tab: all good. Simply set `virgin` to false
+            if( this.data.virgin ){
+              consolelog("Setting data.virgin to false" );
+              this.data.virgin = false;
+              this._ws_sendQueue();
+            } else {
+              // It's not a virgin tab. So, the server had dropped the existing tab
+              // from the database (maybe after long term disconnection)
+              // The client is no longer up to date with the server, will send
+              // subscribing elements a `reset` message so that they know
+              consolelog("It's a newtab message for on a NON virgin tab!" );
+              consolelog("Will call resetSubscribers on subscribers too " );
+              consolelog("ALSO zap the message queue" );
+
+              this.data.messageQueue = {};
+              this._ws_resetSubscribers();
+            }
+
+          // It's an existing tab: set ready and send messages in the queue
+          } else {
+
+            this.data.ready = true;
+            this._ws_sendQueue();
+          }
+
+          // Also, return shielding the actual app from these protocol-only messages
           return;
-        }
-
-        consolelog("Reset came from a non-virgin connection!", this.data.virgin);
-
-        // A 'reset' from the server at this point is surely because WE
-        // were inactive for a long time. A 'reset' will imply that the messageQueue
-        // needs to be zapped.
-        if( message.type == 'reset' ){
-          this.data.messageQueue = {};
         }
 
         // A message arrived: broadcast it to subscribers
@@ -159,6 +196,12 @@
           return;
         }
 
+        if( !this.data.ready ) {
+          consolelog("Got out of sending queue since it's not yet ready (newtab or existingtab messages not yet received)");
+          return;
+        }
+
+
         if( Object.keys( this.data.messageQueue ).length == 0 ){
           consolelog("Nothing to send, quitting");
           this.inSendQueue = false;
@@ -166,6 +209,8 @@
         }
 
         consolelog("There are messages in the queue. Broadcasting these many:", Object.keys( this.data.messageQueue ).length );
+
+        console.log("READY STATE:", this.data.socket.readyState );
 
         for( var k in this.data.messageQueue ){
 
@@ -176,13 +221,14 @@
           try {
             consolelog("Attempting to send...", message );
             this.data.socket.send( JSON.stringify( message ) );
-            consolelog("Sending to socket successful!", message );
-            this.data.lastSync = new Date();
-            delete this.data.messageQueue[ 'm-' + message.messageId ];
           } catch( e ){
             consolelog("Error sending message!", message.messageId, err );
             break;
           }
+
+          consolelog("Sending to socket successful!" );
+          this.data.lastSync = new Date();
+          delete this.data.messageQueue[ 'm-' + message.messageId ];
 
         }
         this.inSendQueue = false;
@@ -204,18 +250,29 @@
       },
 
 
-      _ws_notifySubscribers: function( message ) {
+      _ws_resetSubscribers: function( message ) {
+        consolelog("Callinng wsReset() on local subscribers:", this.data.subscribers.length, message )
+        for (var i = 0; i < this.data.subscribers.length; ++i) {
+          var subscriber = this.data.subscribers[ i ];
+          if( subscriber.wsReset) subscriber.wsReset();
+        }
+      },
 
+      _ws_notifySubscribers: function( message ) {
         consolelog("Sending message to local subscribers:", this.data.subscribers.length, message )
         for (var i = 0; i < this.data.subscribers.length; ++i) {
           var subscriber = this.data.subscribers[ i ];
-          if( subscriber.wsReset && message.type == 'reset' ) subscriber.wsReset( message );
           if( subscriber.wsMessage ) subscriber.wsMessage( message );
         }
       },
 
 
       open: function(){
+
+        if( this.data.status == 'open' ){
+          consolelog("open() called, but connection was already open. Ignorning.")
+          return;
+        }
 
         var finalUrl = this.data.url+"?tabId=" + this.data.tabId;
 
@@ -279,8 +336,8 @@
     var secondsFromLastPing = 0;
     setInterval( function(){
       consolelog("Checking if I should be sending ping out...")
-      if( object.data.status == 'open' && secondsFromLastPing >= PINGEVERY ){
-        consolelog("I should! Connection is open and", secondsFromLastPing, 'is bigger than', PINGEVERY )
+      if( object.data.status == 'open' && object.data.ready && secondsFromLastPing >= PINGEVERY ){
+        consolelog("I should! Connection is open/ready and", secondsFromLastPing, 'is bigger than', PINGEVERY )
         object._ws_ping();
         secondsFromLastPing = 0;
       } else {
