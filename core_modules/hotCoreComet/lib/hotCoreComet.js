@@ -576,7 +576,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
         var message = {
           type: "user-online-changed",
           userId: sessionData.userId,
-          online: 'no',
+          online: false,
         };
 
         stores.tabs.dbLayer.select( { }, function( err, tabs ){
@@ -827,7 +827,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
             var message = {
               type: "user-online-changed",
               userId: sessionData.userId,
-              online: 'yes',
+              online: 'true',
             }
 
             stores.tabs.dbLayer.select( { }, function( err, tabs ){
@@ -1107,11 +1107,11 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreComet', hotplate.cacheable( func
           consolelog("CHECKING: ", request.params.userId, $c.userId, $c.loggedIn, $c.ws && $c.ws.readyState );
           if( $c && $c.userId && $c.loggedIn && request.params.userId.toString() == $c.userId.toString() && $c.ws && $c.ws.readyState == 1 ){
             consolelog("Returning YES!");
-            return cb( null, 'yes' );
+            return cb( null, { online: true } );
           }
         }
         consolelog("Returning NO!");
-        return cb( null, 'no');
+        return cb( null, { online: false } );
       }
 
     });
