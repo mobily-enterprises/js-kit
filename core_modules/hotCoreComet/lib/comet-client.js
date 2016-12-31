@@ -185,7 +185,7 @@
 
       _ws_sendQueue: function(){
 
-        consolelog("Entered sending queue...")
+        //consolelog("Entered sending queue...")
         if( this.inSendQueue ){
           consolelog("Got out of sending queue since it's already going");
           return;
@@ -203,7 +203,7 @@
 
 
         if( Object.keys( this.data.messageQueue ).length == 0 ){
-          consolelog("Nothing to send, quitting");
+          //consolelog("Nothing to send, quitting");
           this.inSendQueue = false;
           return;
         }
@@ -335,13 +335,13 @@
     var PINGEVERY = object.data.pingInterval;
     var secondsFromLastPing = 0;
     setInterval( function(){
-      consolelog("Checking if I should be sending ping out...")
+      //consolelog("Checking if I should be sending ping out...")
       if( object.data.status == 'open' && object.data.ready && secondsFromLastPing >= PINGEVERY ){
-        consolelog("I should! Connection is open/ready and", secondsFromLastPing, 'is bigger than', PINGEVERY )
+        consolelog("Ping (connection is open/ready and", secondsFromLastPing, 'is bigger than', PINGEVERY )
         object._ws_ping();
         secondsFromLastPing = 0;
       } else {
-        consolelog("Nope! Either connection is not open or", secondsFromLastPing, 'is smaller than', PINGEVERY )
+        //consolelog("Nope! Either connection is not open or", secondsFromLastPing, 'is smaller than', PINGEVERY )
         secondsFromLastPing += CHECKINTERVAL;
       }
     }, CHECKINTERVAL );
