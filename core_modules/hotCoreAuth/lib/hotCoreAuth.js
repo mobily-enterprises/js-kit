@@ -28,7 +28,7 @@ var basicContentResponsePage = function( strategyId, action, user, info ){
   return response;
 };
 
-var stores = {}
+var stores = exports.stores = {}
 
 
 /**
