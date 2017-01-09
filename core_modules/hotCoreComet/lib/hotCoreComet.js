@@ -143,7 +143,7 @@ exports.enableCometEvents = function( Store ){
 }
 
 var currentlyDeliveringTab = {};
-var stores = {};
+var stores = exports.stores = {};
 
 //logger.log( { error: err, system: true, logLevel: 3, message: "Error while adding message to the queue table" } );
 
@@ -919,7 +919,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
   consolelog("IN LISTENER TO NOTIFY USERS ABOUT OWN RECORD" );
 
   if( message.type != 'store-change' ){
-    consolelog("It's not a recordChange about chatMessages, ignoring it");
+    consolelog("It's not a store-change , ignoring it");
     return cb( null, [] );
   };
 
@@ -949,8 +949,8 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
     // TODO: work out WHY Alan had server errors as tabSession.userId wasn't set
     consolelog("Websocket session for the tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
-    console.log("Comparison data:", tabSession.userId, record.userId  );
-    console.log("Comparison tests:", !!tabSession, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
+    consolelog("Comparison data:", tabSession.userId, record.userId  );
+    consolelog("Comparison tests:", !!tabSession, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
     return cb( null, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
   };
   function makeMessage( ce, tab, message, cb  ){
@@ -1149,7 +1149,10 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
             consolelog("Session data from db's 'request' option:", sessionData );
 
             stores.tabs.dbLayer.select( { }, function( err, tabs ){
-              if( err ) return; // TODO LOG
+              if( err ){
+                logger.log( { error: err, system: true, logLevel: 3, message: "Error selecting tabs from db" } );
+                cb( null );
+              }
 
               var message = {
                 type: 'db-change',
