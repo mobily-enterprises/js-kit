@@ -225,7 +225,7 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
 
   stores.tabSubscriptions.dbLayer.selectByHash( subsFilter, function( err, subs, total ){
     if( err ) {
-      logger.log( { error: err, system: true, logLevel: 3, message: "Error getting subscriptions", data: { filter: filter } } );
+      logger.log( { error: err, system: true, logLevel: 3, message: "Error getting subscriptions" } );
       return cb( err );;
     }
 
