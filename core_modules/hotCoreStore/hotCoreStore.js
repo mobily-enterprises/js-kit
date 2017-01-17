@@ -61,7 +61,7 @@ var _onlyUserId = function( request, method, cb ){
   }
 
   // The request doesn't include a userId: fail (nothing to compare against)
-  var userId = method == request.data.doc ? request.data.doc.userid : request.body.userId;
+  var userId = request.data.doc ? request.data.doc.userId : ( request.body.userId || request.params.userId );
   if( ! userId ){
     return cb( null, false, "userId missing in doc, permission denied" );
   }
