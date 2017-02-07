@@ -58,6 +58,13 @@ var getConfigRecords = exports.getConfigRecords = function( workspaceId, userId,
           filter.userId = userId;
         }
 
+        // Allow extra filters
+        if( store.configStore.extraFilter ){
+          for( var k in store.configStore.extraFilter ){
+            filter[ k ] = store.configStore.extraFilter[ k ];
+          }
+        }
+
         // It's a one-field set, it will only return ONE value.
         //
         if( store.idProperty == 'workspaceId' || store.idProperty == 'userId' || store.idProperty == 'globalId'){
