@@ -222,6 +222,7 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
   consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
 
   var r = [];
+  var alreadyDispatched = {};
 
   stores.tabSubscriptions.dbLayer.selectByHash( subsFilter, function( err, subs, total ){
     if( err ) {
@@ -236,6 +237,16 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
         consolelog("Considering sub:", sub );
         var tabSession = ce.connections[ sub.tabId ];
         consolelog("Websocket session for the subscribing tab (shallow):", require('util').inspect( tabSession, { depth: 0 }  ) );
+
+        // Dedup hash. The same subscription might be present more than once in case
+        // the same element (which subscribes) is instanced more than once
+        if( alreadyDispatched[ sub.hash ] ){
+          consolelog("Sub already dispached, skipping:", sub.hash );          
+        } else {
+          alreadyDispatched[ sub.hash ] = true;
+          consolelog("Sub hadn't yet been dispathed. Added to the ones already done:", alreadyDispatched );                    
+        }
+
         selector( ce, sub, tabSession, function( err, result ){
           if( err ){
             logger.log( { error: err, system: true, logLevel: 3, message: "Error running selector", data: { ce: ce, tab: tab, tabSession: tabSession } } );
@@ -667,7 +678,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
           if( typeof message.p4 !== 'undefined' ) sub.p4 = message.p4;
           sub.hash = makeSubscriptionHash( sub );
 
-          stores.tabSubscriptions.dbLayer.deleteByHash( sub, function( err, total ){
+          stores.tabSubscriptions.dbLayer.deleteByHash( sub, { multi: false }, function( err, total ){
             if( err ){
               logger.log( { error: err, system: true, logLevel: 3, message: "Could not unsubscribe", data: { sub: sub } } );
               return;
@@ -696,36 +707,27 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               return;
             }
 
-            if( total > 200 ){
+            if( total > 500 ){
               consolelog("Too many subscriptions", tabid, total );
               return;
             }
 
-            stores.tabSubscriptions.dbLayer.selectByHash( { hash: sub.hash }, function( err, dummy, total ){
+            // NOTE: Duplicate subscriptions are allowed. They will be deduped at dispatch time.
+            // The same element can be instanced many times; each one will subscribe.
+            stores.tabSubscriptions.dbLayer.insert( sub, function( err, registerRecord ){
               if( err ){
-                logger.log( { error: err, system: true, logLevel: 3, message: "Error finding hash", data: { hash: sub.hash } } );
-                return;
-              }
-              if( total ){
-                consolelog("Handle already registered!", dummy, total);
-                return;
+                logger.log( { error: err, system: true, logLevel: 3, message: "Error registering:", data: { sub: sub } } );
               }
 
-              stores.tabSubscriptions.dbLayer.insert( sub, function( err, registerRecord ){
-                if( err ){
-                  logger.log( { error: err, system: true, logLevel: 3, message: "Error registering:", data: { sub: sub } } );
-                }
+              consolelog("OK subscription done!!!", dummy, total);
 
-                consolelog("OK subscription done!!!", dummy, total);
+              // *************************************
+              // This function ends here
+              // ************************************
 
-                // *************************************
-                // This function ends here
-                // ************************************
-
-              });
             });
           });
-
+      
         break;
 
         default:
