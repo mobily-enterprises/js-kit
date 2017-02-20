@@ -59,7 +59,7 @@ exports.HotCometEventsMixin  = declare( Object,{
 
   prepareBody: function f( request, method, body, cb ){
     if( body.fromTabId ){
-      consolelog("fromTabId found in body, getting it out and enrighing request.data")
+      consolelog("fromTabId found in body, getting it out and enriching request.data")
       request.data.fromTabId = body.fromTabId;
       delete body.fromTabId;
       consolelog("Request.data now:", request.data );
@@ -82,6 +82,12 @@ exports.HotCometEventsMixin  = declare( Object,{
 
       consolelog("SPROUT: STORE METHOD afterEverything, method ", method, "WILL POSSIBLY GENERATE A COMET EVENT."  );
 
+      // Suppress comet messages if noComet is on
+      if( request.options.noComet ){
+        consolelog("Quitting, since noComet is on" );
+      }
+
+
       consolelog("Checking emitCometStoreEvents...", self.emitCometStoreEvents );
       // If emitStoreCometEvents is not on, don't do anything
       if( ! self.emitCometStoreEvents ){
@@ -100,8 +106,10 @@ exports.HotCometEventsMixin  = declare( Object,{
         var message = {
           type: 'store-change',
           record: record,
+          idProperty: self.idProperty,
           op: method,
           storeName: storeName,
+          fromStore: true,
         };
         if( method == 'put'){
           if( request.putExisting ) message.existing = true;
@@ -163,8 +171,6 @@ var sendMessage = exports.sendMessage = function( tabId, message, cb ){
 
 
 var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, selector, makeMessage, options, cb ){
-
-
 
   consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
 
@@ -241,10 +247,10 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
         // Dedup hash. The same subscription might be present more than once in case
         // the same element (which subscribes) is instanced more than once
         if( alreadyDispatched[ sub.hash ] ){
-          consolelog("Sub already dispached, skipping:", sub.hash );          
+          consolelog("Sub already dispached, skipping:", sub.hash );
         } else {
           alreadyDispatched[ sub.hash ] = true;
-          consolelog("Sub hadn't yet been dispathed. Added to the ones already done:", alreadyDispatched );                    
+          consolelog("Sub hadn't yet been dispathed. Added to the ones already done:", alreadyDispatched );
         }
 
         selector( ce, sub, tabSession, function( err, result ){
@@ -582,7 +588,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
       if( sessionData.userId && sessionData.loggedIn ){
 
-        consolelog("SPROUT: USER CONNECTED WILL GENERATE A COMET EVENT.");
+        consolelog("SPROUT: USER DISCONNECTED WILL GENERATE A COMET EVENT.");
 
         var message = {
           type: "user-online-changed",
@@ -727,7 +733,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
             });
           });
-      
+
         break;
 
         default:
@@ -920,7 +926,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   consolelog("IN LISTENER TO NOTIFY USERS ABOUT OWN RECORD" );
 
-  if( message.type != 'store-change' ){
+  if( message.type != 'store-change' && message.type != 'db-change' ){
     consolelog("It's not a store-change , ignoring it");
     return cb( null, [] );
   };
@@ -966,7 +972,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
 
 hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data, done) {
-  console.log("Auth strategy, acton, data: ", strategyId, action, data );
+  consolelog("Auth strategy, acton, data: ", strategyId, action, data );
 
   if( action != 'signin' && action != 'signout' ) return done( null );
 
@@ -1134,8 +1140,6 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
     Object.keys( s.HotStore.registry ).forEach( ( k ) =>{
       var store = s.HotStore.registry[ k ];
 
-
-      // TODO: take "|| true" out
       if( ( store.emitCometDbEvents )  && store.dbLayer ){
 
         [ 'simpledblayer-update-one', 'simpledblayer-delete-one', 'simpledblayer-insert', ].forEach( (op) => {
@@ -1144,6 +1148,20 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
           store.dbLayer.onCollect( op, function( info, cb ){
 
             consolelog("SPROUT: DB OP ", op, "WILL GENERATE A COMET EVENT. INFO:", require('util').inspect( info, { dpeth: 1 }  ));
+
+            // WAIT. If the query was initiated within JsonRestStores, and the store is also store-aware,
+            // will stop here since stores with both emitCometStoreEvents and emitCometDbEvents will
+            // generate TWO events per REST call
+            if( info.options.fromJsonRestStores && store.emitCometStoreEvents ){
+              consolelog("Quitting, since this DB query came from JsonRestStores, and this store ALREADY has emitCometStoreEvents on"  );
+              return cb( null );
+            }
+
+            // Suppress comet messages
+            if( info.options.noComet ){
+              consolelog("Quitting, since noComet is on" );
+              return cb( null );
+            }
 
             var request = info.options.request || {};
             var sessionData = request.session || {};
@@ -1157,14 +1175,15 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
               }
 
               var message = {
-                type: 'db-change',
+                type: 'store-change',
                 op: {
-                  'simpledblayer-update-one': 'update',
+                  'simpledblayer-update-one': 'put',
                   'simpledblayer-delete-one': 'delete',
-                  'simpledblayer-insert': 'insert',
+                  'simpledblayer-insert': 'post',
                 }[ op ],
                 record: info.record,
                 storeName: store.storeName,
+                fromDb: true,
               };
 
               // This will only work if the store was enriched with the
