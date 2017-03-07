@@ -94,6 +94,7 @@
 
       _ws_onClose: function( e ){
         consolelog("Websocket closed, reattempting opening later");
+        consolelog( e );
         this.data.status = 'closed';
         this.data.ready = false;
         this._ws_notifyStatusChange('closed');
