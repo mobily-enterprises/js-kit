@@ -55,7 +55,7 @@ process.on( 'hotplateShutdown', function(){
 });
 
 
-exports.HotCometEventsMixin  = declare( Object,{
+exports.HotCometEventsMixin  = declare( Object, {
 
   prepareBody: function f( request, method, body, cb ){
     if( body.fromTabId ){
@@ -581,7 +581,9 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
   wss.on('connection', function connection( ws ) {
 
-    var sessionData;
+    consolelog("CONNECTION ESTABLISHED........", tabId )
+
+    var sessionData = { loggedIn: false };
 
     ws.on('close', function connection( ws) {
       consolelog("Connection from tab closed:", tabId );
@@ -637,7 +639,10 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
     ws.on('message', function incoming( message ) {
       consolelog("\n\n\n");
-      consolelog('Received message from a socket:', message );
+      consolelog('*********************************************************************************************' );
+      consolelog('***************************** RECEIVED MESSAGE FROM A SOCKET ********************************:', message );
+      consolelog('*********************************************************************************************' );
+
 
       consolelog("***********************Dealing now with the message...")
       try {
@@ -770,7 +775,6 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
 
     });
 
-
     var location = require('url').parse(ws.upgradeReq.url, true);
     var tabId = location.query.tabId;
     consolelog("Connected! tabId:", tabId );
@@ -780,9 +784,11 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
     makeSessionData( ws.upgradeReq, function( err, returnedSessionData ){
       if( err ){
         logger.log( { error: err, system: true, logLevel: 3, message: "Error while creating session data" } );
+        consolelog("Error while creating session data");
         ws.close();
         return;
       }
+
       sessionData = returnedSessionData;
       consolelog("CONNECTION DATA:", sessionData );
 
@@ -790,6 +796,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
       ensureTab( tabId, ws, sessionData, function( err, tabIsNew ){
         if( err ){
           logger.log( { error: err, system: true, logLevel: 3, message: "Error while running ensureTab" } );
+          consolelog("Error while running ensureTab");
           ws.close();
           return;
         }
@@ -976,23 +983,23 @@ hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data,
 
   if( action != 'signin' && action != 'signout' ) return done( null );
 
-  console.log("User ", data.userId, " did ", action, ". Checking connections, disconnecting the ones belonging to them");
+  consolelog("User ", data.userId, " did ", action, ". Checking connections, disconnecting the ones belonging to them");
 
   Object.keys( connections ).forEach( ( tabId ) => {
 
     var sessionData = connections[ tabId ];
-    console.log("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
+    consolelog("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
 
     if( sessionData && sessionData.userId && sessionData.userId.toString() == data.userId.toString() ){
-      console.log("Found a tab belonging to the user. Disconnecting it.")
+      consolelog("Found a tab belonging to the user. Disconnecting it.")
 
       var ws = sessionData.ws;
       if( ws ){
-        console.log( 'Connection is still up. Killing connection/deleting for tab', tabId );
+        consolelog( 'Connection is still up. Killing connection/deleting for tab', tabId );
         ws.close();
         delete connections[ tabId ].ws
       } else {
-        console.log( 'Was not connected in the first place...' );
+        consolelog( 'Was not connected in the first place...' );
       }
     }
   });
