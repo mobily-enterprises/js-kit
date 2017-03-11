@@ -990,7 +990,7 @@ hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data,
     var sessionData = connections[ tabId ];
     consolelog("Sessiondata for ",tabId, " is: ", require('util').inspect(  sessionData, { depth: 0 }  ) );
 
-    if( sessionData && sessionData.userId && sessionData.userId.toString() == data.userId.toString() ){
+    if( sessionData && sessionData.userId && data && data.userId && sessionData.userId.toString() == data.userId.toString() ){
       consolelog("Found a tab belonging to the user. Disconnecting it.")
 
       var ws = sessionData.ws;
