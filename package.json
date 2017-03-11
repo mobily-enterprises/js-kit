@@ -29,7 +29,6 @@
     "passport": "~0.3.2",
     "passport-facebook": "~2.1.1",
     "passport-local": "~1.0.0",
-    "primus": "^6.0.6",
     "request": "~2.81.0",
     "@mapbox/sanitize-caja": "~0.1.4",
     "send": "~0.15.1",
