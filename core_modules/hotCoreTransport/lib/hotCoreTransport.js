@@ -6,7 +6,7 @@ var dummy
   , declare = require('simpledeclare')
   , async = require('async')
   , debug = require('debug')('hotplate:hotCoreTransport')
-  , sanitize = require('sanitize-caja')
+  , sanitize = require('@mapbox/sanitize-caja')
 
   , SimpleDbLayer = require( 'simpledblayer' )
   , SimpleSchema = require( 'simpleschema' )

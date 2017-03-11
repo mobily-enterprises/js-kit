@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.105",
+  "version": "0.3.106",
   "private": false,
   "repository": {
     "type": "git",
@@ -31,7 +31,7 @@
     "passport-local": "~1.0.0",
     "primus": "^6.0.6",
     "request": "~2.81.0",
-    "sanitize-caja": "~0.1.4",
+    "@mapbox/sanitize-caja": "~0.1.4",
     "send": "~0.15.1",
     "simpledblayer": "0.3.x",
     "simpledeclare": "0.3.x",
