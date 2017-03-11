@@ -1,6 +1,0 @@
-{
-  "name" : "hotClientDojo",
-  "version": "0.0.4",
-  "main" : "./lib/hotClientDojo.js"
-}
-

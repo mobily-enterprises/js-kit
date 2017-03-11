@@ -1,8 +1,0 @@
-{ 
-  "name" : "hotCoreClientFiles",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreClientFiles.js",
-  "dependencies": {
-    "send": "~0.12.1"
-  }
-}
