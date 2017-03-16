@@ -87,7 +87,6 @@ exports.HotCometEventsMixin  = declare( Object, {
         consolelog("Quitting, since noComet is on" );
       }
 
-
       consolelog("Checking emitCometStoreEvents...", self.emitCometStoreEvents );
       // If emitStoreCometEvents is not on, don't do anything
       if( ! self.emitCometStoreEvents ){
@@ -200,7 +199,7 @@ var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, sele
 
         if( result ){
           consolelog("Selector passed, dispatching a message!")
-          makeMessage( ce, tab, ce.message, function( err, newMessage){
+          makeMessage( ce, tab, tabSession, ce.message, function( err, newMessage){
             consolelog("Will dispatch: ", newMessage )
             r.push({ to: tab.id, message: newMessage });
             cb( null );
@@ -261,7 +260,7 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
 
           if( result ){
             consolelog("Selector passed, dispatching a message!")
-            makeMessage( ce, sub, ce.message, function( err, newMessage){
+            makeMessage( ce, sub, tabSession, ce.message, function( err, newMessage){
               consolelog("Will dispatch: ", newMessage )
               r.push({ to: sub.tabId, message: newMessage });
               cb( null );
@@ -911,7 +910,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
     return cb( null, tabSession.userId && tabSession.loggedIn );
   }
 
-  function makeMessage( ce, sub, message, cb) {
+  function makeMessage( ce, sub, tabSession, message, cb) {
     return cb( null, {
       type: 'user-online-changed',
       p1: userId,
@@ -968,7 +967,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
     consolelog("Comparison tests:", !!tabSession, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
     return cb( null, tabSession.userId && tabSession.userId.toString() == record.userId.toString() );
   };
-  function makeMessage( ce, tab, message, cb  ){
+  function makeMessage( ce, tab, tabSession, message, cb  ){
     return cb( null, message );
   };
 
@@ -977,6 +976,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
   conditionalTabDispatch( ce, selector, makeMessage, { includeOwnTab: true }, cb );
 });
 
+/*
 
 hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data, done) {
   consolelog("Auth strategy, acton, data: ", strategyId, action, data );
@@ -1005,7 +1005,7 @@ hotplate.hotEvents.onCollect('auth', 'main', function (strategyId, action, data,
   });
   done( null );
 });
-
+*/
 
 
 
