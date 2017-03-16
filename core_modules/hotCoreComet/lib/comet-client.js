@@ -271,7 +271,12 @@
       open: function(){
 
         if( this.data.status == 'open' ){
-          consolelog("open() called, but connection was already open. Ignorning.")
+          consolelog("open() called, but connection was already open. Ignorning. The application is likely booting up")
+          return;
+        }
+
+        if( ! this.data.url ){
+          consolelog("open() called, but URL wasn't set. Ignorning.")
           return;
         }
 
@@ -287,8 +292,11 @@
       },
 
       close: function(){
-        this.data.socket.close();
+        if( this.data.socket ) this.data.socket.close();
       },
+
+
+
 
       sendWs: function( message ){
         consolelog("Putting message in sending queue...", message );
