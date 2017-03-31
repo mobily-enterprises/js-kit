@@ -2,7 +2,7 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.109",
+  "version": "0.3.110",
   "private": false,
   "repository": {
     "type": "git",
