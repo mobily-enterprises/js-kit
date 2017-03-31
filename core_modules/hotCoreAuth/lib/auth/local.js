@@ -165,7 +165,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
                 if( err ) return done( err, null );
 
                 var returnObject = { id: req.session.userId };
-                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
+                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { request: req, returnObject: returnObject, userId: req.session.userId, login: login, password: password }, function( err ){
                   if( err ) return done( err, null );
 
                   return done( null, returnObject );
@@ -183,7 +183,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
                 // Allow other modules to enrich the returnObject if they like
                 var returnObject = { id: res.userId };
-                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
+                hotplate.hotEvents.emitCollect( 'auth', 'local', 'manager', { request: req, returnObject: returnObject, userId: res.userId, login: login, password: password }, function( err ){
                   if( err ) return done( err, null );
 
                   // That's it: return!
@@ -234,7 +234,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
           // Allow other modules to enrich the returnObject if they like
           var returnObject = { id: res[ 0 ].userId };
-          hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err, preventLogin ){
+          hotplate.hotEvents.emitCollect( 'auth', 'local', 'signin', { request: req, returnObject: returnObject, userId: res[0].userId, login: login, password: password }, function( err, preventLogin ){
             if( err ) return done( err );
 
             if( preventLogin.onlyResults().indexOf( true ) != -1 ){
@@ -300,7 +300,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done  ){
 
               // Allow other modules to enrich the returnObject if they like
               var returnObject = { id: user.id };
-              hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
+              hotplate.hotEvents.emitCollect( 'auth', 'local', 'register', { request: req, returnObject: returnObject, userId: user.id, login: login, password: password }, function( err ){
                 if( err ) return done( err, null );
 
                 done( null, returnObject );

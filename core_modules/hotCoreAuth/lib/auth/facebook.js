@@ -132,7 +132,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
             // Allow other modules to enrich the returnObject if they like
             var returnObject = { id: res.userId };
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { returnObject: returnObject, userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'manager', { request: req, returnObject: returnObject, userId: res.userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
               if( err ) return done( err );
 
               done( null, returnObject, profile );
@@ -249,7 +249,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
           // Allow other modules to enrich the returnObject if they like
           var returnObject = { id: userId };
-          hotplate.hotEvents.emitCollect( 'auth', 'facebook', action, { returnObject: returnObject, userId: userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err, preventLogin ){
+          hotplate.hotEvents.emitCollect( 'auth', 'facebook', action, { request: req, returnObject: returnObject, userId: userId, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err, preventLogin ){
             if( err ) return done( err, null );
 
             // Authentication was artificially prevented by callback
@@ -343,7 +343,7 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
 
            // Allow other modules to enrich the returnObject if they like
             var returnObject = { id: res.userId };
-            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { returnObject: returnObject, userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
+            hotplate.hotEvents.emitCollect( 'auth', 'facebook', 'register', { request: req, returnObject: returnObject, userId: user.id, accessToken: accessToken, refreshToken: refreshToken, profile: profile }, function( err ){
               if( err ) return done( err );
 
               // User just registered: make her "logged in"
