@@ -217,7 +217,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
 
       schema: new HotSchema({
         strategyId:  { type: 'blob', searchable: true, required: true, trim: 30 }  ,
-        field1:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
+        field1:      { type: 'blob', unique: true, searchable: true, required: false, trim: 255 } ,
         field2:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
         field3:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
         field4:      { type: 'blob', searchable: true, required: false, trim: 255 } ,
