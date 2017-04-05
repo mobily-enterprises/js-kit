@@ -190,8 +190,13 @@ exports.regenerateAllIndexes = function( done ){
 
       if( ! store.dbLayer ) return; // Like saying "continue"
 
-      store.dbLayer.dropAllIndexes( function( e ){
-        store.dbLayer.generateSchemaIndexes( { background: true }, function(){}  );
+      console.log("MAKING INDEXES FOR:", storeName );
+      store.dbLayer.dropAllIndexes( function( err ){
+        if( err ) console.log("ERROR dropping indexes for " , storeName, ":", err );
+
+        store.dbLayer.generateSchemaIndexes( { background: true }, function( err ){
+          if( err ) console.log("ERROR creating indexes: for" , storeName, ":", err );
+        });
       });
     });
 
@@ -203,5 +208,6 @@ exports.regenerateAllIndexes = function( done ){
 hotplate.hotEvents.onCollect( 'run', function( done ){
   if( ! hotplate.config.get( 'hotCoreStore.zapIndexes' ) ) return done( null );
 
+  console.log("GENERATING ALL INDEXES...");
   exports.regenerateAllIndexes( done );
 });
