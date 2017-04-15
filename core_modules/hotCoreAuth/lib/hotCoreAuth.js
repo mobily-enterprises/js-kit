@@ -154,7 +154,7 @@ exports.makeResponder = function( req, res, next, strategyId, action, forceAjaxR
 
       case 'ajax':
         // Simply return the object, with the correct HTTP error if needed
-        res.json( user ? 200 : 401, { strategyId: strategyId, action: action, user: user, info: info } );
+        res.status( user ? 200 : 401).json( { strategyId: strategyId, action: action, user: user, info: info } );
       break;
 
       case 'redirect-opener':
