@@ -256,7 +256,7 @@ hotplate.hotEvents.onCollect( 'stores', 'hotCoreAuth', hotplate.cacheable( funct
             if( request.session.userId != request.params.userId ) return cb( null, false );
 
             // Don't allow them to delete the last remaining strategy, or they will not be allowed back in
-            stores.usersStrategies.dbLayer.selectByHash( { conditions: { userId: request.data.fullDoc.userId } }, { children: true }, function( err, queryDocs) {
+            stores.usersStrategies.dbLayer.selectByHash( { userId: request.data.fullDoc.userId }, { children: true }, function( err, queryDocs) {
               if( err ) return cb( err );
 
               if( queryDocs.length > 1 ){
