@@ -97,8 +97,10 @@ exports.HotCometEventsMixin  = declare( Object, {
       // Do not deal with get-like queries
       if( method == 'getQuery' || method == 'get') return cb( null );
 
+      /*
       stores.tabs.dbLayer.select( { }, function( err, tabs ){
         if( err ) return; // TODO LOG
+      */
 
         var record = request.data.preparedDoc;
 
@@ -119,11 +121,9 @@ exports.HotCometEventsMixin  = declare( Object, {
         var cometEvent = {
           message: message,
           sessionData: request.session,
-          stores: stores,
-          connections: connections,
-          tabs: tabs,
           fromTabId: request.data.fromTabId,
-          fromClient: false
+          fromClient: false,
+          store: self,
         };
 
         consolelog("Store is comet-emabled. Will emit the following comet-event:" );
@@ -137,7 +137,7 @@ exports.HotCometEventsMixin  = declare( Object, {
 
           cb( null );
         });
-      });
+      //});
     });
   }
 });
@@ -286,8 +286,6 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function( ce, su
 }
 
 
-
-
 function emitAndSendMessages( cometEvent, cb ){
 
   // There is no message: don't do anything
@@ -296,34 +294,42 @@ function emitAndSendMessages( cometEvent, cb ){
     return cb( null );
   }
 
-  consolelog("EMITTING comet-event, and then sending messages to the stores depending on what comes back");
-
-  hotplate.hotEvents.emitCollect( 'comet-event', cometEvent, function( err, entriesToSend ){
+  stores.tabs.dbLayer.select( { }, function( err, tabs ){
     if( err ) return cb( err );
 
-    //console.log("Raw, unflattened return from emitCollect:", require('util').inspect( entriesToSend, { depth: 5 } )  );
+    // Enrich the event with stores, connections and tabs
+    cometEvent.stores = stores;
+    cometEvent.connections = connections;
+    cometEvent.tabs = tabs;
 
-    entriesToSend = entriesToSend.onlyResults().reduce(function( a, b ){  return a.concat( b ); }, [] );
+    consolelog("EMITTING comet-event, and then sending messages to the stores depending on what comes back");
 
-    consolelog( 'Total list of messages to send:', entriesToSend );
+    hotplate.hotEvents.emitCollect( 'comet-event', cometEvent, function( err, entriesToSend ){
+      if( err ) return cb( err );
 
-    async.eachSeries(
-      entriesToSend,
+      //console.log("Raw, unflattened return from emitCollect:", require('util').inspect( entriesToSend, { depth: 5 } )  );
 
-      function( entry, cb ){
-        consolelog("Sending message:", entry, "to tabId", entry.to );
-        sendMessage( entry.to, entry.message, cb );
-      },
+      entriesToSend = entriesToSend.onlyResults().reduce(function( a, b ){  return a.concat( b ); }, [] );
 
-      function( err ){
-        if( err ) return cb( err );
+      consolelog( 'Total list of messages to send:', entriesToSend );
 
-        consolelog("All messages added to the queue!" );
+      async.eachSeries(
+        entriesToSend,
 
-        cb( null );
-      }
-    )
+        function( entry, cb ){
+          consolelog("Sending message:", entry, "to tabId", entry.to );
+          sendMessage( entry.to, entry.message, cb );
+        },
 
+        function( err ){
+          if( err ) return cb( err );
+
+          consolelog("All messages added to the queue!" );
+
+          cb( null );
+        }
+      )
+    });
   });
 };
 
@@ -597,19 +603,16 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
           online: false,
         };
 
-        stores.tabs.dbLayer.select( { }, function( err, tabs ){
-          if( err ){
-            logger.log( { error: err, system: true, logLevel: 3, message: "Error getting tabs before emitting comet message:" } );
-            consolelog("Error getting tabs before emitting comet message", err );
-            return;
-          }
+        //stores.tabs.dbLayer.select( { }, function( err, tabs ){
+        //  if( err ){
+        //    logger.log( { error: err, system: true, logLevel: 3, message: "Error getting tabs before emitting comet message:" } );
+        //    consolelog("Error getting tabs before emitting comet message", err );
+        //    return;
+        //  }
 
           emitAndSendMessages({
             message: message,
             sessionData: sessionData,
-            stores: stores,
-            connections: connections,
-            tabs: tabs,
             fromClient: false,
             fromTabId: tabId,
           }, function( err ){
@@ -617,7 +620,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               logger.log( { error: err, system: true, logLevel: 3, message: "Error running emitAndSendMessages" } );
             }
           });
-        });
+        //});
       } else {
         consolelog("Since sessionData.userId and sessonData.loggedIn are not both set, won't SPROUT a comet event" );
       }
@@ -743,19 +746,19 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
         default:
           consolelog("It's a proper message, propagating it now...");
           // Emit the comet event. This may result in
-          stores.tabs.dbLayer.select( { }, function( err, tabs ){
+
+
+            /*stores.tabs.dbLayer.select( { }, function( err, tabs ){
             if( err ){
               logger.log( { error: err, system: true, logLevel: 3, message: "Error getting tabs before emitting comet message:" } );
               consolelog("Error getting tabs before emitting comet message", err );
               return;
             }
+            */
 
             emitAndSendMessages({
               message: message,
               sessionData: sessionData,
-              stores: stores,
-              connections: connections,
-              tabs: tabs,
               fromClient: true,
               fromTabId: tabId,
             }, function( err ){
@@ -768,7 +771,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               // ************************************
 
             });
-          });
+          //});
         break;
       }
 
@@ -844,19 +847,18 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
               online: 'true',
             }
 
+            /*
             stores.tabs.dbLayer.select( { }, function( err, tabs ){
               if( err ){
                 logger.log( { error: err, system: true, logLevel: 3, message: "Error getting tabs before emitting comet message:" } );
                 consolelog("Error getting tabs before emitting comet message", err );
                 return;
               }
+            */
 
               emitAndSendMessages({
                 message: message,
                 sessionData: sessionData,
-                stores: stores,
-                connections: connections,
-                tabs: tabs,
                 fromClient: false,
                 fromTabId: tabId,
               }, function( err ){
@@ -865,7 +867,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
                 }
                 // END OF FUNCTION
               });
-            });
+            //});
 
           } else {
             consolelog("Since sessionData.userId and sessonData.loggedIn are not both set, won't SPROUT a comet event" );
@@ -932,10 +934,16 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   consolelog("IN LISTENER TO NOTIFY USERS ABOUT OWN RECORD" );
 
-  if( message.type != 'store-change' && message.type != 'db-change' ){
+  if( message.type != 'store-change' ){
     consolelog("It's not a store-change , ignoring it");
     return cb( null, [] );
   };
+
+  if( ce.store && ce.store.suppressOwnRecordCometEvent ){
+    consolelog("The store asks for suppression of own record-comet events, ignoring it");
+    return cb( null, [] );
+
+  }
 
   if( ce.fromClient ){
     consolelog("Message coming straight from client, ignoring (needs to come from the server)");
@@ -1173,52 +1181,86 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
             var request = info.options.request || {};
             var sessionData = request.session || {};
 
-            consolelog("Session data from db's 'request' option:", sessionData );
 
-            stores.tabs.dbLayer.select( { }, function( err, tabs ){
+            // Make a new request object that is a mere approximation of a "real"
+            // JsonRestStores request object, borrowing as much as possible from
+            // the "original" one.
+            var newRequest = {};
+            for( var k in request ){
+              newRequest[ k ] = request[ k ];
+            }
+            newRequest.body = info.record;
+            newRequest.params = [];
+            newRequest.data = [];
+
+            for( var k in request.data ){
+              newRequest.data[ k ] = request.data;
+            }
+
+            newRequest.data.doc = info.recordBefore;
+            newRequest.data.fullDoc = info.recordBefore;
+            newRequest.data.docAfter = info.record;
+            newRequest.data.fullDocAfter = info.record;
+            newRequest.fromDbComet = true;
+
+            var method = {
+              'simpledblayer-update-one': 'put',
+              'simpledblayer-delete-one': 'delete',
+              'simpledblayer-insert': 'post',
+            }[op];
+
+            store.prepareBeforeSendProxy( newRequest, method, info.record, function( err, preparedDoc ){
               if( err ){
-                logger.log( { error: err, system: true, logLevel: 3, message: "Error selecting tabs from db" } );
+                logger.log( { error: err, system: true, logLevel: 3, message: "Error preparing doc using prepareBeforeSendProxy" } );
                 cb( null );
               }
 
-              var message = {
-                type: 'store-change',
-                op: {
-                  'simpledblayer-update-one': 'put',
-                  'simpledblayer-delete-one': 'delete',
-                  'simpledblayer-insert': 'post',
-                }[ op ],
-                record: info.record,
-                storeName: store.storeName,
-                fromDb: true,
-              };
 
-              // This will only work if the store was enriched with the
-              // Comet mixin _and_ the client sent the tabId
-              if( request.data && request.data.fromTabId ){
-                var fromTabId = request.data.fromTabId;
-                consolelog("Store is comet-emabled, it will also have a fromTabId:", fromTabId );
-              }
+              consolelog("Session data from db's 'request' option:", sessionData );
 
-              var cometEvent = {
-                message: message,
-                sessionData: sessionData,
-                stores: stores,
-                connections: connections,
-                tabs: tabs,
-                fromClient: false,
-                fromTabId: fromTabId
-              };
+              /*
+              stores.tabs.dbLayer.select( { }, function( err, tabs ){
+                if( err ){
+                  logger.log( { error: err, system: true, logLevel: 3, message: "Error selecting tabs from db" } );
+                  cb( null );
+                }
+              */
 
-              var ce = cometEvent;
-              consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
+                var message = {
+                  type: 'store-change',
+                  op: method,
+                  record: info.record,
+                  storeName: store.storeName,
+                  fromDb: true,
+                };
+                if( op == 'simpledblayer-update-one') message.existing = true;
+                if( op == 'simpledblayer-insert') message.new = true;
 
-              // The message doesn't have tabId, since... it can't.
-              emitAndSendMessages( cometEvent, function( err ){
-                if( err ) consolelog("Error runnign emitAndSendMessages:", err );
+                // This will only work if the store was enriched with the
+                // Comet mixin _and_ the client sent the tabId
+                if( request.data && request.data.fromTabId ){
+                  var fromTabId = request.data.fromTabId;
+                  consolelog("Store is comet-emabled, it will also have a fromTabId:", fromTabId );
+                }
 
-                cb( null );
-              });
+                var cometEvent = {
+                  message: message,
+                  sessionData: sessionData,
+                  fromClient: false,
+                  fromTabId: fromTabId,
+                  store: store,
+                };
+
+                var ce = cometEvent;
+                consolelog("Comet event: ", { message: ce.message, sessionData: ce.sessionData, connections: ce.connections, tabs: ce.tabs } );
+
+                // The message doesn't have tabId, since... it can't.
+                emitAndSendMessages( cometEvent, function( err ){
+                  if( err ) consolelog("Error runnign emitAndSendMessages:", err );
+
+                  cb( null );
+                });
+              //});
             });
           });
         });
