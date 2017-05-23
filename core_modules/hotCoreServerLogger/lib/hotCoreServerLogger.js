@@ -84,11 +84,11 @@ exports.log = function( l, req, done ){
 
   // If the level is 3, critical, print the line to the screen
   if( l.logLevel >= 3 ){
-    hotplate.critical("Logging a highly important line: %j", l, 'Error Object is:', require('util').inspect( l.error, { depth: 10 } ) );
-    if( l.error ) console.log( l.error.stack );
+    hotplate.critical("Logging a highly important line:", require('util').inspect( l, { depth: 3 } ) , 'Error Object is:', require('util').inspect( l.error, { depth: 10 } ) );
   }
 
   debug("Logging: %o", l );
+
 
   // Emit the log event
   hotplate.hotEvents.emitCollect( 'log', l, done );
