@@ -181,6 +181,7 @@ var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, sele
     function( tab, cb ){
 
       // Don't echo message back to own tab, unless options.includeOwnTab is true
+      //console.log("Testing for tab matching:", !options.includeOwnTab, tab.id, ce.fromTabId, tab.id.toString() == ce.fromTabId.toString() );
       if( !options.includeOwnTab && tab.id && ce.fromTabId && tab.id.toString() == ce.fromTabId.toString() ) {
         consolelog("STOP! tabIds match...");
         return cb( null );
@@ -744,7 +745,7 @@ hotplate.hotEvents.onCollect( 'serverCreated', 'hotCoreComet', hotplate.cacheabl
         break;
 
         default:
-          consolelog("It's a proper message, propagating it now...");
+          consolelog("It's a proper message, propagating it now...", message, sessionData);
           // Emit the comet event. This may result in
 
 
