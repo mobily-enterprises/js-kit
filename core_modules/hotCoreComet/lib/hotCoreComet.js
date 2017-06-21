@@ -57,19 +57,28 @@ process.on( 'hotplateShutdown', function(){
 
 exports.HotCometEventsMixin  = declare( Object, {
 
-  prepareBody: function f( request, method, body, cb ){
-    if( body.fromTabId ){
-      consolelog("fromTabId found in body, getting it out and enriching request.data")
-      request.data.fromTabId = body.fromTabId;
-      delete body.fromTabId;
-      consolelog("Request.data now:", request.data );
+  // Add from-tab-id if present
+  _checkParamIds: function f( request, skipIdProperty, cb ){
+    consolelog("REQUEST:", request );
+
+    var method = request._req && request._req.method;
+    consolelog("METHOD:", method );
+    if( method == 'PUT' || method == 'POST' ||method == 'DELETE' ){
+
+      consolelog("HEADERS:", request._req.headers );
+      var tabId = request._req.headers[ 'x-from-tab-id' ];
+      consolelog("TAB ID:", tabId );
+      if( tabId ){
+        consolelog("fromTabId found in body, getting it out and enriching request.data")
+        request.data.fromTabId = tabId;
+        consolelog("Request.data now:", request.data );
+      }
     }
-    this.inheritedAsync( f, arguments, function( err, preparedBody ){
+
+    this.inheritedAsync( f, arguments, function( err ){
       if( err ) return cb( err );
-
-      cb( null, preparedBody );
-
-    } );
+      cb( null );
+    });
   },
 
   afterEverything: function f( request, method, cb ){
@@ -392,6 +401,8 @@ function sendMessagesInTab( tabId, cb ){
           // If the connection is not there, all good but "false" (delivery failed)
           var ws = connections[ record.tabId ] && connections[ record.tabId ].ws;
           if( ! ws ) return cb( new Error("No websocket connection") ); // End of cycle will kill currentlyDeliveringTab
+
+
 
           var message = record.message;
           message.messageId = record.id;
@@ -982,7 +993,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   // Will cycle throigh all tabs and dispatch a message after transforming it
   // with makeMessage
-  conditionalTabDispatch( ce, selector, makeMessage, { includeOwnTab: true }, cb );
+  conditionalTabDispatch( ce, selector, makeMessage, { includeOwnTab: false }, cb );
 });
 
 /*
@@ -1179,9 +1190,14 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
               return cb( null );
             }
 
+            // TEMPORARY
+            if( ! info.options.request ){
+              console.log("WARNING: REQUEST NOT PASSED IN OPTION", info );
+            }
+
+            //console.log("OPTION REQUEST:", info.options.request );
             var request = info.options.request || {};
             var sessionData = request.session || {};
-
 
             // Make a new request object that is a mere approximation of a "real"
             // JsonRestStores request object, borrowing as much as possible from
