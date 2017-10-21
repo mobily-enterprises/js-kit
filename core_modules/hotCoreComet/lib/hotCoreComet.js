@@ -189,9 +189,9 @@ var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, sele
 
     function( tab, cb ){
 
-      // Don't echo message back to own tab, unless options.includeOwnTab is true
-      //console.log("Testing for tab matching:", !options.includeOwnTab, tab.id, ce.fromTabId, tab.id.toString() == ce.fromTabId.toString() );
-      if( !options.includeOwnTab && tab.id && ce.fromTabId && tab.id.toString() == ce.fromTabId.toString() ) {
+      // Don't echo message back to own tab if options.excludeOwnTab is true
+      //console.log("Testing for tab matching:", options.excludeOwnTab, tab.id, ce.fromTabId, tab.id.toString() == ce.fromTabId.toString() );
+      if( options.excludeOwnTab && tab.id && ce.fromTabId && tab.id.toString() == ce.fromTabId.toString() ) {
         consolelog("STOP! tabIds match...");
         return cb( null );
       } else {
@@ -993,7 +993,7 @@ hotplate.hotEvents.onCollect( 'comet-event', function( ce, cb ){
 
   // Will cycle throigh all tabs and dispatch a message after transforming it
   // with makeMessage
-  conditionalTabDispatch( ce, selector, makeMessage, { includeOwnTab: false }, cb );
+  conditionalTabDispatch( ce, selector, makeMessage, {}, cb );
 });
 
 /*
@@ -1191,9 +1191,9 @@ hotplate.hotEvents.onCollect( 'setRoutes', 'hotCoreComet', function( app, done )
             }
 
             // TEMPORARY
-            if( ! info.options.request ){
-              console.log("WARNING: REQUEST NOT PASSED IN OPTION", info );
-            }
+            //if( ! info.options.request ){
+            //  console.log("WARNING: REQUEST NOT PASSED IN OPTION", info );
+            //}
 
             //console.log("OPTION REQUEST:", info.options.request );
             var request = info.options.request || {};
