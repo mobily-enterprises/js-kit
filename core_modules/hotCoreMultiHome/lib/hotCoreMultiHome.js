@@ -127,6 +127,9 @@ hotplate.config.set('hotCoreMultiHome', {
   * ELSE: return list of tabs belonging to users in workspaces common to requesting userId
   *
 */
+
+/*
+// THIS IS DEPRECATED AND USELESS
 exports.makeTabIdHashForMultihome = function( userId, tabId, message, done ){
 
   var tabIdHash = {};
@@ -287,6 +290,7 @@ var userInWorkspace = exports.userInWorkspace = function( userId, workspaceId, d
 
 }
 
+*/
 
 /*
   IN SHORT:
