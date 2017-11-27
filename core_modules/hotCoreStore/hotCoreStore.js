@@ -1,4 +1,6 @@
+/* eslint-disable */
 "use strict";
+
 
 var dummy
   , hotplate =  require('hotplate')
@@ -19,30 +21,36 @@ hotplate.config.set( 'hotCoreStore.zapIndexes', false );
 /* The basic stores, ready-to-use with the selected DB etc. */
 /* ******************************************************** */
 
-exports.get = hotplate.cacheable( function( done ){
+var cachedGetResults = null;
 
-  // Simple schema
-  var BasicSchema =  declare( [ SimpleSchema, hotplate.config.get( 'hotplate.SchemaMixin') ] );
+exports.get = function( done ){
 
+  if (!cachedGetResults){
 
-  // Sets the DB Layer
-  var DbLayer = declare([ SimpleDbLayer, hotplate.config.get('hotplate.DbLayerMixin') ], {
-    db: hotplate.config.get( 'hotplate.db' )
-  });
+    // Simple schema
+    var BasicSchema =  declare( [ SimpleSchema, hotplate.config.get( 'hotplate.SchemaMixin') ] );
 
-    // Creates a basic DB store based on that layer
-  var BasicDbStore = declare( [ JsonRestStores, JsonRestStores.SimpleDbLayerMixin, JsonRestStores.HTTPMixin ], {
-    DbLayer: DbLayer,
-    chainErrors: 'all'
-  });
+    // Sets the DB Layer
+    var DbLayer = declare([ SimpleDbLayer, hotplate.config.get('hotplate.DbLayerMixin') ], {
+      db: hotplate.config.get( 'hotplate.db' )
+    });
 
-  // Legacy names
-  var HotSchema = BasicSchema;
-  var HotStore = BasicDbStore;
+      // Creates a basic DB store based on that layer
+    var BasicDbStore = declare( [ JsonRestStores, JsonRestStores.SimpleDbLayerMixin, JsonRestStores.HTTPMixin ], {
+      DbLayer: DbLayer,
+      chainErrors: 'all'
+    });
 
-  done( null, { BasicSchema: BasicSchema, HotSchema: HotSchema, BasicDbStore: BasicDbStore, HotStore: HotStore } );
+    // Legacy names
+    var HotSchema = BasicSchema;
+    var HotStore = BasicDbStore;
 
-} );
+    cachedGetResults = { DbLayer, BasicSchema, HotSchema, BasicDbStore, HotStore }
+  }
+
+  if( done ) return done( null, cachedGetResults );
+  else return( cachedGetResults );
+};
 
 /* ******************************************************** */
 /*                  Permission mixins                       */
