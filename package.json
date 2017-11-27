@@ -2,17 +2,18 @@
   "name": "hotplate",
   "description": "Hotplate SaaS development framework",
   "main": "./hotplate.js",
-  "version": "0.3.118",
+  "version": "0.3.119",
   "private": false,
   "repository": {
     "type": "git",
     "url": "git://github.com/mercmobily/hotplate.git"
   },
   "dependencies": {
+    "@mapbox/sanitize-caja": "~0.1.4",
     "allhttperrors": "0.3.x",
     "async": "~2.1.5",
     "base64-stream": "~0.1.2",
-    "bcrypt": "~1.0.2",
+    "bcrypt": "^1.0.3",
     "cookie-parser": "^1.4.3",
     "cookie-session": "^2.0.0-alpha.2",
     "debug": "~2.6.1",
@@ -30,7 +31,6 @@
     "passport-facebook": "~2.1.1",
     "passport-local": "~1.0.0",
     "request": "~2.81.0",
-    "@mapbox/sanitize-caja": "~0.1.4",
     "send": "~0.15.1",
     "simpledblayer": "0.3.x",
     "simpledeclare": "0.3.x",
