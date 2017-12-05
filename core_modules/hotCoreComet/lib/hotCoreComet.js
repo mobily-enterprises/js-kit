@@ -248,6 +248,7 @@ var conditionalSubsDispatch = exports.conditionalSubsDispatch = function (ce, su
                 logger.log({ error: err, system: false, logLevel: 3, message: 'Error running makeMessage', data: { ce: ce, sub: sub, tabSession: tabSession } })
                 return cb(null)
               }
+              newMessage.fromTabId = ce.fromTabId
               consolelog('Will dispatch: ', newMessage)
               r.push({ to: sub.tabId, message: newMessage })
               cb(null)
