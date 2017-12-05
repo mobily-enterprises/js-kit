@@ -211,6 +211,7 @@ var conditionalTabDispatch = exports.conditionalTabDispatch = function( ce, sele
           consolelog("Selector passed, dispatching a message!")
           makeMessage( ce, tab, tabSession, ce.message, function( err, newMessage){
             consolelog("Will dispatch: ", newMessage )
+            message.fromTabId = tab.id
             r.push({ to: tab.id, message: newMessage });
             cb( null );
           });
