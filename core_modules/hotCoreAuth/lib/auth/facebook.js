@@ -214,7 +214,6 @@ exports.strategyRoutesMaker = function( app, strategyConfig, done ) {
         // works regardless
         if( ! res.length ){
 
-
           // if strictLogin is enabled, then a profile MUST be linked
           // beforehand, or it won't work.
           if( strategyConfig.strictLogin ){
