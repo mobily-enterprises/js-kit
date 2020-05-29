@@ -1,43 +1,12 @@
 {
-  "name": "hotplate",
-  "description": "Hotplate SaaS development framework",
-  "main": "./hotplate.js",
-  "version": "0.3.121",
+  "name": "js-kit",
+  "description": "Comprehensive kit to write progressive web applications in ES6 with web components (client) and node (server)",
+  "version": "0.1.1",
   "private": false,
   "repository": {
     "type": "git",
-    "url": "git://github.com/mobily-enterprises/hotplate.git"
+    "url": "git://github.com/mobily-enterprises/js-kit.git"
   },
   "dependencies": {
-    "@mapbox/sanitize-caja": "~0.1.4",
-    "allhttperrors": "0.3.x",
-    "async": "~2.1.5",
-    "base64-stream": "~0.1.2",
-    "bcrypt": "^1.0.3",
-    "cookie-parser": "^1.4.3",
-    "cookie-session": "^2.0.0-alpha.2",
-    "debug": "~2.6.1",
-    "deepobject": "0.3.x",
-    "email-addresses": "~2.0.1",
-    "eventemittercollector": "0.3.x",
-    "hat": "~0.0.3",
-    "html-to-text": "~3.2.0",
-    "imap": "~0.8.14",
-    "jsonreststores": "0.3.x",
-    "keygrip": "^1.0.1",
-    "mimelib": "~0.3.0",
-    "nodemailer": "~3.1.5",
-    "passport": "~0.3.2",
-    "passport-facebook": "~2.1.1",
-    "passport-local": "~1.0.0",
-    "request": "~2.81.0",
-    "send": "~0.15.1",
-    "simpledblayer": "0.3.x",
-    "simpledeclare": "0.3.x",
-    "simpleschema": "0.3.x",
-    "tracer": "~0.8.7",
-    "twilio": "~2.11.1",
-    "utf-8-validate": "~3.0.1",
-    "ws": "^2.2.0"
   }
 }
