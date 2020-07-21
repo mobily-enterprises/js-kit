@@ -1,8 +1,0 @@
-{ 
-  "name" : "hotCoreError",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreError.js",
-  "dependencies": {
-    "allhttperrors": "0.3.x"
-  }
-}

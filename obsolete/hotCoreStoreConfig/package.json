@@ -1,5 +1,0 @@
-{
-  "name" : "hotCoreStoreConfig",
-  "version": "0.0.4",
-  "main" : "./lib/hotCoreStoreConfig.js"
-}

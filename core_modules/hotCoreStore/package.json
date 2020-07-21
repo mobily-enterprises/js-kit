@@ -1,8 +1,0 @@
-{
-  "name" : "hotCoreStore",
-  "version": "0.0.4",
-  "main" : "./hotCoreStore.js",
-  "dependencies": {
-    "simpledeclare": "0.3.x"
-  }
-}
