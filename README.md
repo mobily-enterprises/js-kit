@@ -17,8 +17,8 @@ rm -rf node-modules/js-kit-*;NPM_CONFIG_REGISTRY=http://localhost:4873; NPM_CONF
 ````
 
 TODO
-* Add command in .bin to install sub-package from directory
-* Add executable which will be run by each file on postinstall, module name as parameter
+X Add command in .bin to install sub-package from directory
+X Add executable which will be run by each file on postinstall, module name as parameter
 * Add way to copy files over to main repo
 * Add another folder with a JSON to explain which file goes where, and files, to be injected where
 * Decide whether it will change the open-wc app, or simply rename index.html and make new one

@@ -7,6 +7,9 @@
   "engines": {
     "node": "10.x.x"
   },
+  "bin": {
+    "js-kit": "./bin/kit.js"
+  },
   "dependencies": {},
   "devDependencies": {
   }
