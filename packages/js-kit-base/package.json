@@ -1,0 +1,10 @@
+{
+  "name": "js-kit-base",
+  "version": "1.0.0",
+  "description": "js-kit base package",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tony Mobily",
+  "license": "ISC"
+}
