@@ -7,14 +7,14 @@ verdaccio
 ... make changes to the GIT repo
 
 ## Terminal 2
-NPM_CONFIG_REGISTRY=http://localhost:4873 npm --force unpublish
-NPM_CONFIG_REGISTRY=http://localhost:4873 npm --force pub
+````
+NPM_CONFIG_REGISTRY=http://localhost:4873 npm --force unpublish; NPM_CONFIG_REGISTRY=http://localhost:4873 npm --force pub
+````
 
 ## Terminal 3
-rm -rf node-modules/js-kit-*
-npm i js-kit
-npm --no-save install node_modules/js-kit/packages/js-kit-server-stores/
-
+````
+rm -rf node-modules/js-kit-*;NPM_CONFIG_REGISTRY=http://localhost:4873; NPM_CONFIG_REGISTRY=http://localhost:4873 npm i js-kit;npm --no-save install node_modules/js-kit/packages/js-kit-server-stores/
+````
 
 TODO
 * Add command in .bin to install sub-package from directory
