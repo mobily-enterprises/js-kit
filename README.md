@@ -22,7 +22,6 @@ X Add command in .bin to install sub-package from directory
 X Add executable which will be run by each file on postinstall, module name as parameter
 * Add way to copy files over to main repo
 * Add another folder with a JSON to explain which file goes where, and files, to be injected where
-* Decide whether it will change the open-wc app, or simply rename index.html and make new one
 * Add js-kit-base, js-kit-server and js-kit-stores
 * Add initial docco documentation generation
 * Make list of all missing "kits" to be added
