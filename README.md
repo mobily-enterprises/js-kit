@@ -13,7 +13,8 @@ NPM_CONFIG_REGISTRY=http://localhost:4873 npm --force unpublish; NPM_CONFIG_REGI
 
 ## Terminal 3
 ````
-rm -rf node-modules/js-kit-*;NPM_CONFIG_REGISTRY=http://localhost:4873; NPM_CONFIG_REGISTRY=http://localhost:4873 npm i js-kit;npm --no-save install node_modules/js-kit/packages/js-kit-server-stores/
+rm -rf node-modules/js-kit-*; NPM_CONFIG_REGISTRY=http://localhost:4873 npm i js-kit; npx js-kit add js-kit-server-stores
+
 ````
 
 TODO

@@ -18,5 +18,17 @@ async function run(node, cmd, op, p1, p2, p3) {
     case 'testRun':
       console.error('testRun was here')
       break
+
+    case 'cleanup':
+      execSync(`rm ../../../${p1}`)
+      break
+
+    case 'init':
+      // load package.json
+      // run npm install on js-kit.dependencies
+      // copy files in distr
+      // load js-kit.inserts, make inserts
+      // LATER load js-kit.replaces, make replaces
+    break
   }
 }
