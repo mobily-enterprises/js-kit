@@ -1,0 +1,11 @@
+{
+  "name": "server-stores",
+  "version": "1.0.0",
+  "description": "js-kit server stores",
+  "author": "Tony Mobily",
+  "kitDependencies": [
+    "base"
+  ],
+  "npmDependencies": {
+  }
+}

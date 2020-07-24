@@ -1,0 +1,11 @@
+{
+  "name": "base",
+  "version": "1.0.0",
+  "description": "js-kit base",
+  "author": "Tony Mobily",
+  "kitDependencies": [
+  ],
+  "npmDependencies": {
+    "lit-element": "^2.3.1"
+  }
+}
