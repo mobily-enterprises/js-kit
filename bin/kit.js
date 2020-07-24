@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // const execSync = require('child_process').execSync
 const fs = require('fs')
-const copy = require('recursive-copy')
+const path = require('path')
 
 run(...process.argv)
 
@@ -22,7 +22,6 @@ async function installKit (kitName) {
     process.exit(1)
   }
 
-  console.log('Installing:', kitName)
   if (fs.existsSync(kitInstallFile)) {
     console.log(`${kitName} already installed, skipping...`)
     return
@@ -30,24 +29,23 @@ async function installKit (kitName) {
 
   const kjson = require(`${kitDir}/kit.json`)
   const deps = kjson.kitDependencies || []
-  if (deps.length) {
-    console.log('This module has dependencies. Installing them.', deps)
-  }
+  if (deps.length) console.log('This module has dependencies. Installing them.', deps)
+
   for (const kitName of deps) {
     installKit(kitName)
   }
+  if (deps.length) console.log('Dependencies installed.', deps)
+
+  console.log('Installing:', kitName)
 
   // Install this kit
 
   if (isDir(`${kitDir}/distr`)) {
-    console.log('distr folder found, copying files over')
-    console.log(process.env, __dirname)
-    // await copy(`${kitDir}/distr`,
-
+    console.log('"distr" folder found, copying files over')
+    copyRecursiveSync(`${kitDir}/distr`, '.')
   }
 
   // Install it
-  //   copy files in distr
   //   add npmDependencies to package.json (if not there already)
   //   load js-kit.inserts, make inserts
 
@@ -66,5 +64,34 @@ function isDir (path) {
   catch (e) {
     if (e.code === 'ENOENT') return false
     throw e
+  }
+}
+
+function copyRecursiveSync (src, dest) {
+  const exists = fs.existsSync(src)
+  const stats = exists && fs.statSync(src)
+  const isDirectory = exists && stats.isDirectory()
+  if (isDirectory) {
+    try {
+      fs.mkdirSync(dest)
+    } catch (e) {
+      if (e.code !== 'EEXIST') throw e
+    }
+    for (const childItemName of fs.readdirSync(src)) {
+      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName))
+    }
+  } else {
+    // MAYBE rename original file
+    const exists = fs.existsSync(dest)
+    const dstStats = exists && fs.statSync(dest)
+    const isFile = exists && dstStats.isFile()
+    if (isFile) {
+      console.log(`${dest} already there, making a backup`)
+      const now = new Date()
+      const backupFileName = dest + '.' + now.getFullYear() + '-' + String(now.getMonth()).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0')
+      fs.renameSync(dest, backupFileName)
+    }
+
+    fs.copyFileSync(src, dest)
   }
 }
