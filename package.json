@@ -10,7 +10,9 @@
   "bin": {
     "js-kit": "./bin/kit.js"
   },
-  "dependencies": {},
+  "dependencies": {
+    "recursive-copy": "^2.0.10"
+  },
   "devDependencies": {
     "eslint": "^7.4.0",
     "eslint-config-standard": "^14.1.1",
