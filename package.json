@@ -11,6 +11,7 @@
     "js-kit": "./bin/kit.js"
   },
   "dependencies": {
+    "pkg-up": "^3.1.0",
     "recursive-copy": "^2.0.10"
   },
   "devDependencies": {
