@@ -34,11 +34,11 @@ async function run (node, cmd, op, p1, p2, p3) {
   }
 
   async function installKit (kitName) {
-    const kitDir = `${__dirname}/../kits/${kitName}`
+    const kitPath = `${__dirname}/../kits/${kitName}`
     const kitInstallFile = `${__dirname}/../installed/${kitName}`
 
     // Check if kit is available
-    if (!isDir(kitDir)) {
+    if (!isDir(kitPath)) {
       console.log(`FATAL: Kit not found: ${kitName}`)
       process.exit(1)
     }
@@ -50,7 +50,7 @@ async function run (node, cmd, op, p1, p2, p3) {
     }
 
     // Install dependendencies first
-    const kitPackageJson = require(`${kitDir}/kit.json`)
+    const kitPackageJson = require(`${kitPath}/kit.json`)
     const deps = kitPackageJson.kitDependencies || []
     if (deps.length) console.log('This module has dependencies. Installing them.', deps)
     for (const kitName of deps) {
@@ -62,33 +62,34 @@ async function run (node, cmd, op, p1, p2, p3) {
     console.log('Installing:', kitName)
 
     // STEP #1: copy files over
-    if (isDir(`${kitDir}/distr`)) {
+    if (isDir(`${kitPath}/distr`)) {
       console.log('"distr" folder found, copying files over')
-      copyRecursiveSync(`${kitDir}/distr`, dstPath, true)
+      copyRecursiveSync(`${kitPath}/distr`, dstPath, true)
     }
 
     // STEP #1: copy files over
-    if (isDir(`${kitDir}/distr-opt`)) {
+    if (isDir(`${kitPath}/distr-opt`)) {
       console.log('"distr-opt" folder (optional files) found, copying files over')
-      copyRecursiveSync(`${kitDir}/distr-opt`, dstPath, false)
+      copyRecursiveSync(`${kitPath}/distr-opt`, dstPath, false)
     }
 
     // Add dependencies and devDependencies
     dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDependencies', dstPackageJson, 'dependencies') || dstPackageJsonChanged
     dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDevDependencies', dstPackageJson, 'devDependencies') || dstPackageJsonChanged
 
-    // STEP $3: make requested inserts in destination files
+    // Carry ong requested inserts in destination files
     const inserts = kitPackageJson.inserts || []
     for (const insert of inserts) {
       const point = insert.point
       const file = insert.file
-      const contents = fs.readFileSync(path.join(kitDir, 'inserts', insert.contents))
+      const contents = fs.readFileSync(path.join(kitPath, 'inserts', insert.contents))
 
       await replaceInFile({
         files: path.join(dstPath, file),
         from: point,
         to: point + '\n' + contents
       })
+      console.log(`Contents of ${insert.contents} added to injectionj point in ${file}`)
     }
 
     // Mark it as installed in metadata (create lock file)
