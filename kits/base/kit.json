@@ -7,5 +7,20 @@
   ],
   "npmDependencies": {
     "lit-element":"2.1.1"
-  }
+  },
+  "npmDevDependencies": {
+    "stocazzo": "1.1.1"
+  },
+  "inserts": [
+    {
+      "point": "### Something here ###",
+      "contents": "somethingText.js",
+      "file": "app.js"
+    },
+    {
+      "point": "### Something else here ###",
+      "contents": "somethingElseText.js",
+      "file": "app.js"
+    }
+  ]
 }

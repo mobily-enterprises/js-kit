@@ -12,7 +12,8 @@
   },
   "dependencies": {
     "pkg-up": "^3.1.0",
-    "recursive-copy": "^2.0.10"
+    "recursive-copy": "^2.0.10",
+    "replace-in-file": "^6.1.0"
   },
   "devDependencies": {
     "eslint": "^7.4.0",

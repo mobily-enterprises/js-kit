@@ -3,6 +3,7 @@
 const fs = require('fs')
 const path = require('path')
 const pkgUp = require('pkg-up')
+const replaceInFile = require('replace-in-file')
 
 // This is a module-wide variable. It will be set on run(),
 // since it's an async function
@@ -72,29 +73,23 @@ async function run (node, cmd, op, p1, p2, p3) {
       copyRecursiveSync(`${kitDir}/distr-opt`, dstPath, false)
     }
 
-    // STEP #2: dd npmDependencies to package.json (if not there already)
-    // Just modify dstPackageJson
-    let dstNpmDependencies
-    if (typeof dstPackageJson.dependencies === 'undefined') {
-      dstNpmDependencies = dstPackageJson.dependencies = {}
-    } else {
-      dstNpmDependencies = dstPackageJson.dependencies
-    }
-    const kitNpmDependencies = kitPackageJson.npmDependencies || {}
-    for (const depName in kitNpmDependencies) {
-      if (typeof dstNpmDependencies[depName] === 'undefined') {
-        console.log('Adding npm dependency: ' + depName)
-        dstNpmDependencies[depName] = kitNpmDependencies[depName]
-        dstPackageJsonChanged = true
-      } else {
-        console.log('Non adding npm dependency as it was already there: ' + depName)
-      }
-    }
-
-    // STEP #2a: Repeat the above for devDependencies
-    // Note: make code generic
+    // Add dependencies and devDependencies
+    dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDependencies', dstPackageJson, 'dependencies') || dstPackageJsonChanged
+    dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDevDependencies', dstPackageJson, 'devDependencies') || dstPackageJsonChanged
 
     // STEP $3: make requested inserts in destination files
+    const inserts = kitPackageJson.inserts || []
+    for (const insert in inserts) {
+      const point = insert.point
+      const contents = fs.readFileSync(insert.contents)
+      const file = insert.file
+
+      await replaceInFile({
+        files: path.join(kitDir, file),
+        from: point,
+        to: point + '\n' + contents
+      })
+    }
 
     // Mark it as installed in metadata (create lock file)
     fs.writeFileSync(kitInstallFile, kitPackageJson.version)
@@ -114,6 +109,28 @@ async function run (node, cmd, op, p1, p2, p3) {
       if (e.code === 'ENOENT') return false
       throw e
     }
+  }
+
+  function copyKeys (src, srcProp, dst, dstProp) {
+    let changed = false
+    let dstObject
+    if (typeof dst[dstProp] === 'undefined') {
+      dstObject = dst[dstProp] = {}
+    } else {
+      dstObject = dst[dstProp]
+    }
+    const srcObject = src[srcProp] || {}
+
+    for (const key in srcObject) {
+      if (typeof dstObject[key] === 'undefined') {
+        console.log(`Adding key to ${dstProp}: ${key}`)
+        dstObject[key] = srcObject[key]
+        changed = true
+      } else {
+        console.log(`Non adding key ${key} in ${dstProp} as it was already there`)
+      }
+    }
+    return changed
   }
 
   function copyRecursiveSync (src, dest, force = true) {
