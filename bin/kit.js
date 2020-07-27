@@ -79,13 +79,13 @@ async function run (node, cmd, op, p1, p2, p3) {
 
     // STEP $3: make requested inserts in destination files
     const inserts = kitPackageJson.inserts || []
-    for (const insert in inserts) {
+    for (const insert of inserts) {
       const point = insert.point
-      const contents = fs.readFileSync(insert.contents)
       const file = insert.file
+      const contents = fs.readFileSync(path.join(kitDir, 'inserts', insert.contents))
 
       await replaceInFile({
-        files: path.join(kitDir, file),
+        files: path.join(dstPath, file),
         from: point,
         to: point + '\n' + contents
       })
