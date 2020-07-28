@@ -1,0 +1,12 @@
+{
+  "serverPort": 8080,
+  "db": {
+    "dbPort": 3306,
+    "dbHost": "localhost",
+    "db": "js-kit",
+    "dbUser":"root",
+    "dbPassword":""
+  },
+  "artificialDelay": 0,
+  "redirectHost": "localhost:8443"
+}

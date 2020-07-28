@@ -1,0 +1,3 @@
+SOME
+THING
+TEXT
