@@ -5,20 +5,42 @@
    "author":"Tony Mobily",
    "kitDependencies":[
    ],
-   "manipulateJson": {
-      "package.json": {
-        "set":{
-           "scripts.start":"SERVE_BUILT=true NODE_ENV=production node server/www",
-           "scripts.start:dev":"node server/www",
-           "scripts.start:dev:debug":"node --inspect-brk server/www ",
-           "scripts.start:dev:built":"SERVE_BUILT=true node server/www",
-           "dependencies.DEP1":"^3.1.0",
-           "devDependencies.DEVDEP1":"^4.1.0"
-        },
-        "unset":[
-           "scripts.start:build"
-        ]
-      }
+   "manpulate": {
+     "json": {
+       "package.json": {
+         "set":{
+            "scripts.start":"SERVE_BUILT=true NODE_ENV=production node server/www",
+            "scripts.start:dev":"node server/www",
+            "scripts.start:dev:debug":"node --inspect-brk server/www ",
+            "scripts.start:dev:built":"SERVE_BUILT=true node server/www",
+            "dependencies.DEP1":"^3.1.0",
+            "devDependencies.DEVDEP1":"^4.1.0"
+         },
+         "unset":[
+            "scripts.start:build"
+         ]
+       }
+     },
+     "text": {
+       "app.js": {
+         "op": "insert-after",
+         "point": "### Something here ###",
+         "contents": "somethingTextAfter.js",
+       },
+
+       "app.js": {
+         "op": "insert-before",
+         "point": "### Something here ###",
+         "contents": "somethingTextBefore.js",
+       },
+
+       "app.js": {
+         "op": "replace",
+         "from": "a",
+         "to": "b",
+       }
+     }
+
    },
    "packageJson":{
       "set":{
