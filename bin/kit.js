@@ -4,6 +4,9 @@ const fs = require('fs')
 const path = require('path')
 const pkgUp = require('pkg-up')
 const replaceInFile = require('replace-in-file')
+const setValue = require('set-value')
+const getValue = require('get-value')
+const unsetValue = require('unset-value')
 
 // This is a module-wide variable. It will be set on run(),
 // since it's an async function
@@ -35,7 +38,15 @@ async function run (node, cmd, op, p1, p2, p3) {
 
   async function installKit (kitName) {
     const kitPath = `${__dirname}/../kits/${kitName}`
-    const kitInstallFile = `${__dirname}/../installed/${kitName}`
+    const kitInstallDir = `${dstPath}/jsKitInstalled`
+    const kitInstallFile = `${kitInstallDir}/${kitName}`
+
+    console.log('STOCAZZO', kitInstallFile)
+
+    // Check if kit is already installed
+    if (!isDir(kitInstallDir)) {
+      fs.mkdirSync(kitInstallDir)
+    }
 
     // Check if kit is available
     if (!isDir(kitPath)) {
@@ -73,9 +84,8 @@ async function run (node, cmd, op, p1, p2, p3) {
       copyRecursiveSync(`${kitPath}/distr-opt`, dstPath, false)
     }
 
-    // Add dependencies and devDependencies
-    dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDependencies', dstPackageJson, 'dependencies') || dstPackageJsonChanged
-    dstPackageJsonChanged = copyKeys(kitPackageJson, 'npmDevDependencies', dstPackageJson, 'devDependencies') || dstPackageJsonChanged
+
+    dstPackageJsonChanged = manipulate(kitPackageJson, 'packageJson', dstPackageJson)
 
     // Carry ong requested inserts in destination files
     const inserts = kitPackageJson.inserts || []
@@ -112,25 +122,45 @@ async function run (node, cmd, op, p1, p2, p3) {
     }
   }
 
-  function copyKeys (src, srcProp, dst, dstProp) {
+  function manipulate (o, k, dst) {
+    debugger
+    if (o[k] === null || typeof o[k] !== 'object') return
+    o = o[k]
     let changed = false
-    let dstObject
-    if (typeof dst[dstProp] === 'undefined') {
-      dstObject = dst[dstProp] = {}
-    } else {
-      dstObject = dst[dstProp]
-    }
-    const srcObject = src[srcProp] || {}
 
-    for (const key in srcObject) {
-      if (typeof dstObject[key] === 'undefined') {
-        console.log(`Adding key to ${dstProp}: ${key}`)
-        dstObject[key] = srcObject[key]
-        changed = true
-      } else {
-        console.log(`Non adding key ${key} in ${dstProp} as it was already there`)
+    for (const op in o) {
+      switch (op) {
+        case 'setIfNotThere':
+          for (const key in o[op]) {
+            if (typeof getValue(dst, key) === 'undefined') {
+              setValue(dst, key, o[op][key])
+              changed = true
+            }
+          }
+          break
+
+        case 'set':
+          for (const key in o[op]) {
+            setValue(dst, key, o[op][key])
+            changed = true
+          }
+          break
+
+        case 'unset':
+          for (const key of o[op]) {
+            unsetValue(dst, key)
+            changed = true
+          }
+          break
+        case 'pushIfNotThere':
+        case 'push':
+        case 'pull':
+          break
+        default:
+          console.log('Invalid operation in object manipulation:', k, op)
       }
     }
+
     return changed
   }
 
