@@ -8,6 +8,8 @@ X Add way to copy files over to main repo
 X Add way to add which packages will be added to the main repo
 X Duplicate dependencies code to devDependencies
 X Allow string injection in kit.json (from "injections" folder, referenced in kit.json)
+* Change kit.json format so that it's generic, make it work
+* Allow running of post-install, post-manipulation functions with access to all variables and functions
 * server
   * write initial server (server directory, change 'start' in main package.json)
   * Add readline-sync questions for DB setup (use post-install.sh in scripts)
