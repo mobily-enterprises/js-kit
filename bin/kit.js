@@ -84,7 +84,6 @@ async function run (node, cmd, op, p1, p2, p3) {
       copyRecursiveSync(`${kitPath}/distr-opt`, dstPath, false)
     }
 
-
     dstPackageJsonChanged = manipulate(kitPackageJson, 'packageJson', dstPackageJson)
 
     // Carry ong requested inserts in destination files
