@@ -3,30 +3,5 @@
   "description": "JS Kit repository",
   "version": "0.0.2",
   "repository": "mobily-enterprises/js-kit",
-  "scripts": {},
-  "engines": {
-    "node": "10.x.x"
-  },
-  "bin": {
-    "js-kit": "./bin/kit.js"
-  },
-  "dependencies": {
-    "pkg-up": "^3.1.0",
-    "recursive-copy": "^2.0.10",
-    "replace-in-file": "^6.1.0",
-    "get-value": "^3.0.1",
-    "set-value": "^3.0.2",
-    "unset-value": "^1.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.4.0",
-    "eslint-config-standard": "^14.1.1",
-    "eslint-plugin-html": "^6.0.2",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-lit": "^1.2.0",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1",
-    "standard": "^14.3.4"
-  }
+  "forScaffoldizer": true
 }
