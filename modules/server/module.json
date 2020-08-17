@@ -1,0 +1,79 @@
+{
+   "name":"server",
+   "version":"1.0.0",
+   "description":"js-kit base server with stores support",
+   "author":"Tony Mobily",
+   "moduleDependencies":[
+      "server-base"
+   ],
+   "manpulate":{
+      "json":{
+         "package.json":[
+            {
+               "op":"set",
+               "key":"scripts.start",
+               "value":"SERVE_BUILT=true NODE_ENV=production node server/www"
+            },
+            {
+               "op":"set",
+               "key":"scripts.start:dev",
+               "value":"node server/www"
+            },
+            {
+               "op":"set",
+               "key":"scripts.start:dev:debug",
+               "value":"node --inspect-brk server/www"
+            },
+            {
+               "op":"set",
+               "key":"scripts.start:dev:built",
+               "value":"SERVE_BUILT=true node server/www"
+            },
+            {
+               "op":"set",
+               "key":"dependencies.DEP1",
+               "value":"3.1.0"
+            },
+            {
+               "op":"set",
+               "key":"dependencies.DEP2",
+               "value":"4.1.0"
+            },
+            {
+               "op":"unset",
+               "key":"scripts.start:build"
+            },
+            {
+               "op":"set",
+               "key":"postInstall",
+               "value":"cd server; npm install"
+            }
+         ]
+      },
+      "text":{
+         "app.js":[
+            {
+               "op":"insert",
+               "position":"after",
+               "newlineBefore":true,
+               "newlineAfter":true,
+               "point":"### Something here ###",
+               "contentsFromFile":"somethingTextAfter.js"
+            },
+            {
+               "op":"insert",
+               "position":"before",
+               "newlineBefore":true,
+               "newlineAfter":true,
+               "point":"### Something here ###",
+               "contentsFromFile":"somethingTextBefore.js"
+            },
+            {
+               "op":"replace",
+               "from":"a",
+               "to":"b"
+            }
+         ]
+      }
+   }
+}
