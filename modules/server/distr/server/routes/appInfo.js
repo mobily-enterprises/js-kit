@@ -2,13 +2,13 @@ const vars = require('../vars') /* eslint-disable-line */
 const JsonRestStores = require('jsonreststores') /* eslint-disable-line */
 
 // Used so that pages can load /routes/appInfo.js and get a JSON with session info
-exports = module.exports = async (req, res, next) => {
+exports = async (req, res) => {
   const appInfo = await exports.appInfoGetter(req)
   res.type('application/javascript')
-  res.status(200).send('window.APPINFO = ' + JSON.stringify(appInfo))
+  res.status(200).send(`window.APPINFO = ${JSON.stringify(appInfo)}`)
 }
 
-exports.appInfoGetter = async function (req) {
+exports.appInfoGetter = async () => {
   const config = {
     env: process.env.NODE_ENV
   }
@@ -19,3 +19,4 @@ exports.appInfoGetter = async function (req) {
 
   return config
 }
+module.exports = exports

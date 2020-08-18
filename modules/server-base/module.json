@@ -1,8 +1,0 @@
-{
-   "name":"server-base",
-   "version":"1.0.0",
-   "description":"Server base",
-   "author":"Tony Mobily",
-   "kitDependencies":[
-   ]
-}

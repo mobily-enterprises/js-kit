@@ -1,7 +1,7 @@
 {
   "name": "js-kit",
   "description": "JS Kit repository",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "repository": "mobily-enterprises/js-kit",
   "forScaffoldizer": true
 }

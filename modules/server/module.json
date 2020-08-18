@@ -1,12 +1,10 @@
 {
    "name":"server",
    "version":"1.0.0",
-   "description":"js-kit base server with stores support",
+   "description":"js-kit base server with stores support, but no database",
    "author":"Tony Mobily",
-   "moduleDependencies":[
-      "server-base"
-   ],
-   "manpulate":{
+   "showInMenu": true,
+   "manipulate":{
       "json":{
          "package.json":[
             {
@@ -31,49 +29,12 @@
             },
             {
                "op":"set",
-               "key":"dependencies.DEP1",
-               "value":"3.1.0"
-            },
-            {
-               "op":"set",
-               "key":"dependencies.DEP2",
-               "value":"4.1.0"
-            },
-            {
-               "op":"unset",
-               "key":"scripts.start:build"
-            },
-            {
-               "op":"set",
                "key":"postInstall",
                "value":"cd server; npm install"
             }
          ]
       },
       "text":{
-         "app.js":[
-            {
-               "op":"insert",
-               "position":"after",
-               "newlineBefore":true,
-               "newlineAfter":true,
-               "point":"### Something here ###",
-               "contentsFromFile":"somethingTextAfter.js"
-            },
-            {
-               "op":"insert",
-               "position":"before",
-               "newlineBefore":true,
-               "newlineAfter":true,
-               "point":"### Something here ###",
-               "contentsFromFile":"somethingTextBefore.js"
-            },
-            {
-               "op":"replace",
-               "from":"a",
-               "to":"b"
-            }
-         ]
       }
    }
 }

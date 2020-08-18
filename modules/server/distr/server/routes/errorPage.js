@@ -1,11 +1,10 @@
 const vars = require('../vars')
 
-exports = module.exports = function (err, req, res, next) {
-  console.error('ERROR IS:', err.status, err)
+exports = (err, req, res) => {
 
   // Log the error in the `errors` table
-  vars.connection.query('INSERT INTO errors SET name=?, message=?, stackTrace=?', [err.name, err.message, err.stack], function (err) {
-    if (err) console.error('UNABLE TO LOG THIS ERROR:', err)
+  vars.connection.query('INSERT INTO errors SET name=?, message=?, stackTrace=?', [err.name, err.message, err.stack], (error) => {
+    if (error) console.error('UNABLE TO LOG THIS ERROR:', error) /* eslint-disable-line */
   })
 
   // Set local variables, depending on the env
@@ -22,3 +21,4 @@ exports = module.exports = function (err, req, res, next) {
     // render the error page
   }
 }
+module.exports = exports

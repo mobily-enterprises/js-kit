@@ -1,12 +1,13 @@
 #!/usr/bin/env node
+/* eslint-disable */
 
 /**
  * Module dependencies.
  */
 
-const app = require('./app.js')
 const debug = require('debug')('p:server')
 const http = require('http')
+const app = require('./app.js')
 
 /**
  * Get port from environment and store in Express.
@@ -88,3 +89,4 @@ function onListening () {
     : 'port ' + addr.port
   debug('Listening on ' + bind)
 }
+/* eslit-enable */

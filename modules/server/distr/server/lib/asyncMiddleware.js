@@ -1,4 +1,4 @@
-exports = module.exports = fn =>
+exports =fn =>
   async (req, res, next) => {
     try {
       await fn(req, res, next)
@@ -6,3 +6,4 @@ exports = module.exports = fn =>
       next(e)
     }
   }
+module.exports = exports

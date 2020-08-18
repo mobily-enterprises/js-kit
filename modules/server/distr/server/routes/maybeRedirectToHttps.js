@@ -2,7 +2,7 @@ const originalUrl = require('original-url')
 const e = require('allhttperrors')
 
 // Redirect to HTTPS
-exports = module.exports = (req, res, next) => {
+exports = (req, res, next) => {
   const url = originalUrl(req)
   if (!req.secure && url.protocol !== 'https:' && process.env.NODE_ENV === 'production') {
     if (req.method === 'GET') {
@@ -14,3 +14,4 @@ exports = module.exports = (req, res, next) => {
     next()
   }
 }
+module.exports = exports

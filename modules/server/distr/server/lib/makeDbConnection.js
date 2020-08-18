@@ -1,7 +1,7 @@
 const mysql = require('mysql')
-const promisify = require('util').promisify
+const { promisify } = require('util')
 
-exports = module.exports = function (config) {
+exports = (config) => {
   // Create a pool based on the passed config
   const ret = mysql.createPool({
     host: config.dbHost,
@@ -13,7 +13,9 @@ exports = module.exports = function (config) {
 
   // Promisify async methods, to make this module less painful to use
   for (const method of ['getConnection', 'acquireConnection', 'end', 'query']) {
-    ret[method + 'P'] = promisify(ret[method])
+    ret[`${method}P`] = promisify(ret[method])
   }
   return ret
 }
+
+module.exports = exports

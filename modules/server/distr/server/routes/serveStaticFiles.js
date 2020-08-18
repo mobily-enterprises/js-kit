@@ -1,20 +1,21 @@
 const fs = require('fs')
-const vars = require('./vars')
 const express = require('express')
-const esDevServer = require('es-dev-server')
+const esDevServer = require('es-dev-server') /* eslint-disable-line */
+const Koa = require('koa')
+const vars = require('../vars')
 
-exports = module.exports = function (app) {
+exports =  (app) => {
   function safeConfigOutput (o) {
-    o = { ...o }
-    delete o.db.dbPassword
-    return o
+    const oCopy = { ...o }
+    delete oCopy.db.dbPassword
+    return oCopy
   }
 
   const serveBuilt = process.env.SERVE_BUILT
 
   // Show what environment is running
-  console.log('Running application as:', process.env.NODE_ENV || 'development')
-  console.log('Config:\n', safeConfigOutput(vars.config))
+  console.log('Running application as:', process.env.NODE_ENV || 'development') /* eslint-disable-line */
+  console.log('Config:\n', safeConfigOutput(vars.config)) /* eslint-disable-line */
 
   // Serve the built version EITHER if it's a non-dev environments OR if serveBuilt is set
   if (serveBuilt) {
@@ -29,11 +30,10 @@ exports = module.exports = function (app) {
     // Serve the local unbuilt directory using Polyserve as a module
   } else {
     if (fs.existsSync('distributed')) {
-      console.error('ERROR: cannot serve unbuilt directory from distributed environment')
+      console.error('ERROR: cannot serve unbuilt directory from distributed environment') /* eslint-disable-line */
       process.exit(99)
     }
 
-    const Koa = require('koa')
     const config = esDevServer.createConfig({
       nodeResolve: true,
       appIndex: 'index.html',
@@ -49,3 +49,4 @@ exports = module.exports = function (app) {
     app.use(koaApp.callback())
   }
 }
+module.exports = exports

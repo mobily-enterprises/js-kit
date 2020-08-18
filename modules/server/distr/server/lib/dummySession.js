@@ -1,1 +1,2 @@
-exports = module.exports = { loggedIn: true }
+exports = { loggedIn: true }
+module.exports = exports

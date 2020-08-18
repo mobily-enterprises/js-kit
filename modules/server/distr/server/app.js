@@ -1,22 +1,29 @@
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const logger = require('morgan')
-const vars = require('./vars.js')
-const expressSession = require('express-session')
-const expressMySqlSession = require('express-mysql-session')
-const makeDbConnection = require('./lib/makeDbConnection.js')
-const serveStaticFiles = require('./routes/serveStaticFiles.js')
+// const expressSession = require('express-session')
+// const expressMySqlSession = require('express-mysql-session')
+const JsonRestStores = require('jsonreststores')
+// "jsonreststores-mysql": "^2.x.x"
 const e = require('allhttperrors')
 const path = require('path')
 const errorPageRoute = require('./routes/errorPage')
-const JsonRestStores = require('jsonreststores')
+const vars = require('./vars.js')
+// const makeDbConnection = require('./lib/makeDbConnection.js')
+const serveStaticFiles = require('./routes/serveStaticFiles.js')
 const maybeRedirectToHttps = require('./routes/maybeRedirectToHttps')
 const asyncMiddleware = require('./lib/asyncMiddleware') /*  eslint-disable-line */
 
+// "express-mysql-session": "^2.1.3",
+// "express-session": "^1.16.1",
+// "mime": "^2.4.5",
+// "debug": "^4.1.1",
+// "mysql": "^2.17.1",
+
 // Print unhandled exception if it happens. This will prevent unmanaged
 // errors going silent
-process.on('unhandledRejection', (e, p) => {
-  console.log('UNHANDLED REJECTION!', e, 'PROMISE:', p)
+process.on('unhandledRejection', (err, p) => {
+  console.log('UNHANDLED REJECTION!', err, 'PROMISE:', p) /* eslint-disable-line  */
 })
 
 // Create the express app
@@ -36,6 +43,7 @@ app.use(express.json({ limit: '4mb' }))
 app.use(express.urlencoded({ limit: '4mb', extended: false }))
 app.use(cookieParser())
 
+/*
 // Make up the session store and the session
 vars.connection = makeDbConnection(vars.config.db)
 const MySQLStore = expressMySqlSession(expressSession)
@@ -48,6 +56,7 @@ const session = expressSession({
   saveUninitialized: false,
   cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 * 26 }
 })
+*/
 
 /* ### STATIC FILES ### */
 
@@ -59,7 +68,7 @@ serveStaticFiles(app)
 
 // Set the session. This happens after static files, otherwise
 // the sessions table will be potentially _very_ polluted
-app.use(session)
+// app.use(session)
 
 /* ### ROUTES ### */
 
@@ -74,7 +83,7 @@ app.use(errorPageRoute)
 // Artificially call the errorPageRoute as "not found"
 app.use((req, res) => errorPageRoute(new e.NotFoundError(), req, res))
 
-app._readyChecker = async function () {
+app._readyChecker = async () => {
   /* ### BEGIN OF READY CHECKER ### */
 
   /* ### END OF READY CHECKER ### */
