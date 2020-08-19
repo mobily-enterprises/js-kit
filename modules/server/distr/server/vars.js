@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 const env = process.env.NODE_ENV || 'development'
-const config = JSON.parse(fs.readFileSync(`./envConfig/${env}`, 'utf8')) /* eslint-disable-line */
+const config = JSON.parse(fs.readFileSync(`${__dirname}/envConfig/${env}.json`, 'utf8')) /* eslint-disable-line */
 
 // If PORT is set, then use it. Services like HEROKU or Amazon will set it for you
 if (process.env.PORT) {

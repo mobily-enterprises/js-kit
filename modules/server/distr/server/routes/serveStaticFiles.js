@@ -4,7 +4,7 @@ const esDevServer = require('es-dev-server') /* eslint-disable-line */
 const Koa = require('koa')
 const vars = require('../vars')
 
-exports =  (app) => {
+exports = (app) => {
   function safeConfigOutput (o) {
     const oCopy = { ...o }
     delete oCopy.db.dbPassword
