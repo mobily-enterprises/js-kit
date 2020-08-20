@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "description": "DB support for server stores",
   "author": "Tony Mobily",
-  "showInMenu": false,
   "moduleDependencies":[
     "server-stores",
     "db"
   ],
+  "position": 140,
+  "shortListed": true,
+  "positionInShortList": 20,
   "manipulate":{
     "json":{
        "server/package.json":[

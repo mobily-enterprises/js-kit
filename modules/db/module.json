@@ -3,10 +3,10 @@
    "version":"1.0.0",
    "description":"DB support for JS-KIT (mysql)",
    "author":"Tony Mobily",
-   "showInMenu":false,
    "moduleDependencies":[
       "server"
    ],
+   "position": 120,
    "manipulate":{
       "json":{
          "server/package.json":[

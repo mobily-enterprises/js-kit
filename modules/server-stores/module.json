@@ -3,10 +3,10 @@
    "version":"1.0.0",
    "description":"Server stores support JS-KIT",
    "author":"Tony Mobily",
-   "showInMenu":false,
    "moduleDependencies":[
       "server"
    ],
+   "position": 110,   
    "manipulate":{
       "json":{
          "server/package.json":[
