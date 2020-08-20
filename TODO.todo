@@ -1,17 +1,17 @@
-☐ server
+✔ server @done(2020-08-21 07:13)
   ✔ write initial server (server directory, change 'start' in main package.json) @done(2020-08-19 07:55)
   ✔ Make sure basic open-wc app runs @done(2020-08-19 07:56)
   ✔ Add DB/session/serverstores module with prompts questions for DB setup @done(2020-08-20 09:35)
-  ☐ Add basic client module, working with or without open-wc (tpe app with tabs)
-  ☐ Exit everything on ctrl-c on input (prompts)
-  ☐ Change the way initial setup works
-    ☐ Two lists: one of "super-packages", and one of "optional ones" (set in package.json)
-    ☐ Allow positioning of modules (position field in package.json)
-    ☐ Allow multi-select for optional ones
-    ☐ Make it possible to add multiple modules via cmd (commander)
-    ☐ Blank out already installed packages
-  ☐ Change "// *** -- start" into self-contained blocks /* */
-  ☐ Generally tidy up, improve code, start documenting it as literate code
+  ✔ Exit everything on ctrl-c on input (prompts) @done(2020-08-21 07:05)
+✔ Change the way initial setup works @done(2020-08-21 07:34)
+  ✔ Two lists: one of "super-packages", and one of "optional ones" (set in package.json) @done(2020-08-21 06:45)
+  ✔ Allow multi-select for optional ones @done(2020-08-21 07:05)
+  ✔ Allow positioning of modules (position field in package.json) @done(2020-08-21 07:05)
+  ✔ Make it possible to add multiple modules via cmd (commander) and UI @done(2020-08-21 07:12)
+  ✔ Blank out already installed packages @done(2020-08-21 07:34)
+☐ Add basic client module, working with or without open-wc (tpe app with tabs)
+☐ Change "// *** -- start" into self-contained blocks /* */
+☐ Generally tidy up, improve code, start documenting it as literate code
 ☐ Figure out how to change eslint rules in open-wc
 ☐ Organise literate documentation to module code
 ☐ Add initial docco-next documentation generation to js-kit
