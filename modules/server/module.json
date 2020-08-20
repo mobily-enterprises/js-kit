@@ -29,7 +29,7 @@
             },
             {
                "op":"set",
-               "key":"postInstall",
+               "key":"scripts.postinstall",
                "value":"cd server; npm install"
             }
          ]

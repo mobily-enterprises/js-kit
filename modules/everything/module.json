@@ -1,0 +1,11 @@
+{
+   "name":"everything",
+   "version":"1.0.0",
+   "description":"DB support for JS-KIT (mysql)",
+   "author":"Tony Mobily",
+   "showInMenu":false,
+   "moduleDependencies":[
+      "server-stores-db",
+      "db-sessions"
+   ]
+}

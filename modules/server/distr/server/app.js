@@ -1,94 +1,70 @@
+// Global (installed) modules -- start
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const logger = require('morgan')
-// const expressSession = require('express-session')
-// const expressMySqlSession = require('express-mysql-session')
-const JsonRestStores = require('jsonreststores')
-// "jsonreststores-mysql": "^2.x.x"
 const e = require('allhttperrors')
 const path = require('path')
+// Global (installed) modules -- end
+
+// Local modules -- start
 const errorPageRoute = require('./routes/errorPage')
-const vars = require('./vars.js')
-// const makeDbConnection = require('./lib/makeDbConnection.js')
+const vars = require('./vars.js') /*  eslint-disable-line */
 const serveStaticFiles = require('./routes/serveStaticFiles.js')
 const maybeRedirectToHttps = require('./routes/maybeRedirectToHttps')
-const asyncMiddleware = require('./lib/asyncMiddleware') /*  eslint-disable-line */
-
-// "express-mysql-session": "^2.1.3",
-// "express-session": "^1.16.1",
-// "mime": "^2.4.5",
-// "debug": "^4.1.1",
-// "mysql": "^2.17.1",
+const asyncMiddleware = require('./lib/asyncMiddleware')
+// Local modules -- end
 
 // Print unhandled exception if it happens. This will prevent unmanaged
 // errors going silent
 process.on('unhandledRejection', (err, p) => {
-  console.log('UNHANDLED REJECTION!', err, 'PROMISE:', p) /* eslint-disable-line  */
+  console.log('UNHANDLED REJECTION!', err, 'PROMISE:', p)
 })
 
-// Create the express app
-const app = express()
+// Before app is created -- start
+// Before app is created -- end
 
-// This will be used by the `www` executable to set the server port
-app._serverPort = vars.config.serverPort
+const app = express() // Create the express app
 
-// Redirect to HTTPS for production
-app.use(maybeRedirectToHttps)
+// After app is created -- start
+// After app is created -- end
 
-// Enable the logger
-app.use(logger())
+// Ready checker. This allows app.js (this file) to complete async work
+// before the server is actually started (in ./www)
+app._readyChecker = async () => {
+  /* Ready checker -- start */
+  /* Ready checker -- end */
+  return true
+}
 
-// Make up request.body, based on urlencoded or json inputs
-app.use(express.json({ limit: '4mb' }))
-app.use(express.urlencoded({ limit: '4mb', extended: false }))
-app.use(cookieParser())
+// Standard express stuff -- start
+app.use(maybeRedirectToHttps) // Redirect to HTTPS for production
+app.use(logger()) // Enable the logger
+app.use(express.json({ limit: '4mb' })) // Make up request.body, json
+app.use(express.urlencoded({ limit: '4mb', extended: false })) // // Make up request.body, urlencoded
+app.use(cookieParser()) // Cookie parser
+// Standard express stuff -- end
 
-/*
-// Make up the session store and the session
-vars.connection = makeDbConnection(vars.config.db)
-const MySQLStore = expressMySqlSession(expressSession)
-const sessionStore = new MySQLStore({}, vars.connection)
-const session = expressSession({
-  key: 'js-kit',
-  secret: 'YOU NEED TO CHANGE THIS',
-  store: sessionStore,
-  resave: false,
-  saveUninitialized: false,
-  cookie: { maxAge: 1000 * 60 * 60 * 24 * 7 * 26 }
-})
-*/
+// Before serving static files -- start
+// Before serving static files -- end
 
-/* ### STATIC FILES ### */
-
-// Will serve the app using using es-dev-server (debugging, unbuilt) or
-// always serving index.html
+// Will serve the app's static files using using es-dev-server (debugging, unbuilt) or
+// always serving index.html manually
 serveStaticFiles(app)
 
-/* ### SESSION ### */
+// After static files -- start
+// After static files -- end
 
-// Set the session. This happens after static files, otherwise
-// the sessions table will be potentially _very_ polluted
-// app.use(session)
+// Routes -- start
+// Routes -- 1
+// Routes -- 2
+// Routes -- 3
+// Routes -- end
 
-/* ### ROUTES ### */
-
-/* ### STORES ### */
-
-// Automatically include all stores in stores/2.0 and listen to them all
-JsonRestStores.requireStoresFromPath(path.join(__dirname, 'stores/1.0'), app)
-
-// Error handler page
+// Error handler page. Express will route here when there is an error,
+// since errorPageRoute has 4 parameters (err, req, res, next)
 app.use(errorPageRoute)
 
 // Artificially call the errorPageRoute as "not found"
 app.use((req, res) => errorPageRoute(new e.NotFoundError(), req, res))
 
-app._readyChecker = async () => {
-  /* ### BEGIN OF READY CHECKER ### */
-
-  /* ### END OF READY CHECKER ### */
-  return true
-}
-
-// app.use(express.static(path.join(__dirname, 'public')));
 module.exports = app

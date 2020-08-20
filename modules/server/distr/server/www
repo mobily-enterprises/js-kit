@@ -8,12 +8,14 @@
 const debug = require('debug')('p:server')
 const http = require('http')
 const app = require('./app.js')
+const vars = require('./vars.js')
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(app._serverPort)
+ // This will be used by the `www` executable to set the server port
+const port = normalizePort(vars.config.serverPort)
 app.set('port', port)
 
 /**

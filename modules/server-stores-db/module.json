@@ -1,0 +1,22 @@
+{
+  "name": "server-stores-db",
+  "version": "1.0.0",
+  "description": "DB support for server stores",
+  "author": "Tony Mobily",
+  "showInMenu": false,
+  "moduleDependencies":[
+    "server-stores",
+    "db"
+  ],
+  "manipulate":{
+    "json":{
+       "server/package.json":[
+          {
+             "op":"set",
+             "key":"dependencies.jsonreststores-mysql",
+             "value":"^2.x.x"
+          }
+       ]
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+   "name":"server-stores",
+   "version":"1.0.0",
+   "description":"Server stores support JS-KIT",
+   "author":"Tony Mobily",
+   "showInMenu":false,
+   "moduleDependencies":[
+      "server"
+   ],
+   "manipulate":{
+      "json":{
+         "server/package.json":[
+            {
+               "op":"set",
+               "key":"dependencies.jsonreststores",
+               "value":"^2.x.x"
+            }
+         ]
+      },
+      "text":{
+         "server/app.js":[
+            {
+               "op":"insert",
+               "position":"before",
+               "newlineAfter":true,
+               "anchorPoint":"// Global (installed) modules -- end",
+               "value":"const JsonRestStores = require('jsonreststores')"
+            },
+            {
+               "op":"insert",
+               "position":"before",
+               "newlineAfter":true,
+               "anchorPoint":"/* ### ROUTES -- end ### */",
+               "value":"// Automatically include all stores in stores/2.0 and listen to them all\nJsonRestStores.requireStoresFromPath(path.join(__dirname, 'stores/1.0'), app)\n"
+            }
+         ]
+      }
+   }
+}

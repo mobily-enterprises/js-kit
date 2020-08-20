@@ -1,0 +1,61 @@
+{
+  "name": "db-sessions",
+  "version": "1.0.0",
+  "description": "Database-based sessions for js-kit",
+  "author": "Tony Mobily",
+  "showInMenu": false,
+  "moduleDependencies":[
+    "db"
+  ],
+  "manipulate":{
+    "json":{
+       "server/package.json":[
+          {
+             "op":"set",
+             "key":"dependencies.express-mysql-session",
+             "value":"^2.x.x"
+          },
+          {
+             "op":"set",
+             "key":"dependencies.express-session",
+             "value":"^1.x.x"
+          }
+       ]
+    },
+    "text":{
+       "server/app.js":[
+          {
+             "op":"insert",
+             "position":"before",
+             "newlineAfter":true,
+             "anchorPoint":"// Global (installed) modules -- end",
+             "value":"const expressSession = require('express-session')"
+          },
+          {
+             "op":"insert",
+             "position":"before",
+             "newlineAfter":true,
+             "anchorPoint":"// Global (installed) modules -- end",
+             "value":"const expressMySqlSession = require('express-mysql-session')"
+          },
+
+          {
+             "op":"insert",
+             "position":"before",
+             "newlineAfter":true,
+             "anchorPoint":"// Before serving static files -- end",
+             "valueFromFile":"session.js"
+          },
+
+          {
+             "op":"insert",
+             "position":"after",
+             "newLineBefore": true,
+             "newlineAfter":true,
+             "anchorPoint":"// After static files -- start\n",
+             "value":"\n// Enable sessions, straight after serving static files\napp.use(session)\n"
+          }
+       ]
+    }
+  }
+}

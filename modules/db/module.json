@@ -1,0 +1,66 @@
+{
+   "name":"db",
+   "version":"1.0.0",
+   "description":"DB support for JS-KIT (mysql)",
+   "author":"Tony Mobily",
+   "showInMenu":false,
+   "moduleDependencies":[
+      "server"
+   ],
+   "manipulate":{
+      "json":{
+         "server/package.json":[
+            {
+               "op":"set",
+               "key":"dependencies.mysql",
+               "value":"^2.x.x"
+            }
+         ],
+         "server/envConfig/development.json":[
+            {
+               "op":"set",
+               "key":"db.dbHost",
+               "value":"<%=userInput.db.dbHost%>"
+            },
+            {
+               "op":"set",
+               "key":"db.dbPort",
+               "value":"<%=userInput.db.dbPort%>"
+            },
+            {
+               "op":"set",
+               "key":"db.db",
+               "value":"<%=userInput.db.db%>"
+            },
+            {
+               "op":"set",
+               "key":"db.dbUser",
+               "value":"<%=userInput.db.dbUser%>"
+            },
+            {
+               "op":"set",
+               "key":"db.dbPassword",
+               "value":"<%=userInput.db.dbPassword%>"
+            }
+         ]
+      },
+      "text":{
+         "server/app.js":[
+            {
+               "op":"insert",
+               "position":"before",
+               "newlineAfter":true,
+               "anchorPoint":"// Local modules -- end",
+               "value":"const makeDbConnection = require('./lib/makeDbConnection.js')"
+            },
+            {
+               "op":"insert",
+               "position":"before",
+               "newlineAfter":true,
+               "anchorPoint":"// Before serving static files -- end",
+               "value":"vars.connection = makeDbConnection(vars.config.db)"
+            }
+         ]
+      }
+   }
+}

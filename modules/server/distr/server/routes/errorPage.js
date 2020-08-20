@@ -1,7 +1,6 @@
 const vars = require('../vars')
 
-exports = (err, req, res) => {
-
+exports = (err, req, res, next) => {
   // Log the error in the `errors` table
   vars.connection.query('INSERT INTO errors SET name=?, message=?, stackTrace=?', [err.name, err.message, err.stack], (error) => {
     if (error) console.error('UNABLE TO LOG THIS ERROR:', error) /* eslint-disable-line */
