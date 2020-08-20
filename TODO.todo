@@ -2,8 +2,14 @@
   ✔ write initial server (server directory, change 'start' in main package.json) @done(2020-08-19 07:55)
   ✔ Make sure basic open-wc app runs @done(2020-08-19 07:56)
   ✔ Add DB/session/serverstores module with prompts questions for DB setup @done(2020-08-20 09:35)
+  ☐ Exit everything on ctrl-c on input (prompts)
+  ☐ Change the way initial setup works
+    ☐ Two lists: one of "super-packages", and one of "optional ones" (set in package.json)
+    ☐ Allow multi-select for optional ones
+    ☐ Make it possible to add multiple modules via cmd (commander)
+    ☐ Blank out already installed packages
   ☐ Add basic client module, working with open-wc (tpe app with tabs)
-  ☐ Make it possible to add multiple modules, via cmd line AND via UI
+  ☐ Change "// *** -- start" into self-contained blocks /* */
   ☐ Generally tidy up, improve code, start documenting it as literate code
 ☐ Figure out how to change eslint rules
 ☐ Organise literate documentation to module code
