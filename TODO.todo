@@ -5,6 +5,7 @@
   ☐ Exit everything on ctrl-c on input (prompts)
   ☐ Change the way initial setup works
     ☐ Two lists: one of "super-packages", and one of "optional ones" (set in package.json)
+    ☐ Allow positioning of modules (position field in package.json)
     ☐ Allow multi-select for optional ones
     ☐ Make it possible to add multiple modules via cmd (commander)
     ☐ Blank out already installed packages
@@ -13,7 +14,7 @@
   ☐ Generally tidy up, improve code, start documenting it as literate code
 ☐ Figure out how to change eslint rules
 ☐ Organise literate documentation to module code
-☐ Add initial docco documentation generation to js-kit
+☐ Add initial docco-next documentation generation to js-kit
 ☐ Make list of all missing "kits" to be added
   ☐ reducs
   ☐ user-login (work out DB init queries)
