@@ -1,13 +1,30 @@
 {
-  "name": "client",
-  "version": "1.0.0",
-  "description": "js-kit base client files",
-  "author": "Tony Mobily",
-  "kitDependencies": [
+  "name":"client",
+  "version":"1.0.0",
+  "description":"Basic client files for JS-KIT",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
   ],
-  "npmDependencies": {
-  },
-  "npmDevDependencies": {
-  },
-  "position": 500 
+  "shortListed": true,
+  "positionInShortList": 10,
+  "position": -1,
+  "manipulate":{
+    "text":{
+      "index.html":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/__APP_CODE__.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/__APP_ELEMENT__.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ]
+    }
+  }
 }

@@ -1,3 +1,0 @@
-SOME
-THING
-TEXT
