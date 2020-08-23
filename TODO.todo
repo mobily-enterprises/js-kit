@@ -16,13 +16,13 @@
 ☐ Figure out how to change eslint rules in open-wc
 ☐ Organise literate documentation to module code
 ☐ Add initial docco-next documentation generation to js-kit
+☐ Add new type of reinstallable module, for pages etc.
 ☐ Make list of all missing modules to be added
   ☐ tpe-container (tpe drawer, reducs, historify, routify)
-  ☐ user-login (work out DB init queries)
+  ☐ user-login (with DB init queries)
   ☐ shared-code
   ☐ client-stores
   ☐ ...?
-☐ Add/document missing kits. Each kit to be fully documented properly.
 
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app
