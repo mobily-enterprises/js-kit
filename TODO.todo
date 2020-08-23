@@ -9,14 +9,15 @@
   ✔ Allow positioning of modules (position field in package.json) @done(2020-08-21 07:05)
   ✔ Make it possible to add multiple modules via cmd (commander) and UI @done(2020-08-21 07:12)
   ✔ Blank out already installed packages @done(2020-08-21 07:34)
-☐ Add basic client module, working with or without open-wc (tpe app with tabs)
+✔ Add basic client module, working with or without open-wc (tpe app with tabs) @done(2020-08-22 21:22)
+  ✔ Add "fs" key to module, for file system changes, before-manipulate and after-manipulate, with ops and parameters (rename) @done(2020-08-23 07:29)
 ☐ Change "// *** -- start" into self-contained blocks /* */
 ☐ Generally tidy up, improve code, start documenting it as literate code
 ☐ Figure out how to change eslint rules in open-wc
 ☐ Organise literate documentation to module code
 ☐ Add initial docco-next documentation generation to js-kit
 ☐ Make list of all missing modules to be added
-  ☐ reducs
+  ☐ tpe-container (tpe drawer, reducs, historify, routify)
   ☐ user-login (work out DB init queries)
   ☐ shared-code
   ☐ client-stores

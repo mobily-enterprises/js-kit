@@ -1,7 +1,6 @@
 import { LitElement, html, css } from 'lit-element'
-import { openWcLogo } from './open-wc-logo.js'
 
-export class <%=utils.toCamelCase(dstPackageJsonValues.name)%> extends LitElement {
+export class <%=vars.client.appFile%> extends LitElement {
   static get properties () {
     return {
       title: { type: String },
@@ -40,7 +39,7 @@ export class <%=utils.toCamelCase(dstPackageJsonValues.name)%> extends LitElemen
       <main>
         <h1>My app</h1>
 
-        <p>Edit <code>src/<%=utils.toCamelCase(dstPackageJsonValues.name)%></code> and save to reload.</p>
+        <p>Edit <code>src/<%=vars.client.appFile%></code> and save to reload.</p>
       </main>
 
     `

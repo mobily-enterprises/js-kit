@@ -15,12 +15,12 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/__APP_CODE__.js":[
+      "src/<%=vars.client.appFile%>.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/__APP_ELEMENT__.js":[
+      "src/<%=dstPackageJsonValues.name%>.js":[
         {
           "op":"resolve-ejs"
         }

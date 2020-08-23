@@ -7,7 +7,7 @@ const vars = require('../vars')
 exports = (app) => {
   function safeConfigOutput (o) {
     const oCopy = { ...o }
-    delete oCopy.db.dbPassword
+    if (oCopy.db) delete oCopy.db.dbPassword
     return oCopy
   }
 
@@ -38,7 +38,8 @@ exports = (app) => {
       nodeResolve: true,
       appIndex: 'index.html',
       moduleDirs: ['node_modules'],
-      preserveSymlinks: true
+      preserveSymlinks: true,
+      watch: true
     })
     const middlewares = esDevServer.createMiddlewares(config)
     const koaApp = new Koa()

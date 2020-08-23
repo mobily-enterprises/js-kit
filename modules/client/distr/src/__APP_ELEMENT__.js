@@ -1,3 +1,3 @@
-import { <%=utils.toCamelCase(dstPackageJsonValues.name)%> } from './<%=utils.toCamelCase(dstPackageJsonValues.name)%>.js'
+import { <%=vars.client.appFile%> } from './<%=vars.client.appFile%>.js'
 
-customElements.define('<%=dstPackageJsonValues.name%>', <%=utils.toCamelCase(dstPackageJsonValues.name)%>)
+customElements.define('<%=dstPackageJsonValues.name%>', <%=vars.client.appFile%>)
