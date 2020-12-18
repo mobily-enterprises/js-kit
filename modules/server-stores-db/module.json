@@ -5,7 +5,7 @@
   "author": "Tony Mobily",
   "moduleDependencies":[
     "server-stores",
-    "db"
+    "server-db"
   ],
   "position": 140,
   "shortListed": true,

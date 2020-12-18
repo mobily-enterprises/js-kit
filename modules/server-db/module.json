@@ -1,10 +1,10 @@
 {
-   "name":"db",
+   "name":"server-db",
    "version":"1.0.0",
    "description":"DB support for JS-KIT (mysql)",
    "author":"Tony Mobily",
    "moduleDependencies":[
-      "server"
+      "server-base"
    ],
    "position": 120,
    "manipulate":{

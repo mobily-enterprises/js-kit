@@ -1,10 +1,10 @@
 {
-  "name": "db-sessions",
+  "name": "server-db-sessions",
   "version": "1.0.0",
   "description": "Database-based sessions for js-kit",
   "author": "Tony Mobily",
   "moduleDependencies":[
-    "db"
+    "server-db"
   ],
   "position": 130,
   "manipulate":{

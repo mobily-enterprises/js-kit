@@ -1,5 +1,5 @@
 {
-   "name":"server",
+   "name":"server-base",
    "version":"1.0.0",
    "description":"js-kit base server with stores support, but no database",
    "author":"Tony Mobily",

@@ -1,5 +1,5 @@
 {
-  "name":"client",
+  "name":"client-base",
   "version":"1.0.0",
   "description":"Basic client files for JS-KIT",
   "author":"Tony Mobily",

@@ -4,9 +4,9 @@
    "description":"Server stores support JS-KIT",
    "author":"Tony Mobily",
    "moduleDependencies":[
-      "server"
+      "server-base"
    ],
-   "position": 110,   
+   "position": 110,
    "manipulate":{
       "json":{
          "server/package.json":[
