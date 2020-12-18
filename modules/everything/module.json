@@ -5,7 +5,8 @@
    "author":"Tony Mobily",
    "moduleDependencies":[
       "server-stores-db",
-      "server-db-sessions"
+      "server-db-sessions",
+      "client-base"
    ],
    "shortListed": true,
    "positionInShortList": 10,
