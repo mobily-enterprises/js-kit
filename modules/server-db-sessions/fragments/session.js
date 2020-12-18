@@ -1,8 +1,8 @@
 const MySQLStore = expressMySqlSession(expressSession)
 const sessionStore = new MySQLStore({}, vars.connection)
 const session = expressSession({
-  key: "<%=userInput['db-sessions'].key%>",
-  secret: "<%=userInput['db-sessions'].secret%>",
+  key: "<%=userInput['server-db-sessions'].key%>",
+  secret: "<%=userInput['server-db-sessions'].secret%>",
   store: sessionStore,
   resave: false,
   saveUninitialized: false,

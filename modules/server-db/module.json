@@ -20,27 +20,27 @@
             {
                "op":"set",
                "key":"db.dbHost",
-               "value":"<%=userInput.db.dbHost%>"
+               "value":"<%=userInput['server-db'].dbHost%>"
             },
             {
                "op":"set",
                "key":"db.dbPort",
-               "value":"<%=userInput.db.dbPort%>"
+               "value":"<%=userInput['server-db'].dbPort%>"
             },
             {
                "op":"set",
                "key":"db.db",
-               "value":"<%=userInput.db.db%>"
+               "value":"<%=userInput['server-db'].db%>"
             },
             {
                "op":"set",
                "key":"db.dbUser",
-               "value":"<%=userInput.db.dbUser%>"
+               "value":"<%=userInput['server-db'].dbUser%>"
             },
             {
                "op":"set",
                "key":"db.dbPassword",
-               "value":"<%=userInput.db.dbPassword%>"
+               "value":"<%=userInput['server-db'].dbPassword%>"
             }
          ]
       },
