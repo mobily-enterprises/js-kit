@@ -1,14 +1,13 @@
 {
    "name":"everything",
    "version":"1.0.0",
-   "description":"DB support for JS-KIT (mysql)",
+   "description":"Everything (client and server)",
    "author":"Tony Mobily",
    "moduleDependencies":[
-      "server-stores-db",
-      "server-db-sessions",
-      "client-base"
+      "everything-client",
+      "everything-server"
    ],
    "shortListed": true,
-   "positionInShortList": 10,
-   "position": -1
+   "shortListPosition": -20,
+   "position": -10
 }

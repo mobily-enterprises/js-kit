@@ -1,0 +1,12 @@
+{
+   "name":"everything-client",
+   "version":"1.0.0",
+   "description":"Everything client-side",
+   "author":"Tony Mobily",
+   "moduleDependencies":[
+      "client-base"
+   ],
+   "shortListed": true,
+   "shortListPosition": -10,
+   "position": -10
+}

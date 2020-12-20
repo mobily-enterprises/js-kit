@@ -7,7 +7,7 @@ const vars = require('../vars')
 exports = (app) => {
   function safeConfigOutput (o) {
     const oCopy = { ...o }
-    if (oCopy.db) delete oCopy.db.dbPassword
+    if (oCopy['server-db']) delete oCopy['server-db'].dbPassword
     return oCopy
   }
 

@@ -1,0 +1,13 @@
+{
+   "name":"everything-server",
+   "version":"1.0.0",
+   "description":"Everything server-side",
+   "author":"Tony Mobily",
+   "moduleDependencies":[
+      "server-db-stores",
+      "server-db-sessions"
+   ],
+   "shortListed": true,
+   "shortListPosition": -9,
+   "position": -10
+}
