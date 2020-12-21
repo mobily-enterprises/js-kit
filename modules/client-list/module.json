@@ -1,0 +1,13 @@
+{
+  "name":"client-list",
+  "component": false,
+  "shortListed": true,
+  "version":"1.0.0",
+  "description":"List of elements",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-base"
+  ],
+  "position": 50,
+  "shortListPosition": 50
+}
