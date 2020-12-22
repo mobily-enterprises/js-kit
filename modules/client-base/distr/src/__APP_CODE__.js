@@ -1,16 +1,21 @@
+// Import modules -- start
 import { LitElement, html, css } from 'lit-element'
+// Local modules -- end
 
-export class <%=vars.client.appFile%> extends LitElement {
+export class <%=vars.appFile%> extends LitElement {
   static get properties () {
     return {
+      // App properties -- start
       title: { type: String },
-      page: { type: String }
+      page: { type: String },
+      // App properties -- end
     }
   }
 
   static get styles () {
     return css`
       :host {
+        /* Host styles -- start */
         min-height: 100vh;
         display: flex;
         flex-direction: column;
@@ -21,8 +26,10 @@ export class <%=vars.client.appFile%> extends LitElement {
         max-width: 960px;
         margin: 0 auto;
         text-align: center;
+        /* Host styles -- end */
       }
 
+      /* App styles -- start */
       main {
         flex-grow: 1;
       }
@@ -31,17 +38,20 @@ export class <%=vars.client.appFile%> extends LitElement {
         margin-top: 36px;
         animation: app-logo-spin infinite 20s linear;
       }
+      /* App styles -- end */
     `
   }
 
+  /* App methods -- start */
   render () {
     return html`
       <main>
         <h1>My app</h1>
 
-        <p>Edit <code>src/<%=vars.client.appFile%></code> and save to reload.</p>
+        <p>Edit <code>src/<%=vars.appFile%></code> and save to reload.</p>
       </main>
 
     `
   }
+  /* App methods -- end */
 }

@@ -1,0 +1,51 @@
+{
+  "name":"client-app-frame",
+  "version":"1.0.0",
+  "description":"App frame -- app with drawer, dynamic loading",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-base"
+  ],
+  "position": 10,
+  "manipulate":{
+    "json":{
+       "package.json":[
+          {
+             "op":"set",
+             "key":"dependencies.routify",
+             "value":"^1.2.x"
+          },
+          {
+             "op":"set",
+             "key":"dependencies.tpe",
+             "value":"^0.x.x"
+          },
+          {
+             "op":"set",
+             "key":"dependencies.tpe-material",
+             "value":"^0.x.x"
+          }
+       ]
+    },
+    "text":{
+      "index.html":[
+        {
+           "op":"insert",
+           "position":"before",
+           "newlineAfter":true,
+           "anchorPoint":"<!-- Head - end -->",
+           "value":"  <script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
+        }
+      ],
+      "src/<%=vars.appFile%>.js":[
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"// Local modules -- end",
+          "valueFromFile":"imports.js"
+        }
+      ]
+    }
+  }
+}

@@ -4,7 +4,7 @@
    "description":"Everything client-side",
    "author":"Tony Mobily",
    "moduleDependencies":[
-      "client-base"
+      "client-app-frame"
    ],
    "shortListed": true,
    "shortListPosition": 50

@@ -1,3 +1,3 @@
-import { <%=vars.client.appFile%> } from './<%=vars.client.appFile%>.js'
+import { <%=vars.appFile%> } from './<%=vars.appFile%>.js'
 
-customElements.define('<%=dstPackageJsonValues.name%>', <%=vars.client.appFile%>)
+customElements.define('<%=dstPackageJsonValues.name%>', <%=vars.appFile%>)

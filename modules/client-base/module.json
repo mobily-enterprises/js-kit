@@ -13,7 +13,7 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/<%=vars.client.appFile%>.js":[
+      "src/<%=vars.appFile%>.js":[
         {
           "op":"resolve-ejs"
         }
