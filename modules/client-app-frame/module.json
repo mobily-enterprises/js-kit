@@ -24,6 +24,11 @@
              "op":"set",
              "key":"dependencies.tpe-material",
              "value":"^0.x.x"
+          },
+          {
+             "op":"set",
+             "key":"dependencies.pwa-helpers",
+             "value":"^0.9.x"
           }
        ]
     },
