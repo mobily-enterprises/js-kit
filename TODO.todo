@@ -15,24 +15,30 @@
 
 ☐ Add basic app, so that it works
 ☐ Add modules
-   - client-app-frame (ask for [x] appPrefix, [x] tpe, [ ] responsiveness, [ ] routify [ ] dynamic loading, [ ] drawer ?)
-   - client-back-bar (historify and header, and SOME of pageMixin)
+   - client-app-frame
+     - (ask for [x] appPrefix, [x] tpe, [ ] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
+     - client-back-bar (historify and header, and SOME of pageMixin)
+     - client-reducs
 
    - server-store
-
-   - client-reducs
-
    - client-server-auth
    - client-server-user-config
    - client-server-app-config
 
   Reinstallable pages
-   - client-store-list
-   - client-store-view
-   - client-store-edit
+   - client-store-list-page
+   - client-store-view-page
+   - client-store-edit-page
+
+   - client-tabbed-element [PLACEMENT]
+   - client-store-list [PLACEMENT]
+   - client-store-view [PLACEMENT]
+   - client-store-edit [PLACEMENT]
+
    - client-root-page
    - client-page
    - client-tabbed-page
+
 
   Less important
    - client-server-shared-code
