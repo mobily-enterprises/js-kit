@@ -42,6 +42,16 @@
            "value":"  <script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
         }
       ],
+      "src/<%=vars.elPrefix%>-page-load-error.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/<%=vars.elPrefix%>-page-not-found.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",
@@ -49,6 +59,11 @@
           "newlineAfter":false,
           "anchorPoint":"// Local modules -- end",
           "valueFromFile":"imports.js"
+        },
+        {
+           "op":"custom",
+           "function":"addMixin",
+           "mixin":"ResponsiveMixin"
         }
       ]
     }

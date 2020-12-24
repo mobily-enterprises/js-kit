@@ -9,7 +9,13 @@ exports.getPrompts = (config) => {
       name: 'elPrefix',
       message: 'Element name prefix',
       initial: 'my'
-    }
+    },
+    {
+      type: 'toggle',
+      name: 'dynamicLoading',
+      message: 'Enable dynamic loading of pages',
+      initial: false
+    },
   ]
 }
 
@@ -21,4 +27,12 @@ exports.preAdd = (config) => {
 }
 
 exports.postAdd = (config) => {
+}
+
+exports.fileRenamer = (config, file) => {
+  switch (file) {
+    case 'src/PREFIX-page-load-error.js': return `src/${config.vars.elPrefix}-page-load-error.js`
+    case 'src/PREFIX-page-not-found.js': return `src/${config.vars.elPrefix}-page-not-found.js`
+    default: return file
+  }
 }

@@ -16,9 +16,18 @@
 ☐ Add basic app, so that it works
 ☐ Add modules
    - client-app-frame
-     - (ask for [x] appPrefix, [x] tpe, [ ] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
+     - Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
+     - (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
      - client-back-bar (historify and header, and SOME of pageMixin)
-     - client-reducs
+
+   - client-root-page (loaded dynamically -- do we need this?)
+   - client-page
+   - client-tabbed-page
+
+   - client-element
+   - client-tabbed-element [PLACEMENT]
+
+   - client-reducs
 
    - server-store
    - client-server-auth
@@ -30,15 +39,9 @@
    - client-store-view-page
    - client-store-edit-page
 
-   - client-tabbed-element [PLACEMENT]
-   - client-store-list [PLACEMENT]
-   - client-store-view [PLACEMENT]
-   - client-store-edit [PLACEMENT]
-
-   - client-root-page
-   - client-page
-   - client-tabbed-page
-
+   - client-store-list-element [PLACEMENT]
+   - client-store-view-element [PLACEMENT]
+   - client-store-edit-element [PLACEMENT]
 
   Less important
    - client-server-shared-code
