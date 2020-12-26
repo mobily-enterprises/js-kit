@@ -62,8 +62,27 @@
         },
         {
            "op":"custom",
-           "function":"addMixin",
-           "mixin":"ResponsiveMixin"
+           "function":"addMixinToElement",
+           "mixin":"AppElementMixin"
+        },
+        {
+           "op":"custom",
+           "function":"addMixinToElement",
+           "mixin":"MainPageMixin"
+        }
+      ],
+      "src/base/AppElementMixin":[
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":true,
+          "anchorPoint":"// Local modules -- end",
+          "value":"import { ResponsiveMixin } from './AppElementMixins/ResponsiveMixin.js'"
+        },
+        {
+          "op":"custom",
+          "function":"addMixinToMixin",
+          "mixin":"ResponsiveMixin"
         }
       ]
     }

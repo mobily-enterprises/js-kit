@@ -1,4 +1,5 @@
-import { AppElement } from './AppElement.js'
-import { PageMixin } from './PageMixin.js'
+import { LitElement } from 'lit-element'
+import { AppElementMixin } from './AppElementMixin.js'
+import { PageElementMixin } from './PageElementMixin.js'
 
-export class PageElement extends PageMixin(AppElement) {}
+export class PageElement extends PageElementMixin(AppElementMixin(LitElement)) {}

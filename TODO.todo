@@ -14,6 +14,13 @@
 ✔ Add new type of reinstallable module, for pages etc. @done(2020-12-21 20:21)
 
 ☐ Add basic app, so that it works
+☐
+
+Maybe add reflect:true to routify's PageElementMixin
+Watchout, taken autoload out of PageElementMixin
+
+STAGE 1
+
 ☐ Add modules
    - client-app-frame
      - Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
@@ -21,11 +28,13 @@
      - client-back-bar (historify and header, and SOME of pageMixin)
 
    - client-root-page (loaded dynamically -- do we need this?)
-   - client-page
-   - client-tabbed-page
+   - client-inner-page [PLACEMENT]
 
    - client-element
    - client-tabbed-element [PLACEMENT]
+
+
+STAGE 2
 
    - client-reducs
 
@@ -33,6 +42,8 @@
    - client-server-auth
    - client-server-user-config
    - client-server-app-config
+
+STAGE 3
 
   Reinstallable pages
    - client-store-list-page

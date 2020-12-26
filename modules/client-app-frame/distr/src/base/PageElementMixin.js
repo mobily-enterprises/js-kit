@@ -3,13 +3,11 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
 import '../ui-elements/co-page-header'
 
-export const PageMixin = (base) => {
+export const PageElementMixin = (base) => {
   return class Base extends RoutingPageMixin(base) {
     static get properties () {
       return {
-        active: { type: Boolean, reflect: true },
         pageTitle: { type: String },
-        autoload: { type: Boolean },
         hideHeader: { type: Boolean, attribute: 'hide-header' }
       }
     }

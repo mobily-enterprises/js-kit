@@ -1,4 +1,4 @@
-// Import modules -- start
+// Local modules -- start
 import { LitElement, html, css } from 'lit-element'
 // Local modules -- end
 
