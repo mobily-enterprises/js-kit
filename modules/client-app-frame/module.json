@@ -61,6 +61,14 @@
           "valueFromFile":"imports.js"
         },
         {
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":true,
+          "anchorPoint":"/* Style array -- start */",
+          "value":"      appTheme,"
+        },
+
+        {
            "op":"custom",
            "function":"addMixinToElement",
            "mixin":"AppElementMixin"

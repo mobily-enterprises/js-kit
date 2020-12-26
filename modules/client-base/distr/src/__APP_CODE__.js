@@ -13,33 +13,37 @@ export class <%=vars.appFile%> extends LitElement {
   }
 
   static get styles () {
-    return css`
-      :host {
-        /* Host styles -- start */
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        font-size: calc(10px + 2vmin);
-        color: #1a2b42;
-        max-width: 960px;
-        margin: 0 auto;
-        text-align: center;
-        /* Host styles -- end */
-      }
+    return [
+      /* Style array -- start */
+      /* Style array -- end */
+      css`
+        :host {
+          /* Host styles -- start */
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
+          font-size: calc(10px + 2vmin);
+          color: #1a2b42;
+          max-width: 960px;
+          margin: 0 auto;
+          text-align: center;
+          /* Host styles -- end */
+        }
 
-      /* App styles -- start */
-      main {
-        flex-grow: 1;
-      }
+        /* App styles -- start */
+        main {
+          flex-grow: 1;
+        }
 
-      .logo > svg {
-        margin-top: 36px;
-        animation: app-logo-spin infinite 20s linear;
-      }
-      /* App styles -- end */
-    `
+        .logo > svg {
+          margin-top: 36px;
+          animation: app-logo-spin infinite 20s linear;
+        }
+        /* App styles -- end */
+      `
+    ]
   }
 
   /* App methods -- start */
