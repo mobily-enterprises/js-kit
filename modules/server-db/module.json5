@@ -50,14 +50,14 @@
                "op":"insert",
                "position":"before",
                "newlineAfter":true,
-               "anchorPoint":"// Local modules -- end",
+               "anchorPoint":"/* Loaded modules -- end */",
                "value":"const makeDbConnection = require('./lib/makeDbConnection.js')"
             },
             {
                "op":"insert",
                "position":"before",
                "newlineAfter":true,
-               "anchorPoint":"// Before serving static files -- end",
+               "anchorPoint":"/* Before serving static files -- end */",
                "value":"vars.connection = makeDbConnection(vars.config.db)"
             }
          ]

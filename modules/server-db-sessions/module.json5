@@ -28,14 +28,14 @@
              "op":"insert",
              "position":"before",
              "newlineAfter":true,
-             "anchorPoint":"// Global (installed) modules -- end",
+             "anchorPoint":"/* Loaded modules -- end */",
              "value":"const expressSession = require('express-session')"
           },
           {
              "op":"insert",
              "position":"before",
              "newlineAfter":true,
-             "anchorPoint":"// Global (installed) modules -- end",
+             "anchorPoint":"/* Loaded modules -- end */",
              "value":"const expressMySqlSession = require('express-mysql-session')"
           },
 
@@ -43,7 +43,7 @@
              "op":"insert",
              "position":"before",
              "newlineAfter":true,
-             "anchorPoint":"// Before serving static files -- end",
+             "anchorPoint":"/* Before serving static files -- end */",
              "valueFromFile":"session.js"
           },
 

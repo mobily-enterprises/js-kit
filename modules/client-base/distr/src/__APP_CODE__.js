@@ -1,14 +1,14 @@
-// Local modules -- start
+/* Loaded modules -- start */
 import { LitElement, html, css } from 'lit-element'
-// Local modules -- end
+/* Loaded modules -- end */
 
 export class <%=vars.appFile%> extends LitElement {
   static get properties () {
     return {
-      // App properties -- start
+      /* App properties -- start */
       title: { type: String },
       page: { type: String },
-      // App properties -- end
+      /* App properties -- end */
     }
   }
 

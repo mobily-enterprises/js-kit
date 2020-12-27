@@ -57,7 +57,7 @@
           "op":"insert",
           "position":"before",
           "newlineAfter":false,
-          "anchorPoint":"// Local modules -- end",
+          "anchorPoint":"/* Loaded modules -- end */",
           "valueFromFile":"imports.js"
         },
         {
@@ -84,7 +84,7 @@
           "op":"insert",
           "position":"before",
           "newlineAfter":true,
-          "anchorPoint":"// Local modules -- end",
+          "anchorPoint":"/* Loaded modules -- end */",
           "value":"import { ResponsiveMixin } from './AppElementMixins/ResponsiveMixin.js'"
         },
         {

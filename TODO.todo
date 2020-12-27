@@ -13,9 +13,9 @@
   ✔ Add "fs" key to module, for file system changes, before-manipulate and after-manipulate, with ops and parameters (rename) @done(2020-08-23 07:29)
 ✔ Add new type of reinstallable module, for pages etc. @done(2020-12-21 20:21)
 ✔ Change json to json5, in order to being able to add comments -- CHANGE OF HEART @done(2020-12-27 21:07)
-☐ Change "// *** -- start" into self-contained blocks /* */
-☐ Add basic app, so that it works
+✔ Change "// *** -- start" into self-contained blocks /* */ @done(2020-12-28 06:38)
 
+NOTES:
 Maybe add reflect:true to routify's PageElementMixin
 Watchout, taken autoload out of PageElementMixin
 
@@ -23,9 +23,9 @@ STAGE 1
 
 ☐ Add modules
    - client-app-frame
-     - Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
-     - (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
-     - client-back-bar (historify and header, and SOME of pageMixin)
+     X Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
+     . (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
+     . client-back-bar (historify and header, and SOME of pageMixin)
 
    - client-root-page (loaded dynamically -- do we need this?)
    - client-inner-page [PLACEMENT]
