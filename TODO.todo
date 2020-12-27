@@ -12,9 +12,9 @@
 ✔ Add basic client module, working with or without open-wc (tpe app with tabs) @done(2020-08-22 21:22)
   ✔ Add "fs" key to module, for file system changes, before-manipulate and after-manipulate, with ops and parameters (rename) @done(2020-08-23 07:29)
 ✔ Add new type of reinstallable module, for pages etc. @done(2020-12-21 20:21)
-
+✔ Change json to json5, in order to being able to add comments -- CHANGE OF HEART @done(2020-12-27 21:07)
+☐ Change "// *** -- start" into self-contained blocks /* */
 ☐ Add basic app, so that it works
-☐
 
 Maybe add reflect:true to routify's PageElementMixin
 Watchout, taken autoload out of PageElementMixin
@@ -71,8 +71,3 @@ rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffo
 
 
 rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app everything; cd testing-app; npm install;cd ..
-
-
-NOT DONE
-☐ Change "// *** -- start" into self-contained blocks /* */ -- NOT SURE WHY I SHOULD
-☐ Change json to json5, in order to being able to add comments -- CHANGE OF HEART
