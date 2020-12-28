@@ -24,15 +24,17 @@ STAGE 1
 ☐ Add modules
    - client-app-frame
      X Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
-     . (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [ ] routify [ ] dynamic loading (prompt), [ ] drawer (with slot for menu button)
-     . client-back-bar (historify and header, and SOME of pageMixin)
+     X (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [X] routify [X] dynamic loading (prompt), [X] drawer (with slot for menu button)
+     X client-back-bar (historify and header, and SOME of pageMixin)
+
+   - IMPORTANT: client-base now has config.vars.appFile =  ... in preAdd. INSTEAD, have code that runs every time regardless, even if the module is ALREADY installed.
+     - Store prompt variables somewhere, and reload them as if they were answered (JSON)
+   - Actually enable sessions server side, find a better way to whitelist URLs
 
    - client-root-page (loaded dynamically -- do we need this?)
    - client-inner-page [PLACEMENT]
-
    - client-element
-   - client-tabbed-element [PLACEMENT]
-
+   - client-tabbed-page
 
 STAGE 2
 
