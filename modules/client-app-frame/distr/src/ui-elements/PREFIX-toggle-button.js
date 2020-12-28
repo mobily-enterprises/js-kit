@@ -4,7 +4,7 @@ import { arrowDropDown, arrowDropUp } from '../styles/icons'
 import { ButtonSharedStyles } from '../styles/shared-styles-button'
 import { shadow2 } from '../styles/shared-styles'
 
-export class ToggleButton extends LitElement {
+export class Element extends LitElement {
   static get styles () {
     return [
       ButtonSharedStyles,
@@ -83,4 +83,4 @@ export class ToggleButton extends LitElement {
     this.dispatchEvent(new CustomEvent('toggle-changed', { detail: { state: !!this.active }, composed: true, bubbles: true }))
   }
 }
-customElements.define('toggle-button', ToggleButton)
+customElements.define('<%=vars.elPrefix%>-toggle-button', Element)

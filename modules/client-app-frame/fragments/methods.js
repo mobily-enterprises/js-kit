@@ -39,15 +39,15 @@ async runDynamicLoading () {
   // If the element isn't here, teleport to 404 since it's a straight not found
   const cleanPath = path.split(/[#?/]/)[1]
   console.log(cleanPath)
-  if (!this.shadowRoot.querySelector(`co-${cleanPath}`)) {
-    activateElement(this.shadowRoot.querySelector('co-page-not-found'))
+  if (!this.shadowRoot.querySelector(`<%=vars.elPrefix%>-${cleanPath}`)) {
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-page-not-found'))
     return
   }
 
   // Import the correct module for this page
   let mod
   try {
-    mod = await import(`./co-${cleanPath}.js`)
+    mod = await import(`./<%=vars.elPrefix%>-${cleanPath}.js`)
   } catch (e) {
     console.log('Error loading module:', e)
     // Nothing needs to happen here
@@ -55,7 +55,7 @@ async runDynamicLoading () {
 
   // Loading error: display the loading error page
   if (!mod) {
-    activateElement(this.shadowRoot.querySelector('co-page-load-error'))
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-page-load-error'))
   }
 
   await this.updateComplete

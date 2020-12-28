@@ -4,13 +4,9 @@ import { MainPageMixin } from 'routify/lit/MainPageMixin'
 import { activateElement } from 'routify/routify'
 import { installMediaQueryWatcher } from 'pwa-helpers/media-query.js'
 import { updateMetadata } from 'pwa-helpers/metadata.js'
+import { teleport, historifySetup } from 'historify/historify.js'
 
 import { AppElementMixin } from './base/AppElementMixin.js'
-import { teleport, historifySetup } from 'historify/historify.js'
 import './<%=vars.elPrefix%>-page-load-error.js'
 import './<%=vars.elPrefix%>-page-not-found.js'
 import { appTheme } from './styles/app-theme.js'
-
-// Not found/load error
-import './<%=vars.elPrefix%>-page-load-error.js'
-import './<%=vars.elPrefix%>-page-not-found.js'

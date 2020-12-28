@@ -198,7 +198,7 @@ export class Element extends ResponsiveMixin(EeHeader) {
   _createToggle (name, icon) {
     const slot = this.shadowRoot.querySelector(`slot[name=${name}]`)
     slot.addEventListener('slotchange', this._addExpandButton.bind(this))
-    const toggle = document.createElement('toggle-button')
+    const toggle = document.createElement('<%=vars.elPrefix%>-toggle-button')
     toggle.id = `${name}Toggle`
     toggle.toggleAttribute('no-shadow', true)
     if (icon) {

@@ -46,9 +46,9 @@ export const PageElementMixin = (base) => {
       return this.hideHeader
         ? ''
         : html`
-          <co-page-header id="header" .backComputer=${this._backComputer ? this._backComputer.bind(this) : undefined} back header-title="${ifDefined(this.pageTitle)}">
+          <<%=vars.elPrefix%>-page-header id="header" .backComputer=${this._backComputer ? this._backComputer.bind(this) : undefined} back header-title="${ifDefined(this.pageTitle)}">
             ${this.headerSlotted()}
-          </co-page-header>
+          </<%=vars.elPrefix%>-page-header>
         `
     }
 
