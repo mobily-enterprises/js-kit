@@ -1,7 +1,7 @@
 import { html, css } from 'lit-element'
 import { ifDefined } from 'lit-html/directives/if-defined'
 import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
-import '../ui-elements/co-page-header'
+import '../ui-elements/<%=vars.elPrefix%>-page-header'
 
 export const PageElementMixin = (base) => {
   return class Base extends RoutingPageMixin(base) {

@@ -29,6 +29,11 @@
              "op":"set",
              "key":"dependencies.pwa-helpers",
              "value":"^0.9.x"
+          },
+          {
+             "op":"set",
+             "key":"dependencies.historify",
+             "value":"^1.0.3"
           }
        ]
     },
@@ -52,6 +57,26 @@
           "op":"resolve-ejs"
         }
       ],
+      "src/ui-elements/<%=vars.elPrefix%>-header.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/ui-elements/<%=vars.elPrefix%>-page-header.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/ui-elements/<%=vars.elPrefix%>-toggle-button.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/base/PageElementMixin.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",
@@ -63,7 +88,7 @@
         {
           "op":"insert",
           "position":"after",
-          "newlineBefore":true,
+          "newlineBefore":false,
           "anchorPoint":"/* Style array -- start */",
           "value":"      appTheme,"
         },
@@ -77,13 +102,56 @@
            "op":"custom",
            "function":"addMixinToElement",
            "mixin":"MainPageMixin"
-        }
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "anchorPoint":"/* App methods -- end */",
+          "valueFromFile":"methods.js"
+        },
+        {
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":"/* Loaded modules -- end */",
+          "valueFromFile":"dynamicImports.js"
+        },
+        /* App styles -- start */
+        {
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":true,
+          "anchorPoint":"/* App styles -- start */",
+          "valueFromFile":"styles.css"
+        },
+        {
+          "op":"deleteText",
+          "deleteRegexp":"^      <main>[\\s\\S]*</main>[\n\r]",
+          "deleteRegexpOptions":"m",
+        },
+        {
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":"/* App render function -- start */",
+          "valueFromFile":"drawer.js"
+        },
+        {
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":"<!-- App render -- start -->",
+          "valueFromFile":"render.html"
+        },
       ],
       "src/base/AppElementMixin":[
         {
           "op":"insert",
           "position":"before",
-          "newlineAfter":true,
+          "newlineAfter":false,
           "anchorPoint":"/* Loaded modules -- end */",
           "value":"import { ResponsiveMixin } from './AppElementMixins/ResponsiveMixin.js'"
         },

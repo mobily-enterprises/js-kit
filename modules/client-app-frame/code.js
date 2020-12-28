@@ -33,6 +33,9 @@ exports.fileRenamer = (config, file) => {
   switch (file) {
     case 'src/PREFIX-page-load-error.js': return `src/${config.vars.elPrefix}-page-load-error.js`
     case 'src/PREFIX-page-not-found.js': return `src/${config.vars.elPrefix}-page-not-found.js`
+    case 'src/ui-elements/PREFIX-header.js': return `src/ui-elements/${config.vars.elPrefix}-header.js`
+    case 'src/ui-elements/PREFIX-page-header.js': return `src/ui-elements/${config.vars.elPrefix}-page-header.js`
+    case 'src/ui-elements/PREFIX-toggle-button.js': return `src/ui-elements/${config.vars.elPrefix}-toggle-button.js`
     default: return file
   }
 }

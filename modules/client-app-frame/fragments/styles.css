@@ -1,0 +1,60 @@
+        .menu-btn {
+          background: none;
+          border: none;
+          fill: var(--app-drawer-background-color);
+          cursor: pointer;
+          height: 44px;
+          width: 44px;
+          position: absolute;
+          top:0;
+        }
+
+        button.menu-btn:focus, button.menu-btn:active {
+          outline: none !important;
+        }
+
+        ee-drawer {
+          --ee-drawer-color: var(--app-drawer-text-color);
+          --ee-drawer-selected-color: var(--app-drawer-selected-color);
+          z-index:100;
+        }
+
+        ee-drawer * {
+          user-select: none;
+        }
+
+        /* Workaround for IE11 displaying <main> as inline */
+        main {
+          display: block;
+        }
+
+        .main-content {
+          height: 100vh;
+        }
+
+        .page:not([active]) {
+          display: none;
+        }
+
+        .page[active] {
+          display: block;
+        }
+
+        footer {
+          padding: 24px;
+          background: var(--app-drawer-background-color);
+          color: var(--app-drawer-text-color);
+          text-align: center;
+        }
+
+        co-snack-bar {
+          z-index: 1000;
+        }
+
+        /* Wide layout: when the viewport width is bigger than 460px, layout
+        changes to a wide layout */
+        @media (min-width: 460px) {
+          nav {
+            display: block;
+          }
+        }

@@ -1,6 +1,7 @@
 /* Loaded modules -- start */
 import { SharedStyles } from './../styles/shared-styles.js'
 import { fadeInFrames } from '../styles/shared-styles-animations.js'
+import { css } from 'lit-element'
 /* Loaded modules -- end */
 
 export const AppElementMixin = (base) => {

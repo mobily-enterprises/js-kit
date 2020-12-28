@@ -19,28 +19,11 @@ export class <%=vars.appFile%> extends LitElement {
       css`
         :host {
           /* Host styles -- start */
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          font-size: calc(10px + 2vmin);
-          color: #1a2b42;
-          max-width: 960px;
-          margin: 0 auto;
-          text-align: center;
+          display: block;
           /* Host styles -- end */
         }
 
         /* App styles -- start */
-        main {
-          flex-grow: 1;
-        }
-
-        .logo > svg {
-          margin-top: 36px;
-          animation: app-logo-spin infinite 20s linear;
-        }
         /* App styles -- end */
       `
     ]
@@ -48,14 +31,17 @@ export class <%=vars.appFile%> extends LitElement {
 
   /* App methods -- start */
   render () {
+    /* App render function -- start */
     return html`
+      <!-- App render -- start -->
       <main>
         <h1>My app</h1>
 
         <p>Edit <code>src/<%=vars.appFile%></code> and save to reload.</p>
       </main>
-
+      <!-- App render -- end -->
     `
+    /* App render function -- end */
   }
   /* App methods -- end */
 }
