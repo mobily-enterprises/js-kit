@@ -72,6 +72,11 @@
           "op":"resolve-ejs"
         }
       ],
+      "src/<%=vars.elPrefix%>-example.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
       "src/base/PageElementMixin.js":[
         {
           "op":"resolve-ejs"
