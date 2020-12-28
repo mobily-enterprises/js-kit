@@ -22,7 +22,7 @@ Watchout, taken autoload out of PageElementMixin
 STAGE 1
 
 ☐ Add modules
-   - client-app-frame
+   X client-app-frame
      X Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
      X (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [X] routify [X] dynamic loading (prompt), [X] drawer (with slot for menu button)
      X client-back-bar (historify and header, and SOME of pageMixin)
@@ -59,14 +59,12 @@ STAGE 3
   Less important
    - client-server-shared-code
 
-☐ Generally tidy up, improve code, start documenting it as literate code
+STAGE 4
+
+☐ Generally tidy up and improve
 ☐ Figure out how to change eslint rules in open-wc
-☐ Organise literate documentation to module code
+☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit
-☐ Make list of all missing modules to be added
-  ☐ user-login (with DB init queries)
-  ☐ client-stores
-  ☐ ...?
 
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app
