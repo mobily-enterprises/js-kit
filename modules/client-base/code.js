@@ -8,8 +8,11 @@ exports.getPrompts = (config) => {
 exports.prePrompts = (config) => {
 }
 
-exports.preAdd = (config) => {
+exports.boot = (config) => {
   config.vars.appFile =  config.utils.toCamelCase(config.dstPackageJsonValues.name)
+}
+
+exports.preAdd = (config) => {
 }
 
 exports.postAdd = (config) => {

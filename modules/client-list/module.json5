@@ -1,6 +1,6 @@
 {
   "name":"client-list",
-  "component": false,
+  "component": true,
   "shortListed": true,
   "version":"1.0.0",
   "description":"List of elements",

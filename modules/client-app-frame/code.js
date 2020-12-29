@@ -22,8 +22,11 @@ exports.getPrompts = (config) => {
 exports.prePrompts = (config) => {
 }
 
-exports.preAdd = (config) => {
+exports.boot = (config) => {
   config.vars.elPrefix =  config.userInput['client-app-frame'].elPrefix
+}
+
+exports.preAdd = (config) => {
 }
 
 exports.postAdd = (config) => {
