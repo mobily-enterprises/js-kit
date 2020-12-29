@@ -30,9 +30,9 @@ STAGE 1
    X IMPORTANT: client-base now has config.vars.appFile =  ... in preAdd. INSTEAD, have code that runs every time regardless, even if the module is ALREADY installed.
      X Store prompt variables somewhere, and reload them as if they were answered (JSON)
 
-   - Actually enable sessions server side, find a better way to whitelist URLs
+   - Actually enable sessions server side, find a better way to whitelist URLs https://stackoverflow.com/questions/65492674/bypass-sessions-for-static-files-and-using-a-catchall-url-for-spa
 
-   - client-root-page (loaded dynamically -- do we need this?)
+   - client-root-page (maybe loaded dynamically, depending on flag)
    - client-inner-page [PLACEMENT]
    - client-element
    - client-tabbed-page
