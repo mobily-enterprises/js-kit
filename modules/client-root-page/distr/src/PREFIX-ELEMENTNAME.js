@@ -2,7 +2,7 @@ import { html, css } from 'lit-element'
 import { PageElement } from './base/PageElement.js'
 
 class Element extends PageElement {
-  static get pagePath () { return [ '', '/<%=vars.newElementFullNameNoPrefix%>'] }
+  static get pagePath () { return [ '/<%=vars.newElementFullNameNoPrefix%>'] }
 
   static get styles () {
     return [
