@@ -42,7 +42,7 @@ exports.getPrompts = (config) => {
       }
     )
   } else {
-    config.userInput['client-root-page'].uncommentedStaticImport = true
+    config.userInput['client-app-root-page'].uncommentedStaticImport = true
   }
 
   return questions
@@ -52,9 +52,9 @@ exports.boot = (config) => {
 
 exports.preAdd = (config) => {
   // const prefix = config.utils.capitalize(config.utils.toCamelCase(config.vars.elPrefix))
-  // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-root-page'].elementName))
-  config.vars.newElementFullNameNoPrefix = `page-${config.userInput['client-root-page'].elementName}`
-  config.vars.newElementFullName = `${config.vars.elPrefix}-page-${config.userInput['client-root-page'].elementName}`
+  // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-app-root-page'].elementName))
+  config.vars.newElementFullNameNoPrefix = `page-${config.userInput['client-app-root-page'].elementName}`
+  config.vars.newElementFullName = `${config.vars.elPrefix}-page-${config.userInput['client-app-root-page'].elementName}`
 }
 
 exports.postAdd = (config) => {

@@ -17,14 +17,14 @@ class Element extends PageElement {
 
   constructor () {
     super()
-    this.pageTitle = '<%=userInput['client-root-page'].elementTitle%>'
+    this.pageTitle = '<%=userInput['client-app-root-page'].elementTitle%>'
   }
 
   render () {
     return html`
       ${super.render()}
       <section>
-        <h2><%=userInput['client-root-page'].elementTitle%></h2>
+        <h2><%=userInput['client-app-root-page'].elementTitle%></h2>
       </section>
     `
   }

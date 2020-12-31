@@ -1,5 +1,5 @@
 {
-  "name":"client-root-page",
+  "name":"client-app-root-page",
   "version":"1.0.0",
   "component": true,
   "description":"Root page for JS-KIT, might enable autoload",
@@ -28,7 +28,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"/* Extra app modules -- end */",
-          "value":"<%=userInput['client-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js'"
+          "value":"<%=userInput['client-app-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js'"
         },
         {
           "op":"insert",
