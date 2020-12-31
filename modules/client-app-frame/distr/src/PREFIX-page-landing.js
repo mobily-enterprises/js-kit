@@ -3,6 +3,7 @@ import { PageElement } from './base/PageElement.js'
 
 class Element extends PageElement {
   static get pagePath () { return [ ''] }
+
   static get styles () {
     return [
       ...super.styles,
@@ -29,4 +30,4 @@ class Element extends PageElement {
   }
 }
 
-window.customElements.define('<%=vars.elPrefix%>-landing', Element)
+window.customElements.define('<%=vars.elPrefix%>-page-landing', Element)
