@@ -33,7 +33,7 @@ STAGE 1
    - Actually enable sessions server side, find a better way to whitelist URLs https://stackoverflow.com/questions/65492674/bypass-sessions-for-static-files-and-using-a-catchall-url-for-spa
 
    Reinstallable pages
-   - client-root-page (maybe loaded dynamically, depending on flag)
+   X client-root-page (maybe loaded dynamically, depending on flag)
    - client-tabbed-page
    - client-inner-page [PLACEMENT]
    - client-element [PLACEMENT]
