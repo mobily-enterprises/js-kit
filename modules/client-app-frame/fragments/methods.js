@@ -19,17 +19,6 @@ async routerCallback (params, e) {
 
   if (drawer) drawer.close()
 
-  // ////////////////////////////////////////////////////////////////
-  // Change the page's metadata
-  // ////////////////////////////////////////////////////////////////
-
-  const pageTitle = '<%=userInput['client-app-frame'].appName%>' + ' - ' + this._page
-  updateMetadata({
-    title: pageTitle,
-    description: pageTitle
-    // This object also takes an image property, that points to an img src.
-  })
-
   if (DYNAMIC_LOADING) await this.runDynamicLoading()
 }
 
