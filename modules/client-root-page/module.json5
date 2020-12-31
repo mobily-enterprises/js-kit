@@ -1,0 +1,43 @@
+{
+  "name":"client-root-page",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Root page for JS-KIT, might enable autoload",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-app-frame"
+  ],
+  "position": -1,
+  "manipulate":{
+    "text":{
+      "src/<%=vars.newElementFullName%>.js":[
+        {
+          "op":"resolve-ejs"
+        },
+      ],
+      "src/<%=vars.appFile%>.js":[
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- App pages -- end -->",
+          "value":"        <<%=vars.newElementFullName%> class=\"page\" ></<%=vars.newElementFullName%>>"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"/* Extra app modules -- end */",
+          "value":"<%=userInput['client-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- Drawer contents -- end -->",
+          "valueFromFile":"drawerEntry.js"
+        },
+      ]
+    }
+  }
+}
