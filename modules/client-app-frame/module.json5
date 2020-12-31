@@ -72,7 +72,7 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/<%=vars.elPrefix%>-example.js":[
+      "src/<%=vars.elPrefix%>-landing.js":[
         {
           "op":"resolve-ejs"
         }

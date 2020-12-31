@@ -1,10 +1,8 @@
 import { html, css } from 'lit-element'
 import { PageElement } from './base/PageElement.js'
-import { warning } from './styles/icons.js'
-import { shadow2 } from './styles/shared-styles'
 
 class Element extends PageElement {
-  static get pagePath () { return [ '', '/example'] }
+  static get pagePath () { return [ ''] }
   static get styles () {
     return [
       ...super.styles,
@@ -18,17 +16,17 @@ class Element extends PageElement {
 
   constructor () {
     super()
-    this.pageTitle = 'Example page'
+    this.pageTitle = 'Landing page'
   }
 
   render () {
     return html`
       ${super.render()}
       <section>
-        <h2>EXAMPLE PAGE</h2>
+        <h2>Landing PAGE</h2>
       </section>
     `
   }
 }
 
-window.customElements.define('<%=vars.elPrefix%>-example', Element)
+window.customElements.define('<%=vars.elPrefix%>-landing', Element)
