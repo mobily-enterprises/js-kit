@@ -23,7 +23,7 @@ async routerCallback (params, e) {
   // Change the page's metadata
   // ////////////////////////////////////////////////////////////////
 
-  const pageTitle = this.appTitle + ' - ' + this._page
+  const pageTitle = '<%=userInput['client-app-frame'].appName%>' + ' - ' + this._page
   updateMetadata({
     title: pageTitle,
     description: pageTitle

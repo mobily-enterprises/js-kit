@@ -6,8 +6,14 @@ exports.getPrompts = (config) => {
   return [
     {
       type: 'text',
+      name: 'appName',
+      message: 'App name',
+      initial: ''
+    },
+    {
+      type: 'text',
       name: 'elPrefix',
-      message: 'Element name prefix',
+      message: 'Elements\' name prefix',
       initial: 'my'
     },
     {

@@ -28,7 +28,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"/* Extra app modules -- end */",
-          "value":"<%=userInput['client-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js"
+          "value":"<%=userInput['client-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js'"
         },
         {
           "op":"insert",

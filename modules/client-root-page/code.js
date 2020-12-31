@@ -13,21 +13,21 @@ exports.getPrompts = (config) => {
       name: 'elementName',
       message: 'Element name',
       initial: '',
-      validate: value => !value.match(/[a-zA-Z]+[a-zA-Z0-9\-]*/) ? 'Only characters, numbers and dashes allowed' : true
+      validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
     },
     {
       type: 'text',
       name: 'elementTitle',
       message: 'Element title',
       initial: '',
-      validate: value => !value.match(/[a-zA-Z]+[a-zA-Z0-9\-]*/) ? 'Only characters, numbers and dashes allowed' : true
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     },
     {
       type: 'text',
       name: 'elementMenuTitle',
       message: 'Element menu title',
       initial: '',
-      validate: value => !value.match(/[a-zA-Z0-9 ]+/) ? 'Only characters, numbers and spaces allowed' : true
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     }
 
   ]
