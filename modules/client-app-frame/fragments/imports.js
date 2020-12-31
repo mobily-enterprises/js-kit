@@ -3,7 +3,6 @@ import 'tpe/tpe.js'
 import { MainPageMixin } from 'routify/lit/MainPageMixin'
 import { activateElement } from 'routify/routify'
 import { installMediaQueryWatcher } from 'pwa-helpers/media-query.js'
-import { updateMetadata } from 'pwa-helpers/metadata.js'
 import { teleport, historifySetup } from 'historify/historify.js'
 
 import { AppElementMixin } from './base/AppElementMixin.js'
