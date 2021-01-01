@@ -53,8 +53,8 @@ exports.boot = (config) => {
 exports.preAdd = (config) => {
   // const prefix = config.utils.capitalize(config.utils.toCamelCase(config.vars.elPrefix))
   // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-app-root-page'].elementName))
-  config.vars.newElementFullNameNoPrefix = `page-${config.userInput['client-app-root-page'].elementName}`
-  config.vars.newElementFullName = `${config.vars.elPrefix}-page-${config.userInput['client-app-root-page'].elementName}`
+  config.vars.newElementFullNameNoPrefix = `${config.userInput['client-app-root-page'].elementName}`
+  config.vars.newElementFullName = `${config.vars.elPrefix}-${config.userInput['client-app-root-page'].elementName}`
 }
 
 exports.postAdd = (config) => {
@@ -62,7 +62,7 @@ exports.postAdd = (config) => {
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'src/PREFIX-ELEMENTNAME.js': return `src/${config.vars.newElementFullName}.js`
+    case 'src/root-pages/PREFIX-ELEMENTNAME.js': return `src/root-pages/${config.vars.newElementFullName}.js`
     default: return file
   }
 }

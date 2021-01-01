@@ -1,7 +1,7 @@
 import { html, css } from 'lit-element'
 import { ifDefined } from 'lit-html/directives/if-defined'
 import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
-import '../ui-elements/<%=vars.elPrefix%>-page-header'
+import './elements/<%=vars.elPrefix%>-page-header'
 import { updateMetadata } from 'pwa-helpers/metadata.js'
 
 export const PageElementMixin = (base) => {

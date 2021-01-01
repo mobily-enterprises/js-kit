@@ -47,37 +47,37 @@
            "value":"  <script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
         }
       ],
-      "src/<%=vars.elPrefix%>-page-load-error.js":[
+      "src/root-pages/<%=vars.elPrefix%>-load-error.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/<%=vars.elPrefix%>-page-not-found.js":[
+      "src/root-pages/<%=vars.elPrefix%>-not-found.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/ui-elements/<%=vars.elPrefix%>-header.js":[
+      "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/ui-elements/<%=vars.elPrefix%>-page-header.js":[
+      "src/lib/base/elements/<%=vars.elPrefix%>-page-header.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/ui-elements/<%=vars.elPrefix%>-toggle-button.js":[
+      "src/lib/base/elements/<%=vars.elPrefix%>-toggle-button.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/<%=vars.elPrefix%>-page-landing.js":[
+      "src/root-pages/<%=vars.elPrefix%>-landing.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/base/PageElementMixin.js":[
+      "src/lib/base/PageElementMixin.js":[
         {
           "op":"resolve-ejs"
         }
@@ -152,7 +152,7 @@
           "valueFromFile":"render.html"
         },
       ],
-      "src/base/AppElementMixin":[
+      "src/lib/base/AppElementMixin.js":[
         {
           "op":"insert",
           "position":"before",

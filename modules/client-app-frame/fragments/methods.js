@@ -29,7 +29,7 @@ async runDynamicLoading () {
   const cleanPath = path.split(/[#?/]/)[1]
   console.log(cleanPath)
   if (!this.shadowRoot.querySelector(`<%=vars.elPrefix%>-${cleanPath}`)) {
-    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-page-not-found'))
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-not-found'))
     return
   }
 
@@ -44,7 +44,7 @@ async runDynamicLoading () {
 
   // Loading error: display the loading error page
   if (!mod) {
-    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-page-load-error'))
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-load-error'))
   }
 
   await this.updateComplete

@@ -1,9 +1,10 @@
 import { html, css } from 'lit-element'
-import { PageElement } from './base/PageElement.js'
-import { warning } from './styles/icons.js'
-import { shadow2 } from './styles/shared-styles'
+import { PageElement } from '../lib/base/PageElement.js'
+import { warning } from '../styles/icons.js'
+import { shadow2 } from '../styles/shared-styles'
 
 class Element extends PageElement {
+  static get pagePath () { return '/load-error' }
   static get styles () {
     return [
       ...super.styles,
@@ -34,24 +35,28 @@ class Element extends PageElement {
 
   constructor () {
     super()
-    this.pageTitle = 'Not Found'
+    this.pageTitle = 'Loading error'
   }
 
   render () {
     return html`
       ${super.render()}
       <section>
-        <h2>Oops! You hit a 404</h2>
+        <h2>Loading error</h2>
         <div id="warningIcon">
           ${warning}
         </div>
         <p>
-          The page you're looking for doesn't seem to exist. Head back
-          <a href="/">home</a> and try again?
+          The page you are trying to view couldn't load.
+          <button @click="${this._reloadApp}" value="reload"> Reload </button>
         </p>
       </section>
     `
   }
+
+  _reloadApp (e) {
+    location.reload()
+  }
 }
 
-window.customElements.define('<%=vars.elPrefix%>-page-not-found', Element)
+window.customElements.define('<%=vars.elPrefix%>-load-error', Element)

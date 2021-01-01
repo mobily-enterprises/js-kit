@@ -40,12 +40,12 @@ exports.postAdd = (config) => {
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'src/PREFIX-page-load-error.js': return `src/${config.vars.elPrefix}-page-load-error.js`
-    case 'src/PREFIX-page-not-found.js': return `src/${config.vars.elPrefix}-page-not-found.js`
-    case 'src/ui-elements/PREFIX-header.js': return `src/ui-elements/${config.vars.elPrefix}-header.js`
-    case 'src/ui-elements/PREFIX-page-header.js': return `src/ui-elements/${config.vars.elPrefix}-page-header.js`
-    case 'src/ui-elements/PREFIX-toggle-button.js': return `src/ui-elements/${config.vars.elPrefix}-toggle-button.js`
-    case 'src/PREFIX-page-landing.js': return `src/${config.vars.elPrefix}-page-landing.js`
+    case 'src/root-pages/PREFIX-load-error.js': return `src/root-pages/${config.vars.elPrefix}-load-error.js`
+    case 'src/root-pages/PREFIX-not-found.js': return `src/root-pages/${config.vars.elPrefix}-not-found.js`
+    case 'src/root-pages/PREFIX-landing.js': return `src/root-pages/${config.vars.elPrefix}-landing.js`
+    case 'src/lib/base/elements/PREFIX-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-header.js`
+    case 'src/lib/base/elements/PREFIX-page-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-page-header.js`
+    case 'src/lib/base/elements/PREFIX-toggle-button.js': return `src/lib/base/elements/${config.vars.elPrefix}-toggle-button.js`
     default: return file
   }
 }

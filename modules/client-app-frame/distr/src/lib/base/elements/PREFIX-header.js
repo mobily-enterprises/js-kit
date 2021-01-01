@@ -1,10 +1,10 @@
 import { css } from 'lit-element'
 import { EeHeader } from 'tpe/ee-header.js'
-import { shadow3 } from '../styles/shared-styles'
+import { shadow3 } from '../../../styles/shared-styles'
 
 import './<%=vars.elPrefix%>-toggle-button'
-import { moreVert, infoOutline } from '../styles/icons'
-import { ResponsiveMixin } from '../base/AppElementMixins/ResponsiveMixin'
+import { moreVert, infoOutline } from '../../../styles/icons'
+import { ResponsiveMixin } from '../AppElementMixins/ResponsiveMixin'
 
 export class Element extends ResponsiveMixin(EeHeader) {
   static get styles () {

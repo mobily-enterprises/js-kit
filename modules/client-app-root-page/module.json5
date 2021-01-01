@@ -10,7 +10,7 @@
   "position": -1,
   "manipulate":{
     "text":{
-      "src/<%=vars.newElementFullName%>.js":[
+      "src/root-pages/<%=vars.newElementFullName%>.js":[
         {
           "op":"resolve-ejs"
         },
@@ -28,7 +28,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"/* Extra app modules -- end */",
-          "value":"<%=userInput['client-app-root-page'].uncommentedStaticImport ? '' : '// '%>import './<%=vars.newElementFullName%>.js'"
+          "value":"<%=userInput['client-app-root-page'].uncommentedStaticImport ? '' : '// '%>import './root-pages/<%=vars.newElementFullName%>.js'"
         },
         {
           "op":"insert",

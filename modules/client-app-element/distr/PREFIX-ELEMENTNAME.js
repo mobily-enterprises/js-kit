@@ -1,5 +1,5 @@
 import { html, css } from 'lit-element'
-import { PageElement } from './base/PageElement.js'
+import { PageElement } from '../lib/base/PageElement.js'
 
 class Element extends PageElement {
 

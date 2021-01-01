@@ -5,5 +5,6 @@ exports.addMixinToElement = async function (contents, m, config) {
 }
 
 exports.addMixinToMixin = async function (contents, m, config) {
-  return contents.replace(/([ \t]*return[ \t]+class[ \t]+base[ \t]+)extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
+  debugger
+  return contents.replace(/([ \t]*return[ \t]+class[ \t]+base[ \t]+)extends[ \t]+(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
 }
