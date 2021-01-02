@@ -1,10 +1,10 @@
 import { css } from 'lit-element'
 import { EeHeader } from 'tpe/ee-header.js'
-import { shadow3 } from '../../../styles/shared-styles'
+import { shadow3 } from '../../../styles/shared-styles.js'
 
-import './<%=vars.elPrefix%>-toggle-button'
-import { moreVert, infoOutline } from '../../../styles/icons'
-import { ResponsiveMixin } from '../AppElementMixins/ResponsiveMixin'
+import './<%=vars.elPrefix%>-toggle-button.js'
+import { moreVert, infoOutline } from '../../../styles/icons.js'
+import { ResponsiveMixin } from '../AppElementMixins/ResponsiveMixin.js'
 
 export class Element extends ResponsiveMixin(EeHeader) {
   static get styles () {
@@ -187,6 +187,7 @@ export class Element extends ResponsiveMixin(EeHeader) {
     this._actionsBoundToggle = this._actionsToggle.bind(this)
     this._middleBoundToggle = this._middleToggle.bind(this)
   }
+  
   firstUpdated () {
     this.actionsArea = this.shadowRoot.querySelector('div.actions')
     this.middleArea = this.shadowRoot.querySelector('div[middle]')

@@ -56,7 +56,7 @@ class Element extends PageElement {
   }
 
   _reloadApp () { /* eslint-disable-line class-methods-use-this */
-    location.reload()
+    window.location.reload()
   }
 }
 

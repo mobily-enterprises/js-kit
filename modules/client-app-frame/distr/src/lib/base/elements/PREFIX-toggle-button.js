@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit-element'
-import { rotateFrames, fromBottomFrames } from '../../../styles/shared-styles-animations'
-import { arrowDropDown, arrowDropUp } from '../../../styles/icons'
-import { ButtonSharedStyles } from '../../../styles/shared-styles-button'
-import { shadow2 } from '../../../styles/shared-styles'
+import { rotateFrames, fromBottomFrames } from '../../../styles/shared-styles-animations.js'
+import { arrowDropDown, arrowDropUp } from '../../../styles/icons.js'
+import { ButtonSharedStyles } from '../../../styles/shared-styles-button.js'
+import { shadow2 } from '../../../styles/shared-styles.js'
 
 export class Element extends LitElement {
   static get styles () {

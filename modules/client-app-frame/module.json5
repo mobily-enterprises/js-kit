@@ -110,6 +110,7 @@
         },
         {
           "op":"insert",
+          "newlineBefore":true,
           "position":"before",
           "anchorPoint":"/* App methods -- end */",
           "valueFromFile":"methods.js"

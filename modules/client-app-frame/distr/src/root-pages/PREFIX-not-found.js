@@ -1,7 +1,7 @@
 import { html, css } from 'lit-element'
 import { PageElement } from '../lib/base/PageElement.js'
 import { warning } from '../styles/icons.js'
-import { shadow2 } from '../styles/shared-styles'
+import { shadow2 } from '../styles/shared-styles.js'
 
 class Element extends PageElement {
   static get styles () {

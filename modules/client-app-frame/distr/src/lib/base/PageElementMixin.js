@@ -1,7 +1,7 @@
 import { html, css } from 'lit-element'
 import { ifDefined } from 'lit-html/directives/if-defined'
 import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
-import './elements/<%=vars.elPrefix%>-page-header'
+import './elements/<%=vars.elPrefix%>-page-header.js'
 import { updateMetadata } from 'pwa-helpers/metadata.js'
 
 export const PageElementMixin = (base) => {
@@ -30,7 +30,7 @@ export const PageElementMixin = (base) => {
 
     routerCallback () {
       updateMetadata({
-        title: '<%=userInput['client-app-frame'].appName%>' + ' - ' + this.pageTitle,
+        title: `<%=userInput['client-app-frame'].appName%> - ${this.pageTitle}`,
         description: this.pageTitle
       })
     }
@@ -44,21 +44,23 @@ export const PageElementMixin = (base) => {
       return this.active
     }
 
-    headerSlotted () {
+    headerSlotted () { /* eslint-disable-line class-methods-use-this */
       return ''
     }
 
     renderHeader () {
+      /* eslint-disable lit/no-template-bind */
+
       return this.hideHeader
         ? ''
         : html`
-          <<%=vars.elPrefix%>-page-header id="header" .backComputer=${this._backComputer ? this._backComputer.bind(this) : undefined} back header-title="${ifDefined(this.pageTitle)}">
+          <<%=vars.elPrefix%>-page-header id="header" .backComputer=${this._backComputer ? this._backComputer : undefined} back header-title="${ifDefined(this.pageTitle)}">
             ${this.headerSlotted()}
           </<%=vars.elPrefix%>-page-header>
         `
     }
 
-    equalParams (o1, o2) {
+    equalParams (o1, o2) { /* eslint-disable-line class-methods-use-this */
       if (!o1 || !o2) return false
       const num = v => Number.isNaN(Number(v)) ? v : Number(v)
 
