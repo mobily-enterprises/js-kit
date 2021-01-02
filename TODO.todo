@@ -34,9 +34,9 @@ STAGE 1
 
    Reinstallable pages
    X client-app-root-page (maybe loaded dynamically, depending on flag)
+   - client-app-element [PLACEMENT]
    - client-app-inner-page [PLACEMENT]
-   - client-element [PLACEMENT]
-   - client-tabbed-element [PLACEMENT]
+   - client-tabs-element [PLACEMENT]
 
 STAGE 2
 

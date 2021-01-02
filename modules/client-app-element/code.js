@@ -15,8 +15,8 @@ exports.getPrompts = (config) => {
     },
     {
       type: 'text',
-      name: 'elementMenuTitle',
-      message: 'Element menu title',
+      name: 'elementTitle',
+      message: 'Element title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     }
