@@ -1,10 +1,10 @@
 /* Loaded modules -- start */
 import { html, css } from 'lit-element'
-import { PageElement } from '../lib/base/PageElement.js'
+import { <%=vars.baseClass%> } from '../lib/base/<%=vars.baseClass%>.js'
 /* Loaded modules -- end */
 
-class Element extends PageElement {
-  static get pagePath () { return [ '/<%=vars.newElementFullNameNoPrefix%>'] }
+class Element extends <%=vars.baseClass%> {
+  <%if(vars.baseClass === 'PageElement'){ %>static get pagePath () { return [ '/<%=vars.newElementFullNameNoPrefix%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
     return [
@@ -26,7 +26,12 @@ class Element extends PageElement {
   /* Element methods -- start */
   constructor () {
     super()
-    this.pageTitle = '<%=userInput['client-app-root-page'].elementTitle%>'
+    /* Constructor -- start */
+<%if(vars.baseClass === 'PageElement'){ -%>
+    this.pageTitle = '<%=vars.elementTitle%>'
+<% } -%>
+    /* Constructor -- end */
+
   }
 
   render () {
@@ -35,7 +40,7 @@ class Element extends PageElement {
       <!-- Element render -- start -->
       ${super.render()}
       <section>
-        <h2><%=userInput['client-app-root-page'].elementTitle%></h2>
+        <h2><%=vars.elementTitle%></h2>
         <!-- Element insertion point -->
       </section>
       <!-- Element render -- end -->

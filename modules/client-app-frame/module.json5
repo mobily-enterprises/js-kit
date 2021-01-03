@@ -47,12 +47,12 @@
            "value":"  <script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
         }
       ],
-      "src/root-pages/<%=vars.elPrefix%>-load-error.js":[
+      "src/pages/<%=vars.elPrefix%>-load-error.js":[
         {
           "op":"resolve-ejs"
         }
       ],
-      "src/root-pages/<%=vars.elPrefix%>-not-found.js":[
+      "src/pages/<%=vars.elPrefix%>-not-found.js":[
         {
           "op":"resolve-ejs"
         }
@@ -72,7 +72,7 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/root-pages/<%=vars.elPrefix%>-landing.js":[
+      "src/pages/<%=vars.elPrefix%>-landing.js":[
         {
           "op":"resolve-ejs"
         }

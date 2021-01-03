@@ -40,9 +40,9 @@ exports.postAdd = (config) => {
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'src/root-pages/PREFIX-load-error.js': return `src/root-pages/${config.vars.elPrefix}-load-error.js`
-    case 'src/root-pages/PREFIX-not-found.js': return `src/root-pages/${config.vars.elPrefix}-not-found.js`
-    case 'src/root-pages/PREFIX-landing.js': return `src/root-pages/${config.vars.elPrefix}-landing.js`
+    case 'src/pages/PREFIX-load-error.js': return `src/pages/${config.vars.elPrefix}-load-error.js`
+    case 'src/pages/PREFIX-not-found.js': return `src/pages/${config.vars.elPrefix}-not-found.js`
+    case 'src/pages/PREFIX-landing.js': return `src/pages/${config.vars.elPrefix}-landing.js`
     case 'src/lib/base/elements/PREFIX-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-header.js`
     case 'src/lib/base/elements/PREFIX-page-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-page-header.js`
     case 'src/lib/base/elements/PREFIX-toggle-button.js': return `src/lib/base/elements/${config.vars.elPrefix}-toggle-button.js`

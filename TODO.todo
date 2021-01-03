@@ -33,10 +33,36 @@ STAGE 1
    - Actually enable sessions server side, find a better way to whitelist URLs https://stackoverflow.com/questions/65492674/bypass-sessions-for-static-files-and-using-a-catchall-url-for-spa
 
    Reinstallable pages
-   X client-app-root-page (maybe loaded dynamically, depending on flag)
-   - client-app-element [PLACEMENT]
-   - client-app-inner-page [PLACEMENT]
-   - client-tabs-element [PLACEMENT]
+   X client-app-root-page (maybe loaded dynamically, depending on flag) -- placement fine as-is
+
+* client-app-tabs-element [PLACEMENT] (ask whether it will be routed pages, or "use-hash passive") -- ONLY ONE routed-pages per element
+
+* client-app-root-page
+  ☐ standard (page)
+  ☐ list (page)
+  ☐ view (page)
+  ☐ edit (page)
+
+* client-app-inner-page -- placed in any <!-- Page tab insertion point -->. Must be child of root-page, URL must beginning must match
+  ☐ standard (page)
+  ☐ list (page)
+  ☐ view (page)
+  ☐ edit (page)
+
+* client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
+  ☐ standard (element)
+  ☐ list (element)
+  ☐ view (element)
+  ☐ edit (element)
+
+
+
+
+
+
+* client-app-inner-page -- placed in any <!-- Page tab insertion point -->. Must be child of root-page, URL must beginning must match
+
+PLUS allow element and inner-pages to be placed in sub-dir (existing or created)
 
 STAGE 2
 
@@ -51,13 +77,21 @@ STAGE 3
 
   Reinstallable pages
    - server-store
-   - client-store-list-page
-   - client-store-view-page
-   - client-store-edit-page
 
-   - client-store-list-element [PLACEMENT]
-   - client-store-view-element [PLACEMENT]
-   - client-store-edit-element [PLACEMENT]
+   - client-store-list-element
+   - client-store-view-element
+   - client-store-edit-element
+
+   - client-store-list-inner-page
+   - client-store-view-inner-page
+   - client-store-edit-inner-page
+
+   - client-store-list-root-page
+   - client-store-view-root-page
+   - client-store-edit-root-page
+
+INNER PAGE AND ROOT PAGE
+
 
   Less important
    - client-server-shared-code
