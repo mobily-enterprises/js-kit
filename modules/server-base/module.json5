@@ -30,7 +30,7 @@
             {
                "op":"set",
                "key":"scripts.postinstall",
-               "value":"cd server; npm install"
+               "value":"cd server && npm install"
             }
          ]
       },
