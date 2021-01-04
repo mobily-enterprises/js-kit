@@ -25,23 +25,27 @@
 
     // If the element isn't here, teleport to 404 since it's a straight not found
     const cleanPath = path.split(/[#?/]/)[1]
-    if (!this.shadowRoot.querySelector(`<%=vars.elPrefix%>-${cleanPath}`)) {
-      activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-not-found'))
-      return
-    }
 
-    // Import the correct module for this page
-    let mod
-    try {
-      mod = await import(`./<%=vars.elPrefix%>-${cleanPath}.js`)
-    } catch (e) {
-      console.error('Error loading module:', e) /* eslint-disable-line no-console */
-      // Nothing needs to happen here
-    }
+    // Only try to load
+    if (cleanPath !== '') {
+      if(!this.shadowRoot.querySelector(`my-${cleanPath}`)) {
+        activateElement(this.shadowRoot.querySelector('my-not-found'))
+        return
+      }
 
-    // Loading error: display the loading error page
-    if (!mod) {
-      activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-load-error'))
+      // Import the correct module for this page
+      let mod
+      try {
+        mod = await import(`./my-${cleanPath}.js`)
+      } catch (e) {
+        console.error('Error loading module:', e) /* eslint-disable-line no-console */
+        // Nothing needs to happen here
+      }
+
+      // Loading error: display the loading error page
+      if (!mod) {
+        activateElement(this.shadowRoot.querySelector('my-load-error'))
+      }
     }
 
     await this.updateComplete
