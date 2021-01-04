@@ -39,7 +39,7 @@ class Element extends PageElement {
 
   render () {
     return html`
-      ${super.render()}
+      ${this.renderHeader()}
       <section>
         <h2>Oops! You hit a 404</h2>
         <div id="warningIcon">

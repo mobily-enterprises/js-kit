@@ -38,7 +38,7 @@ class Element extends <%=vars.baseClass%> {
     /* Element render function -- start */
     return html`
       <!-- Element render -- start -->
-      ${super.render()}
+      ${this.renderHeader()}
       <section>
         <h2><%=vars.elementTitle%></h2>
         <!-- Element insertion point -->

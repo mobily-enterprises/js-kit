@@ -13,12 +13,7 @@ export const PageElementMixin = (base) => {
       }
     }
 
-    render () {
-      return html`
-        ${this.renderHeader()}
-        ${super.render()}
-      `
-    }
+    render () {}
 
     constructor () {
       super()

@@ -22,7 +22,7 @@ class Element extends PageElement {
 
   render () {
     return html`
-      ${super.render()}
+      ${this.renderHeader()}
       <section>
         <h2>Landing PAGE</h2>
       </section>

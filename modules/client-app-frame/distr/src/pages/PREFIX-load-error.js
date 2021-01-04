@@ -41,7 +41,7 @@ class Element extends PageElement {
 
   render () {
     return html`
-      ${super.render()}
+      ${this.renderHeader()}
       <section>
         <h2>Loading error</h2>
         <div id="warningIcon">
