@@ -1,0 +1,11 @@
+{
+  "name":"client-app-page-tabs",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Tabs of simple non-routed elements",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-app-frame"
+  ],
+  "position": -1,
+}
