@@ -24,21 +24,19 @@ exports.preAdd = (config) => {
 }
 
 exports.postAdd = async (config) => {
-  config.utils.prompts( {
-    type: 'text',
-    name: 'stocazzo',
-    message: 'Tab id',
-    initial: '',
+  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir)
+
+  const destination = await config.utils.prompts( {
+    type: 'select',
+    name: 'destination',
+    message: 'Destination element',
+    choices: anchorPoints.map(e => { return { title: e.file, value: e.file } } )
     }
   )
-  console.log("TEST 1:", config.utils.walk(config.dstDir))
-  console.log("TEST 2:", config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir))
-
-
 
   const manipulations = {
     text: {
-      "":[
+      [destination.destination]:[
         {
            "op":"insert",
            "position":"after",
@@ -49,9 +47,7 @@ exports.postAdd = async (config) => {
       ]
     }
   }
-  await config.utils.executeManipulations(manipulations, )
-
-
+  await config.utils.executeManipulations(manipulations, config)
 }
 
 exports.fileRenamer = (config, file) => {
