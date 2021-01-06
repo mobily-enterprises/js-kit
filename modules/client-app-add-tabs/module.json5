@@ -1,5 +1,5 @@
 {
-  "name":"client-app-page-tabs",
+  "name":"client-app-add-tabs",
   "version":"1.0.0",
   "component": true,
   "description":"Tabs of simple non-routed elements",

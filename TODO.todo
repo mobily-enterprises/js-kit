@@ -36,9 +36,9 @@ STAGE 1
    Reinstallable pages
    X client-app-root-page (maybe loaded dynamically, depending on flag) -- placement fine as-is
 
-* client-app-page-tabs [PLACEMENT] -- ONLY ONE routed-pages per element
+* client-app-add-tabs [PLACEMENT] -- ONLY ONE routed-pages per element
 
-* client-app-element-tabs [PLACEMENT] ("use-hash passive")
+* client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
 
 X client-app-root-page
   ☐  (standard, list, view, edit)
