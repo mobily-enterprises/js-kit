@@ -15,7 +15,7 @@
 ✔ Change json to json5, in order to being able to add comments -- CHANGE OF HEART @done(2020-12-27 21:07)
 ✔ Change "// *** -- start" into self-contained blocks /* */ @done(2020-12-28 06:38)
 ✔ Change PageElementMixin render function @done(21-01-04 17:23)
- 
+
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin
 Watchout, taken autoload out of PageElementMixin
@@ -51,6 +51,15 @@ X client-app-root-page
 
 * client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
   ☐  (standard, list, view, edit)
+
+
+WHERE AM I?
+* Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints
+* Have a function that will display that info as as sentence
+* Rename client-app-page-tabs into client-app-element-tabs
+* Create client-app-page-tabs
+* Complete placement of client-app-element with prompts
+* Write client-app-inner-page so that it places pages inner pages in right spot
 
 
 STAGE 2
