@@ -54,13 +54,13 @@ X client-app-root-page
 
 
 WHERE AM I?
-* Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints
-* Have a function that will display that info as as sentence
+X Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints
+X Have a function that will display that info as as sentence
+X Add extra sentence to prompts, and write little intro when placing element
 * Rename client-app-page-tabs into client-app-element-tabs
 * Create client-app-page-tabs
 * Complete placement of client-app-element with prompts
 * Write client-app-inner-page so that it places pages inner pages in right spot
-
 
 STAGE 2
 

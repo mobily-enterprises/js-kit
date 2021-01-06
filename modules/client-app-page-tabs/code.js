@@ -24,8 +24,7 @@ exports.preAdd = (config) => {
 }
 
 exports.postAdd = async (config) => {
-  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir)
-
+  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, config.scaffoldUtilsFunctions.getFileInfo)
 
   if (!anchorPoints.length) {
     console.log('There are no insertion points available in the project')
@@ -36,7 +35,7 @@ exports.postAdd = async (config) => {
     type: 'select',
     name: 'destination',
     message: 'Destination element',
-    choices: anchorPoints.map(e => { return { title: e.file, value: e.file } } )
+    choices: anchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: e.file } } )
     }
   )
 
