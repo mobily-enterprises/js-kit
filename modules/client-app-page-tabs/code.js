@@ -26,6 +26,12 @@ exports.preAdd = (config) => {
 exports.postAdd = async (config) => {
   const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir)
 
+
+  if (!anchorPoints.length) {
+    console.log('There are no insertion points available in the project')
+    return
+  }
+
   const destination = await config.utils.prompts( {
     type: 'select',
     name: 'destination',
@@ -33,6 +39,11 @@ exports.postAdd = async (config) => {
     choices: anchorPoints.map(e => { return { title: e.file, value: e.file } } )
     }
   )
+
+  if (!destination.destination) {
+    console.log('No destination set')
+    return
+  }
 
   const manipulations = {
     text: {
