@@ -1,3 +1,5 @@
+const utils = require('../../utils.js')
+
 exports.getPromptsHeading = (config) => {
 }
 
@@ -24,40 +26,18 @@ exports.preAdd = (config) => {
 }
 
 exports.postAdd = async (config) => {
-  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, config.scaffoldUtilsFunctions.getFileInfo)
 
-  if (!anchorPoints.length) {
-    console.log('There are no insertion points available in the project')
-    return
-  }
-
-  const destination = await config.utils.prompts( {
-    type: 'select',
-    name: 'destination',
-    message: 'Destination element',
-    choices: anchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: e.file } } )
+  const textManipulations = [
+    {
+       "op":"insert",
+       "position":"after",
+       "newlineAfter":true,
+       "anchorPoint":"<!-- Element insertion point -->",
+       "valueFromFile":"element-tabs.js"
     }
-  )
+  ]
 
-  if (!destination.destination) {
-    console.log('No destination set')
-    return
-  }
-
-  const manipulations = {
-    text: {
-      [destination.destination]:[
-        {
-           "op":"insert",
-           "position":"after",
-           "newlineAfter":true,
-           "anchorPoint":"<!-- Element insertion point -->",
-           "valueFromFile":"element-tabs.js"
-        }
-      ]
-    }
-  }
-  await config.utils.executeManipulations(manipulations, config)
+  utils.runInsertionManipulations(config, '<!-- Element insertion point -->', textManipulations)
 }
 
 exports.fileRenamer = (config, file) => {

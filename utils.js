@@ -25,3 +25,32 @@ exports.getFileInfo = function (contents) {
     description: `Class of type ${m[1]}`
   }
 }
+
+exports.runInsertionManipulations = async function(config, anchorPoint, textManipulations) {
+  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, exports.getFileInfo)
+
+  if (!anchorPoints.length) {
+    console.log('There are no insertion points available in the project')
+    return
+  }
+
+  const destination = await config.utils.prompts( {
+    type: 'select',
+    name: 'destination',
+    message: 'Destination element',
+    choices: anchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: e.file } } )
+    }
+  )
+
+  if (!destination.destination) {
+    console.log('No destination set')
+    return
+  }
+
+  const manipulations = {
+    text: {
+      [destination.destination]: textManipulations
+    }
+  }
+  await config.utils.executeManipulations(manipulations, config)
+}
