@@ -37,22 +37,24 @@ exports.runInsertionManipulations = async function(config, anchorPoint, textMani
   // Take out the element just added
   anchorPoints = anchorPoints.filter(ap => ap.file !== excludeFile)
 
-  const destination = await config.utils.prompts( {
+  const input = await config.utils.prompts( {
     type: 'select',
     name: 'destination',
     message: 'Destination element',
     choices: anchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: e.file } } )
     }
   )
+  const destination = input.destination
 
-  if (!destination.destination) {
+  if (!destination) {
     console.log('No destination set')
     return
   }
 
+  if (typeof textManipulations === 'function') textManipulations = textManipulations(destination)
   const manipulations = {
     text: {
-      [destination.destination]: textManipulations
+      [destination]: textManipulations
     }
   }
   await config.utils.executeManipulations(manipulations, config)
