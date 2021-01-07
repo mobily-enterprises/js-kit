@@ -33,7 +33,7 @@ exports.postAdd = async (config) => {
        "position":"after",
        "newlineAfter":true,
        "anchorPoint":"<!-- Element insertion point -->",
-       "valueFromFile":"element-tabs.js"
+       "valueFromFile":"page-tabs.js"
     }
   ]
 

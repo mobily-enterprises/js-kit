@@ -26,13 +26,16 @@ exports.getFileInfo = function (contents) {
   }
 }
 
-exports.runInsertionManipulations = async function(config, anchorPoint, textManipulations) {
-  const anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, exports.getFileInfo)
+exports.runInsertionManipulations = async function(config, anchorPoint, textManipulations, excludeFile) {
+  let anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, exports.getFileInfo)
 
   if (!anchorPoints.length) {
     console.log('There are no insertion points available in the project')
     return
   }
+
+  // Take out the element just added
+  anchorPoints = anchorPoints.filter(ap => ap.file !== excludeFile)
 
   const destination = await config.utils.prompts( {
     type: 'select',

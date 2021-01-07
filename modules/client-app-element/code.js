@@ -1,3 +1,5 @@
+const utils = require('../../utils.js')
+
 exports.getPromptsHeading = (config) => {
 }
 
@@ -35,22 +37,7 @@ exports.getPrompts = (config) => {
       message: 'Element name',
       initial: '',
       validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
-    },
-    {
-      type: 'text',
-      name: 'elementTitle',
-      message: 'Element title',
-      initial: '',
-      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
-    },
-    {
-      type: 'text',
-      name: 'elementMenuTitle',
-      message: 'Element menu title',
-      initial: '',
-      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     }
-
   ]
 
   return questions
@@ -72,6 +59,19 @@ exports.preAdd = (config) => {
 }
 
 exports.postAdd = (config) => {
+  const textManipulations = [
+    {
+       "op":"insert",
+       "position":"after",
+       "newlineAfter":true,
+       "newlineBefore":true,
+       "anchorPoint":"<!-- Element insertion point -->",
+       "value":"<<%=vars.elementName%>></<%=vars.elementName%>>"
+    }
+  ]
+
+  const selfPathToExclude = `src/elements/${config.vars.newElementFullName}.js`
+  utils.runInsertionManipulations(config, '<!-- Element insertion point -->', textManipulations, selfPathToExclude)
 }
 
 exports.fileRenamer = (config, file) => {

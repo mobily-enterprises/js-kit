@@ -36,17 +36,18 @@ STAGE 1
    Reinstallable pages
    X client-app-root-page (maybe loaded dynamically, depending on flag) -- placement fine as-is
 
-* client-app-add-tabs [PLACEMENT] -- ONLY ONE routed-pages per element
+X client-app-add-tabs [PLACEMENT] -- ONLY ONE routed-pages per element
 
-* client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
+X client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
 
 X client-app-root-page
   ☐  (standard, list, view, edit)
 
-* client-app-inner-page -- placed in any <!-- Page tab insertion point -->. Must be child of root-page, URL must beginning must match
+* client-app-inner-page -- placed in any <!-- Page insertion point --> (in stack or tabs)
+  ☐ Must be child of root-page, URL must beginning must match
   ☐ File position will be a directory with name of parent element
   ☐ Add import in parent element
-  ☐
+
   ☐  (standard, list, view, edit)
 
 * client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
@@ -58,35 +59,33 @@ X Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchor
 X Have a function that will display that info as as sentence
 X Add extra sentence to prompts, and write little intro when placing element
 X Rename client-app-add-tabs into client-app-element-tabs
-* Create client-app-add-page-tabs
-* Complete placement of client-app-element with prompts
-* Write client-app-inner-page so that it places pages inner pages in right spot
+X Create client-app-add-page-tabs
+X Complete placement of client-app-element with prompts
+* Write client-app-inner-page so that it places inner pages in right spot
 
 STAGE 2
 
-   - client-reducs
+ - server-add-stores (adding an actual store)
 
-   - server-stores
-   - client-server-auth
-   - client-server-user-config
-   - client-server-app-config
+ - client-store-list-element
+ - client-store-view-element
+ - client-store-edit-element
+
+ - client-store-list-inner-page
+ - client-store-view-inner-page
+ - client-store-edit-inner-page
+
+ - client-store-list-root-page
+ - client-store-view-root-page
+ - client-store-edit-root-page
 
 STAGE 3
 
-  Reinstallable pages
-   - server-store
+ - client-reducs
+ - client-server-auth
+ - client-server-user-config
+ - client-server-app-config
 
-   - client-store-list-element
-   - client-store-view-element
-   - client-store-edit-element
-
-   - client-store-list-inner-page
-   - client-store-view-inner-page
-   - client-store-edit-inner-page
-
-   - client-store-list-root-page
-   - client-store-view-root-page
-   - client-store-edit-root-page
 
 INNER PAGE AND ROOT PAGE
 
