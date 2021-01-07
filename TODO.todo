@@ -57,8 +57,8 @@ WHERE AM I?
 X Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints
 X Have a function that will display that info as as sentence
 X Add extra sentence to prompts, and write little intro when placing element
-X Rename client-app-page-tabs into client-app-element-tabs
-* Create client-app-page-tabs
+X Rename client-app-add-tabs into client-app-element-tabs
+* Create client-app-add-page-tabs
 * Complete placement of client-app-element with prompts
 * Write client-app-inner-page so that it places pages inner pages in right spot
 
