@@ -15,6 +15,13 @@
 ✔ Change json to json5, in order to being able to add comments -- CHANGE OF HEART @done(2020-12-27 21:07)
 ✔ Change "// *** -- start" into self-contained blocks /* */ @done(2020-12-28 06:38)
 ✔ Change PageElementMixin render function @done(21-01-04 17:23)
+✔ Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints  @done(2021-01-07 16:46)
+✔ Have a function that will display that info as as sentence @done(2021-01-07 16:46)
+✔ Add extra sentence to prompts, and write little intro when placing element @done(2021-01-07 16:46)
+✔ Rename client-app-add-tabs into client-app-element-tabs @done(2021-01-07 16:46)
+✔ Create client-app-add-page-tabs @done(2021-01-07 16:46)
+✔ Complete placement of client-app-element with prompts @done(2021-01-07 16:46)
+✔ Write client-app-inner-page so that it places inner pages in right spot @done(2021-01-07 16:46)
 
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin
@@ -43,25 +50,14 @@ X client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
 X client-app-root-page
   ☐  (standard, list, view, edit)
 
-* client-app-inner-page -- placed in any <!-- Page insertion point --> (in stack or tabs)
+* client-app-inner-page -- placed in any <!-- Page insertion point --> or <!-- Page tab insertion point -->
   ☐ Must be child of root-page, URL must beginning must match
   ☐ File position will be a directory with name of parent element
   ☐ Add import in parent element
-
   ☐  (standard, list, view, edit)
 
 * client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
   ☐  (standard, list, view, edit)
-
-
-WHERE AM I?
-X Add more gathered metainfo (Mixin, title, whatever) with regex from findAnchorPoints
-X Have a function that will display that info as as sentence
-X Add extra sentence to prompts, and write little intro when placing element
-X Rename client-app-add-tabs into client-app-element-tabs
-X Create client-app-add-page-tabs
-X Complete placement of client-app-element with prompts
-X Write client-app-inner-page so that it places inner pages in right spot
 
 STAGE 2
 
