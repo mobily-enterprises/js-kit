@@ -89,7 +89,7 @@ exports.postAdd = (config) => {
          op: "insert",
          position: "after",
          newlineAfter: true,
-         newlineBefore: true,
+         newlineBefore: false,
          anchorPoint: anchorPoint,
          value:"<<%=vars.elementName%>></<%=vars.elementName%>>"
       },
@@ -103,13 +103,12 @@ exports.postAdd = (config) => {
     ]
 
     if (anchorPoint === '<!-- Element tab insertion point -->') {
-      debugger
       textManipulations.push(
         {
            op: "insert",
            position: "after",
            newlineAfter: true,
-           newlineBefore: true,
+           newlineBefore: false,
            anchorPoint: '<!-- Element tab heading insertion point -->',
            value:"<div tab-name=\"<%=vars.newElementFullName%>\"><%=utils.capitalize(vars.elementName)%></div>"
         }
