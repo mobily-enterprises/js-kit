@@ -1,0 +1,20 @@
+{
+  "name":"client-app-inner-page",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Inner page for JS-KIT",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-app-frame"
+  ],
+  "position": -1,
+  "manipulate":{
+    "text":{
+      "src/pages/<%=vars.newElementFullName%>.js":[
+        {
+          "op":"resolve-ejs"
+        },
+      ]
+    }
+  }
+}

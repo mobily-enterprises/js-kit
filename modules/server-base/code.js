@@ -1,14 +1,9 @@
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
 
-exports.getPrompts = (config) => {
-}
+exports.getPrompts = (config) => { }
 
-exports.prePrompts = (config) => {
-}
+exports.prePrompts = (config) => { }
 
-exports.preAdd = (config) => {
-}
+exports.preAdd = (config) => { }
 
-exports.postAdd = (config) => {
-}
+exports.postAdd = (config) => { }

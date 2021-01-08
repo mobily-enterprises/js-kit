@@ -68,11 +68,9 @@ exports.preAdd = (config) => {
 exports.postAdd = (config) => {
   if (!config.userInput['client-app-element'].placeElement) return
 
-  debugger
-
   const textManipulations = function (file, anchorPoint) {
 
-    // DIsclaimer: I wrote this code when really, really tired (Tony)
+    // Disclaimer: I wrote this code when really, really tired (Tony)
     // Work out the full path of the file to import
     const fileToImport = `src/elements/${config.vars.newElementFullName}.js`
     // Work out the relative path from the two path's location. Note: if the files are in the same

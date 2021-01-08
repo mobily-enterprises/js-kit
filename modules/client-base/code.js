@@ -1,22 +1,17 @@
 
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
 
-exports.getPrompts = (config) => {
-}
+exports.getPrompts = (config) => { }
 
-exports.prePrompts = (config) => {
-}
+exports.prePrompts = (config) => { }
 
 exports.boot = (config) => {
   config.vars.appFile =  config.utils.toCamelCase(config.dstPackageJsonValues.name)
 }
 
-exports.preAdd = (config) => {
-}
+exports.preAdd = (config) => { }
 
-exports.postAdd = (config) => {
-}
+exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
   switch (file) {

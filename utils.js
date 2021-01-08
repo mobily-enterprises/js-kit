@@ -15,14 +15,14 @@ exports.getFileInfo = function (contents) {
   if (m) return {
     mixins: m[1].split('(').join(','),
     baseClass: m[2],
-    description: `An ${m[2]}, mixed with ${m[1]}`
+    description: `${m[2]}, mixed with ${m[1]}`
   }
 
   // Look for mixed in classes
   m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)[ \t]+\{$/m)
   if (m) return {
     baseClass: m[1],
-    description: `An ${m[1]}`
+    description: `${m[1]}`
   }
 }
 

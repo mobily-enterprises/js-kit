@@ -25,7 +25,12 @@
 ✔ Work out how to add a page either in Page Insertion Point or Page tab insertion point @done(2021-01-08 07:43)
 ✔ Work out how to add an element either in Element Insertion Point or Element tab insertion point @done(2021-01-08 07:43)
   ✔ HINT: write textManipulation as a function, AND findAnchorPoints() given an array, and adding anchor point to info @done(2021-01-08 07:43)
+☐ REWORK things so that postAdd is not used for extra prompts, use prepRompts instead (doh)
 ☐ Finish client-app-inner-pages
+  ☐ Add URL info to js-kit/utils/getFileInfo
+  ☐ Ask for path RELATIVE to the path above
+  ☐ Add file
+
 
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin
@@ -54,13 +59,13 @@ X client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
 X client-app-root-page
   ☐  (standard, list, view, edit)
 
+X client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
+  ☐  (standard, list, view, edit)
+
 * client-app-inner-page -- placed in any <!-- Page insertion point --> or <!-- Page tab insertion point -->
   ☐ Must be child of root-page, URL must beginning must match
   ☐ File position will be a directory with name of parent element
   ☐ Add import in parent element
-  ☐  (standard, list, view, edit)
-
-* client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
   ☐  (standard, list, view, edit)
 
 STAGE 2

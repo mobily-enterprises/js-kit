@@ -1,9 +1,22 @@
+const utils = require('../../utils.js')
 
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
+
+exports.getPrompts = (config) => { }
+
 
 exports.getPrompts = (config) => {
-  const questions = [
+  const anchorPoints = [
+    'Page tab insertion point'
+  ]
+  let foundAnchorPoints = config.utils.findAnchorPoints(anchorPoints, config.dstDir, utils.getFileInfo)
+
+  if (!foundAnchorPoints.length) {
+    console.log('No suitable page for an inner page found')
+    return false
+  }
+
+  return [
     {
       type: 'select',
       name: 'type',
@@ -36,53 +49,40 @@ exports.getPrompts = (config) => {
     },
     {
       type: 'text',
-      name: 'elementTitle',
-      message: 'Element title',
-      initial: '',
-      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
-    },
-    {
-      type: 'text',
       name: 'elementMenuTitle',
       message: 'Element menu title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
+    },
+    {
+      type: 'select',
+      name: 'destination',
+      message: 'Destination element',
+      choices: foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
     }
-
   ]
-
-  if (config.userInput['client-app-frame'].dynamicLoading) {
-    questions.push(
-      {
-        type: 'toggle',
-        name: 'uncommentedStaticImport',
-        message: 'Force static load with static import, even though app supports dynamic imports',
-        initial: false
-      }
-    )
-  } else {
-    config.userInput['client-app-root-page'].uncommentedStaticImport = true
-  }
-
-  return questions
 }
-exports.boot = (config) => {
-}
+exports.boot = (config) => { }
 
 exports.preAdd = (config) => {
   // const prefix = config.utils.capitalize(config.utils.toCamelCase(config.vars.elPrefix))
-  // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-app-root-page'].elementName))
-  config.vars.newElementFullNameNoPrefix = `${config.userInput['client-app-root-page'].elementName}`
-  config.vars.newElementFullName = `${config.vars.elPrefix}-${config.userInput['client-app-root-page'].elementName}`
-  config.vars.type = config.userInput['client-app-root-page'].type
-  config.vars.elementName = config.userInput['client-app-root-page'].elementName
-  config.vars.elementTitle = config.userInput['client-app-root-page'].elementTitle
-  config.vars.elementMenuTitle = config.userInput['client-app-root-page'].elementMenuTitle
-  config.vars.uncommentedStaticImport = config.userInput['client-app-root-page'].uncommentedStaticImport
+  // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-app-inner-page'].elementName))
+  config.vars.newElementFullNameNoPrefix = `${config.userInput['client-app-inner-page'].elementName}`
+  config.vars.newElementFullName = `${config.vars.elPrefix}-${config.userInput['client-app-inner-page'].elementName}`
+  config.vars.type = config.userInput['client-app-inner-page'].type
+  config.vars.elementName = config.userInput['client-app-inner-page'].elementName
+  config.vars.elementTitle = config.userInput['client-app-inner-page'].elementTitle
+  config.vars.elementMenuTitle = config.userInput['client-app-inner-page'].elementMenuTitle
   config.vars.baseClass = 'PageElement'
 }
 
-exports.postAdd = (config) => { }
+exports.postAdd = (config) => {
+  if (!config.userInput['client-app-inner-page'].destination) {
+    console.log('No destination selected')
+    return
+  }
+
+}
 
 exports.fileRenamer = (config, file) => {
 
