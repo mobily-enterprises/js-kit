@@ -37,7 +37,12 @@ exports.postAdd = async (config) => {
     }
   ]
 
-  utils.runInsertionManipulations(config, '<!-- Element insertion point -->', textManipulations)
+  utils.runInsertionManipulations(
+    config,
+    '<!-- Element insertion point -->',
+    textManipulations,
+    utils.humanizeAnchorPoint
+  )
 }
 
 exports.fileRenamer = (config, file) => {

@@ -15,46 +15,57 @@ exports.getFileInfo = function (contents) {
   if (m) return {
     mixins: m[1].split('(').join(','),
     baseClass: m[2],
-    description: `Class of type ${m[2]}, mixed with ${m[1]}`
+    description: `An ${m[2]}, mixed with ${m[1]}`
   }
 
   // Look for mixed in classes
   m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)[ \t]+\{$/m)
   if (m) return {
     baseClass: m[1],
-    description: `Class of type ${m[1]}`
+    description: `An ${m[1]}`
   }
 }
 
-exports.runInsertionManipulations = async function(config, anchorPoint, textManipulations, excludeFile) {
-  let anchorPoints = config.utils.findAnchorPoints('<!-- Element insertion point -->', config.dstDir, exports.getFileInfo)
+exports.humanizeAnchorPoint  = (anchorPoint) => {
+  switch (anchorPoint) {
+    case '<!-- Element insertion point -->': return 'in element'
+    case '<!-- Element tab insertion point -->': return 'in tab'
+    default: return anchorPoint
+  }
+}
 
-  if (!anchorPoints.length) {
+
+exports.runInsertionManipulations = async function(config, anchorPoints, textManipulations, humanizeAnchorPoint, excludeFile) {
+  let foundAnchorPoints = config.utils.findAnchorPoints(anchorPoints, config.dstDir, exports.getFileInfo)
+
+  if (!foundAnchorPoints.length) {
     console.log('There are no insertion points available in the project')
     return
   }
 
   // Take out the element just added
-  anchorPoints = anchorPoints.filter(ap => ap.file !== excludeFile)
+  foundAnchorPoints = foundAnchorPoints.filter(ap => ap.file !== excludeFile)
 
   const input = await config.utils.prompts( {
     type: 'select',
     name: 'destination',
     message: 'Destination element',
-    choices: anchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description}`, value: e.file } } )
+    choices: foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} (${humanizeAnchorPoint(e.anchorPoint)})`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
     }
   )
-  const destination = input.destination
-
-  if (!destination) {
-    console.log('No destination set')
+  if (!input.destination || !input.destination.file) {
+    console.log('No destination file set')
     return
+
   }
 
-  if (typeof textManipulations === 'function') textManipulations = textManipulations(destination)
+  const file = input.destination.file
+  const anchorPoint = input.destination.anchorPoint
+
+  if (typeof textManipulations === 'function') textManipulations = textManipulations(file, anchorPoint)
   const manipulations = {
     text: {
-      [destination]: textManipulations
+      [file]: textManipulations
     }
   }
   await config.utils.executeManipulations(manipulations, config)

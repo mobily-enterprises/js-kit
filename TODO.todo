@@ -22,6 +22,10 @@
 ✔ Create client-app-add-page-tabs @done(2021-01-07 16:46)
 ✔ Complete placement of client-app-element with prompts @done(2021-01-07 16:46)
 ✔ Write client-app-inner-page so that it places inner pages in right spot @done(2021-01-07 16:46)
+✔ Work out how to add a page either in Page Insertion Point or Page tab insertion point @done(2021-01-08 07:43)
+✔ Work out how to add an element either in Element Insertion Point or Element tab insertion point @done(2021-01-08 07:43)
+  ✔ HINT: write textManipulation as a function, AND findAnchorPoints() given an array, and adding anchor point to info @done(2021-01-08 07:43)
+☐ Finish client-app-inner-pages
 
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin
@@ -62,6 +66,7 @@ X client-app-root-page
 STAGE 2
 
  - server-add-stores (adding an actual store)
+ - Add ability to run task to create DB for stores
 
  - client-store-list-element
  - client-store-view-element
@@ -83,13 +88,10 @@ STAGE 3
  - client-server-app-config
 
 
-INNER PAGE AND ROOT PAGE
-
-
-  Less important
-   - client-server-shared-code
 
 STAGE 4
+
+☐ (maybe) client-server-shared-code
 
 ☐ Generally tidy up and improve
 ☐ Figure out how to change eslint rules in open-wc
