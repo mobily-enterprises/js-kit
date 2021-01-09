@@ -1,5 +1,6 @@
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
+
+exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
   return [
@@ -35,8 +36,6 @@ exports.getPrompts = (config) => {
     }
   ]
 }
-
-exports.prePrompts = (config) => { }
 
 exports.preAdd = (config) => { }
 

@@ -2,8 +2,7 @@ const utils = require('../../utils.js')
 
 exports.getPromptsHeading = (config) => { }
 
-exports.getPrompts = (config) => { }
-
+exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
   const anchorPoints = [

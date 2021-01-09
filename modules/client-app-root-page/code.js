@@ -1,6 +1,7 @@
 
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
+
+exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
   const questions = [
@@ -66,8 +67,8 @@ exports.getPrompts = (config) => {
 
   return questions
 }
-exports.boot = (config) => {
-}
+
+exports.boot = (config) => { }
 
 exports.preAdd = (config) => {
   // const prefix = config.utils.capitalize(config.utils.toCamelCase(config.vars.elPrefix))

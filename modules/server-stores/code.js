@@ -1,8 +1,8 @@
 exports.getPromptsHeading = (config) => { }
 
-exports.getPrompts = (config) => { }
-
 exports.prePrompts = (config) => { }
+
+exports.getPrompts = (config) => { }
 
 exports.preAdd = (config) => { }
 

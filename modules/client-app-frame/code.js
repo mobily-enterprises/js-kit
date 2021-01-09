@@ -2,6 +2,8 @@ exports.getPromptsHeading = (config) => {
   return "Pick the previx of your app's elements. If you pick 'my', elements will be 'my-something', 'my-something-else' and so on"
 }
 
+exports.prePrompts = (config) => { }
+
 exports.getPrompts = (config) => {
   return [
     {
@@ -25,18 +27,13 @@ exports.getPrompts = (config) => {
   ]
 }
 
-exports.prePrompts = (config) => {
-}
-
 exports.boot = (config) => {
   config.vars.elPrefix =  config.userInput['client-app-frame'].elPrefix
 }
 
-exports.preAdd = (config) => {
-}
+exports.preAdd = (config) => { }
 
-exports.postAdd = (config) => {
-}
+exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
   switch (file) {

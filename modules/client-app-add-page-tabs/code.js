@@ -1,10 +1,8 @@
 const utils = require('../../utils.js')
 
-exports.getPromptsHeading = (config) => {
-}
+exports.getPromptsHeading = (config) => { }
 
-exports.getPrompts = (config) => {
-}
+exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
   const questions = [
@@ -19,11 +17,10 @@ exports.getPrompts = (config) => {
 
   return questions
 }
-exports.boot = (config) => {
-}
 
-exports.preAdd = (config) => {
-}
+exports.boot = (config) => { }
+
+exports.preAdd = (config) => { }
 
 exports.postAdd = async (config) => {
 
@@ -45,5 +42,4 @@ exports.postAdd = async (config) => {
   )
 }
 
-exports.fileRenamer = (config, file) => {
-}
+exports.fileRenamer = (config, file) => { }
