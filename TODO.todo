@@ -37,6 +37,8 @@
 ☐ --- STAGE 2 DONE ---
 
 
+☐ LATER: Check that element doesn't exist already
+☐ LATER: Allow to add elements in a "elements" subdirectory under the element itself
 
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin

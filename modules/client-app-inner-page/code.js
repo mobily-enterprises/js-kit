@@ -75,7 +75,7 @@ exports.getPrompts = (config) => {
     },
     {
       type: 'text',
-      name: 'subUrl',
+      name: 'subPath',
       message: prev => `Nested URL, coming from ${prev.pagePath}`,
       choices: anchorPoints(),
       validate: value => !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/) ? 'Valid URLs, starting with "/" or "#"' : true
@@ -95,8 +95,12 @@ exports.postPrompts = async (config) => {
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
     title: userInput.elementTitle,
-    menuTitle: userInput.elementMenuTitle,
-    placeElement: false
+    placeElement: false,
+    subPath: config.userInput['client-app-inner-page'].subPath
+    // TODO
+    parentElementPath,
+    // TODO
+    importPath,
   }
 
   /*

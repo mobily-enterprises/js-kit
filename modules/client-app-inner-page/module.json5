@@ -14,7 +14,37 @@
         {
           "op":"resolve-ejs"
         },
+      ],
+      // TODO
+      "<%=vars.newElementInfo.parentElementPath%>":[
+        {
+          // TODO
+          "op": "insert",
+          "position": "after",
+          "newlineAfter": true,
+          "newlineBefore": false,
+          "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
+          "value":"<<%=vars.newElementInfo.name%> slot=\"content\"></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          // TODO
+          "op": "insert",
+          "position": "before",
+          "newlineAfter": false,
+          "anchorPoint": "/* Loaded modules -- end */",
+          "value": "import '<%=vars.newElementInfo.importPath%>'"
+        },
+        {
+          // TO CHECK
+          "op": "insert",
+          "position": "after",
+          "newlineAfter": true,
+          "newlineBefore": false,
+          "anchorPoint": '<!-- Page tab heading insertion point -->',
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"${window.location.pathname}<%=vars.newElementInfo.subPath\"><div><%=vars.newElementInfo.title%>%></div></a>"
+        }
       ]
+    }
     }
   }
 }
