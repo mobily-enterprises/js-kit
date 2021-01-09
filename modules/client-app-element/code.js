@@ -8,10 +8,9 @@ exports.prePrompts = (config) => { }
 exports.getPrompts = (config) => {
 
   function anchorPoints () {
-    let foundAnchorPoints = config.utils.findAnchorPoints(
+    let foundAnchorPoints = utils.findAnchorPoints(
+      config,
       ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'],
-      config.dstDir,
-      utils.getFileInfo
     )
 
     if (!foundAnchorPoints.length) {

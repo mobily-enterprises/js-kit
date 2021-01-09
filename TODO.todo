@@ -29,17 +29,18 @@
 ✔ Finish client-app-inner-pages @done(2021-01-09 15:34)
   ✔ Add URL info to js-kit/utils/getFileInfo @done(2021-01-09 11:27)
   ✔ Ask for path RELATIVE to the path above @done(2021-01-09 11:27)
-☐ Split findAnchorPoints so that there is a generic one from scaffoldizer and a specific super-short one for js-kit
+✔ Split findAnchorPoints so that there is a generic one from scaffoldizer and a specific super-short one for js-kit @done(2021-01-10 06:06)
+✔ Harmonise API so that config is always at the beginning @done(2021-01-10 06:37)
+☐ Allow to add elements in a "elements" subdirectory under the element itself
+☐ Check that element doesn't exist already
+☐ Check that element path is not already set
+
 ☐ Check that it still all works
+
 ☐ Add server stores (simplified version)
 ☐ Add way to run scripts -- use to create databases
 ☐ Add add-edit elements, list elements, etc (check renaming, right now can't work for others)
 ☐ --- STAGE 2 DONE ---
-
-
-☐ LATER: Check that element doesn't exist already
-☐ LATER: Check that element path is not already set
-☐ LATER: Allow to add elements in a "elements" subdirectory under the element itself
 
 NOTES:
 Maybe add reflect:true to routify's PageElementMixin
@@ -99,16 +100,9 @@ STAGE 3
  - client-server-auth
  - client-server-user-config
  - client-server-app-config
+ - Figure out how to change eslint rules in open-wc, or detach from open-wc
 
 STAGE 4
-
-☐ (maybe) client-server-shared-code
-
-☐ Generally tidy up and improve
-☐ Figure out how to change eslint rules in open-wc, or detach from open-wc
-
-STAGE 5
-
 ☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit
 

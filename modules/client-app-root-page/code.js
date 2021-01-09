@@ -73,6 +73,7 @@ exports.postPrompts = (config) => {
 
   config.vars.newElementInfo = {
     baseClass: 'PageElement',
+    pagePath: `/${userInput.elementName}`,
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,

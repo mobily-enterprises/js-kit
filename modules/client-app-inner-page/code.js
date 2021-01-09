@@ -8,8 +8,8 @@ exports.prePrompts = (config) => { }
 exports.getPrompts = (config) => {
 
   function anchorPoints () {
-    let foundAnchorPoints = config.utils
-      .findAnchorPoints('<!-- Page tab insertion point -->', config.dstDir, utils.getFileInfo)
+    let foundAnchorPoints = utils
+      .findAnchorPoints(config, '<!-- Page tab insertion point -->')
       .filter(e => e.info.pagePath)
 
     if (!foundAnchorPoints.length) {
@@ -86,12 +86,11 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-inner-page']
 
-  debugger
-
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
     baseClass: 'PageElement',
+    pagePath: `${userInput.destination.pagePath }${userInput.subPath}`,
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
@@ -108,35 +107,6 @@ exports.postPrompts = async (config) => {
     config.vars.newElementInfo.parentElementPath.split('.').slice(0, -1).join('.'),
     `${config.vars.newElementInfo.name}.js`
   )
-
-
-  /*
-   [ ] Work out the path of the file (the chosen file, munus the 'js' at the end)
-   [ ] Work out relative link from container to element
-   [ ] Work out pagePath
-
-   [ ] Make sure fileRanamer copies the file to the right spot
-   [ ] Add module.json writing to add import to parent file (same as appElement)
-   [ ] Add module.json writing to add entry in tab to parent file (same as AppElement)
-   [ ]
-  */
-
-  /*
-  // Work out the relative path from the two path's location. Note: if the files are in the same
-  // spot, it will need to be assigned at least a "."
-  // When joining them together, `path.sep` is used since path.join will normalise things, and
-  // eat away that './' (if present)
-  const fileToImport = `src/elements/${newElementInfo.name}.js`
-  let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
-  const importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
-
-  // New page's info
-  if (userInput.placeElement && userInput.destination) {
-    config.vars.newElementInfo.placeElement = true
-    config.vars.newElementInfo.importPath = importPath
-    config.vars.newElementInfo.destination =  userInput.destination
-  }
-  */
 
 }
 

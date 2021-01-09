@@ -7,8 +7,8 @@ exports.prePrompts = (config) => { }
 exports.getPrompts = (config) => {
 
   function anchorPoints () {
-    let foundAnchorPoints = config.utils
-      .findAnchorPoints('<!-- Element insertion point -->', config.dstDir, utils.getFileInfo)
+    let foundAnchorPoints = utils
+      .findAnchorPoints(config, '<!-- Element insertion point -->')
       .filter(e => e.info.baseClass === 'PageElement')
 
     if (!foundAnchorPoints.length) {
