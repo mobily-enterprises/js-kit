@@ -32,12 +32,13 @@
 ☐ Split findAnchorPoints so that there is a generic one from scaffoldizer and a specific super-short one for js-kit
 ☐ Check that it still all works
 ☐ Add server stores (simplified version)
-☐ Add way to run script
-☐ Add add-edit elements, without stores stuff
+☐ Add way to run scripts -- use to create databases
+☐ Add add-edit elements, list elements, etc (check renaming, right now can't work for others)
 ☐ --- STAGE 2 DONE ---
 
 
 ☐ LATER: Check that element doesn't exist already
+☐ LATER: Check that element path is not already set
 ☐ LATER: Allow to add elements in a "elements" subdirectory under the element itself
 
 NOTES:
@@ -98,8 +99,6 @@ STAGE 3
  - client-server-auth
  - client-server-user-config
  - client-server-app-config
-
-
 
 STAGE 4
 
