@@ -25,12 +25,15 @@
 ✔ Work out how to add a page either in Page Insertion Point or Page tab insertion point @done(2021-01-08 07:43)
 ✔ Work out how to add an element either in Element Insertion Point or Element tab insertion point @done(2021-01-08 07:43)
   ✔ HINT: write textManipulation as a function, AND findAnchorPoints() given an array, and adding anchor point to info @done(2021-01-08 07:43)
-☐ REWORK things so that postAdd is not used for extra prompts, use prepRompts instead (doh)
+✔ REWORK things so that postAdd is not used for extra prompts, use prepRompts instead (doh) @done(2021-01-09 10:49)
 ☐ Finish client-app-inner-pages
-  ☐ Add URL info to js-kit/utils/getFileInfo
-  ☐ Ask for path RELATIVE to the path above
+  ✔ Add URL info to js-kit/utils/getFileInfo @done(2021-01-09 11:27)
+  ✔ Ask for path RELATIVE to the path above @done(2021-01-09 11:27)
+☐ Split findAnchorPoints so that there is a generic one from scaffoldizer and a specific super-short one for js-kit
+☐ Check that it still all works
+☐ Add server stores (simplified version)
+☐ Add way to run script
 ☐ Add add-edit elements, without stores stuff
-☐ Add stores
 ☐ --- STAGE 2 DONE ---
 
 
@@ -102,7 +105,10 @@ STAGE 4
 ☐ (maybe) client-server-shared-code
 
 ☐ Generally tidy up and improve
-☐ Figure out how to change eslint rules in open-wc, or boot it
+☐ Figure out how to change eslint rules in open-wc, or detach from open-wc
+
+STAGE 5
+
 ☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit
 
