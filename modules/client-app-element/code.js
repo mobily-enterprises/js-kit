@@ -73,68 +73,37 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
-  if (!userInput.placeElement || !userInput.destination) return
-
+  // New page's info
+  // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
+    baseClass: 'AppElement',
     type: userInput.type,
-    nameNoPrefix: userInput.elementName,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
+    nameNoPrefix: userInput.elementName,
     title: userInput.elementTitle,
     menuTitle: userInput.elementMenuTitle,
-    baseClass: 'AppElement'
+    placeElement: false
   }
-
-  // Work out the full path of the file to import
-  const fileToImport = `src/elements/${newElementInfo.name}.js`
 
   // Work out the relative path from the two path's location. Note: if the files are in the same
   // spot, it will need to be assigned at least a "."
-  let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
-
-  // Join them together. Note that `path.sep` is used since path.join will normalise things, and
+  // When joining them together, `path.sep` is used since path.join will normalise things, and
   // eat away that './' (if present)
+  const fileToImport = `src/elements/${newElementInfo.name}.js`
+  let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
   const importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
 
-  // Add more transformations based on the user input
-
-  config.moduleJson5Values.manipulate.text[userInput.destination.file] = [
-    {
-       op: "insert",
-       position: "after",
-       newlineAfter: true,
-       newlineBefore: false,
-       anchorPoint: userInput.destination.anchorPoint,
-       value:"<<%=vars.newElementInfo.name%>></<%=vars.newElementInfo.name%>>"
-    },
-    {
-       op: "insert",
-       position: "before",
-       newlineAfter: false,
-       anchorPoint: "/* Loaded modules -- end */",
-       value: `import '${importPath}'`
-    }
-  ]
-
-  if (userInput.destination.anchorPoint === '<!-- Element tab insertion point -->') {
-    config.moduleJson5Values.manipulate.text[userInput.destination.file].push(
-      {
-         op: "insert",
-         position: "after",
-         newlineAfter: true,
-         newlineBefore: false,
-         anchorPoint: '<!-- Element tab heading insertion point -->',
-         value:"<div tab-name=\"<%=vars.newElementInfo.name%>\"><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div>"
-      }
-    )
+  // New page's info
+  if (userInput.placeElement && userInput.destination) {
+    config.vars.newElementInfo.placeElement = true
+    config.vars.newElementInfo.importPath = importPath
+    config.vars.newElementInfo.destination =  userInput.destination
   }
 }
 
 exports.boot = (config) => { }
 
 exports.fileRenamer = (config, file) => {
-
-  debugger
-
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 

@@ -68,33 +68,33 @@ exports.getPrompts = (config) => {
   return questions
 }
 
-exports.boot = (config) => { }
+exports.postPrompts = (config) => {
+  const userInput = config.userInput['client-app-root-page']
 
-exports.preAdd = (config) => {
-  // const prefix = config.utils.capitalize(config.utils.toCamelCase(config.vars.elPrefix))
-  // const name = config.utils.capitalize(config.utils.toCamelCase(config.userInput['client-app-root-page'].elementName))
-  config.vars.newElementFullNameNoPrefix = `${config.userInput['client-app-root-page'].elementName}`
-  config.vars.newElementFullName = `${config.vars.elPrefix}-${config.userInput['client-app-root-page'].elementName}`
-  config.vars.type = config.userInput['client-app-root-page'].type
-  config.vars.elementName = config.userInput['client-app-root-page'].elementName
-  config.vars.elementTitle = config.userInput['client-app-root-page'].elementTitle
-  config.vars.elementMenuTitle = config.userInput['client-app-root-page'].elementMenuTitle
-  config.vars.uncommentedStaticImport = config.userInput['client-app-root-page'].uncommentedStaticImport
-  config.vars.baseClass = 'PageElement'
+  config.vars.newElementInfo = {
+    baseClass: 'PageElement',
+    type: userInput.type,
+    name: `${config.vars.elPrefix}-${userInput.elementName}`,
+    nameNoPrefix: userInput.elementName,
+    title: userInput.elementTitle,
+    menuTitle: userInput.elementMenuTitle,
+    uncommentedStaticImport: userInput.uncommentedStaticImport
+  }
 }
+
+exports.boot = (config) => { }
 
 exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
-
   // Skip copying of the wrong type of pages
-  if (file.split('-')[0] !== config.vars.type) return
+  if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
   switch (file) {
-    case 'standard-PREFIX-ELEMENTNAME.js': return `src/pages/${config.vars.newElementFullName}.js`
-    case 'list-PREFIX-ELEMENTNAME.js': return `src/pages/list-${config.vars.newElementFullName}.js`
-    case 'view-PREFIX-ELEMENTNAME.js': return `src/pages/view-${config.vars.newElementFullName}.js`
-    case 'edit-PREFIX-ELEMENTNAME.js': return `src/pages/edit-${config.vars.newElementFullName}.js`
+    case 'standard-PREFIX-ELEMENTNAME.js': return `src/pages/${config.vars.newElementInfo.name}.js`
+    case 'list-PREFIX-ELEMENTNAME.js': return `src/pages/list-${config.vars.newElementInfo.name}.js`
+    case 'view-PREFIX-ELEMENTNAME.js': return `src/pages/view-${config.vars.newElementInfo.name}.js`
+    case 'edit-PREFIX-ELEMENTNAME.js': return `src/pages/edit-${config.vars.newElementInfo.name}.js`
     default: return file
   }
 }

@@ -102,7 +102,7 @@ STAGE 4
 ☐ (maybe) client-server-shared-code
 
 ☐ Generally tidy up and improve
-☐ Figure out how to change eslint rules in open-wc
+☐ Figure out how to change eslint rules in open-wc, or boot it
 ☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit
 

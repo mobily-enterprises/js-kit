@@ -5,6 +5,20 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
+
+  function anchorPoints () {
+    let foundAnchorPoints = config.utils
+      .findAnchorPoints('<!-- Element insertion point -->', config.dstDir, utils.getFileInfo)
+      .filter(e => e.info.baseClass === 'PageElement')
+
+    if (!foundAnchorPoints.length) {
+      console.log('There are no insertion points available for this element. Please add a page first.')
+      process.exit(1)
+    }
+
+    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} (${utils.humanizeAnchorPoint(e.anchorPoint)})`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
+  }
+
   const questions = [
     {
       type: 'text',
@@ -12,6 +26,12 @@ exports.getPrompts = (config) => {
       message: 'Tab id',
       initial: '',
       validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
+    },
+    {
+      type: 'select',
+      name: 'destination',
+      message: 'Destination element',
+      choices: anchorPoints()
     }
   ]
 
@@ -22,24 +42,6 @@ exports.boot = (config) => { }
 
 exports.preAdd = (config) => { }
 
-exports.postAdd = async (config) => {
-
-  const textManipulations = [
-    {
-       "op":"insert",
-       "position":"after",
-       "newlineAfter":true,
-       "anchorPoint":"<!-- Element insertion point -->",
-       "valueFromFile":"page-tabs.js"
-    }
-  ]
-
-  utils.runInsertionManipulations(
-    config,
-    '<!-- Element insertion point -->',
-    textManipulations,
-    utils.humanizeAnchorPoint
-  )
-}
+exports.postAdd = async (config) => { }
 
 exports.fileRenamer = (config, file) => { }

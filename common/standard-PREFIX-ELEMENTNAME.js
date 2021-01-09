@@ -1,10 +1,10 @@
 /* Loaded modules -- start */
 import { html, css } from 'lit-element'
-import { <%=vars.baseClass%> } from '../lib/base/<%=vars.baseClass%>.js'
+import { <%=vars.newElementInfo.baseClass%> } from '../lib/base/<%=vars.newElementInfo.baseClass%>.js'
 /* Loaded modules -- end */
 
-class Element extends <%=vars.baseClass%> {
-  <%if(vars.baseClass === 'PageElement'){ %>static get pagePath () { return [ '/<%=vars.newElementFullNameNoPrefix%>'] }<% } else { %>// No URL since this is not a page<% } %>
+class Element extends <%=vars.newElementInfo.baseClass%> {
+  <%if(vars.newElementInfo.baseClass === 'PageElement'){ %>static get pagePath () { return [ '/<%=vars.newElementInfo.nameNoPrefix%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
     return [
@@ -27,8 +27,8 @@ class Element extends <%=vars.baseClass%> {
   constructor () {
     super()
     /* Constructor -- start */
-<%if(vars.baseClass === 'PageElement'){ -%>
-    this.pageTitle = '<%=vars.elementTitle%>'
+<%if(vars.newElementInfo.baseClass === 'PageElement'){ -%>
+    this.newElementInfo.pageTitle = '<%=vars.newElementInfo.nameNoPrefix%>'
 <% } -%>
     /* Constructor -- end */
 
@@ -40,7 +40,7 @@ class Element extends <%=vars.baseClass%> {
       <!-- Element render -- start -->
       ${this.renderHeader()}
       <section>
-        <h2><%=vars.elementTitle%></h2>
+        <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
         <!-- Element insertion point -->
       </section>
       <!-- Element render -- end -->
@@ -50,4 +50,4 @@ class Element extends <%=vars.baseClass%> {
   /* Element methods -- end */
 }
 
-window.customElements.define('<%=vars.newElementFullName%>', Element)
+window.customElements.define('<%=vars.newElementInfo.name%>', Element)

@@ -7,5 +7,18 @@
   "moduleDependencies":[
     "client-app-frame"
   ],
+  "manipulate":{
+    "text":{
+      "<%=userInput['client-app-add-tabs'].destination.file%>":[
+        {
+           "op":"insert",
+           "position":"after",
+           "newlineAfter":true,
+           "anchorPoint":"<!-- Element insertion point -->",
+           "valueFromFile":"element-tabs.js"
+        }
+      ]
+    }
+  },
   "position": -1,
 }
