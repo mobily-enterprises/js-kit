@@ -43,6 +43,7 @@ exports.humanizeAnchorPoint  = (anchorPoint) => {
   switch (anchorPoint) {
     case '<!-- Element insertion point -->': return 'in element'
     case '<!-- Element tab insertion point -->': return 'in tab'
+    case '<!-- Page tab insertion point -->': return 'in page tab'
     default: return anchorPoint
   }
 }

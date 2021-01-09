@@ -1,4 +1,4 @@
-<a ?selected="${this._page === '<%=vars.newElementFullNameNoPrefix%>'}" name="<%=vars.newElementFullNameNoPrefix%>" href="/<%=vars.newElementFullNameNoPrefix%>">
+<a ?selected="${this._page === '<%=vars.newElementInfo.name%>'}" name="<%=vars.newElementInfo.nameNoPrefix%>" href="/<%=vars.newElementInfo.nameNoPrefix%>">
   <!-- <iron-icon icon="icons:class"></iron-icon> -->
-  <span><%=userInput['client-app-root-page'].elementMenuTitle%></span>
+  <span><%=vars.newElementInfo.menuTitle%></span>
 </a>

@@ -77,7 +77,6 @@ exports.getPrompts = (config) => {
       type: 'text',
       name: 'subPath',
       message: prev => `Nested URL, coming from ${prev.pagePath}`,
-      choices: anchorPoints(),
       validate: value => !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/) ? 'Valid URLs, starting with "/" or "#"' : true
     },
   ]
@@ -87,21 +86,29 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-inner-page']
 
+  debugger
+
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
-    baseClass: 'AppElement',
+    baseClass: 'PageElement',
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
     title: userInput.elementTitle,
     placeElement: false,
-    subPath: config.userInput['client-app-inner-page'].subPath
-    // TODO
-    parentElementPath,
-    // TODO
-    importPath,
+    subPath: config.userInput['client-app-inner-page'].subPath,
+    parentElementPath: userInput.destination.file,
+    anchorPoint: userInput.destination.anchorPoint
   }
+
+  newElementInfo.importPath = `./${path.basename(userInput.destination.file,'.js')}/${config.vars.newElementInfo.name}.js`
+
+  newElementInfo.fullPath = path.join(
+    config.vars.newElementInfo.parentElementPath.split('.').slice(0, -1).join('.'),
+    `${config.vars.newElementInfo.name}.js`
+  )
+
 
   /*
    [ ] Work out the path of the file (the chosen file, munus the 'js' at the end)
@@ -114,6 +121,7 @@ exports.postPrompts = async (config) => {
    [ ]
   */
 
+  /*
   // Work out the relative path from the two path's location. Note: if the files are in the same
   // spot, it will need to be assigned at least a "."
   // When joining them together, `path.sep` is used since path.join will normalise things, and
@@ -129,6 +137,7 @@ exports.postPrompts = async (config) => {
     config.vars.newElementInfo.destination =  userInput.destination
   }
   */
+
 }
 
 exports.boot = (config) => { }
@@ -137,11 +146,16 @@ exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
+  debugger
+
   switch (file) {
-    case 'standard-PREFIX-ELEMENTNAME.js': return `src/elements/${config.vars.newElementInfo.name}.js`
-    case 'list-PREFIX-ELEMENTNAME.js': return `src/elements/list-${config.vars.newElementInfo.name}.js`
-    case 'view-PREFIX-ELEMENTNAME.js': return `src/elements/view-${config.vars.newElementInfo.name}.js`
-    case 'edit-PREFIX-ELEMENTNAME.js': return `src/elements/edit-${config.vars.newElementInfo.name}.js`
-    default: return file
+    case 'standard-PREFIX-ELEMENTNAME.js':
+    case 'list-PREFIX-ELEMENTNAME.js':
+    case 'view-PREFIX-ELEMENTNAME.js':
+    case 'edit-PREFIX-ELEMENTNAME.js':
+      return config.vars.newElementInfo.fullPath
+      break
+    default:
+      return file
   }
 }
