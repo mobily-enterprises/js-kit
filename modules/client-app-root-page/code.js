@@ -11,8 +11,8 @@ exports.getPrompts = (config) => {
       message: 'Which type of page?',
       choices: [
         {
-          title: 'Standard page',
-          value: 'standard'
+          title: 'Plain page',
+          value: 'plain'
         },
         {
           title: 'List page',
@@ -88,14 +88,17 @@ exports.boot = (config) => { }
 exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
+  debugger
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
   switch (file) {
-    case 'standard-PREFIX-ELEMENTNAME.js': return `src/pages/${config.vars.newElementInfo.name}.js`
-    case 'list-PREFIX-ELEMENTNAME.js': return `src/pages/list-${config.vars.newElementInfo.name}.js`
-    case 'view-PREFIX-ELEMENTNAME.js': return `src/pages/view-${config.vars.newElementInfo.name}.js`
-    case 'edit-PREFIX-ELEMENTNAME.js': return `src/pages/edit-${config.vars.newElementInfo.name}.js`
-    default: return file
+    case 'plain-PREFIX-ELEMENTNAME.js':
+    case 'list-PREFIX-ELEMENTNAME.js':
+    case 'view-PREFIX-ELEMENTNAME.js':
+    case 'edit-PREFIX-ELEMENTNAME.js':
+      return `src/pages/${config.vars.newElementInfo.name}.js`
+    default:
+      return file
   }
 }

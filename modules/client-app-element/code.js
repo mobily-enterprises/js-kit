@@ -8,10 +8,9 @@ exports.prePrompts = (config) => { }
 exports.getPrompts = (config) => {
 
   function anchorPoints () {
-    let foundAnchorPoints = utils.findAnchorPoints(
-      config,
-      ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'],
-    )
+    let foundAnchorPoints = utils
+      .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'])
+      .filter(e => e.info.pagePath)
 
     if (!foundAnchorPoints.length) {
       console.log('There are no insertion points available for this element. Please add a page first.')
@@ -28,8 +27,8 @@ exports.getPrompts = (config) => {
       message: 'Which type of element?',
       choices: [
         {
-          title: 'Standard element',
-          value: 'standard'
+          title: 'Plain element',
+          value: 'plain'
         },
         {
           title: 'List element',
@@ -72,6 +71,8 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
+  debugger
+
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
@@ -84,19 +85,23 @@ exports.postPrompts = async (config) => {
     placeElement: false
   }
 
-  // Work out the relative path from the two path's location. Note: if the files are in the same
-  // spot, it will need to be assigned at least a "."
-  // When joining them together, `path.sep` is used since path.join will normalise things, and
-  // eat away that './' (if present)
-  const fileToImport = `src/elements/${newElementInfo.name}.js`
-  let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
-  const importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
-
   // New page's info
   if (userInput.placeElement && userInput.destination) {
-    config.vars.newElementInfo.placeElement = true
-    config.vars.newElementInfo.importPath = importPath
-    config.vars.newElementInfo.destination =  userInput.destination
+    /*
+    // Old code, worked out the import path assuming that element was placed in /elements
+    const fileToImport = `src/elements/${newElementInfo.name}.js`
+    let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
+    newElementInfo.importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
+    */
+    debugger
+    newElementInfo.placeElement = true
+    newElementInfo.importPath = `${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
+    newElementInfo.destination =  userInput.destination
+    newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
+  // Element doesn't belong to a specific page: simply place it in src/elements
+  } else {
+    newElementInfo.destination =  {}
+    newElementInfo.destinationDirectory = 'src/elements'
   }
 }
 
@@ -106,11 +111,15 @@ exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
+  const destinationDirectory = config.vars.newElementInfo.destinationDirectory
+
   switch (file) {
-    case 'standard-PREFIX-ELEMENTNAME.js': return `src/elements/${config.vars.newElementInfo.name}.js`
-    case 'list-PREFIX-ELEMENTNAME.js': return `src/elements/list-${config.vars.newElementInfo.name}.js`
-    case 'view-PREFIX-ELEMENTNAME.js': return `src/elements/view-${config.vars.newElementInfo.name}.js`
-    case 'edit-PREFIX-ELEMENTNAME.js': return `src/elements/edit-${config.vars.newElementInfo.name}.js`
-    default: return file
+    case 'plain-PREFIX-ELEMENTNAME.js':
+    case 'list-PREFIX-ELEMENTNAME.js':
+    case 'view-PREFIX-ELEMENTNAME.js':
+    case 'edit-PREFIX-ELEMENTNAME.js':
+      return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
+    default:
+      return file
   }
 }

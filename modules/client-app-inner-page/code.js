@@ -34,8 +34,8 @@ exports.getPrompts = (config) => {
       message: 'Which type of element?',
       choices: [
         {
-          title: 'Standard element',
-          value: 'standard'
+          title: 'Plain element',
+          value: 'plain'
         },
         {
           title: 'List element',
@@ -116,10 +116,8 @@ exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
-  debugger
-
   switch (file) {
-    case 'standard-PREFIX-ELEMENTNAME.js':
+    case 'plain-PREFIX-ELEMENTNAME.js':
     case 'list-PREFIX-ELEMENTNAME.js':
     case 'view-PREFIX-ELEMENTNAME.js':
     case 'edit-PREFIX-ELEMENTNAME.js':

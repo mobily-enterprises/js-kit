@@ -10,7 +10,7 @@
   "position": -1,
   "manipulate":{
     "text":{
-      "src/elements/<%=vars.newElementInfo.name%>.js":[
+      "<%=vars.newElementInfo.destinationDirectory%>/<%=vars.newElementInfo.name%>.js":[
         {
           "op":"resolve-ejs"
         },
