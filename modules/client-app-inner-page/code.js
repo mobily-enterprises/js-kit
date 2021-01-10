@@ -1,11 +1,15 @@
 const path = require('path')
 const utils = require('../../utils.js')
 
+let globalPrev
+
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
+
+  let answers
 
   function anchorPoints () {
     let foundAnchorPoints = utils
@@ -56,9 +60,8 @@ exports.getPrompts = (config) => {
       name: 'elementName',
       message: 'Element name',
       initial: '',
-      validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
+      validate: utils.elementNameValidator(config)
     },
-
     {
       type: 'text',
       name: 'elementTitle',
@@ -76,8 +79,10 @@ exports.getPrompts = (config) => {
     {
       type: 'text',
       name: 'subPath',
-      message: prev => `Nested URL, coming from ${prev.pagePath}`,
-      validate: value => !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/) ? 'Valid URLs, starting with "/" or "#"' : true
+      message: (prev) => { globalPrev = prev; return `Nested URL, coming from ${prev.pagePath}` },
+      validate: (value) => {
+        return utils.pagePathValidator(config, value, globalPrev)
+      }
     },
   ]
   return questions

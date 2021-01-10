@@ -49,7 +49,7 @@ exports.getPrompts = (config) => {
       name: 'elementName',
       message: 'Element name',
       initial: '',
-      validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
+      validate: utils.elementNameValidator(config)
     },
     {
       type: 'confirm',
@@ -71,8 +71,6 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
-  debugger
-
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
@@ -93,7 +91,6 @@ exports.postPrompts = async (config) => {
     let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
     newElementInfo.importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
     */
-    debugger
     newElementInfo.placeElement = true
     newElementInfo.importPath = `${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
     newElementInfo.destination =  userInput.destination

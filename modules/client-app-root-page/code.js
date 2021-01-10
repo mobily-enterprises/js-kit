@@ -1,3 +1,4 @@
+const utils = require('../../utils.js')
 
 exports.getPromptsHeading = (config) => { }
 
@@ -33,7 +34,7 @@ exports.getPrompts = (config) => {
       name: 'elementName',
       message: 'Element name',
       initial: '',
-      validate: value => !value.match(/^[a-z]+[a-z0-9\-]*$/) ? 'Only lower case characters, numbers and dashes allowed' : true
+      validate: utils.elementNameValidator(config)
     },
     {
       type: 'text',
