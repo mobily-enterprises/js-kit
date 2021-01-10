@@ -44,7 +44,7 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
     return res
   }
 
-  return config.utils.findAnchorPoints(config, anchorPoints, getFileInfo, keepContents)
+  return config.utils.findAnchorPoints(anchorPoints, config.dstDir, getFileInfo, keepContents)
 }
 
 
@@ -59,7 +59,7 @@ exports.humanizeAnchorPoint  = (anchorPoint) => {
 
 exports.allFiles  = (config) => {
   // Get all the files, memoizing it
-  exports.allFiles.list = exports.allFiles.list || exports.findAnchorPoints(config, '')
+  exports.allFiles.list = exports.allFiles.list || exports.findAnchorPoints(config, "<!-- Element insertion point -->")
   return exports.allFiles.list
 }
 exports.allFiles.list = null
