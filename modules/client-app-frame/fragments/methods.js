@@ -36,7 +36,7 @@ async runDynamicLoading () {
     // Import the correct module for this page
     let mod
     try {
-      mod = await import(`./my-${cleanPath}.js`)
+      mod = await import(`./pages/my-${cleanPath}.js`)
     } catch (e) {
       console.error('Error loading module:', e) /* eslint-disable-line no-console */
       // Nothing needs to happen here

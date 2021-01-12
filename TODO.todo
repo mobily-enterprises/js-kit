@@ -34,11 +34,9 @@
 ✔ Allow to add elements in a "elements" subdirectory under the element itself @done(2021-01-10 09:03)
 ✔ Check that element doesn't exist already @done(2021-01-10 10:43)
 ✔ Check that element path is not already set @done(2021-01-10 11:47)
-☐ Force names for add/list/view elements
-
-☐ Check that it still all works (and check headers are off in inner-pages)
-
-
+✔ Force names for add/list/view elements @done(2021-01-12 07:58)
+✔ Check that it still all works (and check headers are off in inner-pages) @done(2021-01-12 11:06)
+☐ 
 
 ☐ Add server stores (simplified version)
 ☐ Add edit/list/view elements

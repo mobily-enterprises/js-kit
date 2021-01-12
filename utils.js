@@ -8,6 +8,10 @@ exports.addMixinToMixin = async function (contents, m, config) {
   return contents.replace(/([ \t]*return[ \t]+class[ \t]+Base[ \t]+extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
 }
 
+exports.replaceBaseClass = async function (contents, m, config) {
+  return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/,`$1${regexpEscape(m.baseClass)} \{`)
+}
+
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
   const getFileInfo = function (contents) {

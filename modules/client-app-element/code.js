@@ -71,6 +71,8 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
+  userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
+
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {

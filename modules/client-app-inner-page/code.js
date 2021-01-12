@@ -1,7 +1,6 @@
 const path = require('path')
 const utils = require('../../utils.js')
 
-let globalPrev
 
 exports.getPromptsHeading = (config) => { }
 
@@ -9,7 +8,7 @@ exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
 
-  let answers
+  let globalPrev
 
   function anchorPoints () {
     let foundAnchorPoints = utils
@@ -90,6 +89,8 @@ exports.getPrompts = (config) => {
 
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-inner-page']
+  
+  userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
 
   // New page's info
   // No placement by default

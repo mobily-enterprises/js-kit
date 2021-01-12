@@ -4,7 +4,7 @@ import { <%=vars.newElementInfo.baseClass%> } from '../lib/base/<%=vars.newEleme
 /* Loaded modules -- end */
 
 class Element extends <%=vars.newElementInfo.baseClass%> {
-  <%if(vars.newElementInfo.baseClass === 'PageElement'){ %>static get pagePath () { return [ '<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
+  <%if(vars.newElementInfo.baseClass === 'PageElement' || vars.newElementInfo.baseClass === 'RoutedElement'){ %>static get pagePath () { return [ '<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
     return [
@@ -28,7 +28,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     super()
     /* Constructor -- start */
 <%if(vars.newElementInfo.baseClass === 'PageElement'){ -%>
-    this.newElementInfo.pageTitle = '<%=vars.newElementInfo.nameNoPrefix%>'
+    this.pageTitle = '<%=vars.newElementInfo.nameNoPrefix%>'
 <% } -%>
     /* Constructor -- end */
 

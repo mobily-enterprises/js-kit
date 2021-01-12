@@ -72,6 +72,8 @@ exports.getPrompts = (config) => {
 exports.postPrompts = (config) => {
   const userInput = config.userInput['client-app-root-page']
 
+  userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
+
   config.vars.newElementInfo = {
     baseClass: 'PageElement',
     pagePath: `/${userInput.elementName}`,

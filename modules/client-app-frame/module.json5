@@ -77,7 +77,7 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/lib/base/PageElementMixin.js":[
+      "src/lib/base/PageElement.js":[
         {
           "op":"resolve-ejs"
         }
@@ -100,8 +100,8 @@
 
         {
            "op":"custom",
-           "function":"addMixinToElement",
-           "mixin":"AppElementMixin"
+           "function":"replaceBaseClass",
+           "baseClass":"AppElement"
         },
         {
            "op":"custom",
@@ -153,7 +153,7 @@
           "valueFromFile":"render.html"
         },
       ],
-      "src/lib/base/AppElementMixin.js":[
+      "src/lib/base/AppElement.js":[
         {
           "op":"insert",
           "position":"before",
@@ -163,7 +163,7 @@
         },
         {
           "op":"custom",
-          "function":"addMixinToMixin",
+          "function":"addMixinToElement",
           "mixin":"ResponsiveMixin"
         }
       ]
