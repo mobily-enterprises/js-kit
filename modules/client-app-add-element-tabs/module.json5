@@ -1,21 +1,21 @@
 {
-  "name":"client-app-add-page-tabs",
+  "name":"client-app-add-element-tabs",
   "version":"1.0.0",
   "component": true,
-  "description":"Tabs of routed, page elements",
+  "description":"Tabs of simple non-routed elements",
   "author":"Tony Mobily",
   "moduleDependencies":[
     "client-app-frame"
   ],
   "manipulate":{
     "text":{
-      "<%=userInput['client-app-add-page-tabs'].destination.file%>":[
+      "<%=userInput['client-app-add-element-tabs'].destination.file%>":[
         {
            "op":"insert",
            "position":"after",
            "newlineAfter":true,
            "anchorPoint":"<!-- Element insertion point -->",
-           "valueFromFile":"page-tabs.js"
+           "valueFromFile":"element-tabs.js"
         }
       ]
     }

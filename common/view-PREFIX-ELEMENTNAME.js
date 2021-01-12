@@ -4,7 +4,7 @@ import { <%=vars.newElementInfo.baseClass%> } from '../lib/base/<%=vars.newEleme
 /* Loaded modules -- end */
 
 class Element extends <%=vars.newElementInfo.baseClass%> {
-  <%if(vars.newElementInfo.baseClass === 'PageElement' || vars.newElementInfo.baseClass === 'RoutedElement'){ %>static get pagePath () { return [ '<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
+  <%if(vars.newElementInfo.ownPath){ %>static get pagePath () { return [ '<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
     return [
@@ -27,7 +27,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
   constructor () {
     super()
     /* Constructor -- start */
-<%if(vars.newElementInfo.baseClass === 'PageElement'){ -%>
+<%if(vars.newElementInfo.ownHeader){ -%>
     this.pageTitle = '<%=vars.newElementInfo.nameNoPrefix%>'
 <% } -%>
     /* Constructor -- end */
@@ -38,7 +38,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     /* Element render function -- start */
     return html`
       <!-- Element render -- start -->
-      <%if(vars.newElementInfo.baseClass === 'PageElement' || vars.newElementInfo.baseClass === 'RoutedElement'){ %>${this.renderHeader()} <% } else %>
+      <%if(vars.newElementInfo.ownHeader){ %>${this.renderHeader()} <% } %>
       <section>
         <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
         <!-- Element insertion point -->

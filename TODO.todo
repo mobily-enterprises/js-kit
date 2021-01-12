@@ -36,11 +36,11 @@
 ✔ Check that element path is not already set @done(2021-01-10 11:47)
 ✔ Force names for add/list/view elements @done(2021-01-12 07:58)
 ✔ Check that it still all works (and check headers are off in inner-pages) @done(2021-01-12 11:06)
-  ☐ add-inner-page (as is, but taking tab placement out)
-  ☐ add-element-tabs -- (renaming add-tabs). NOTE: app-element will add to it
-  ☐ add-routed-element-tabs (renaming add-page-tabs, normal ee-tab but "passive")
-  ☐ add-routed-element-stack? (future)
-  ☐ add-routed-element (cloned from add-inner-page, adding a 'routingElement' element to the tab)
+  ✔ routed-element (cloned from inner-page, adding a 'routedElement' element to the tab) @done(2021-01-13 06:28)
+  ✔ NOT DONE - inner-page (as is, but taking tab placement out) @done(2021-01-13 06:45)
+  ✔ add-element-tabs -- (renaming add-tabs). NOTE: app-element will add to it @done(2021-01-13 06:10)
+  ✔ add-routed-element-tabs (renaming add-page-tabs, normal ee-tab but "passive") @done(2021-01-13 06:45)
+  ✔ NOT DONE add-routed-element-stack? (future) @done(2021-01-13 06:47)
 
 
 ☐ Add server stores (simplified version)

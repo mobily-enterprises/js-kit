@@ -1,0 +1,45 @@
+{
+  "name":"client-app-routed-element",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Inner page for JS-KIT",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "client-app-frame"
+  ],
+  "position": -1,
+  "manipulate":{
+    "text":{
+      "<%=vars.newElementInfo.fullPath%>":[
+        {
+          "op":"resolve-ejs"
+        },
+      ],
+      "<%=vars.newElementInfo.parentElementPath%>":[
+        {
+          "op": "insert",
+          "position": "after",
+          "newlineAfter": true,
+          "newlineBefore": false,
+          "anchorPoint": "<!-- Routed element tab insertion point -->",
+          "value":"<<%=vars.newElementInfo.name%> slot=\"content\"></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          "op": "insert",
+          "position": "before",
+          "newlineAfter": false,
+          "anchorPoint": "/* Loaded modules -- end */",
+          "value": "import '<%=vars.newElementInfo.importPath%>'"
+        },
+        {
+          "op": "insert",
+          "position": "after",
+          "newlineAfter": true,
+          "newlineBefore": false,
+          "anchorPoint": '<!-- Routed element tab heading insertion point -->',
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"${window.location.pathname}<%=vars.newElementInfo.subPath%>\"><div><%=vars.newElementInfo.title%>%></div></a>"
+        }
+      ]
+    }
+  }
+}
