@@ -1,1 +1,0 @@
-../../../common/edit-PREFIX-ELEMENTNAME.js

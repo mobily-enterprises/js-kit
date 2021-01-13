@@ -8,6 +8,7 @@
     "client-app-frame"
   ],
   "position": 50,
+  "extraCopyDirectory": "common",
   "manipulate":{
     "text":{
       "<%=vars.newElementInfo.destinationDirectory%>/<%=vars.newElementInfo.name%>.js":[
