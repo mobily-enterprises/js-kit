@@ -54,9 +54,9 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
 exports.humanizeAnchorPoint  = (anchorPoint) => {
   switch (anchorPoint) {
-    case '<!-- Element insertion point -->': return 'in element'
-    case '<!-- Element tab insertion point -->': return 'in tab'
-    case '<!-- Routed element tab insertion point -->': return 'in routed tab'
+    case '<!-- Element insertion point -->': return ''
+    case '<!-- Element tab insertion point -->': return '(in tab)'
+    case '<!-- Routed element tab insertion point -->': return '(in routed tab)'
     default: return anchorPoint
   }
 }

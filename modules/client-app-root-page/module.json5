@@ -7,7 +7,7 @@
   "moduleDependencies":[
     "client-app-frame"
   ],
-  "position": -10,
+  "position": 10,
   "manipulate":{
     "text":{
       "src/pages/<%=vars.newElementInfo.name%>.js":[

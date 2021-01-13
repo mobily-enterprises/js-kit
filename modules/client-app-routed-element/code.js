@@ -21,7 +21,7 @@ exports.getPrompts = (config) => {
     }
 
     return foundAnchorPoints.map(e => { return {
-      title: `${e.file} -- ${e.info.description} (${utils.humanizeAnchorPoint(e.anchorPoint)})`,
+      title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`,
       value: {
         file: e.file,
         anchorPoint: e.anchorPoint,

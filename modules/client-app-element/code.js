@@ -16,7 +16,7 @@ exports.getPrompts = (config) => {
       process.exit(1)
     }
 
-    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} (${utils.humanizeAnchorPoint(e.anchorPoint)})`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
+    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
   }
 
   const questions = [
