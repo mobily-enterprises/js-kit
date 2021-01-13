@@ -1,12 +1,12 @@
 {
   "name": "js-kit",
   "description": "JS Kit repository",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "repository": "mobily-enterprises/js-kit",
   "forScaffoldizer": true,
   "dependencies": {
     "escape-string-regexp": "^4.0.0",
-    "scaffoldizer": "0.0.10x"
+    "scaffoldizer": "0.0.10"
   },
   "bin": {
     "jskit": "./bin/jskit.js"
