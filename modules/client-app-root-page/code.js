@@ -1,4 +1,5 @@
 const utils = require('../../utils.js')
+const path = require('path')
 
 exports.getPromptsHeading = (config) => { }
 
@@ -76,7 +77,7 @@ exports.postPrompts = (config) => {
 
   userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
 
-  config.vars.newElementInfo = {
+  const newElementInfo = config.vars.newElementInfo = {
     baseClass: 'PageElement',
     ownHeader: true,
     ownPath: true,
@@ -86,7 +87,8 @@ exports.postPrompts = (config) => {
     nameNoPrefix: userInput.elementName,
     title: userInput.elementTitle,
     menuTitle: userInput.elementMenuTitle,
-    uncommentedStaticImport: userInput.uncommentedStaticImport
+    uncommentedStaticImport: userInput.uncommentedStaticImport,
+    libPath: '../lib'
   }
 }
 

@@ -62,14 +62,6 @@ exports.getPrompts = (config) => {
       validate: utils.elementNameValidator(config)
     },
     {
-      type: 'text',
-      name: 'elementTitle',
-      message: 'Element title',
-      initial: '',
-      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
-    },
-
-    {
       type: 'select',
       name: 'destination',
       message: 'Destination element',
@@ -109,7 +101,8 @@ exports.postPrompts = async (config) => {
   newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
   newElementInfo.destination =  userInput.destination
   newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
-  newElementInfo.libPath = path.relative(userInput.destination.file, 'lib') || '.'
+  debugger
+  newElementInfo.libPath = path.relative(userInput.destination.file, 'src/lib') || '.'
 }
 
 exports.boot = (config) => { }
@@ -118,12 +111,14 @@ exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
+  const destinationDirectory = config.vars.newElementInfo.destinationDirectory
+
   switch (file) {
     case 'plain-PREFIX-ELEMENTNAME.js':
     case 'list-PREFIX-ELEMENTNAME.js':
     case 'view-PREFIX-ELEMENTNAME.js':
     case 'edit-PREFIX-ELEMENTNAME.js':
-      return config.vars.newElementInfo.fullPath
+    return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
       break
     default:
       return file

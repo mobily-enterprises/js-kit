@@ -91,7 +91,7 @@ exports.postPrompts = async (config) => {
     newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
     newElementInfo.destination =  userInput.destination
     newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
-    newElementInfo.libPath = path.relative(userInput.destination.file, 'lib') || '.'
+    newElementInfo.libPath = path.relative(userInput.destination.file, 'src/lib') || '.'
 
   // Element doesn't belong to a specific page: simply place it in src/elements
   } else {
