@@ -1,15 +1,14 @@
 #!/usr/bin/env node
-const scaffoldizer = require('scaffoldizer')
 
-#!/usr/bin/env node
-const { program } = require('scaffoldizer/node_modules/commander')
-const { add } = require('scaffoldizer/commands/add')
+debugger
+const { program } = require('../node_modules/commander')
+const add = require('../node_modules/scaffoldizer/commands/add')
 
 const jskitPackageJson = require('../package.json')
 const commands = {
-  add: modules => add('..', '.', modules)
+  add: modules => add(`${__dirname}/..`, process.cwd(), modules)
   }
-}
+
 // const globals = require('./globals')
 
 const increaseVerbosity = (dummyValue, previous) => previous++
