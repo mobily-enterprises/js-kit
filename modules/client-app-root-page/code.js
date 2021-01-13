@@ -66,6 +66,8 @@ exports.getPrompts = (config) => {
     config.userInput['client-app-root-page'].uncommentedStaticImport = true
   }
 
+  debugger
+
   return questions
 }
 
@@ -76,6 +78,8 @@ exports.postPrompts = (config) => {
 
   config.vars.newElementInfo = {
     baseClass: 'PageElement',
+    ownHeader: true,
+    ownPath: true,
     pagePath: `/${userInput.elementName}`,
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,

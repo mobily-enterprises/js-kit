@@ -1,6 +1,6 @@
 /* Loaded modules -- start */
 import { html, css } from 'lit-element'
-import { <%=vars.newElementInfo.baseClass%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.baseClass%>.js'
+import { <%=vars.newElementInfo.baseClass%> } from '../lib/base/<%=vars.newElementInfo.baseClass%>.js'
 /* Loaded modules -- end */
 
 class Element extends <%=vars.newElementInfo.baseClass%> {
@@ -28,7 +28,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     super()
     /* Constructor -- start */
 <%if(vars.newElementInfo.ownHeader){ -%>
-    this.pageTitle = '<%=vars.newElementInfo.menuTitle%>'
+    this.pageTitle = '<%=vars.newElementInfo.nameNoPrefix%>'
 <% } -%>
     /* Constructor -- end */
 

@@ -10,21 +10,23 @@
   "position": -1,
   "manipulate":{
     "text":{
-      "<%=vars.newElementInfo.fullPath%>":[
+      "<%=vars.newElementInfo.destinationDirectory%>/<%=vars.newElementInfo.name%>.js":[
         {
           "op":"resolve-ejs"
         },
       ],
-      "<%=vars.newElementInfo.parentElementPath%>":[
+      "<%=vars.newElementInfo.destination.file%>":[
         {
+
           "op": "insert",
           "position": "after",
           "newlineAfter": true,
           "newlineBefore": false,
-          "anchorPoint": "<!-- Routed element tab insertion point -->",
+          "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
           "value":"<<%=vars.newElementInfo.name%> slot=\"content\"></<%=vars.newElementInfo.name%>>"
         },
         {
+
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -32,12 +34,13 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
+
           "op": "insert",
           "position": "after",
           "newlineAfter": true,
           "newlineBefore": false,
           "anchorPoint": '<!-- Routed element tab heading insertion point -->',
-          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"${window.location.pathname}<%=vars.newElementInfo.subPath%>\"><div><%=vars.newElementInfo.title%>%></div></a>"
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"${window.location.pathname}<%=vars.newElementInfo.subPath%>\"><div><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
         }
       ]
     }

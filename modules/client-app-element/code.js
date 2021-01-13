@@ -6,11 +6,10 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
-
   function anchorPoints () {
     let foundAnchorPoints = utils
       .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'])
-      .filter(e => e.info.pagePath)
+      // .filter(e => e.info.pagePath)
 
     if (!foundAnchorPoints.length) {
       console.log('There are no insertion points available for this element. Please add a page first.')
@@ -77,26 +76,23 @@ exports.postPrompts = async (config) => {
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
     baseClass: 'AppElement',
+    ownHeader: false,
+    ownPath: false,
+
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
-    title: userInput.elementTitle,
-    menuTitle: userInput.elementMenuTitle,
     placeElement: false
   }
 
   // New page's info
   if (userInput.placeElement && userInput.destination) {
-    /*
-    // Old code, worked out the import path assuming that element was placed in /elements
-    const fileToImport = `src/elements/${newElementInfo.name}.js`
-    let relativePath = path.relative(path.dirname(userInput.destination.file), path.dirname(fileToImport)) || '.'
-    newElementInfo.importPath = `${relativePath}${path.sep}${path.basename(fileToImport)}`
-    */
     newElementInfo.placeElement = true
-    newElementInfo.importPath = `${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
+    newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
     newElementInfo.destination =  userInput.destination
     newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
+    newElementInfo.libPath = path.relative(userInput.destination.file, 'lib') || '.'
+
   // Element doesn't belong to a specific page: simply place it in src/elements
   } else {
     newElementInfo.destination =  {}
