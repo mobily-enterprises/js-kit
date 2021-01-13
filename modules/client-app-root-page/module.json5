@@ -21,7 +21,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
-          "value":"        <<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
         },
         {
           "op":"insert",
