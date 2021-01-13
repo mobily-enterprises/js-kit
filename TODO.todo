@@ -44,6 +44,7 @@
 ☐ Add server stores (server-add-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
 ☐ (With Raphael) Add edit/list/view elements
+☐ (With Raphael) Decide what to do for initial default tabs
 ☐ --- STAGE 2 DONE ---
 ☐ client-reducs
 ☐ clientserver-auth
