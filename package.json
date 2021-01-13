@@ -5,6 +5,15 @@
   "repository": "mobily-enterprises/js-kit",
   "forScaffoldizer": true,
   "dependencies": {
-    "escape-string-regexp": "^4.0.0"
+    "escape-string-regexp": "^4.0.0",
+    "scaffoldizer": "0.0.8"
+  },
+  "bin": {
+    "jskit": "./bin/jskit.js"
+  },
+  "author": "Tony Mobily",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/mobily-enterprises/js-kit/issues"
   }
 }
