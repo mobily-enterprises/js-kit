@@ -9,7 +9,7 @@ exports.getPrompts = (config) => {
   function anchorPoints () {
     let foundAnchorPoints = utils
       .findAnchorPoints(config, '<!-- Element insertion point -->')
-      .filter(e => e.info.baseClass === 'PageElement')
+      .filter(e => e.info.baseClass === 'PageElement' || e.info.baseClass === 'RoutedElement')
 
     if (!foundAnchorPoints.length) {
       console.log('There are no insertion points available for this element. Please add a page first.')

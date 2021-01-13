@@ -56,7 +56,7 @@ exports.humanizeAnchorPoint  = (anchorPoint) => {
   switch (anchorPoint) {
     case '<!-- Element insertion point -->': return 'in element'
     case '<!-- Element tab insertion point -->': return 'in tab'
-    case '<!-- Page tab insertion point -->': return 'in page tab'
+    case '<!-- Routed element tab insertion point -->': return 'in routed tab'
     default: return anchorPoint
   }
 }
@@ -90,7 +90,6 @@ exports.elementNameValidator = (config) => {
 }
 
 exports.pagePathValidator = (config, value, prev) => {
-  debugger
   return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
   ? 'Valid URLs, starting with "/" or "#"'
   : (

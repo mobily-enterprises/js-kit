@@ -19,11 +19,11 @@
         {
 
           "op": "insert",
-          "position": "after",
+          "position": "before",
           "newlineAfter": true,
           "newlineBefore": false,
           "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
-          "value":"<<%=vars.newElementInfo.name%> slot=\"content\"></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.name%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
         },
         {
 
@@ -36,11 +36,11 @@
         {
 
           "op": "insert",
-          "position": "after",
+          "position": "before",
           "newlineAfter": true,
           "newlineBefore": false,
           "anchorPoint": '<!-- Routed element tab heading insertion point -->',
-          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"${window.location.pathname}<%=vars.newElementInfo.subPath%>\"><div><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
         }
       ]
     }

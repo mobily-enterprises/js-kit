@@ -13,7 +13,7 @@ exports.getPrompts = (config) => {
   function anchorPoints () {
     let foundAnchorPoints = utils
       .findAnchorPoints(config, '<!-- Routed element tab insertion point -->')
-      .filter(e => e.info.pagePath)
+      // .filter(e => e.info.pagePath)
 
     if (!foundAnchorPoints.length) {
       console.log('There are no insertion points available for this element. Please add a page first.')
@@ -102,7 +102,7 @@ exports.postPrompts = async (config) => {
   newElementInfo.destination =  userInput.destination
   newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
   debugger
-  newElementInfo.libPath = path.relative(userInput.destination.file, 'src/lib') || '.'
+  newElementInfo.libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 }
 
 exports.boot = (config) => { }

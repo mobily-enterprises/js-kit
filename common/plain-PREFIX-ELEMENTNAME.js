@@ -38,7 +38,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     /* Element render function -- start */
     return html`
       <!-- Element render -- start -->
-      <%if(vars.newElementInfo.ownHeader){ %>debugger; ${this.renderHeader()} <% } %>
+      <%if(vars.newElementInfo.ownHeader){ %>${this.renderHeader()} <% } %>
       <section>
         <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
         <!-- Element insertion point -->
