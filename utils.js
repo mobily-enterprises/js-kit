@@ -12,6 +12,12 @@ exports.replaceBaseClass = async function (contents, m, config) {
   return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/,`$1${regexpEscape(m.baseClass)} \{`)
 }
 
+exports.maybeAddStarToPath = async function (contents, m, config) {
+  debugger
+  if (contents.match(/[ \t]*static[ \t]+get[ \t]+pagePath.*?\*\*\'/)) return contents
+  return contents.replace(/([ \t]*static[ \t]+get[ \t]+pagePath[ \t]*\([ \t]*\)[ \t]*{[ \t]*return[ \t]*\[[ \t]*\')(.*?)(\'.*?)/,`$1$2', '$2/\*\*$3`)
+}
+
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
   const getFileInfo = function (contents) {

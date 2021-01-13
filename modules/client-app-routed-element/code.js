@@ -101,7 +101,6 @@ exports.postPrompts = async (config) => {
   newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
   newElementInfo.destination =  userInput.destination
   newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
-  debugger
   newElementInfo.libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 }
 

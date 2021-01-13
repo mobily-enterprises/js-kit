@@ -41,77 +41,22 @@
   ✔ add-element-tabs -- (renaming add-tabs). NOTE: app-element will add to it @done(2021-01-13 06:10)
   ✔ add-routed-element-tabs (renaming add-page-tabs, normal ee-tab but "passive") @done(2021-01-13 06:45)
   ✔ NOT DONE add-routed-element-stack? (future) @done(2021-01-13 06:47)
-
-
-☐ Add server stores (simplified version)
-☐ Add edit/list/view elements
-☐ Add way to run scripts -- use to create databases
-☐ Check that  they all work (!)
+☐ Add server stores (server-add-store) (simple version)
+☐ Add way to run scripts -- use to create databases (picking store)
+☐ (With Raphael) Add edit/list/view elements
 ☐ --- STAGE 2 DONE ---
-
-NOTES:
-Maybe add reflect:true to routify's PageElementMixin
-Watchout, taken autoload out of PageElementMixin
-
-STAGE 1
-
-☐ Add modules
-   X client-app-frame
-     X Work on PageElement, decide how to organise mixin with AppElement, PageElement and PageMixin. Turn AppElement into a mixin?
-     X (ask for [x] appPrefix, [x] tpe, [X] responsiveness, [X] routify [X] dynamic loading (prompt), [X] drawer (with slot for menu button)
-     X client-back-bar (historify and header, and SOME of pageMixin)
-
-   X IMPORTANT: client-base now has config.vars.appFile =  ... in preAdd. INSTEAD, have code that runs every time regardless, even if the module is ALREADY installed.
-     X Store prompt variables somewhere, and reload them as if they were answered (JSON)
-
-   - Actually enable sessions server side, find a better way to whitelist URLs https://stackoverflow.com/questions/65492674/bypass-sessions-for-static-files-and-using-a-catchall-url-for-spa
-
-   Reinstallable pages
-   X client-app-root-page (maybe loaded dynamically, depending on flag) -- placement fine as-is
-
-X client-app-add-tabs [PLACEMENT] -- ONLY ONE routed-pages per element
-
-X client-app-add-page-tabs [PLACEMENT] ("use-hash passive")
-
-X client-app-root-page
-  ☐  (plain, list, view, edit)
-
-X client-app-element -- placed in any <!-- Element insertion point --> or any <!-- Element tab insertion point --> (more complex, 2 insertions)
-  ☐  (plain, list, view, edit)
-
-X client-app-inner-page -- placed in any <!-- Page insertion point --> or <!-- Page tab insertion point -->
-  ☐ Must be child of root-page, URL must beginning must match
-  ☐ File position will be a directory with name of parent element
-  ☐ Add import in parent element
-
-STAGE 2
-
- - server-add-stores (adding an actual store)
- - Add ability to run task to create DB for stores
-
- - client-store-list-element
- - client-store-view-element
- - client-store-edit-element
-
- - client-store-list-inner-page
- - client-store-view-inner-page
- - client-store-edit-inner-page
-
- - client-store-list-root-page
- - client-store-view-root-page
- - client-store-edit-root-page
-
-STAGE 3
-
- - client-reducs
- - clientserver-auth
- - clientserver-user-config
- - clientserver-app-config
- - Figure out how to change eslint rules in open-wc, or detach from open-wc
-
-STAGE 4
+☐ client-reducs
+☐ clientserver-auth
+☐ clientserver-user-config
+☐ clientserver-app-config
+--- STAGE 3 DONE
+☐ Figure out how to change eslint rules in open-wc, or detach from open-wc
 ☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit
+☐ --- STAGE 4 DONE
+☐ Maybe add reflect:true to routify's PageElementMixin
+☐ Watchout, taken autoload out of PageElementMixin
+
 
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app
