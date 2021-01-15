@@ -41,8 +41,17 @@
   ✔ add-element-tabs -- (renaming add-tabs). NOTE: app-element will add to it @done(2021-01-13 06:10)
   ✔ add-routed-element-tabs (renaming add-page-tabs, normal ee-tab but "passive") @done(2021-01-13 06:45)
   ✔ NOT DONE add-routed-element-stack? (future) @done(2021-01-13 06:47)
+✔ Make js-kit work as a standalone program @done(2021-01-14 07:44)
+✔ Change order of parameters is stock scaffoldizer https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program @done(2021-01-15 08:44)
+☐ Make sure it still works if app name doesn't have a "-" by adding 'main'
+☐ Add eslint to frame
+☐ Make sure that result app is fully linted
+☐ Add module to build (rollup config)
+
+☐ Look for a different server to serve files rather than open-wc's
 ☐ Add server stores (server-add-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
+
 ☐ (With Raphael) Add edit/list/view elements
 ☐ (With Raphael) Decide what to do for initial default tabs
 ☐ --- STAGE 2 DONE ---
