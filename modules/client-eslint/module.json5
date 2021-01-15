@@ -1,0 +1,60 @@
+{
+  "name":"client-eslint",
+  "version":"1.0.0",
+  "description":"Eslint files",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+  ],
+  "position": -1,
+  "manipulate":{
+    "json":{
+      "package.json":[
+        {
+          "op":"set",
+          "key":"devDependencies.eslint",
+          "value":"^7.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-config-standard",
+          "value":"^14.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.standard",
+          "value":"^14.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-html",
+          "value":"^6.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-import",
+          "value":"^2.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-lit",
+          "value":"^1.2.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-node",
+          "value":"^11.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-promise",
+          "value":"^4.x.x"
+        },
+        {
+          "op":"set",
+          "key":"devDependencies.eslint-plugin-standard",
+          "value":"^4.x.x"
+        },
+      ]
+    }
+  }
+}
