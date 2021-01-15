@@ -40,5 +40,3 @@ exports.boot = (config) => { }
 exports.preAdd = (config) => { }
 
 exports.postAdd = async (config) => { }
-
-exports.fileRenamer = (config, file) => { }
