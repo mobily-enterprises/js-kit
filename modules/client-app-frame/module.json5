@@ -42,9 +42,9 @@
         {
            "op":"insert",
            "position":"before",
-           "newlineAfter":true,
+           "newlineAfter":false,
            "anchorPoint":"<!-- Head - end -->",
-           "value":"  <script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
+           "value":"<script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
         }
       ],
       "src/pages/<%=vars.elPrefix%>-load-error.js":[
@@ -95,7 +95,7 @@
           "position":"after",
           "newlineBefore":false,
           "anchorPoint":"/* Style array -- start */",
-          "value":"      appTheme,"
+          "value":"appTheme,"
         },
 
         {
@@ -119,7 +119,6 @@
           "op":"insert",
           "position":"after",
           "newlineBefore":true,
-          "newlineAfter":true,
           "anchorPoint":"/* Loaded modules -- end */",
           "valueFromFile":"dynamicImports.js"
         },
