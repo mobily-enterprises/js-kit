@@ -1,5 +1,5 @@
 /* Loaded modules -- start */
-import { LitElement, css } from 'lit-element'
+import { css } from 'lit-element'
 import { AppElement } from './AppElement.js'
 import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
 /* Loaded modules -- end */

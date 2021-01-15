@@ -45,10 +45,8 @@
 ✔ Change order of parameters is stock scaffoldizer https://stackoverflow.com/questions/4351521/how-do-i-pass-command-line-arguments-to-a-node-js-program @done(2021-01-15 08:44)
 ✔ Add eslint to frame @done(2021-01-15 09:17)
 ✔ Make sure it still works if app name doesn't have a "-" by adding 'main' @done(2021-01-15 10:13)
-☐ Make sure that result app is fully linted
+✔ Make sure that result app is fully linted @done(2021-01-15 13:21)
 ☐ Make sure landing page is added from a plain page template
-
-☐ Look for a different server to serve files rather than open-wc's
 
 ☐ Add server stores (server-add-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
@@ -60,6 +58,7 @@
 ☐ clientserver-auth
 ☐ clientserver-user-config
 ☐ clientserver-app-config
+☐ Look for a different server to serve files rather than open-wc's https://www.npmjs.com/package/es6-module-server
 --- STAGE 3 DONE
 ☐ Document the lot as literate code
 ☐ Add initial docco-next documentation generation to js-kit

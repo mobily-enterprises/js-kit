@@ -28,7 +28,7 @@ async runDynamicLoading () {
 
   // Only try to load
   if (cleanPath !== '') {
-    if(!this.shadowRoot.querySelector(`my-${cleanPath}`)) {
+    if (!this.shadowRoot.querySelector(`my-${cleanPath}`)) {
       activateElement(this.shadowRoot.querySelector('my-not-found'))
       return
     }
@@ -69,7 +69,7 @@ async firstUpdated () {
 _toggleDrawer () {
   const drawer = this.shadowRoot.querySelector('ee-drawer')
   if (drawer) {
-    drawer.opened ? drawer.close() : drawer.open() /* eslint-disable-line babel/no-unused-expressions */
+    drawer.opened ? drawer.close() : drawer.open()
     if (drawer.opened) drawer.focus()
   }
 }

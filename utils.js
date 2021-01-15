@@ -9,8 +9,15 @@ exports.addMixinToMixin = async function (contents, m, config) {
 }
 
 exports.replaceBaseClass = async function (contents, m, config) {
-  return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/,`$1${regexpEscape(m.baseClass)} \{`)
-}
+  debugger
+  const originalBaseClassRegExp = /([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/
+  const match = contents.match(originalBaseClassRegExp)
+  if (match) originalBaseClass = match[2]
+  return contents
+    // Take out the bast class from the class declaration
+    .replace(originalBaseClassRegExp ,`$1${regexpEscape(m.baseClass)} \{`)
+    // Take out the import for the base class, which is no longer used
+    .replace(new RegExp(`^([ \t]*import.*)${regexpEscape(originalBaseClass)}([ \t]*,?[ \t]*)(.*)$`, 'm'), '$1$3' )}
 
 exports.maybeAddStarToPath = async function (contents, m, config) {
   debugger

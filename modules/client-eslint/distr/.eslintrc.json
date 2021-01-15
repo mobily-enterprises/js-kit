@@ -12,7 +12,8 @@
     "lit"
   ],
   "rules": {
-    "lit/no-legacy-template-syntax": "off"
+    "lit/no-legacy-template-syntax": "off",
+    "comma-dangle": "off"
   },
   "globals": {
   }
