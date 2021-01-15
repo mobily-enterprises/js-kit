@@ -46,7 +46,8 @@
 ✔ Add eslint to frame @done(2021-01-15 09:17)
 ✔ Make sure it still works if app name doesn't have a "-" by adding 'main' @done(2021-01-15 10:13)
 ✔ Make sure that result app is fully linted @done(2021-01-15 13:21)
-☐ Make sure landing page is added from a plain page template
+☐ Add full hooks (same as plain-PREFIX-ELEMENTNAME) to PREFIX-landing, PREFIX-load-error, PREFIX-not-found
+  ☐ Could this be done programmatically?
 
 ☐ Add server stores (server-add-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
