@@ -47,16 +47,6 @@
            "value":"<script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
         }
       ],
-      "src/pages/<%=vars.elPrefix%>-load-error.js":[
-        {
-          "op":"resolve-ejs"
-        }
-      ],
-      "src/pages/<%=vars.elPrefix%>-not-found.js":[
-        {
-          "op":"resolve-ejs"
-        }
-      ],
       "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[
         {
           "op":"resolve-ejs"
@@ -68,11 +58,6 @@
         }
       ],
       "src/lib/base/elements/<%=vars.elPrefix%>-toggle-button.js":[
-        {
-          "op":"resolve-ejs"
-        }
-      ],
-      "src/pages/<%=vars.elPrefix%>-landing.js":[
         {
           "op":"resolve-ejs"
         }

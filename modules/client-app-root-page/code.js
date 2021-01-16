@@ -33,21 +33,21 @@ exports.getPrompts = (config) => {
     {
       type: 'text',
       name: 'elementName',
-      message: 'Element name',
+      message: 'Page element name',
       initial: '',
       validate: utils.elementNameValidator(config)
     },
     {
       type: 'text',
       name: 'elementTitle',
-      message: 'Element title',
+      message: 'Page title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     },
     {
       type: 'text',
       name: 'elementMenuTitle',
-      message: 'Element menu title',
+      message: 'Page menu title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     }
@@ -67,28 +67,29 @@ exports.getPrompts = (config) => {
     config.userInput['client-app-root-page'].uncommentedStaticImport = true
   }
 
-  debugger
+  // The 'pagePath' and 'notInDrawer' keys are not listed, but are used in postPrompts to set
+  // newElementInfo. TODO: consider whether allowing custom paths and chance NOT to add to drawer
 
   return questions
 }
 
 exports.postPrompts = (config) => {
   const userInput = config.userInput['client-app-root-page']
-
   userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
 
   const newElementInfo = config.vars.newElementInfo = {
     baseClass: 'PageElement',
     ownHeader: true,
     ownPath: true,
-    pagePath: `/${userInput.elementName}`,
+    pagePath: typeof userInput.pagePath !== 'undefined' ? userInput.pagePath : `/${userInput.elementName}`,
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
     title: userInput.elementTitle,
     menuTitle: userInput.elementMenuTitle,
     uncommentedStaticImport: userInput.uncommentedStaticImport,
-    libPath: '../lib'
+    libPath: '../lib',
+    notInDrawer: userInput.notInDrawer
   }
 }
 
@@ -97,7 +98,6 @@ exports.boot = (config) => { }
 exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
-  debugger
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 

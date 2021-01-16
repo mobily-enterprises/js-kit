@@ -32,6 +32,7 @@
           "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.name%>.js'"
         },
         {
+          "if":"<%=!vars.newElementInfo.notInDrawer%>",
           "op":"insert",
           "position":"before",
           "newlineBefore":false,

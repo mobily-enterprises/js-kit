@@ -4,7 +4,7 @@ import { <%=vars.newElementInfo.baseClass%> } from '<%=vars.newElementInfo.libPa
 /* Loaded modules -- end */
 
 class Element extends <%=vars.newElementInfo.baseClass%> {
-  <%if(vars.newElementInfo.ownPath){ %>static get pagePath () { return [ '<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
+  <%if(vars.newElementInfo.ownPath){ %>static get pagePath () { return ['<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
     return [
@@ -31,7 +31,6 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     this.pageTitle = '<%=vars.newElementInfo.menuTitle%>'
 <% } -%>
     /* Constructor -- end */
-
   }
 
   render () {

@@ -1,0 +1,15 @@
+div#warningIcon {
+  margin: auto;
+  height: 64px;
+  width: 64px;
+  border-radius: 50%;
+  box-shadow: ${shadow2};
+  padding: 10px;
+  background: white;
+}
+
+div#warningIcon svg {
+  height: 64px;
+  width: 64px;
+  fill: orangered;
+}

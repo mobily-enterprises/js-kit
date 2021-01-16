@@ -9,7 +9,6 @@ exports.addMixinToMixin = async function (contents, m, config) {
 }
 
 exports.replaceBaseClass = async function (contents, m, config) {
-  debugger
   const originalBaseClassRegExp = /([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/
   const match = contents.match(originalBaseClassRegExp)
   if (match) originalBaseClass = match[2]
@@ -20,7 +19,6 @@ exports.replaceBaseClass = async function (contents, m, config) {
     .replace(new RegExp(`^([ \t]*import.*)${regexpEscape(originalBaseClass)}([ \t]*,?[ \t]*)(.*)$`, 'm'), '$1$3' )}
 
 exports.maybeAddStarToPath = async function (contents, m, config) {
-  debugger
   if (contents.match(/[ \t]*static[ \t]+get[ \t]+pagePath.*?\*\*\'/)) return contents
   return contents.replace(/([ \t]*static[ \t]+get[ \t]+pagePath[ \t]*\([ \t]*\)[ \t]*{[ \t]*return[ \t]*\[[ \t]*\')(.*?)(\'.*?)/,`$1$2', '$2/\*\*$3`)
 }

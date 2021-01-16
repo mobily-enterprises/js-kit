@@ -1,3 +1,6 @@
+const installModule = require('../../node_modules/scaffoldizer/commands/add.js').installModule
+const executeManipulations = require('../../node_modules/scaffoldizer/lib/utils.js').executeManipulations
+
 exports.getPromptsHeading = (config) => {
   return "Pick the previx of your app's elements. If you pick 'my', elements will be 'my-something', 'my-something-else' and so on"
 }
@@ -31,15 +34,116 @@ exports.boot = (config) => {
   config.vars.elPrefix =  config.userInput['client-app-frame'].elPrefix
 }
 
-exports.preAdd = (config) => { }
+exports.preAdd = async (config) => { }
 
-exports.postAdd = (config) => { }
+exports.postAdd = async (config) => {
+  await installModule('client-app-root-page', config, {
+    type: 'plain',
+    elementName: 'landing',
+    elementTitle: 'Landing Page',
+    elementMenuTitle: 'Landing',
+    uncommentedStaticImport: true,
+    pagePath: ''
+  })
+
+  await installModule('client-app-root-page', config, {
+    type: 'plain',
+    elementName: 'not-found',
+    elementTitle: 'Not found',
+    elementMenuTitle: 'Not Found',
+    uncommentedStaticImport: true,
+    notInDrawer: true
+  })
+
+  executeManipulations(config, {
+    text: {
+      "src/pages/<%=vars.elPrefix%>-not-found.js":[
+        {
+          "op":"resolve-ejs"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"<!-- Element insertion point -->",
+          "valueFromFile":"notFound.html"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Loaded modules -- end */",
+          "value":"import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Element styles -- end */",
+          "valueFromFile":"warning-css.css"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Host styles -- end */",
+          "value":"animation: fadeIn 0.3s ease-in;\ntext-align: center;"
+        }
+      ]
+    }
+  })
+
+
+  await installModule('client-app-root-page', config, {
+    type: 'plain',
+    elementName: 'load-error',
+    elementTitle: 'Load error',
+    elementMenuTitle: 'Load error',
+    uncommentedStaticImport: true,
+    notInDrawer: true
+  })
+
+  executeManipulations(config, {
+    text: {
+      "src/pages/<%=vars.elPrefix%>-load-error.js":[
+        {
+          "op":"resolve-ejs"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"<!-- Element insertion point -->",
+          "valueFromFile":"loadError.html"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Loaded modules -- end */",
+          "value":"import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Element styles -- end */",
+          "valueFromFile":"warning-css.css"
+        },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineAfter":false,
+          "anchorPoint":"/* Host styles -- end */",
+          "value":"animation: fadeIn 0.3s ease-in;\ntext-align: center;"
+        }
+      ],
+    }
+  })
+}
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'src/pages/PREFIX-load-error.js': return `src/pages/${config.vars.elPrefix}-load-error.js`
-    case 'src/pages/PREFIX-not-found.js': return `src/pages/${config.vars.elPrefix}-not-found.js`
-    case 'src/pages/PREFIX-landing.js': return `src/pages/${config.vars.elPrefix}-landing.js`
     case 'src/lib/base/elements/PREFIX-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-header.js`
     case 'src/lib/base/elements/PREFIX-page-header.js': return `src/lib/base/elements/${config.vars.elPrefix}-page-header.js`
     case 'src/lib/base/elements/PREFIX-toggle-button.js': return `src/lib/base/elements/${config.vars.elPrefix}-toggle-button.js`
