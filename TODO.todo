@@ -48,11 +48,11 @@
 ✔ Make sure that result app is fully linted @done(2021-01-15 13:21)
 ✔ Add full hooks (same as plain-PREFIX-ELEMENTNAME) to PREFIX-landing, PREFIX-load-error, PREFIX-not-found @done(2021-01-16 09:39)
   ✔ Done programmatically! (Was: Could this be done programmatically? @done(2021-01-16 09:39)
-☐ Add server stores (server-store) (simple version)
+✔ Add server stores (server-store) (simple version) @done(2021-01-17 11:14)
   ☐ Validate store name, ensure there is no matching store
   ☐ Validate store URL, ensure there is no matching URL
-  ☐ validate version better
-☐ Add server stores (server-db-store) (simple version)
+  ☐ Validate version better
+☐ Add DB server stores (server-db-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
 ☐ Write function that, given a store, returns a list of fields and types
 
