@@ -1,0 +1,20 @@
+{
+  "name":"server-store",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Add a store to the app",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+    "server-stores"
+  ],
+  "position": 20,
+  "manipulate":{
+    "text":{
+      "server/stores/<%=vars.newStoreInfo.version%>/<%=vars.newStoreInfo.name%>.js":[
+        {
+          "op":"resolve-ejs"
+        },
+      ]
+    }
+  }
+}

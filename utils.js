@@ -83,7 +83,6 @@ exports.elementAlreadyDefined = (config, el) => {
   return exports.allFiles(config).find(o => o.info.definedElement === el)
 }
 
-
 exports.pagePathAlreadyDefined = (config, pagePath) => {
   return exports.allFiles(config).find(o => o.info.pagePath === pagePath)
 }
@@ -97,6 +96,36 @@ exports.elementNameValidator = (config) => {
         ? 'Element already defined'
         : true
     )
+  }
+}
+
+exports.storeNameValidator = (config) => {
+  return function (value) {
+    return !value.match(/^[a-z]+[A-Za-z0-9\-]*$/)
+    ? 'Must be camelCase, with letters and numbers, and start with lower case'
+    : true
+  }
+}
+
+exports.publicURLValidator = (config) => {
+  return function (value) {
+    return !value.match(/^\/[a-z0-9A-Z\-\/_]*$/)
+    ? 'Valid URLs, starting with "/", and without trailing "/"'
+    : true
+  }
+}
+
+exports.pagePathValidator = (config, value, prev) => {
+  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
+  ? 'Valid URLs, starting with "/" or "#"'
+  :true
+}
+
+exports.publicURLprefixValidator = (config) => {
+  return function (value) {
+    return !value.match(/^[A-Za-z0-9\-_]*$/)
+    ? 'Must be letters and numbers (underscore and dash allowed)'
+    : true
   }
 }
 
