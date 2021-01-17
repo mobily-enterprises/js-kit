@@ -55,7 +55,6 @@
   ☐ Improve error message so that findMatchingStoreNameAndVersions gives list of versions
 ☐ Add DB server stores (server-db-store) (simple version)
 ☐ Add way to run scripts -- use to create databases (picking store)
-☐
 ☐ Write function that, given a store, returns a list of fields and types
 
 ☐ (With Raphael) Add edit/list/view elements
