@@ -6,6 +6,9 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
+  let storeName
+  let version
+
   const questions = [
     {
       type: 'text',
@@ -17,8 +20,18 @@ exports.getPrompts = (config) => {
     {
       type: 'text',
       name: 'version',
-      message: 'Store version',
-      initial: '1.0.0'
+      message: (prev, values) => { storeName = values.name; return 'Store version' },
+      initial: '1.0.0',
+      validate: (value) => {
+        return utils.storeVersionValidator(config, value, storeName)
+      }
+    },
+    {
+      type: 'text',
+      name: 'publicURL',
+      message:  (prev, values) => { version = values.version; return `Store URL. /${version}` },
+      initial: (prev) => `/${storeName}`,
+      validate: utils.storePublicURLValidator(config)
     },
     {
       type: 'multiselect',

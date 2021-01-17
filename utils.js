@@ -56,6 +56,15 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
     m = contents.match(/^[ \t]*window[ \t]*\.[ \t]*customElements[ \t]*\.[ \t]*define[ \t]*\(\'(.*?)\'.*$/m)
     if (m) res.definedElement = m[1]
 
+    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+storeName[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+    if (m) res.storeName = m[1]
+
+    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+publicURL[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+    if (m) res.storePublicURL = m[1]
+
+    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+version[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+    if (m) res.storeVersion = m[1]
+
     return res
   }
 
@@ -79,24 +88,35 @@ exports.allFiles  = (config) => {
 }
 exports.allFiles.list = null
 
-exports.elementAlreadyDefined = (config, el) => {
-  return exports.allFiles(config).find(o => o.info.definedElement === el)
+exports.findAttributeInAllFiles = (config, name, value) => {
+  return exports.allFiles(config).find(o => o.info[name] === value)
 }
 
-exports.pagePathAlreadyDefined = (config, pagePath) => {
-  return exports.allFiles(config).find(o => o.info.pagePath === pagePath)
+exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
+  return exports.allFiles(config).find(o => o.info.storeName === storeName && o.info.storeVersion === version)
 }
 
 exports.elementNameValidator = (config) => {
   return function (value) {
     return !value.match(/^[a-z]+[a-z0-9\-]*$/)
-    ? 'Only lower case characters, numbers and dashes allowed'
+      ? 'Only lower case characters, numbers and dashes allowed'
+      : (
+        exports.findAttributeInAllFiles(config, 'definedElement', `${config.vars.elPrefix}-${value}`)
+          ? 'Element already defined'
+          : true
+      )
+  }
+}
+
+exports.storeVersionValidator = (config, value, storeName) => {
+  return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
+    ? 'Must be in format n.n.n E.g. 2.0.0'
     : (
-      exports.elementAlreadyDefined(config, `${config.vars.elPrefix}-${value}`)
-        ? 'Element already defined'
+      exports.findMatchingStoreNameAndVersions(config, value, storeName)
+        ? 'Storename in same version already defined'
         : true
     )
-  }
+
 }
 
 exports.storeNameValidator = (config) => {
@@ -107,18 +127,16 @@ exports.storeNameValidator = (config) => {
   }
 }
 
-exports.publicURLValidator = (config) => {
+exports.storePublicURLValidator = (config) => {
   return function (value) {
     return !value.match(/^\/[a-z0-9A-Z\-\/_]*$/)
-    ? 'Valid URLs, starting with "/", and without trailing "/"'
-    : true
+      ? 'Valid URLs, starting with "/", and without trailing "/"'
+      : (
+        exports.findAttributeInAllFiles(config, 'storePublicURL', value)
+          ? 'Store URL already defined by another store'
+          : true
+      )
   }
-}
-
-exports.pagePathValidator = (config, value, prev) => {
-  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
-  ? 'Valid URLs, starting with "/" or "#"'
-  :true
 }
 
 exports.publicURLprefixValidator = (config) => {
@@ -133,7 +151,7 @@ exports.pagePathValidator = (config, value, prev) => {
   return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
   ? 'Valid URLs, starting with "/" or "#"'
   : (
-    exports.pagePathAlreadyDefined(config, `${prev.pagePath }${value}`)
+    exports.findAttributeInAllFiles(config, 'pagePath', `${prev.pagePath }${value}`)
       ? 'Element already defined'
       : true
   )

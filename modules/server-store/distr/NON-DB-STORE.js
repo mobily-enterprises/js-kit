@@ -10,7 +10,7 @@ class Store extends HttpMixin(JsonRestStores) {
   // it will be `/stores/2.0.0/storeTemplate/:id`.
   static get publicURLprefix () { return '<%=userInput["server-stores"].publicURLprefix%>' }
   static get version () { return '<%=vars.newStoreInfo.version%>' }
-  static get publicURL () { return '<%=vars.newStoreInfo.publicURL%>:id' }
+  static get publicURL () { return '<%=vars.newStoreInfo.publicURL%>/:id' }
 
   // This is a unique name for the store. It should match the store name in the URL
   static get storeName () { return '<%=vars.newStoreInfo.name%>' }
