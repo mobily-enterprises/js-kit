@@ -93,7 +93,9 @@ exports.findAttributeInAllFiles = (config, name, value) => {
 }
 
 exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
-  return exports.allFiles(config).find(o => o.info.storeName === storeName && o.info.storeVersion === version)
+  const list = exports.allFiles(config).filter(o => o.info.storeName === storeName)
+  if (!list.find(o => o.info.storeVersion === version)) return ''
+  return `Store already exists in this version - ${list.map(e => `${e.info.storeVersion}/${e.info.storeName}`).join(', ')}`
 }
 
 exports.elementNameValidator = (config) => {
@@ -109,11 +111,12 @@ exports.elementNameValidator = (config) => {
 }
 
 exports.storeVersionValidator = (config, value, storeName) => {
+  let res
   return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
     ? 'Must be in format n.n.n E.g. 2.0.0'
     : (
-      exports.findMatchingStoreNameAndVersions(config, value, storeName)
-        ? 'Storename in same version already defined'
+      (res = exports.findMatchingStoreNameAndVersions(config, value, storeName))
+        ? res
         : true
     )
 
@@ -156,3 +159,34 @@ exports.pagePathValidator = (config, value, prev) => {
       : true
   )
 }
+
+exports.storeChoices = [
+  {
+    title: 'GET -- one element (e.g. GET /store/1)',
+    value: 'get',
+    selected: true
+  },
+  {
+    title: 'GET -- several elements (e.g. GET /store)',
+    value: 'getQuery',
+    selected: true
+
+  },
+  {
+    title: 'PUT (e.g. PUT /store/1)',
+    value: 'put',
+    selected: true
+
+  },
+  {
+    title: 'POST (e.g. POST /store)',
+    value: 'post',
+    selected: true
+
+  },
+  {
+    title: 'DELETE (e.g. DELETE /store/1)',
+    value: 'delete',
+    selected: false
+  },
+]

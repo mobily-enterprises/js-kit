@@ -21,7 +21,7 @@ exports.getPrompts = (config) => {
       type: 'text',
       name: 'version',
       message: (prev, values) => { storeName = values.name; return 'Store version' },
-      initial: config.vars.defaultStoreVersion,
+      initial: '1.0.0',
       validate: (value) => {
         return utils.storeVersionValidator(config, value, storeName)
       }
@@ -34,37 +34,32 @@ exports.getPrompts = (config) => {
       validate: utils.storePublicURLValidator(config)
     },
     {
+      type: 'text',
+      name: 'table',
+      message: 'DB table name',
+      initial: (prev) => `${storeName}`,
+      validate: utils.storeNameValidator(config)
+    },
+    {
+      type: 'confirm',
+      name: 'positioning',
+      message: 'Should the store manage positioning of rows?',
+      initial: true
+    },
+
+    {
       type: 'multiselect',
       name: 'methods',
       message: 'Which HTTP methods?',
       choices: utils.storeChoices,
-    },
-    {
-      type: 'select',
-      name: 'implementation',
-      message: 'Store\'s initial implementation',
-      choices: [
-        {
-          title: 'All methods return dummy values to start with',
-          value: 'dummy',
-          selected: true
-
-        },
-        {
-          title: 'All methods will throw an error, must be implemented',
-          value: 'errors',
-          selected: false
-        }
-      ]
-    },
-
+    }
   ]
 
   return questions
 }
 
 exports.postPrompts = async (config) => {
-  const userInput = config.userInput['server-store']
+  const userInput = config.userInput['server-db-store']
 
   // New page's info
   // No placement by default
@@ -76,7 +71,9 @@ exports.postPrompts = async (config) => {
     version: userInput.version,
     publicURL: userInput.publicURL,
     implementation: userInput.implementation,
-    db: false
+    table: userInput.table,
+    positioning: userInput.positioning,
+    db: true
   }
 }
 
@@ -84,7 +81,7 @@ exports.boot = (config) => { }
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'NON-DB-STORE.js':
+    case 'STORE.js':
       return `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.name}.js`
     default:
       return file

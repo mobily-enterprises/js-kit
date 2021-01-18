@@ -52,10 +52,12 @@
   ✔ Validate store name, ensure there is no matching store @done(2021-01-17 22:39)
   ✔ Validate store URL, ensure there is no matching URL @done(2021-01-17 22:39)
   ✔ Validate version better @done(2021-01-17 23:13)
-  ☐ Improve error message so that findMatchingStoreNameAndVersions gives list of versions
-☐ Add DB server stores (server-db-store) (simple version)
+  ✔ Improve error message so that findMatchingStoreNameAndVersions gives list of versions @done(2021-01-18 07:47)
+  ✔ Turn choices into a select @done(2021-01-18 07:57)
+  ✔ Add default version value to server stores @done(2021-01-18 08:16)
+✔ Add DB server stores (server-db-store) (simple version) @done(2021-01-18 09:48)
 ☐ Add way to run scripts -- use to create databases (picking store)
-☐ Write function that, given a store, returns a list of fields and types
+☐ Write function that, given a store and version, returns a list of fields and types
 
 ☐ (With Raphael) Add edit/list/view elements
 ☐ (With Raphael) Decide what to do for initial default tabs
