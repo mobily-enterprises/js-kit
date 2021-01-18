@@ -1,14 +1,23 @@
 const utils = require('../../utils.js')
 const path = require('path')
 
-exports.script = (config) => {
+exports.script = async (config) => {
   console.log(config.userInput.storeToSync)
-  console.log('SCRIPT RUN!')
+
+  // Make the DB connection
+  const vars = require(path.resolve(path.join(config.dstDir, 'server', 'vars.js')))
+  const makeDbConnection = require(path.resolve(path.join(config.dstDir, 'server', 'lib', 'makeDbConnection.js')))
+  vars.connection = makeDbConnection(vars.config.db)
 
   const storeToSync = config.userInput.storeToSync
 
   const store = require(path.resolve(path.join(config.dstDir, storeToSync)))
-  store.schemaDbSync()
+
+  await store.schemaDbSync()
+
+  vars.connection.end()
+
+  console.log('Schema synched!')
 }
 
 exports.prePrompts = (config) => { }

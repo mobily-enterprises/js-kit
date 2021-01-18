@@ -14,7 +14,13 @@
                "op":"set",
                "key":"dependencies.jsonreststores",
                "value":"^2.x.x"
+            },
+            {
+               "op":"set",
+               "key":"dependencies.simpleschema",
+               "value":"^2.x.x"
             }
+
          ]
       },
       "text":{

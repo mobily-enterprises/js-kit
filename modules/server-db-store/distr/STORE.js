@@ -16,6 +16,9 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
       // field1: { type: 'boolean', default: false },
       // field2: { type: 'string', trim: 16, default: '' },
       // field3: { type: 'string', trim: 16, default: '' }
+<%if(vars.newStoreInfo.positioning){ -%>
+      position: { type: 'number', canBeNull: true } // Field for positioning
+<% } -%>
     })
   }
 
@@ -31,9 +34,6 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
       // field1: { type: 'boolean' },
       // field2: { type: 'string', trim: 16 },
       // field3: { type: 'string', trim: 16 }
-<%if(vars.newStoreInfo.positioning){ -%>
-      position: { type: 'number', canBeNull: true } // Field for positioning
-<% } -%>
     })
   }
 
