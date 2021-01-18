@@ -65,6 +65,9 @@
   ✔ Check that sync script actually does run @done(2021-01-18 23:31)
 ✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 23:49)
 ☐ (With Raphael) Add edit/list/view elements
+  ☐ client-app-element
+  ☐ client-app-root-page
+  ☐ client-app-routed-element
 ☐ (With Raphael) Decide what to do for initial default tabs
 ☐ --- STAGE 2 DONE ---
 ☐ client-reducs
