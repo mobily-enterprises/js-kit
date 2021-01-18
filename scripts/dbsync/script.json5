@@ -1,0 +1,7 @@
+{
+  "name":"dbsync",
+  "version":"1.0.0",
+  "description":"Database sync of schema",
+  "author":"Tony Mobily",
+  "position": -1
+}

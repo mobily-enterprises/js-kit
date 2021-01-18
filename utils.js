@@ -59,6 +59,9 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
     m = contents.match(/^[ \t]*static[ \t]+get[ \t]+storeName[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
     if (m) res.storeName = m[1]
 
+    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+table[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+    if (m) res.storeTable = m[1]
+
     m = contents.match(/^[ \t]*static[ \t]+get[ \t]+publicURL[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
     if (m) res.storePublicURL = m[1]
 

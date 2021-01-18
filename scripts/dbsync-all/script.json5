@@ -1,0 +1,7 @@
+{
+  "name":"dbsync-all",
+  "version":"1.0.0",
+  "description":"Database sync of schema for ALL stores",
+  "author":"Tony Mobily",
+  "position": -1
+}
