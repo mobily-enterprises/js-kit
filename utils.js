@@ -91,6 +91,14 @@ exports.allFiles  = (config) => {
 }
 exports.allFiles.list = null
 
+exports.allStores = (config) => {
+  let foundStores = exports
+    .allFiles(config)
+    .filter(f => f.info.storeName && f.info.storeTable)
+
+  return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
+}
+
 exports.findAttributeInAllFiles = (config, name, value) => {
   return exports.allFiles(config).find(o => o.info[name] === value)
 }

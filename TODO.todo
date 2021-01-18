@@ -57,14 +57,13 @@
   ✔ Add default version value to server stores @done(2021-01-18 08:16)
 ✔ Add DB server stores (server-db-store) (simple version) @done(2021-01-18 09:48)
 ✔ Add way to run scripts -- use to create databases (picking store) @done(2021-01-18 11:54)
-✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 12:20)
 ✔ Check that DB sync actually works @done(2021-01-18 23:31)
   ✔ Reset project @done(2021-01-18 22:29)
   ✔ Create database @done(2021-01-18 22:29)
   ✔ Add DB credentials that actually connect to a DB @done(2021-01-18 22:29)
   ✔ Run server and check that DB connection is happening @done(2021-01-18 23:31)
   ✔ Check that sync script actually does run @done(2021-01-18 23:31)
-
+✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 23:49)
 ☐ (With Raphael) Add edit/list/view elements
 ☐ (With Raphael) Decide what to do for initial default tabs
 ☐ --- STAGE 2 DONE ---
