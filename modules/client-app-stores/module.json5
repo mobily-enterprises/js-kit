@@ -1,0 +1,9 @@
+{
+  "name":"client-app-stores",
+  "version":"1.0.0",
+  "description":"Stores editing mixin and elements",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+  ],
+  "position": -1,
+}

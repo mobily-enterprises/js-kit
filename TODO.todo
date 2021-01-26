@@ -67,7 +67,7 @@
 ☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
   ☐ Decide how to add buttons to page from contained element
   ☐ Final decision on "currentParams" etc.
-    ☐ Have AddEditMixin.js which includes StoreAddEditMixin AND a renderAddEdit() function (with hte current render())
+    ☐ Have AddEditCommonMixin.js which includes StoreAddEditMixin AND a renderAddEdit() function (with hte current render())
     ☐ AddEditPageElement.js inherits from PageElement mixed with AddEditMixin.js
     ☐ AddEditElement.js inherits from AppElement mixed with AddEditElement.js
     ☐ The difference between AddEditPageElement and AddEditElement is in the UI side of things (ADD), plus reloading with params, etc.
