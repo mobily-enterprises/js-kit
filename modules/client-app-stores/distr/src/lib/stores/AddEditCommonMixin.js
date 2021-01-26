@@ -59,7 +59,7 @@ export const AddEditCommonMixin = (base) => {
       }
     }
 
-    render () {
+    renderElement () {
       return html`
         <div class=${classMap({ belowCoHeader: !!this.belowHeader })} ?addpadding=${this.addPadding} main>
           <en-form id="form" action="${this.storeUrl}" ?no-autoload=${!this.autoload} set-form-after-submit .incomingData=${this._incomingData.bind(this)}  .dataLoaded=${this._dataLoaded.bind(this)} .presubmit=${this._presubmit.bind(this)} record-id=${ifDefined(this.recordId)} .response=${this._response.bind(this)}>
