@@ -64,6 +64,12 @@
   ✔ Run server and check that DB connection is happening @done(2021-01-18 23:31)
   ✔ Check that sync script actually does run @done(2021-01-18 23:31)
 ✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 23:49)
+☐ NOTES
+  ☐ AddEdit is done
+  ☐ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender
+  ☐ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed
+  ☐ AddEdit now works for root pages, replicate the same thing for other pages
+  ☐ Rename 'edit' into 'add-edit' everywhere, OR make add-edit, edit, add (resolve this)
 ☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
   ☐ Decide how to add buttons to page from contained element
   ☐ Final decision on "currentParams" etc.
