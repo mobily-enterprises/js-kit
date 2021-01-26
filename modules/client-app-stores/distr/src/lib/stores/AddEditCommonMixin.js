@@ -59,12 +59,12 @@ export const AddEditCommonMixin = (base) => {
       }
     }
 
-    renderAddEditElement () {
+    renderAddEditForm (fields) {
       return html`
         <div class=${classMap({ belowCoHeader: !!this.belowHeader })} ?addpadding=${this.addPadding} main>
           <en-form id="form" action="${this.storeUrl}" ?no-autoload=${!this.autoload} set-form-after-submit .incomingData=${this._incomingData.bind(this)}  .dataLoaded=${this._dataLoaded.bind(this)} .presubmit=${this._presubmit.bind(this)} record-id=${ifDefined(this.recordId)} .response=${this._response.bind(this)}>
             <ee-network id="network" class="fadeIn" manage-loading-errors .messenger="${this.messenger.bind(this)}" .retryMethod="${this.reload.bind(this)}">
-             ${this.innerRender()}
+             ${fields}
             </ee-network>
           </en-form>
         </div>
@@ -79,15 +79,10 @@ export const AddEditCommonMixin = (base) => {
       this.localDataInit = {}
     }
 
-    innerRender () {
-      return ''
-    }
-
     storeChange (detail) {
       if (
         detail.store === this.mainStore() && (
           (detail.op === 'update' && Number(detail.record[this.localDataIdProperty]) === Number(this.recordId)) // ||
-          // detail.op === 'insert' //nonsensical
         )
       ) {
         this[this.localDataProperty] = detail.record

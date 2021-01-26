@@ -39,7 +39,7 @@ exports.getPrompts = (config) => {
         },
         {
           title: 'Edit element',
-          value: 'edit'
+          value: 'add-edit'
         },
       ]
     },
@@ -112,7 +112,7 @@ exports.fileRenamer = (config, file) => {
     case 'plain-PREFIX-ELEMENTNAME.js':
     case 'list-PREFIX-ELEMENTNAME.js':
     case 'view-PREFIX-ELEMENTNAME.js':
-    case 'edit-PREFIX-ELEMENTNAME.js':
+    case 'add-edit-PREFIX-ELEMENTNAME.js':
       return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
     default:
       return file

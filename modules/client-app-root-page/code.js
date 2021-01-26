@@ -26,7 +26,7 @@ exports.getPrompts = (config) => {
         },
         {
           title: 'Edit page',
-          value: 'edit'
+          value: 'add-edit'
         },
       ]
     },
@@ -79,7 +79,7 @@ exports.postPrompts = (config) => {
 
   const lookup = {
     'plain': '',
-    'edit': 'AddEdit',
+    'add-edit': 'AddEdit',
     'list': 'List',
     'view': 'View'
   }
@@ -114,7 +114,7 @@ exports.fileRenamer = (config, file) => {
     case 'plain-PREFIX-ELEMENTNAME.js':
     case 'list-PREFIX-ELEMENTNAME.js':
     case 'view-PREFIX-ELEMENTNAME.js':
-    case 'edit-PREFIX-ELEMENTNAME.js':
+    case 'add-edit-PREFIX-ELEMENTNAME.js':
       return `src/pages/${config.vars.newElementInfo.name}.js`
     default:
       return file
