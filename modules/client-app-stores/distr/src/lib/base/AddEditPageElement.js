@@ -1,6 +1,6 @@
 import { html } from 'lit-element'
 import { AddEditCommonMixin } from '../stores/AddEditCommonMixin.js'
-import { PageElement } from '../PageElement.js'
+import { PageElement } from './PageElement.js'
 import { teleport } from 'historify'
 export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
   static get properties () {

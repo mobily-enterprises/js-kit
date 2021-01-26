@@ -73,9 +73,10 @@ export const AddEditCommonMixin = (base) => {
 
     constructor () {
       super()
-      this.localDataInit = {}
       this.localDataProperty = 'data'
+      this[this.localDataProperty] = {}
       this.localDataIdProperty = 'id'
+      this.localDataInit = {}
     }
 
     innerRender () {
