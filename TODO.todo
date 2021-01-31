@@ -66,14 +66,168 @@
 ✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 23:49)
 ✔ Make AddEdit work <nn-input-text dense name="voucherNumber" label="V#" .value=${this.data.voucherNumber || ''} > </nn-input-text> @done(2021-01-27 06:15)
 
+
+☐ NOTES ON STORES
+Companies
+  /companies/:id
+People [FK: companyId]
+  /people/:id
+  /companies/:companyId/people/:id
+Addresses [FK: personId]
+  /addresses/:id
+  /people/:personId/addresses/:id
+
+☐ Add parameters to anchorPoints. Will need it for "useItem"
+☐ When in a list element, in the main cycle have an element insertion point, with parameter "useItem"
+☐ Always pass "data" to child
+☐ In listElement, make the anchor within the map() cycle with (useItem=true)
+
+NOTE:
+Non-list elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('storeParams').
+  - E.g. <view-element .data=${this.data}>
+  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people/${this.storeParams.id}`
+  - For AppElement elements, .data MUST be provided since they cannot load it themselves
+  - For Routed/Page elements, .data is optional (it will be loaded regardless)
+
+List elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('storeParams').
+  - E.g. <list-element .data=${this.(item||data).ports} AND .storeParams=${this.(item||data)}>
+  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people?companyId=${this.storeParams.id}`
+  - For AppElement elements, .data MUST be provided since they cannot load it themselves
+  - For Routed/Page elements, .data is optional (it will be loaded regardless)
+  - storeParams is NEVER guaranteed to be a full record. If used in Routed/Page elements, it will only contain the IDs from the URL. A ListElement
+    that has listed items that need data in the parent record will need to be contained into a ViewElement which will load it and pass it along
+
+This means that list elements will always have access to the crucial filtering IDs they need to fetch/save the correct data. Fetching is important EVEN
+when having the data available and preloaded, in case the user wants to change ordering fields, go to next page if available, etc.
+
+
+
+
+
+EVERYTHING BELOW THIS LINE NEEDS TO BE ADJUSTED
+
+
+
+NOTE: The difference between an App element and a Routed/Page element is that a Routed/Page element will call reload() if URL has changed. SO, if
+an element is not routed, it will need the data passed to it by the parent
+
+Case 1 -- an PageElement co-view-companies which includes a RoutedElement co-list-companies-people. The PageElement loads the
+company data first. Then the co-list-companies-people loads the list of people from the company and displays it.
+co-list-companies-people MAY be passed parentData which includes the company info
+*NOTE: Elements are contained into one-another. If network fails in the parent, it will be apparent and reload-able
+*NOTE 2: In this example, there will be one query for the company, and then one query in People for each displayed company,
+AND THEN another query un Addresses for each displayed person.
+*NOTE 3: if there is no matched ID in store, it will need to be a queryString by default instead of using the URL
+
+*NOTE 4: If the element is changed into AppElement, no autoload will be done. In that case, "data" MUST be passed by
+parent
+
+  A COMPANY
+    PageElement (view)
+    URL: /view-companies/:id
+    Element: co-view-companies
+    File: /pages/co-view-companies.js
+    Store: companies. Match /view-companies/:id with /companies/:id MATCH: id
+    Query: /companies/:[storeParams.id] (UI: match URL's "id" with one of the foreign keys in store People)
+    Data: "data" (company's record)
+    NOTE: storeParams comes either by the URL (if set, for page elements) or from storeParams which is copied from data
+
+
+  LIST OF PEOPLE FOR A COMPANY
+    RoutedElement (list) WITHIN parent co-view-companies
+    NOT URL: /view-companies/:id
+    Element: co-list-people
+    File: /pages/co-view-companies/elements/co-list-people.js
+    Store: people.
+    Query: /people?companyId=[storeParams.id] (UI: match URL's "id" with one of the foreign keys in store People)
+    Data: "data" (list of all people)
+    Props...
+      MAYBE parentData (co-view-companies.js calls <co-list-people .parentData="${this.data}") -- this.data is the company info
+      MAYBE data (co-view-companies.js calls <co-list-people .data="${this.data.people}") -- this.data.people is the list of people
+
+IMPORTANT REMEMBER: storeParams can be set at every data change, so that it includes all the fields defined as ID in the schema
+
+When this element is created, each row is empty, but with a placeholder to add elements.
+Each element could be
+
+  A PERSON WITHIN THE LIST OF PEOPLE FOR A COMPANY
+    RoutedElement (view) WITHIN parent co-list-people
+    URL: /view-companies/:companyId/people/:personId
+    Element: co-view-person
+    File: /pages/co-view-companies/elements/co-list-people/elements/co-view-person.js
+    Store: people
+    Query:/addresses?personId=[storeParams.personId] (UI: ask to match URL's "companyId" and "personId" with foreign keys in addresses, ONLY match personId)
+    Props...
+      MAYBE parentData (co-list-people.js calls <co-view-person .parentData="${this.data}") (this.data is the full list of people)
+      MAYBE data (from co-list-people, which calls <co-view-person .data="${item}")
+      MAYBE item (from co-list-people, which calls <co-view-person .item="${item}")
+      *NOTE: Needs to find a way to do this. Note that "data" and "item" are the same because this is a view element
+
+  RoutedElement (list) WITHIN parent co-list-people
+    URL: /view-companies/:companyId/people/:personId/addresses
+    Element: co-list-addresses
+    File: /pages/co-view-companies/elements/co-list-people/elements/co-list-addresses.js
+    Store: addresses
+    Query:/addresses?personId=[params.personId] (UI: ask to match URL's "companyId" and "personId" with foreign keys in addresses, ONLY match personId)
+    Props...
+      MAYBE parentData (co-list-people.js calls <co-list-addresses .parentData="${this.data}") (this.data is the full list of people)
+      MAYBE data (from co-list-people, which calls <co-list-addresses .data="${item.addresses}")
+      MAYBE item (from co-list-people, which calls <co-list-addresses .item="${item}")
+
+    *NOTE: Needs to find a way to do this. Note that ".addresses", which is a crucial part
+
+
+IMPORTANT REMEMBER: MUST find a way so that the storeParams object is either set by routerCallback (depending on the change of URL) or by parent
+ALSO IMPORTANT: Do not base reloads on change of store URL
+
+
+
+Case 2 -- a PageElement that manages the URL all on its own. E.g. /ports/:portId/berths
+
+Case 2A -- An AppElement which contains a RoutedElement (View) to view the port information,
+and another RoutedElement (List) to view the list of berths
+NOTE: The list element has no access to port information.
+
+  PageElement (plain)
+    URL: /ports/:id
+    Element: co-port
+    File: /pages/co-port.js
+
+  RoutedElement (view) WITHIN parent co-port.
+    URL: /ports/:id
+    Element: co-view-port.js
+    File: /pages/co-port/elements/co-view-port.js
+    Store: ports. Match /ports/:id (page) with /ports/:id (store)
+
+  RoutedElement (list) WITHIN parent co-port
+    URL: /ports/:id
+    Element: co-list-port-berths.js
+    File: /pages/co-port/elements/co-list-port-berths.js
+    Store: berths. Match with ports/:id (page) with /berths?portId=XXX
+
+
+
+
+**TODO**
+  PageElement
+    URL: /view-companies/:id
+    Element: co-view-companies
+    File: /pages/co-view-companies.js
+    Store: companies. Match /view-companies/:id with /companies/:id MATCH: id
+
+
 ☐ NOTES
   ✔ AddEdit is done @done(2021-01-27 06:15)
   ✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
-  ☐ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed
+  ✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
+  ✔ Make it select the store @done(2021-01-27 08:01)
+  ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
+  ☐ Look for "message: 'Which" and change function to call pageTypeQuestion() 
   ☐ Make it work out the fields by actually loading the store
   ☐ Add the fields in add-edit
-  ☐ Rename 'edit' into 'add-edit' everywhere
   ☐ AddEdit now works for root pages, replicate the same thing for other pages
+  ☐ Add save/cancel button to app header
+
 ☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
   ☐ Decide how to add buttons to page from contained element
   ☐ Final decision on "currentParams" etc.
