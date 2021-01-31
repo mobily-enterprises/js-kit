@@ -1,4 +1,7 @@
 const regexpEscape = require('escape-string-regexp')
+const prompts = require('prompts')
+const fs = require('fs')
+const path = require('path')
 
 exports.addMixinToElement = async function (contents, m, config) {
   return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
@@ -96,7 +99,7 @@ exports.allStores = (config) => {
     .allFiles(config)
     .filter(f => f.info.storeName && f.info.storeTable)
 
-  return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
+  return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName} -- ${e.info.storePublicURL}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
 }
 
 exports.findAttributeInAllFiles = (config, name, value) => {
@@ -109,16 +112,63 @@ exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
   return `Store already exists in this version - ${list.map(e => `${e.info.storeVersion}/${e.info.storeName}`).join(', ')}`
 }
 
-exports.elementNameValidator = (config) => {
-  return function (value) {
-    return !value.match(/^[a-z]+[a-z0-9\-]*$/)
-      ? 'Only lower case characters, numbers and dashes allowed'
-      : (
-        exports.findAttributeInAllFiles(config, 'definedElement', `${config.vars.elPrefix}-${value}`)
-          ? 'Element already defined'
-          : true
-      )
+exports.elementNameValidator = (config, value, prev) => {
+  return !value.match(/^[a-z]+[a-z0-9\-]*$/)
+    ? 'Only lower case characters, numbers and dashes allowed'
+    : (
+      exports.findAttributeInAllFiles(config, 'definedElement', `${config.vars.elPrefix}-${exports.elementNameFromInput(config, value, prev)}`)
+        ? 'Element already defined'
+        : true
+    )
+}
+
+
+exports.pagePathValidator = (config, value, prev) => {
+  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
+  ? 'Valid URLs, starting with "/" or "#"'
+  : (
+    exports.findAttributeInAllFiles(config, 'pagePath', `${prev.pagePath }${value}`)
+      ? 'Element already defined'
+      : true
+  )
+}
+exports.pageTypeQuestion = (config) => {
+  let choices
+  if (fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))) {
+    return {
+      type: 'select',
+      name: 'type',
+      message: 'Which type of page?',
+      choices : [
+        {
+          title: 'Plain page',
+          value: 'plain'
+        },
+        {
+          title: 'List page',
+          value: 'list'
+        },
+        {
+          title: 'View page',
+          value: 'view'
+        },
+        {
+          title: 'Add/edit page',
+          value: 'add-edit'
+        },
+      ]
+    }
+  } else {
+
+    // No input done. Just set the user input
+    return {
+      type: null,
+    }
   }
+}
+
+exports.elementNameFromInput = (config, enteredName, type = 'plain')  => {
+  return `${type === 'plain' ? '' : `${type}-`}${enteredName}`
 }
 
 exports.storeVersionValidator = (config, value, storeName) => {
@@ -130,8 +180,19 @@ exports.storeVersionValidator = (config, value, storeName) => {
         ? res
         : true
     )
-
 }
+
+exports.pageBaseClass = (type) => {
+  const lookup = {
+    'plain': '',
+    'add-edit': 'AddEdit',
+    'list': 'List',
+    'view': 'View'
+  }
+
+  return `${lookup[type]}PageElement`
+}
+
 
 exports.storeNameValidator = (config) => {
   return function (value) {
@@ -159,16 +220,6 @@ exports.publicURLprefixValidator = (config) => {
     ? 'Must be letters and numbers (underscore and dash allowed)'
     : true
   }
-}
-
-exports.pagePathValidator = (config, value, prev) => {
-  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
-  ? 'Valid URLs, starting with "/" or "#"'
-  : (
-    exports.findAttributeInAllFiles(config, 'pagePath', `${prev.pagePath }${value}`)
-      ? 'Element already defined'
-      : true
-  )
 }
 
 exports.storeChoices = [
@@ -201,3 +252,25 @@ exports.storeChoices = [
     selected: false
   },
 ]
+
+
+exports.askStoreQuestions = async (config) => {
+
+  store =  await prompts([
+    {
+      type: 'select',
+      message: 'Store to query',
+      name: 'store',
+      choices: exports.allStores(config)
+    }
+  ])
+
+  debugger
+  const storeObject = require(path.join(config.dstDir, store.store.file) )
+
+  // storeObject.schema.structure -- get list, filtering out ID and position field
+  // Let user select which ones
+  // Return list of fields, with info attached, in userInput
+
+
+}

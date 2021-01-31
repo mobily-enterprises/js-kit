@@ -6,36 +6,19 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
+
+  let globalPrev
+
   const questions = [
-    {
-      type: 'select',
-      name: 'type',
-      message: 'Which type of page?',
-      choices: [
-        {
-          title: 'Plain page',
-          value: 'plain'
-        },
-        {
-          title: 'List page',
-          value: 'list'
-        },
-        {
-          title: 'View page',
-          value: 'view'
-        },
-        {
-          title: 'Edit page',
-          value: 'add-edit'
-        },
-      ]
-    },
+    utils.pageTypeQuestion(config),
     {
       type: 'text',
       name: 'elementName',
-      message: 'Page element name',
+      message: (prev) => { globalPrev = prev; return 'Page element name' },
       initial: '',
-      validate: utils.elementNameValidator(config)
+      validate: (value) => {
+        return utils.elementNameValidator(config, value, globalPrev)
+      }
     },
     {
       type: 'text',
@@ -73,18 +56,20 @@ exports.getPrompts = (config) => {
   return questions
 }
 
-exports.postPrompts = (config) => {
-  const userInput = config.userInput['client-app-root-page']
-  userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
+exports.postPrompts = async (config) => {
+  let userInput = config.userInput['client-app-root-page']
 
-  const lookup = {
-    'plain': '',
-    'add-edit': 'AddEdit',
-    'list': 'List',
-    'view': 'View'
+  if (!userInput.type) userInput.type = 'plain'
+  userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
+  const baseClass = utils.pageBaseClass(userInput.type)
+
+  if (userInput.type !== 'plain') {
+    const extraStoreInput = await utils.askStoreQuestions(config)
+    userInput = { ...userInput, ...extraStoreInput }
+
+    // For AddEdit, use function to work out form string
+    // Run the transformation to add those fields
   }
-
-  const baseClass = `${lookup[userInput.type]}PageElement`
 
   const newElementInfo = config.vars.newElementInfo = {
     baseClass,
@@ -108,7 +93,7 @@ exports.postAdd = (config) => { }
 
 exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
-  if (file.split('-')[0] !== config.vars.newElementInfo.type) return
+  if (!file.startsWith(config.vars.newElementInfo.type)) return
 
   switch (file) {
     case 'plain-PREFIX-ELEMENTNAME.js':
