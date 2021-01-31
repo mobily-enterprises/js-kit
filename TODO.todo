@@ -83,22 +83,69 @@ Addresses [FK: personId]
 ☐ In listElement, make the anchor within the map() cycle with (useItem=true)
 
 NOTE:
-Non-list elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('storeParams').
-  - E.g. <view-element .data=${this.data}>
+**URL PARAMS ARE ONLY FOR LOADING**
+Routing/Page Elements will have a property `reloadFromLocation` used in routerCallback
+
+Non-list elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('data').
+  - E.g. <view-element .data=${this.data}> (AppElement) or <view-element> (Routing/Page Elements)
   - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people/${this.storeParams.id}`
   - For AppElement elements, .data MUST be provided since they cannot load it themselves
-  - For Routed/Page elements, .data is optional (it will be loaded regardless)
+  - For Routed/Page elements, .data is optional (it will be loaded unless reloadFromLocation is false)
 
-List elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('storeParams').
-  - E.g. <list-element .data=${this.(item||data).ports} AND .storeParams=${this.(item||data)}>
+List elements will have an internal storeParams variable which will either be set in routerCallback() or passed to it directly
+  - E.g. <list-element .data=${this.(item||data).ports} .storeParams=${this.(item||data)}> or <list-element>
   - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people?companyId=${this.storeParams.id}`
   - For AppElement elements, .data MUST be provided since they cannot load it themselves
-  - For Routed/Page elements, .data is optional (it will be loaded regardless)
+  - For Routed/Page elements, .data is optional (it will be loaded unless reloadFromLocation is false)
   - storeParams is NEVER guaranteed to be a full record. If used in Routed/Page elements, it will only contain the IDs from the URL. A ListElement
     that has listed items that need data in the parent record will need to be contained into a ViewElement which will load it and pass it along
 
 This means that list elements will always have access to the crucial filtering IDs they need to fetch/save the correct data. Fetching is important EVEN
 when having the data available and preloaded, in case the user wants to change ordering fields, go to next page if available, etc.
+
+
+☐ NOTES
+  ✔ AddEdit is done @done(2021-01-27 06:15)
+  ✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
+  ✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
+  ✔ Make it select the store @done(2021-01-27 08:01)
+  ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
+  ☐ Look for "message: 'Which" and change function to call pageTypeQuestion()
+  ☐ Make it work out the fields by actually loading the store
+  ☐ Add the fields in add-edit
+  ☐ MAYBE make add, edit, add-edit pages rather than blanket "add" (only URL is different?).
+  ☐ AddEdit now works for root pages, replicate the same thing for other pages
+  ☐ Add save/cancel button to app header
+
+☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
+  ☐ Decide how to add buttons to page from contained element
+  ☐ Final decision on "currentParams" etc.
+    ☐ Have AddEditCommonMixin.js which includes StoreAddEditMixin AND a renderAddEdit() function (with hte current render())
+    ☐ AddEditPageElement.js inherits from PageElement mixed with AddEditMixin.js
+    ☐ AddEditElement.js inherits from AppElement mixed with AddEditElement.js
+    ☐ The difference between AddEditPageElement and AddEditElement is in the UI side of things (ADD), plus reloading with params, etc.
+
+☐ (With Raphael) Decide what to do for initial default tabs
+☐ --- STAGE 2 DONE ---
+☐ client-reducs
+☐ clientserver-auth
+☐ clientserver-user-config
+☐ clientserver-app-config
+☐ Look for a different server to serve files rather than open-wc's https://www.npmjs.com/package/es6-module-server
+--- STAGE 3 DONE
+☐ Document the lot as literate code
+☐ Add initial docco-next documentation generation to js-kit
+☐ --- STAGE 4 DONE
+☐ Maybe add reflect:true to routify's PageElementMixin
+☐ Watchout, taken autoload out of PageElementMixin
+☐ Add module to build (rollup config)
+
+
+Testing:
+rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app
+
+
+rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app everything; cd testing-app; npm install;cd ..
 
 
 
@@ -214,46 +261,3 @@ NOTE: The list element has no access to port information.
     Element: co-view-companies
     File: /pages/co-view-companies.js
     Store: companies. Match /view-companies/:id with /companies/:id MATCH: id
-
-
-☐ NOTES
-  ✔ AddEdit is done @done(2021-01-27 06:15)
-  ✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
-  ✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
-  ✔ Make it select the store @done(2021-01-27 08:01)
-  ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
-  ☐ Look for "message: 'Which" and change function to call pageTypeQuestion() 
-  ☐ Make it work out the fields by actually loading the store
-  ☐ Add the fields in add-edit
-  ☐ AddEdit now works for root pages, replicate the same thing for other pages
-  ☐ Add save/cancel button to app header
-
-☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
-  ☐ Decide how to add buttons to page from contained element
-  ☐ Final decision on "currentParams" etc.
-    ☐ Have AddEditCommonMixin.js which includes StoreAddEditMixin AND a renderAddEdit() function (with hte current render())
-    ☐ AddEditPageElement.js inherits from PageElement mixed with AddEditMixin.js
-    ☐ AddEditElement.js inherits from AppElement mixed with AddEditElement.js
-    ☐ The difference between AddEditPageElement and AddEditElement is in the UI side of things (ADD), plus reloading with params, etc.
-
-☐ (With Raphael) Decide what to do for initial default tabs
-☐ --- STAGE 2 DONE ---
-☐ client-reducs
-☐ clientserver-auth
-☐ clientserver-user-config
-☐ clientserver-app-config
-☐ Look for a different server to serve files rather than open-wc's https://www.npmjs.com/package/es6-module-server
---- STAGE 3 DONE
-☐ Document the lot as literate code
-☐ Add initial docco-next documentation generation to js-kit
-☐ --- STAGE 4 DONE
-☐ Maybe add reflect:true to routify's PageElementMixin
-☐ Watchout, taken autoload out of PageElementMixin
-☐ Add module to build (rollup config)
-
-
-Testing:
-rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app
-
-
-rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer add Development/js-kit testing-app everything; cd testing-app; npm install;cd ..
