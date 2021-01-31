@@ -41,9 +41,7 @@ export class PageElement extends RoutedElement {
   renderHeader () {
     /* eslint-disable lit/no-template-bind */
 
-    return this.hideHeader
-      ? ''
-      : html`
+    return html`
         <<%=vars.elPrefix%>-page-header id="header" .backComputer=${this._backComputer ? this._backComputer : undefined} back header-title="${ifDefined(this.pageTitle)}">
           ${this.headerSlotted()}
         </<%=vars.elPrefix%>-page-header>
