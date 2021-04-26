@@ -48,7 +48,9 @@ exports.getPrompts = (config) => {
       name: 'elementName',
       message: 'Element name',
       initial: '',
-      validate: utils.elementNameValidator(config)
+      validate: (value) => {
+        return utils.elementNameValidator(config, value)
+      }
     },
     {
       type: 'confirm',
