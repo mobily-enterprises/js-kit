@@ -37,7 +37,7 @@ exports.getPrompts = (config) => {
       type: 'multiselect',
       name: 'methods',
       message: 'Which HTTP methods?',
-      choices: utils.storeChoices,
+      choices: utils.storeMethodChoices,
     },
     {
       type: 'select',

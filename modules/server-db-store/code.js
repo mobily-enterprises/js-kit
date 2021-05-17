@@ -1,6 +1,17 @@
 const path = require('path')
 const utils = require('../../utils.js')
 
+
+/*
+NOTE: Extra fields for DB stores:
+
+this.connection = this.constructor.connection
+this.table = this.constructor.table
+this.positionFilter = this.constructor.positionFilter
+
+Eventually, ask if it's a DB store. And if it is, ask for table and add connection as an attribute from vars
+*/
+
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
@@ -21,7 +32,7 @@ exports.getPrompts = (config) => {
       type: 'text',
       name: 'version',
       message: (prev, values) => { storeName = values.name; return 'Store version' },
-      initial: '1.0.0',
+      initial: config.vars.defaultStoreVersion,
       validate: (value) => {
         return utils.storeVersionValidator(config, value, storeName)
       }
@@ -51,18 +62,34 @@ exports.getPrompts = (config) => {
       type: 'multiselect',
       name: 'methods',
       message: 'Which HTTP methods?',
-      choices: utils.storeChoices,
-    }
+      choices: utils.storeMethodsChoices,
+    },
+
+    {
+      type: 'confirm',
+      name: 'addFields',
+      message: 'Would you like to set this store\'s fields?',
+      initial: true
+    },
+
   ]
 
   return questions
 }
 
+
+
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['server-db-store']
 
-  // New page's info
-  // No placement by default
+  if (userInput.addFields) {
+
+    fields = utils.getStoreFields()
+
+    console.log('ASKED TO ADD FIELDS!', fields)
+  }
+
+  // New store's info
   const newStoreInfo = config.vars.newStoreInfo = {
     name: userInput.name,
     version: userInput.version,
@@ -76,6 +103,8 @@ exports.postPrompts = async (config) => {
     db: true
   }
 }
+
+
 
 exports.boot = (config) => { }
 

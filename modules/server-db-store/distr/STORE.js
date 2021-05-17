@@ -9,13 +9,8 @@ const vars = require('../../vars')
 
 class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get schema () {
-    //
-    // The schema. This schema has 3 example fields, one boolean and
-    // two strings
     return new Schema({
-      // field1: { type: 'boolean', default: false },
-      // field2: { type: 'string', trim: 16, default: '' },
-      // field3: { type: 'string', trim: 16, default: '' }
+      //
 <%if(vars.newStoreInfo.positioning){ -%>
       position: { type: 'number', canBeNull: true } // Field for positioning
 <% } -%>
@@ -24,16 +19,6 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
 
   static get searchSchema () {
     return new Schema({
-      // The search schema here matches the schema, but that doesn't have to
-      // be the case.
-      // Every field here will be allowed in the query string. For example
-      // /stores/storeTemplate?search=something will be allowed.
-      // Not all fields have to be here; also, not every entry here must be
-      // a schema field -- for example `search` is not a schema field.
-      // search: { type: 'string', trim: 16 },
-      // field1: { type: 'boolean' },
-      // field2: { type: 'string', trim: 16 },
-      // field3: { type: 'string', trim: 16 }
     })
   }
 
@@ -68,11 +53,11 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   // This is the list of the supported methods.
   // The difference between POST and PUT is that
   // PUT will expect an ID
-  static get handleGet () { return true }
-  static get handleGetQuery () { return true }
-  static get handlePost () { return true }
-  static get handlePut () { return true }
-  static get handleDelete () { return true }
+  static get handleGet () { return <%=vars.newStoreInfo.methods.indexOf('get') !== -1 ? 'true' : 'false'%> }
+  static get handleGetQuery () { return <%=vars.newStoreInfo.methods.indexOf('getQuery')  !== -1 ? 'true' : 'false'%> }
+  static get handlePost () { return <%=vars.newStoreInfo.methods.indexOf('post')  !== -1 ? 'true' : 'false'%> }
+  static get handlePut () { return <%=vars.newStoreInfo.methods.indexOf('put')  !== -1 ? 'true' : 'false'%> }
+  static get handleDelete () { return <%=vars.newStoreInfo.methods.indexOf('delete') !== -1 ? 'true' : 'false'%> }
 
   // An artificial delay can be specified for testing purposes
   static get artificialDelay () { return vars.artificialDelay }

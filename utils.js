@@ -14,6 +14,7 @@ exports.addMixinToMixin = async function (contents, m, config) {
 exports.replaceBaseClass = async function (contents, m, config) {
   const originalBaseClassRegExp = /([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/
   const match = contents.match(originalBaseClassRegExp)
+  debugger
   if (match) originalBaseClass = match[2]
   return contents
     // Take out the bast class from the class declaration
@@ -222,7 +223,7 @@ exports.publicURLprefixValidator = (config) => {
   }
 }
 
-exports.storeChoices = [
+exports.storeMethodsChoices = [
   {
     title: 'GET -- one element (e.g. GET /store/1)',
     value: 'get',
@@ -252,6 +253,37 @@ exports.storeChoices = [
     selected: false
   },
 ]
+
+
+exports.getStoreFields = async () => {
+  const fields = {}
+  let op
+
+  while (true) {
+
+    console.log('test!')
+
+    op = await prompts({
+      type: 'select',
+      name: 'value',
+      message: 'Pick a color',
+      choices: [
+        { title: 'Add a field', value: 'add' },
+        { title: 'Delete a field', value: 'del' },
+        { title: 'All done, quit', value: 'quit' },
+        { title: 'I changed my mind, cancel that', value: 'cancel' },
+
+      ]
+    })
+    console.log(op.value)
+    if (op.value === 'quit' || op.value === 'cancel') break
+
+
+    
+
+  }
+  return {}
+}
 
 
 exports.askStoreQuestions = async (config) => {
