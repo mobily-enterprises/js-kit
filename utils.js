@@ -256,17 +256,20 @@ exports.storeMethodsChoices = [
 
 
 exports.getStoreFields = async () => {
-  const fields = {}
+  const fields = {
+    one: { type: 'number' },
+    two: { type: 'string'}
+  }
   let op
 
   while (true) {
 
-    console.log('test!')
+    console.log(JSON.stringify(fields))
 
     op = await prompts({
       type: 'select',
       name: 'value',
-      message: 'Pick a color',
+      message: 'What do you want to do?',
       choices: [
         { title: 'Add a field', value: 'add' },
         { title: 'Delete a field', value: 'del' },
@@ -276,13 +279,173 @@ exports.getStoreFields = async () => {
       ]
     })
     console.log(op.value)
-    if (op.value === 'quit' || op.value === 'cancel') break
 
+    if (op.value === 'del') {
+      fieldToDelete = await prompts({
+        type: 'select',
+        name: 'value',
+        message: 'Which field do you want to delete?',
+        choices: Object.keys(fields).map(el => { return { title: el, value: el } })
+      })
 
-    
+      if (fieldToDelete.value && fields[fieldToDelete.value]) {
+        delete fields[fieldToDelete.value]
+        continue
+      }
+    }
 
+    if (op.value === 'add') {
+
+      const newFiledName = await prompts({
+        type: 'text',
+        name: 'value',
+        message: 'Field name',
+        validate: (v) => fields[v] ?  'Field already defined' : true
+      })
+
+      type = await prompts({
+        type: 'select',
+        name: 'value',
+        message: 'What kind of field is it',
+        choices: [
+          { title: 'Integer number', value: 'integer' },
+          { title: 'Float number', value: 'float' },
+          { title: 'String', value: 'string' },
+          { title: 'Long string (blob)', value: 'blob' },
+          { title: 'Boolean', value: 'boolean' },
+          { title: 'UTC timestamp', value: 'timestamp' },
+          { title: 'Foreign key', value: 'foreign' },
+          { title: 'I changed my mind, cancel that', value: 'cancel' },
+        ]
+      })
+      if (type.value === 'cancel') continue
+
+      let field = {}
+
+      if (type.value === 'integer' || type.value === 'float') {
+
+        field.type = 'number'
+        if (type.float) field.float = true
+
+        field.canBeNull = await prompts({
+          type: 'confirm',
+          name: 'canBeNull',
+          message: 'Is NULL allowed? (yes if "0" is different to "no value")',
+          initial: true
+        })
+
+        if (field.canBeNull) {
+          field.emptyAsNull = await prompts({
+            type: 'confirm',
+            name: 'emptyAsNull',
+            message: 'Default to NULL? (empty value will be stored as "NULL" rather than "0" ',
+            initial: true
+          })
+        } else {
+          field.emptyAsNull = false
+        }
+
+        let min = await prompts({
+          type: 'text',
+          name: 'value',
+          message: 'Minimum allowed number',
+          initial: null
+        })
+        if (min) field.min = Number(min.value)
+
+        console.log(field.min, typeof field.min)
+
+        let max = await prompts({
+          type: 'text',
+          name: 'value',
+          message: 'Maximum allowed number',
+          initial: null
+        })
+        if (max) field.max = Number(max.value)
+        console.log(field.max, typeof field.max)
+      }
+
+      if (type.value === 'string' || type.value === 'blob') {
+
+        // canBeNull: if '' is different to "no value"
+        // emptyAsNull: if '' shouldn't be the default if field was left empty
+        // Qs: length ('trim'), searchable, unique
+      }
+
+      if (type.value === 'blob') {
+        // canBeNull: if '' is different to "no value"
+        // emptyAsNull: if '' shouldn't be the default if field was left empty
+        // Qs: length ('trim'), searchable, unique
+      }
+
+      if (type.value === 'boolean') {
+        // canBeNull: if 'neither' is a possible value
+        // Qs: searchable, unique
+      }
+
+      if (type.value === 'timestamp') {
+        // Always canBeNull ('0' never makes sense)
+        // Always emptyAsNull ('0' never makes sense)
+        // Qs: searchable, unique
+      }
+
+      if (type.value === 'id') {
+        // canBeNull: if it's not required of it's unique (don't want to cast NULL to 0 as it's not a valid key)
+        // emptyAsNull: ALWAYS TRUE (don't want to cast NULL to 0 as it's not a valid key)
+        // searchable, unique: ALWAYS TRUE
+
+        // Qs: store, unique
+      }
+
+      field.searchable = await prompts({
+        type: 'confirm',
+        name: 'searchable',
+        message: 'Is this field searchable? (An index will be created)',
+        initial: false
+      })
+      field.searchable = field.searchable.value
+
+      if (field.searchable) {
+        field.unique = await prompts({
+          type: 'confirm',
+          name: 'unique',
+          message: 'Is this field unique?',
+          initial: false
+        })
+        field.unique = field.unique.value
+      } else {
+        field.unique = false
+      }
+
+      /*
+      ☐ use 'default: ...'
+        ☐ When default is different to null, 0, or '' and you want it to be EVIDENT in the code
+
+      ☐ In 'number'...
+        ☐ use canBeNull for...
+          ☐ ! normal numbers: if '0' is different to "no value"
+          ☐ dates: always (as '0' never makes sense)
+          ☐ ! foreign keys: for optional ones (don't want to cast as 0 as it's not a valid key)
+          ☐ ! unique keys: if foreign key is optional
+          ☐ ! boolean: if "undecided" or "unset" is an option
+        ☐ use emptyAsNull for...
+          ☐ ! normal numbers: if '0' shouldn't be the default if field was left empty
+          ☐ dates: always (as '0' never makes sense)
+          ☐ foreign keys: if client might send empty '' string (it shouldn't)
+          ☐ unique keys: if client might send empty '' string (it shouldn't)
+          ☐ ! boolean: if client might send empty '' string (it shouldn't)
+*/
+    }
+
+    if (op.value === 'quit') {
+      return fields
+    }
+
+    if (op.value === 'cancel') {
+      return {}
+      break
+    }
   }
-  return {}
 }
 
 
@@ -303,6 +466,8 @@ exports.askStoreQuestions = async (config) => {
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones
   // Return list of fields, with info attached, in userInput
+
+
 
 
 }
