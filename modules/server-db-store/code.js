@@ -84,7 +84,7 @@ exports.postPrompts = async (config) => {
 
   if (userInput.addFields) {
 
-    fields = utils.getStoreFields()
+    fields = await utils.getStoreFields()
 
     console.log('ASKED TO ADD FIELDS!', fields)
   }

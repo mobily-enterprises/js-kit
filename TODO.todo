@@ -145,6 +145,10 @@ Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add
 rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add everything; cd testing-app; npm install;cd ..
 
+
+
+
+
 EVERYTHING BELOW THIS LINE NEEDS TO BE ADJUSTED
 
 
