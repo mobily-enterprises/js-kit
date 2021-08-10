@@ -260,52 +260,72 @@ exports.getStoreFields = async () => {
   }
   let op
 
+  async function ask (message, type = 'text', initial = null, validate = null, choices = null) {
+    const ret = (await prompts(
+      {
+        name: 'value',
+        message,
+        type,
+        initial,
+        validate,
+        choices
+     },
+     {
+       onCancel: (prompt) => { console.log('Exited'); throw new Error('CancelledError') }
+     }
+   )).value
+
+    return ret
+  }
+
   while (true) {
 
     console.log(JSON.stringify(fields))
 
-    op = await prompts({
-      type: 'select',
-      name: 'value',
-      message: 'What do you want to do?',
-      choices: [
-        { title: 'Add a new field', value: 'add' },
-        { title: 'Delete a new field just created', value: 'del' },
-        { title: 'All done, quit', value: 'quit' },
-        { title: 'I changed my mind, cancel that', value: 'cancel' },
+    try {
+      op = await  ask('What do you want to do?', 'select', null, null, [
+          { title: 'Add a new field', value: 'add' },
+          { title: 'Delete a new field just created', value: 'del' },
+          { title: 'I changed my mind, cancel that', value: 'cancel' },
+          { title: 'All done, quit', value: 'quit' },
+        ]
+      )
+    } catch (e) {
+      if (e.message !== 'CancelledError') throw(e)
+        const sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
+        if (sure) op = 'cancel'
+        else continue
+    }
 
-      ]
-    })
-    console.log(op.value)
+    // DELETE
+    if (op === 'del') {
+      const fields = Object.keys(fields).map(el => { return { title: el, value: el } })
+      fieldToDelete = await ask('Which field do you want to delete?', 'select', null, null, fields)
 
-    if (op.value === 'del') {
-      fieldToDelete = await prompts({
-        type: 'select',
-        name: 'value',
-        message: 'Which field do you want to delete?',
-        choices: Object.keys(fields).map(el => { return { title: el, value: el } })
-      })
-
-      if (fieldToDelete.value && fields[fieldToDelete.value]) {
-        delete fields[fieldToDelete.value]
+      if (fieldToDelete && fields[fieldToDelete]) {
+        delete fields[fieldToDelete]
         continue
       }
     }
 
-    if (op.value === 'add') {
+    // QUIT
+    if (op === 'quit') {
+      return fields
+    }
 
-      const newFiledName = await prompts({
-        type: 'text',
-        name: 'value',
-        message: 'Field name',
-        validate: (v) => fields[v] ?  'Field already defined' : (!v.length ? "required field" : true)
-      })
+    // CANCEL
+    if (op === 'cancel') {
+      return {}
+      break
+    }
 
-      type = await prompts({
-        type: 'select',
-        name: 'value',
-        message: 'What kind of field is it',
-        choices: [
+    if (op === 'add') {
+      let newFieldName
+      let field = {}
+      try {
+        newFieldName = await ask('Field name', 'text', null, (v) => fields[v] ?  'Field already defined' : (!v.length ? "required field" : true))
+
+        type = await ask('What kind of field is it', 'select', null, null, [
           { title: 'Integer number', value: 'integer' },
           { title: 'Float number', value: 'float' },
           { title: 'String', value: 'string' },
@@ -314,182 +334,124 @@ exports.getStoreFields = async () => {
           { title: 'UTC timestamp', value: 'timestamp' },
           { title: 'Foreign key', value: 'foreign' },
           { title: 'I changed my mind, cancel that', value: 'cancel' },
-        ]
-      })
-      if (type.value === 'cancel') continue
+        ])
+        if (type === 'cancel') continue
 
-      let field = {}
+        // The "defaultValue" variable will be used later to set the initial
+        // value for default
+        let defaultInitialValue
 
-      // The "defaultValue" variable will be used later to set the initial
-      // value for default
-      let defaultInitialValue
+        if (type === 'integer' || type === 'float') {
 
-      if (type.value === 'integer' || type.value === 'float') {
+          field.type = 'number'
+          if (type.float) field.float = true
 
-        field.type = 'number'
-        if (type.float) field.float = true
+          field.canBeNull = await ask('Is NULL allowed? (yes if 0 is different to <no value>)', 'confirm', true)
 
-        field.canBeNull = (await prompts({
-          type: 'confirm',
-          name: 'value',
-          message: 'Is NULL allowed? (yes if 0 is different to <no value>)',
-          initial: true
-        })).value
+          if (field.canBeNull) {
+            field.emptyAsNull = await ask('Empty as NULL? (empty strings, normally cast as 0, will be stored as "NULL" rather than 0', 'confirm', false)
+          } else {
+            field.emptyAsNull = false
+            defaultInitialValue = 0
+          }
 
-        if (field.canBeNull) {
-          field.emptyAsNull = (await prompts({
-            type: 'confirm',
-            name: 'value',
-            message: 'Empty as NULL? (empty strings, normally cast as 0, will be stored as "NULL" rather than 0',
-            initial: true
-          })).value
-        } else {
-          field.emptyAsNull = false
-          defaultInitialValue = '0'
+          let min = await ask('Minimum allowed number', 'number', null)
+          console.log(min, typeof min)
+          if (min !== '') field.min = Number(min)
+
+          let max = await ask('Maximum allowed number', 'number', null)
+          if (max !== '') field.max = Number(max)
         }
 
-        let min = (await prompts({
-          type: 'number',
-          name: 'value',
-          message: 'Minimum allowed number',
-          initial: null
-        })).value
-        if (typeof min !== 'undefined' && min !== '') field.min = Number(min)
+        if (type === 'string') {
 
-        let max = (await prompts({
-          type: 'number',
-          name: 'value',
-          message: 'Maximum allowed number',
-          initial: null
-        })).value
-        if (typeof min !== 'undefined' && min !== '') field.min = Number(min)
-      }
+          field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', true)
+          if (field.canBeNull) {
+            field.emptyAsNull = await ask('Empty string as NULL? (Default is "no", empty string will be stored as NULL rather than "") ', 'confirm', true)
+          } else {
+            field.emptyAsNull = false
+            defaultInitialValue = ''
+          }
 
-      if (type.value === 'string') {
+          let length = await ask('Field max length', 'text', null)
+          if (length) field.length = Number(length)
 
-        field.canBeNull = (await prompts({
-          type: 'confirm',
-          name: 'value',
-          message: 'Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)',
-          initial: true
-        })).value
+          let noTrim = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', false)
+          console.log(noTrim, typeof noTrim)
+          if (noTrim) field.noTrim = true
 
-        if (field.canBeNull) {
-          field.emptyAsNull = (await prompts({
-            type: 'confirm',
-            name: 'value',
-            message: 'Empty string as NULL? (Default is "no", empty string will be stored as NULL rather than "") ',
-            initial: true
-          })).value
-        } else {
-          field.emptyAsNull = false
-          defaultInitialValue = ''
+
+          // canBeNull: if '' is different to "no value"
+          // emptyAsNull: if '' shouldn't be the default if field was left empty
+          // Qs: length ('trim'), searchable, unique
         }
 
-        let length = (await prompts({
-          type: 'text',
-          name: 'value',
-          message: 'Field max length',
-          initial: null
-        })).value
-        if (length) field.length = Number(length)
 
-        let noTrim = (await prompts({
-          type: 'confirm',
-          name: 'value',
-          message: 'Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)',
-          initial: false
-        })).value
-        console.log(noTrim, typeof noTrim)
-        if (noTrim) field.noTrim = true
+        if (type === 'blob') {
+          // YOU ARE HERE
+          // ASK FOR LENGTH, AND SET CORRECT DBTYPE
+          /*
+          TINYBLOB 255
+            BLOB 65535
+            MEDIUMBLOB 16777215
+            LONGBLOB 4294967295
+            */
+          // ASK IF YOU WANT TO SELECT LENGTH OR TYPE. IF SELECT LENGTH, WOTK OUT TYPE BASED ON LENGTH.
+          // IF SELECT TYPE, ASK FOR TYPE AND SET dbType
 
+        }
 
-        // canBeNull: if '' is different to "no value"
-        // emptyAsNull: if '' shouldn't be the default if field was left empty
-        // Qs: length ('trim'), searchable, unique
-      }
+        if (type === 'boolean') {
+          // canBeNull: if 'neither' is a possible value
+          // Qs: searchable, unique
+        }
 
+        if (type === 'timestamp') {
+          // Always canBeNull ('0' never makes sense)
+          // Always emptyAsNull ('0' never makes sense)
+          // Qs: searchable, unique
+        }
 
-      if (type.value === 'blob') {
-        // YOU ARE HERE
-        // ASK FOR LENGTH, AND SET CORRECT DBTYPE
-        /*
-        TINYBLOB 255
-          BLOB 65535
-          MEDIUMBLOB 16777215
-          LONGBLOB 4294967295
-          */
-        // ASK IF YOU WANT TO SELECT LENGTH OR TYPE. IF SELECT LENGTH, WOTK OUT TYPE BASED ON LENGTH.
-        // IF SELECT TYPE, ASK FOR TYPE AND SET dbType
+        if (type === 'id') {
+          // canBeNull: if it's not required of it's unique (don't want to cast NULL to 0 as it's not a valid key)
+          // emptyAsNull: ALWAYS TRUE (don't want to cast NULL to 0 as it's not a valid key)
+          // searchable, unique: ALWAYS TRUE
 
-      }
+          // Qs: store, unique
+        }
 
-      if (type.value === 'boolean') {
-        // canBeNull: if 'neither' is a possible value
-        // Qs: searchable, unique
-      }
+        console.log("defaultInitialValue: ", defaultInitialValue)
 
-      if (type.value === 'timestamp') {
-        // Always canBeNull ('0' never makes sense)
-        // Always emptyAsNull ('0' never makes sense)
-        // Qs: searchable, unique
-      }
+        if (field.type !== 'blob') {
+          let initial
+          if (field.canBeNull) initial = 'NULL'
+          else initial = defaultInitialValue
 
-      if (type.value === 'id') {
-        // canBeNull: if it's not required of it's unique (don't want to cast NULL to 0 as it's not a valid key)
-        // emptyAsNull: ALWAYS TRUE (don't want to cast NULL to 0 as it's not a valid key)
-        // searchable, unique: ALWAYS TRUE
+          console.log(`initial: '${initial}'`, typeof initial)
 
-        // Qs: store, unique
-      }
-
-      console.log("defaultInitialValue: ", defaultInitialValue)
-
-      if (field.type !== 'blob') {
-        let initial
-        if (field.canBeNull) initial = 'NULL'
-        else initial = defaultInitialValue
-
-        console.log(`initial: '${initial}'`, typeof initial)
+          let defaultValue = await ask('Default value for this field (leave empty for no default, and "NULL" for null)', 'text', initial)
 
 
-        let defaultValue = (await prompts({
-          type: 'text',
-          name: 'value',
-          message: 'Default value for this field (leave empty for no default)',
-          initial: initial
-        })).value
+          if (defaultValue === 'NULL') defaultValue = null
 
-        if (defaultValue) {
           field.default = defaultValue
-          if ((field.type === 'text' || field.type === 'blob') && field.default !== 'NULL') field.default = `'${field.default}'`
+          if ((field.type === 'text' || field.type === 'blob') && field.default !== null) field.default = `'${field.default}'`
         }
-      }
 
-      // They are all sortable except blob without a length
-      const notSortable = field.type === 'blob' && !field.length
-      const sortable = !notSortable
-
-      if (sortable) {
-        field.searchable = await prompts({
-          type: 'confirm',
-          name: 'searchable',
-          message: 'Is this field searchable? (An index will be created)',
-          initial: false
-        })
-        field.searchable = field.searchable.value
+        field.searchable = await ask('Is this field searchable? (An index will be created)', 'confirm', false)
 
         if (field.searchable) {
-          field.unique = await prompts({
-            type: 'confirm',
-            name: 'unique',
-            message: 'Is this field unique?',
-            initial: false
-          })
-          field.unique = field.unique.value
+          field.unique = await ask('Is this field unique?', 'confirm', false)
         } else {
           field.unique = false
         }
+
+      } catch (e) {
+        if (e.message === 'CancelledError') {
+          console.log('Adding aborted')
+          continue
+        }
+        throw(e)
       }
 
       /*
@@ -510,15 +472,7 @@ exports.getStoreFields = async () => {
           ☐ unique keys: if client might send empty '' string (it shouldn't)
           ☐ ! boolean: if client might send empty '' string (it shouldn't)
 */
-    }
-
-    if (op.value === 'quit') {
-      return fields
-    }
-
-    if (op.value === 'cancel') {
-      return {}
-      break
+      fields[newFieldName] = field
     }
   }
 }
