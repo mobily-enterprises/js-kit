@@ -284,12 +284,11 @@ exports.getStoreFields = async () => {
 
     try {
       op = await  ask('What do you want to do?', 'select', null, null, [
-          { title: 'Add a new field', value: 'add' },
-          { title: 'Delete a new field just created', value: 'del' },
-          { title: 'I changed my mind, cancel that', value: 'cancel' },
-          { title: 'All done, quit', value: 'quit' },
-        ]
-      )
+        { title: 'Add a new field', value: 'add' },
+        { title: 'Delete a new field just created', value: 'del' },
+        { title: 'I changed my mind, cancel that', value: 'cancel' },
+        { title: 'All done, quit', value: 'quit' },
+      ])
     } catch (e) {
       if (e.message !== 'CancelledError') throw(e)
         const sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
@@ -302,10 +301,8 @@ exports.getStoreFields = async () => {
       const fields = Object.keys(fields).map(el => { return { title: el, value: el } })
       fieldToDelete = await ask('Which field do you want to delete?', 'select', null, null, fields)
 
-      if (fieldToDelete && fields[fieldToDelete]) {
-        delete fields[fieldToDelete]
-        continue
-      }
+      if (fields[fieldToDelete]) delete fields[fieldToDelete]
+      continue
     }
 
     // QUIT
@@ -337,6 +334,20 @@ exports.getStoreFields = async () => {
         ])
         if (type === 'cancel') continue
 
+
+        // Check if it's searchable
+        if (type === 'id') field.searchable = true
+
+        else field.searchable = await ask('Is this field searchable? (An index will be created)', 'confirm', false)
+
+        field.required = await ask('Is this field required? (that is, it MUST be included in every POST or PUT request)', 'confirm', false)
+
+        if (field.searchable) {
+          field.unique = await ask('Is this field unique?', 'confirm', false)
+        } else {
+          field.unique = false
+        }
+
         // The "defaultValue" variable will be used later to set the initial
         // value for default
         let defaultInitialValue
@@ -356,7 +367,6 @@ exports.getStoreFields = async () => {
           }
 
           let min = await ask('Minimum allowed number', 'number', null)
-          console.log(min, typeof min)
           if (min !== '') field.min = Number(min)
 
           let max = await ask('Maximum allowed number', 'number', null)
@@ -364,6 +374,8 @@ exports.getStoreFields = async () => {
         }
 
         if (type === 'string') {
+
+          field.type = 'string'
 
           field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', true)
           if (field.canBeNull) {
@@ -374,31 +386,54 @@ exports.getStoreFields = async () => {
           }
 
           let length = await ask('Field max length', 'text', null)
-          if (length) field.length = Number(length)
+          if (length !== '') field.length = Number(length)
 
           let noTrim = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', false)
           console.log(noTrim, typeof noTrim)
           if (noTrim) field.noTrim = true
-
-
-          // canBeNull: if '' is different to "no value"
-          // emptyAsNull: if '' shouldn't be the default if field was left empty
-          // Qs: length ('trim'), searchable, unique
         }
 
-
         if (type === 'blob') {
-          // YOU ARE HERE
-          // ASK FOR LENGTH, AND SET CORRECT DBTYPE
-          /*
-          TINYBLOB 255
-            BLOB 65535
-            MEDIUMBLOB 16777215
-            LONGBLOB 4294967295
-            */
-          // ASK IF YOU WANT TO SELECT LENGTH OR TYPE. IF SELECT LENGTH, WOTK OUT TYPE BASED ON LENGTH.
-          // IF SELECT TYPE, ASK FOR TYPE AND SET dbType
+          field.type = 'blob'
+          let length = await ask('Field max length', 'text', null)
+          if (length !== '') field.length = Number(length)
 
+          const how = await ask('Do you want to set a specific length, or just a specific length?', 'select', null, null, [
+            { title: 'Specify exact length', value: 'length' },
+            { title: 'Type', value: 'type' },
+            { title: 'Neither -- I changed my mind, cancel that', value: 'cancel' },
+          ])
+          if (how === 'cancel') continue
+
+          if (how === 'type') {
+            const dbType = await ask('Which blob type?', 'select', null, null, [
+              { title: 'TINYBLOB (up to 255 bytes)', value: 'TINYBLOB' },
+              { title: 'BLOB (up tp 65535 bytes)', value: 'BLOB' },
+              { title: 'MEDIUMBLOB (up tp 16777215 bytes)', value: 'MEDIUMBLOB' },
+              { title: 'LONGBLOB (up tp 4294967295 bytes)', value: 'LONGBLOB' },
+              { title: 'None -- I changed my mind, cancel that', value: 'cancel' },
+            ])
+            if (how === 'cancel') continue
+            type.dbType = dbType
+          }
+
+          if (how === 'length') {
+            let max = await ask('Maximum length:', 'number', null)
+            if (max === '' || Number(max) === 0) {
+              console.log('No length provided, field add aborted')
+            }
+            let dbType
+            const len = field.length = Number(max)
+
+            if (len > 4294967295) {
+              console.log('Invalid length, max is 4294967295')
+              continue
+            }
+            else if (len > 16777215) dbType = 'LONGBLOB'
+            else if (len > 65535) dbType = 'MEDIUMBLOB'
+            else if (len > 255) dbType = 'BLOB'
+            else dbType = 'TINYBLOB'
+          }
         }
 
         if (type === 'boolean') {
@@ -413,16 +448,17 @@ exports.getStoreFields = async () => {
         }
 
         if (type === 'id') {
-          // canBeNull: if it's not required of it's unique (don't want to cast NULL to 0 as it's not a valid key)
-          // emptyAsNull: ALWAYS TRUE (don't want to cast NULL to 0 as it's not a valid key)
-          // searchable, unique: ALWAYS TRUE
-
-          // Qs: store, unique
+          field.type = 'id'
+          if (field.unique && !field.required) field.canBeNull = true // Don't want to cast NULL to 0 as it's not a valid key)
+          else field.canBeNull = await ask('Is NULL allowed? (Allowing NULL will make the foreign key NOT compulsory)', 'confirm', true)
+          field.emptyAsNull = true // (don't want to cast NULL to 0 as NULL won't puke on duplicate if unuque)
+          field.searchable = true
+          // TODO:  Add  question for foreign store, asking for store and adding key dbConstraint : { store: storeName }
         }
 
         console.log("defaultInitialValue: ", defaultInitialValue)
 
-        if (field.type !== 'blob') {
+        if (field.type !== 'blob' && field.type !== 'id') {
           let initial
           if (field.canBeNull) initial = 'NULL'
           else initial = defaultInitialValue
@@ -435,15 +471,7 @@ exports.getStoreFields = async () => {
           if (defaultValue === 'NULL') defaultValue = null
 
           field.default = defaultValue
-          if ((field.type === 'text' || field.type === 'blob') && field.default !== null) field.default = `'${field.default}'`
-        }
-
-        field.searchable = await ask('Is this field searchable? (An index will be created)', 'confirm', false)
-
-        if (field.searchable) {
-          field.unique = await ask('Is this field unique?', 'confirm', false)
-        } else {
-          field.unique = false
+          if (field.type === 'text' && field.default !== null) field.default = `'${field.default}'`
         }
 
       } catch (e) {
