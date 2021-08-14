@@ -40,8 +40,8 @@ exports.getPrompts = (config) => {
     {
       type: 'text',
       name: 'publicURL',
-      message:  (prev, values) => { version = values.version; return `Store URL. /${version}` },
-      initial: (prev) => `/${storeName}`,
+      message:  (prev, values) => `Store URL. /${values.version}`,
+      initial: (prev, values) => `/${values.name}`,
       validate: utils.storePublicURLValidator(config)
     },
     {
@@ -57,14 +57,19 @@ exports.getPrompts = (config) => {
       message: 'Should the store manage positioning of rows?',
       initial: true
     },
-
     {
       type: 'multiselect',
       name: 'methods',
       message: 'Which HTTP methods?',
       choices: utils.storeMethodsChoices,
     },
-
+    {
+      type: 'confirm',
+      name: 'advanced',
+      message: 'Would you like to set more advanced options?',
+      initial: false
+    },
+    
     {
       type: 'confirm',
       name: 'addFields',
@@ -84,7 +89,7 @@ exports.postPrompts = async (config) => {
 
   if (userInput.addFields) {
 
-    fields = await utils.getStoreFields()
+    fields = await utils.getStoreFields(config)
 
     console.log('ASKED TO ADD FIELDS!', fields)
   }

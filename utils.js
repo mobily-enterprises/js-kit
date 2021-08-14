@@ -255,10 +255,14 @@ exports.storeMethodsChoices = [
 ]
 
 
-exports.getStoreFields = async () => {
+exports.getStoreFields = async (config) => {
   const fields = {
   }
   let op
+  let length
+  let searchable
+  let required
+  let unique
 
   async function ask (message, type = 'text', initial = null, validate = null, choices = null) {
     const ret = (await prompts(
@@ -296,6 +300,7 @@ exports.getStoreFields = async () => {
         else continue
     }
 
+
     // DELETE
     if (op === 'del') {
       const fields = Object.keys(fields).map(el => { return { title: el, value: el } })
@@ -316,6 +321,7 @@ exports.getStoreFields = async () => {
       break
     }
 
+    // ADD
     if (op === 'add') {
       let newFieldName
       let field = {}
@@ -323,24 +329,115 @@ exports.getStoreFields = async () => {
         newFieldName = await ask('Field name', 'text', null, (v) => fields[v] ?  'Field already defined' : (!v.length ? "required field" : true))
 
         type = await ask('What kind of field is it', 'select', null, null, [
-          { title: 'Integer number', value: 'integer' },
-          { title: 'Float number', value: 'float' },
+          { title: 'Number', value: 'number' },
           { title: 'String', value: 'string' },
-          { title: 'Long string (blob)', value: 'blob' },
+          { title: 'Long text (not searchable)', value: 'text' },
+          { title: 'Blob', value: 'blob' },
           { title: 'Boolean', value: 'boolean' },
           { title: 'UTC timestamp', value: 'timestamp' },
-          { title: 'Foreign key', value: 'foreign' },
+          { title: 'Foreign ID key', value: 'foreign' },
           { title: 'I changed my mind, cancel that', value: 'cancel' },
         ])
-        if (type === 'cancel') continue
 
+        let defaultInitialValue
+        switch(type) {
+          case 'cancel':
+            continue
 
-        // Check if it's searchable
-        if (type === 'id') field.searchable = true
+          case 'number':
+            type = await ask('What kind of number??', 'select', null, null, [
+              { title: 'Integer number', value: 'integer' },
+              { title: 'Long integer number', value: 'long' },
+              { title: 'Float number', value: 'float' },
+              { title: 'Currency amount number', value: 'currency' },
+            ])
+            
+            field.type = 'number'
 
-        else field.searchable = await ask('Is this field searchable? (An index will be created)', 'confirm', false)
+            // The cases 'float', 'currency' and 'long' are treated as
+            // "variations" to INT. A parameter is added to the schema,
+            // mainly to let the DB schema creator know that the field
+            // is not simply an "integer"
+            if (type === 'float') field.float = true
+            else if (type === 'currency') field.currency = true
+            else if (type === 'long') field.long = true
+            
+            field.canBeNull = await ask('Is NULL allowed? (yes if 0 is different to <no value>)', 'confirm', true)
+  
+            if (field.canBeNull) {
+              field.emptyAsNull = await ask('Empty as NULL? (empty strings, normally cast as 0, will be stored as "NULL" rather than 0', 'confirm', false)
+            } else {
+              field.emptyAsNull = false
+              defaultInitialValue = 0
+            }
+  
+            let min = await ask('Minimum allowed number', 'number', null)
+            if (min !== '') field.min = Number(min)
+  
+            let max = await ask('Maximum allowed number', 'number', null)
+            if (max !== '') field.max = Number(max)
+            break
 
-        field.required = await ask('Is this field required? (that is, it MUST be included in every POST or PUT request)', 'confirm', false)
+          case 'string':
+          case 'text':
+            field.type = 'string'
+
+            // The case 'text' is treated as a "variation" to string. A parameter
+            // is added to the schema mainly to let the DB schema creator know
+            // that the field is actually 'text'
+            if (type === 'text') field.asText = true
+
+            field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', true)
+            if (field.canBeNull) {
+              field.emptyAsNull = await ask('Empty string as NULL? (Default is "no", empty string will be stored as NULL rather than "") ', 'confirm', true)
+            } else {
+              field.emptyAsNull = false
+              defaultInitialValue = ''
+            }  
+       
+            length = await ask('Field max length', 'text', null)
+            if (length !== '') field.length = Number(length)
+
+            let noTrim = await ask('Should trimming be skipped? (leading and trailing spaces will be preserved)', 'confirm', false)
+            if (noTrim) field.noTrim = true
+            break
+ 
+          case 'blob':
+            field.type = 'blob'
+            length = await ask('Field max length', 'text', null)
+            if (length !== '') field.length = Number(length)
+
+            field.canBeNull = await ask('Is NULL allowed? (yes if "neither true of false" should be allowed', 'confirm', false)
+            break
+        
+          case 'boolean':
+            field.type = 'boolean'
+            field.canBeNull = await ask('Is NULL allowed? (yes if "neither true of false" should be allowed', 'confirm', false)
+            break
+
+          case 'timestamp':
+            field.canBeNull = true // '0' never makes sense
+            field.emptyAsNull = true // '0' never makes sense
+            break
+
+          case 'id':
+            field.type = 'id'
+            field.canBeNull = await ask('Is NULL allowed? (Allowing NULL will make the foreign key NOT compulsory)', 'confirm', true)
+            field.emptyAsNull = true // (don't want to cast NULL to 0 as NULL won't puke on duplicate if unuque)
+            field.searchable = true
+
+            const isForeignKey = await ask('Is this the foreign key to a different store??', 'confirm', false)
+            let store
+            if (isForeignKey) {
+              store = await ask('Which store?', 'select', null, null, exports.allStores(config))
+              field.dbConstraint = { store: store.name }
+            }
+            break
+        }
+
+        if (typeof field.searchable === 'undefined') {
+          field.searchable = await ask('Is this field searchable? (An index will be created)', 'confirm', false)
+        }
 
         if (field.searchable) {
           field.unique = await ask('Is this field unique?', 'confirm', false)
@@ -348,117 +445,9 @@ exports.getStoreFields = async () => {
           field.unique = false
         }
 
-        // The "defaultValue" variable will be used later to set the initial
-        // value for default
-        let defaultInitialValue
-
-        if (type === 'integer' || type === 'float') {
-
-          field.type = 'number'
-          if (type.float) field.float = true
-
-          field.canBeNull = await ask('Is NULL allowed? (yes if 0 is different to <no value>)', 'confirm', true)
-
-          if (field.canBeNull) {
-            field.emptyAsNull = await ask('Empty as NULL? (empty strings, normally cast as 0, will be stored as "NULL" rather than 0', 'confirm', false)
-          } else {
-            field.emptyAsNull = false
-            defaultInitialValue = 0
-          }
-
-          let min = await ask('Minimum allowed number', 'number', null)
-          if (min !== '') field.min = Number(min)
-
-          let max = await ask('Maximum allowed number', 'number', null)
-          if (max !== '') field.max = Number(max)
-        }
-
-        if (type === 'string') {
-
-          field.type = 'string'
-
-          field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', true)
-          if (field.canBeNull) {
-            field.emptyAsNull = await ask('Empty string as NULL? (Default is "no", empty string will be stored as NULL rather than "") ', 'confirm', true)
-          } else {
-            field.emptyAsNull = false
-            defaultInitialValue = ''
-          }
-
-          let length = await ask('Field max length', 'text', null)
-          if (length !== '') field.length = Number(length)
-
-          let noTrim = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', false)
-          console.log(noTrim, typeof noTrim)
-          if (noTrim) field.noTrim = true
-        }
-
-        if (type === 'blob') {
-          field.type = 'blob'
-          let length = await ask('Field max length', 'text', null)
-          if (length !== '') field.length = Number(length)
-
-          const how = await ask('Do you want to set a specific length, or just a specific length?', 'select', null, null, [
-            { title: 'Specify exact length', value: 'length' },
-            { title: 'Type', value: 'type' },
-            { title: 'Neither -- I changed my mind, cancel that', value: 'cancel' },
-          ])
-          if (how === 'cancel') continue
-
-          if (how === 'type') {
-            const dbType = await ask('Which blob type?', 'select', null, null, [
-              { title: 'TINYBLOB (up to 255 bytes)', value: 'TINYBLOB' },
-              { title: 'BLOB (up tp 65535 bytes)', value: 'BLOB' },
-              { title: 'MEDIUMBLOB (up tp 16777215 bytes)', value: 'MEDIUMBLOB' },
-              { title: 'LONGBLOB (up tp 4294967295 bytes)', value: 'LONGBLOB' },
-              { title: 'None -- I changed my mind, cancel that', value: 'cancel' },
-            ])
-            if (how === 'cancel') continue
-            type.dbType = dbType
-          }
-
-          if (how === 'length') {
-            let max = await ask('Maximum length:', 'number', null)
-            if (max === '' || Number(max) === 0) {
-              console.log('No length provided, field add aborted')
-            }
-            let dbType
-            const len = field.length = Number(max)
-
-            if (len > 4294967295) {
-              console.log('Invalid length, max is 4294967295')
-              continue
-            }
-            else if (len > 16777215) dbType = 'LONGBLOB'
-            else if (len > 65535) dbType = 'MEDIUMBLOB'
-            else if (len > 255) dbType = 'BLOB'
-            else dbType = 'TINYBLOB'
-          }
-        }
-
-        if (type === 'boolean') {
-          // canBeNull: if 'neither' is a possible value
-          // Qs: searchable, unique
-        }
-
-        if (type === 'timestamp') {
-          // Always canBeNull ('0' never makes sense)
-          // Always emptyAsNull ('0' never makes sense)
-          // Qs: searchable, unique
-        }
-
-        if (type === 'id') {
-          field.type = 'id'
-          if (field.unique && !field.required) field.canBeNull = true // Don't want to cast NULL to 0 as it's not a valid key)
-          else field.canBeNull = await ask('Is NULL allowed? (Allowing NULL will make the foreign key NOT compulsory)', 'confirm', true)
-          field.emptyAsNull = true // (don't want to cast NULL to 0 as NULL won't puke on duplicate if unuque)
-          field.searchable = true
-          // TODO:  Add  question for foreign store, asking for store and adding key dbConstraint : { store: storeName }
-        }
-
         console.log("defaultInitialValue: ", defaultInitialValue)
 
-        if (field.type !== 'blob' && field.type !== 'id') {
+        if (field.type !== 'blob' && field.type !== 'text' && field.type !== 'id') {
           let initial
           if (field.canBeNull) initial = 'NULL'
           else initial = defaultInitialValue
@@ -500,6 +489,10 @@ exports.getStoreFields = async () => {
           ☐ unique keys: if client might send empty '' string (it shouldn't)
           ☐ ! boolean: if client might send empty '' string (it shouldn't)
 */
+
+      if (!field.emptyAsNull) delete field.emptyAsNull
+      if (!field.canBeNull) delete field.canBeNull
+
       fields[newFieldName] = field
     }
   }
@@ -528,3 +521,45 @@ exports.askStoreQuestions = async (config) => {
 
 
 }
+
+
+            /*
+            // MOST LIKELY USELESS, BUT YOU NEVER KNOW
+            const how = await ask('Do you want to set a specific length, or just a specific length?', 'select', null, null, [
+              { title: 'Specify exact length', value: 'length' },
+              { title: 'Type', value: 'type' },
+              { title: 'Neither -- I changed my mind, cancel that', value: 'cancel' },
+            ])
+            if (how === 'cancel') continue
+
+            if (how === 'type') {
+              const dbType = await ask('Which blob type?', 'select', null, null, [
+                { title: 'TINYBLOB (up to 255 bytes)', value: 'TINYBLOB' },
+                { title: 'BLOB (up tp 65535 bytes)', value: 'BLOB' },
+                { title: 'MEDIUMBLOB (up tp 16777215 bytes)', value: 'MEDIUMBLOB' },
+                { title: 'LONGBLOB (up tp 4294967295 bytes)', value: 'LONGBLOB' },
+                { title: 'None -- I changed my mind, cancel that', value: 'cancel' },
+              ])
+              if (how === 'cancel') continue
+              type.dbType = dbType
+            }
+            
+
+            if (how === 'length') {
+              let max = await ask('Maximum length:', 'number', null)
+              if (max === '' || Number(max) === 0) {
+                console.log('No length provided, field add aborted')
+              }
+              let dbType
+              const len = field.length = Number(max)
+
+              if (len > 4294967295) {
+                console.log('Invalid length, max is 4294967295')
+                continue
+              }
+              else if (len > 16777215) dbType = 'LONGBLOB'
+              else if (len > 65535) dbType = 'MEDIUMBLOB'
+              else if (len > 255) dbType = 'BLOB'
+              else dbType = 'TINYBLOB'
+            }
+            */
