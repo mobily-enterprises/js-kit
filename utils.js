@@ -255,7 +255,7 @@ exports.storeMethodsChoices = [
 ]
 
 
-exports.getStoreFields = async (config) => {
+exports.getStoreFields = async (config, storeDefaults) => {
   const fields = {
   }
   let op
@@ -490,8 +490,23 @@ exports.getStoreFields = async (config) => {
           ☐ ! boolean: if client might send empty '' string (it shouldn't)
 */
 
-      if (!field.emptyAsNull) delete field.emptyAsNull
-      if (!field.canBeNull) delete field.canBeNull
+      // Clean up definition from useless values,
+      // so that each field definition is not polluted
+      // with defaults
+      if (storeDefaults.emptyAsNull) {
+        if (field.emptyAsNull) delete field.emptyAsNull
+      } else {
+        if (!field.emptyAsNull) delete field.emptyAsNull
+      }
+
+      if (storeDefaults.canBeNull) {
+        if (field.canBeNull) delete field.canBeNull
+      } else {
+        if (!field.canBeNull) delete field.canBeNull
+      }
+
+      if (!field.searchable) delete field.searchable
+      if (!field.unique) delete field.unique
 
       fields[newFieldName] = field
     }

@@ -10,10 +10,6 @@ const vars = require('../../vars')
 class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get schema () {
     return new Schema({
-      //
-<%if(vars.newStoreInfo.positioning){ -%>
-      position: { type: 'number', canBeNull: true } // Field for positioning
-<% } -%>
     })
   }
 
@@ -28,17 +24,13 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get sortableFields () { return [] } // e.g. ['surname', 'name']
 
   // Position and placement configuration
-<%if(vars.newStoreInfo.positioning){ -%>
-  // No positioning management. Set 'positionField' and add the field to the schema
-  // -- e.g. position: { type: 'number', canBeNull: true } -- to enable it
-<% } -%>
-  static get positionField () { return '<%=vars.newStoreInfo.positioning ? "position" : ""%>' }
+  static get positionField () { return '<%=vars.newStoreInfo.positionField ? vars.newStoreInfo.positionField : '' %>' }
   static get positionFilter () { return [] }
-  static get beforeIdField () { return 'beforeId' }
-
+  static get beforeIdField () { return '<%=vars.newStoreInfo.beforeIdField %>' }
+  
   // The next 3 fields will define the stores' URL, in this case
   // it will be `/stores/2.0.0/storeTemplate/:id`.
-  static get publicURLprefix () { return '<%=userInput["server-stores"].publicURLprefix%>' }
+  static get publicURLprefix () { return '<%=vars.newStoreInfo.publicURLprefix%>' }
   static get version () { return '<%=vars.newStoreInfo.version%>' }
   static get publicURL () { return '<%=vars.newStoreInfo.publicURL%>/:id' }
 
@@ -46,9 +38,10 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get storeName () { return '<%=vars.newStoreInfo.name%>' }
 
   // Storing options
-  static get emptyAsNull () { return false } // An empty value will be treated as NULL
-  static get fullRecordOnUpdate () { return false } //  A write will only affects the passed fields, not the whole record
-  static get fullRecordOnInsert () { return true } //  A write will only affects the passed fields, not the whole record
+  static get emptyAsNull () { return <%=vars.newStoreInfo.emptyAsNull ? 'true' : 'false' %> } // An empty value will be treated as NULL
+  static get canBeNull () { return <%=vars.newStoreInfo.canBeNull ? 'true' : 'false' %> }
+  static get fullRecordOnUpdate () { return <%=vars.newStoreInfo.fullRecordOnUpdate ? 'true' : 'false' %> }
+  static get fullRecordOnInsert () { return <%=vars.newStoreInfo.fullRecordOnInsert ? 'true' : 'false' %> } 
 
   // This is the list of the supported methods.
   // The difference between POST and PUT is that
@@ -61,6 +54,8 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
 
   // An artificial delay can be specified for testing purposes
   static get artificialDelay () { return vars.artificialDelay }
+
+  static get defaultLimitOnQueries () { return <%=vars.newStoreInfo.defaultLimitOnQueries %> } //  Max number of records returned by default
 
   // The MySql connection must be passed, as well as the MySql table
   static get connection () { return vars.connection }
