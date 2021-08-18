@@ -255,7 +255,7 @@ exports.storeMethodsChoices = [
 ]
 
 
-exports.getStoreFields = async (config, storeDefaults) => {
+exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   const fields = {
   }
   let op
@@ -295,7 +295,12 @@ exports.getStoreFields = async (config, storeDefaults) => {
       ])
     } catch (e) {
       if (e.message !== 'CancelledError') throw(e)
-        const sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
+        let sure
+        try {
+          sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
+        } catch (e) {
+          if (e.message !== 'CancelledError') throw(e)
+        }
         if (sure) op = 'cancel'
         else continue
     }
@@ -326,7 +331,7 @@ exports.getStoreFields = async (config, storeDefaults) => {
       let newFieldName
       let field = {}
       try {
-        newFieldName = await ask('Field name', 'text', null, (v) => fields[v] ?  'Field already defined' : (!v.length ? "required field" : true))
+        newFieldName = await ask('Field name', 'text', null, (v) => fields[v] || existingFields[v] ?  'Field already defined' : (!v.length ? "required field" : true))
 
         type = await ask('What kind of field is it', 'select', null, null, [
           { title: 'Number', value: 'number' },
@@ -335,7 +340,7 @@ exports.getStoreFields = async (config, storeDefaults) => {
           { title: 'Blob', value: 'blob' },
           { title: 'Boolean', value: 'boolean' },
           { title: 'UTC timestamp', value: 'timestamp' },
-          { title: 'Foreign ID key', value: 'foreign' },
+          { title: 'Foreign ID key', value: 'id' },
           { title: 'I changed my mind, cancel that', value: 'cancel' },
         ])
 
@@ -426,12 +431,12 @@ exports.getStoreFields = async (config, storeDefaults) => {
             field.emptyAsNull = true // (don't want to cast NULL to 0 as NULL won't puke on duplicate if unuque)
             field.searchable = true
 
-            const isForeignKey = await ask('Is this the foreign key to a different store??', 'confirm', false)
-            let store
-            if (isForeignKey) {
-              store = await ask('Which store?', 'select', null, null, exports.allStores(config))
+            const allStores = exports.allStores(config)
+            if (allStores.length){
+              store = await ask('Which store?', 'select', null, null, allStores)
               field.dbConstraint = { store: store.name }
             }
+            field.isParent = await ask('Is this store a logical hierarchy parent?', 'confirm', false)
             break
         }
 
@@ -459,8 +464,10 @@ exports.getStoreFields = async (config, storeDefaults) => {
 
           if (defaultValue === 'NULL') defaultValue = null
 
-          field.default = defaultValue
-          if (field.type === 'text' && field.default !== null) field.default = `'${field.default}'`
+          if (defaultValue !== '') {
+            field.default = defaultValue
+            if (field.type === 'text' && field.default !== null) field.default = `'${field.default}'`
+          }
         }
 
       } catch (e) {
@@ -468,6 +475,7 @@ exports.getStoreFields = async (config, storeDefaults) => {
           console.log('Adding aborted')
           continue
         }
+        console.log('AH!', e)
         throw(e)
       }
 
@@ -531,10 +539,6 @@ exports.askStoreQuestions = async (config) => {
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones
   // Return list of fields, with info attached, in userInput
-
-
-
-
 }
 
 

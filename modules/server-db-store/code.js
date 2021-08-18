@@ -1,16 +1,6 @@
 const path = require('path')
 const utils = require('../../utils.js')
-
-
-/*
-NOTE: Extra fields for DB stores:
-
-this.connection = this.constructor.connection
-this.table = this.constructor.table
-this.positionFilter = this.constructor.positionFilter
-
-Eventually, ask if it's a DB store. And if it is, ask for table and add connection as an attribute from vars
-*/
+const prompts = require('prompts')
 
 exports.getPromptsHeading = (config) => { }
 
@@ -57,7 +47,7 @@ exports.getPrompts = (config) => {
       message: 'Should the store manage positioning of rows?',
       initial: true
     },
-
+    
     {
       type: 'multiselect',
       name: 'methods',
@@ -69,6 +59,13 @@ exports.getPrompts = (config) => {
       name: 'advanced',
       message: 'Would you like to set more advanced options?',
       initial: false
+    },
+
+    {
+      type: (prev, values) => values.advanced && values.positioning ? 'text' : null,
+      name: 'positionField',
+      message: 'Name of positio field (VERY recommended: position',
+      initial: 'position'
     },
 
     {
@@ -115,6 +112,13 @@ exports.getPrompts = (config) => {
     },
 
     {
+      type: (prev, values) => values.advanced ? 'text' : null,
+      name: 'idProperty',
+      message: 'Name of the id property (VERY recommended: "id"',
+      initial: 'id'
+    },
+
+    {
       type: 'confirm',
       name: 'addFields',
       message: 'Would you like to set this store\'s fields?',
@@ -137,16 +141,44 @@ exports.postPrompts = async (config) => {
   if (typeof userInput.beforeIdFields === 'undefined') {
     userInput.beforeIfFields = 'beforeId'
   }
+  if (typeof userInput.idProperty === 'undefined') {
+    userInput.idProperty = 'id'
+  }
+  if (typeof userInput.positionField === 'undefined') {
+    userInput.positionField = 'position'
+  }
 
   if (userInput.addFields) {
 
     const storeDefaults = userInput
-    fields = await utils.getStoreFields(config, storeDefaults)
 
-    // TODO:
-    // List sortable fields (amongst the searchable ones)
-    // Specify positionFilter
+    const existingFields = {}
+    if (userInput.positioning) {
+      existingFields[userInput.positionField] = { type: 'number'}
+    }
 
+    fields = await utils.getStoreFields(config, storeDefaults, existingFields)
+
+    // This will add positioning if set
+    fields = {...fields, ...existingFields}
+
+    console.log(fields)
+
+    const searchableFields = Object.keys(fields).filter(f => fields[f].searchable).map(e => { return  { title: e, value: e }} )
+    if (searchableFields.length) {
+      userInput.sortableFields = (await prompts({
+        name: 'value',
+        message: 'Which fields are sortable?',
+        type: 'multiselect',
+        choices: searchableFields
+      })).value
+      console.log('sortable fields:', userInput.sortableFields)
+    }
+
+    // Set positionFilter
+    userInput.positionFilter = Object.keys(fields).filter(f => fields[f].isParent)
+    
+    console.log('POSITION FILTER:', userInput.positionFilter)
     console.log('ASKED TO ADD FIELDS!', fields)
   }
 
@@ -164,7 +196,7 @@ exports.boot = (config) => { }
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
-    case 'STORE.js':
+    case 'STORE.ejs':
       return `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.name}.js`
     default:
       return file

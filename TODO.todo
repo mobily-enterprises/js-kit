@@ -66,6 +66,19 @@
 ✔ Write function that, given a store and version, returns a list of fields and types @done(2021-01-18 23:49)
 ✔ Make AddEdit work <nn-input-text dense name="voucherNumber" label="V#" .value=${this.data.voucherNumber || ''} > </nn-input-text> @done(2021-01-27 06:15)
 
+STORES
+------
+✔ Make sure that entries in the searchSchema matching schema are marked as searchable in schema in jsoreststores @done(21-08-17 07:35)
+✔ Add parameter to getStoreFields with previously set fields, and use it to prevent positionField from being redeclared @done(21-08-18 07:14)
+  ✔ Make sure the position field is added to the store's schema last @done(21-08-18 07:15)
+✔ Ask which are the sortable fields (only searchable ones) @done(21-08-18 07:20)
+✔ Check for already existing fields, in adding and creating @done(21-08-18 08:33)
+☐ Make it possible to create DB and non-DB stores (table, connection, positionfilter)
+☐ Run db creation script automatically after store
+☐ Add option to add fields to an existing store (new command)
+
+
+
 
 ☐ NOTES ON STORES
 Companies
