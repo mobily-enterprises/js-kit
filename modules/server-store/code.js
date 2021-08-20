@@ -7,10 +7,17 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
+}
+
+
+exports.postPrompts = async (config) => {
+  let fields
   let storeName
   let version
 
-  const questions = [
+  // The getPrompts input is skipped altogether as there are
+  // conditional questions 
+  config.userInput['server-store'] = await prompts([
     {
       type: 'text',
       name: 'name',
@@ -124,52 +131,9 @@ exports.getPrompts = (config) => {
       message: 'Would you like to set this store\'s fields?',
       initial: true
     },
+  ])
 
-  ]
-
-  return questions
-}
-
-
-function nativeVar (v) {
-  switch (typeof v) {
-    case 'integer': 
-      return `${v}`
-    case 'string':  
-      return `'${escape(v)}'`
-    case 'boolean': 
-      return v ? 'true' : false
-    case 'object': 
-      if (Array.isArray(v)) {
-        return `[ ${v.map(o => nativeVar(o)).join(', ')} ]`
-      } else {
-        return v === null ? 'null' : JSON.stringify(v)
-      }
-    default:
-      return v
-  }
-}
-
-function formatSchemaFieldsAsText (fields) {
-  function escape (s) {
-    return s.replace(/'/g, "\\'")
-  }
-
-  res = ''
-  for (const k in fields) {
-    res += `      ${k}: { `
-    const props = []
-    for (const j in fields[k]){
-      props.push(`${j}: ${nativeVar(fields[k][j])}`)
-    }
-    res += `${props.join(', ')} }\n`
-  }
-  return res
-}
-
-exports.postPrompts = async (config) => {
-  const userInput = config.userInput['server-db-store']
-  let fields
+  const userInput = config.userInput['server-store']
 
   // Set defaults in case some questions weren't asked
   // Falsy ones don't need to be set regardless
@@ -214,16 +178,14 @@ exports.postPrompts = async (config) => {
     } else {
       userInput.sortableFields = []
     }
-
-    // Set positionFilter
   }
 
   // New store's info
   const newStoreInfo = config.vars.newStoreInfo = {
     ...userInput,
-    fields: formatSchemaFieldsAsText(fields),
-    sortableFields: nativeVar(userInput.sortableFields),
-    positionFilter: nativeVar(Object.keys(fields).filter(f => fields[f].isParent)),
+    fields: utils.formatSchemaFieldsAsText(fields),
+    sortableFields: utils.nativeVar(userInput.sortableFields),
+    positionFilter: utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent)),
     className: config.utils.capitalize(userInput.name),
     db: true
   }

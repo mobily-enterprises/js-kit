@@ -254,6 +254,42 @@ exports.storeMethodsChoices = [
   },
 ]
 
+const nativeVar = exports.nativeVar = (v) => {
+  switch (typeof v) {
+    case 'integer': 
+      return `${v}`
+    case 'string':  
+      return `'${escape(v)}'`
+    case 'boolean': 
+      return v ? 'true' : false
+    case 'object': 
+      if (Array.isArray(v)) {
+        return `[ ${v.map(o => nativeVar(o)).join(', ')} ]`
+      } else {
+        return v === null ? 'null' : JSON.stringify(v)
+      }
+    default:
+      return v
+  }
+}
+
+const formatSchemaFieldsAsText = exports.formatSchemaFieldsAsText = (fields) => {
+  function escape (s) {
+    return s.replace(/'/g, "\\'")
+  }
+
+  res = ''
+  for (const k in fields) {
+    res += `      ${k}: { `
+    const props = []
+    for (const j in fields[k]){
+      props.push(`${j}: ${nativeVar(fields[k][j])}`)
+    }
+    res += `${props.join(', ')} }\n`
+  }
+  return res
+}
+
 
 exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   const fields = {
@@ -285,14 +321,14 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   while (true) {
 
     console.log('Fields:')
-    console.log(JSON.stringify(fields, null, 2))
+    console.log(formatSchemaFieldsAsText(fields))
 
     try {
       op = await  ask('What do you want to do?', 'select', null, null, [
         { title: 'Add a new field', value: 'add' },
         { title: 'Delete a new field just created', value: 'del' },
         { title: 'I changed my mind, cancel that', value: 'cancel' },
-        { title: 'All done, quit', value: 'quit' },
+        { title: 'All done adding fields, go ahead with changes', value: 'quit' },
       ])
     } catch (e) {
       if (e.message !== 'CancelledError') throw(e)

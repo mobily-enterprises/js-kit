@@ -74,9 +74,13 @@ STORES
 ✔ Ask which are the sortable fields (only searchable ones) @done(21-08-18 07:20)
 ✔ Check for already existing fields, in adding and creating @done(21-08-18 08:33)
 ✔ Find a better prettier way to print schema and array values: indentation, speechmarks, etc. @done(21-08-20 08:07)
-☐ Run db creation script automatically after store
-☐ Make it possible to create DB and non-DB stores (table, connection, positionfilter)
+☐ Make positionField as part of jsonreststore-mysql, take it out of jsonreststores.
+  ☐ Take positionField out of jsonreststores, make sure another 'positioning' field is used instead
+  ☐ Check that it will still work
+  ☐ NOTE: positionField is NOT needed in the memory store since things go into arrays
+☐ Make it possible to create DB, API and memory stores (table, connection (var), positionfilter, positionField)
 ☐ Add option to add fields to an existing store (new command)
+☐ Run db creation script automatically after store
 
 
 

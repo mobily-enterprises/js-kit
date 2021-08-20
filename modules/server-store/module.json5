@@ -1,5 +1,5 @@
 {
-  "name":"server-db-store",
+  "name":"server-store",
   "version":"1.0.0",
   "component": true,
   "description":"Add a DB store to the app",
