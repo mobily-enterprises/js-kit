@@ -9,6 +9,15 @@
   ],
   "position": 510,
   "manipulate":{
+    "json":{
+      "server/package.json":[
+        {
+            "op":"set",
+            "key":"dependencies.jsonreststores-mysql",
+            "value":"^2.x.x"
+        }
+      ]
+    },  
     "text":{
       "server/stores/<%=vars.newStoreInfo.version%>/<%=vars.newStoreInfo.name%>.js":[
         {
