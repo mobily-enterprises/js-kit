@@ -10,6 +10,7 @@ const vars = require('../../vars')
 class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get schema () {
     return new Schema({
+<%-vars.newStoreInfo.fields%>      
     })
   }
 
@@ -21,11 +22,11 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   // Default sort (only used when no sorting is specified) and
   // sortable fields
   static get defaultSort () { return { } } // e.g. { surname: : -1 }
-  static get sortableFields () { return <%-vars.newStoreInfo.sortableFields.length ? JSON.stringify(vars.newStoreInfo.sortableFields) : '[    ]' %> } } // e.g. ['surname', 'name']
+  static get sortableFields () { return <%-vars.newStoreInfo.sortableFields %> } } // e.g. ['surname', 'name']
 
   // Position and placement configuration
-  static get positionField () { return '<%=-vars.newStoreInfo.positioning ? vars.newStoreInfo.positionField : '' %>' }
-  static get positionFilter () { return <%-vars.newStoreInfo.positionFilter.length ? JSON.stringify(vars.newStoreInfo.positionFilter) : '[   ]' %> }
+  static get positionField () { return '<%-vars.newStoreInfo.positioning ? vars.newStoreInfo.positionField : '' %>' }
+  static get positionFilter () { return <%-vars.newStoreInfo.positionFilter %> }
   static get beforeIdField () { return '<%vars.newStoreInfo.beforeIdField %>' }
   
   // The next 3 fields will define the stores' URL, in this case

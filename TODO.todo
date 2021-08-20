@@ -73,10 +73,10 @@ STORES
   ✔ Make sure the position field is added to the store's schema last @done(21-08-18 07:15)
 ✔ Ask which are the sortable fields (only searchable ones) @done(21-08-18 07:20)
 ✔ Check for already existing fields, in adding and creating @done(21-08-18 08:33)
-☐ Make it possible to create DB and non-DB stores (table, connection, positionfilter)
+✔ Find a better prettier way to print schema and array values: indentation, speechmarks, etc. @done(21-08-20 08:07)
 ☐ Run db creation script automatically after store
+☐ Make it possible to create DB and non-DB stores (table, connection, positionfilter)
 ☐ Add option to add fields to an existing store (new command)
-
 
 
 

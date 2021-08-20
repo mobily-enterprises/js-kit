@@ -130,8 +130,46 @@ exports.getPrompts = (config) => {
   return questions
 }
 
+
+function nativeVar (v) {
+  switch (typeof v) {
+    case 'integer': 
+      return `${v}`
+    case 'string':  
+      return `'${escape(v)}'`
+    case 'boolean': 
+      return v ? 'true' : false
+    case 'object': 
+      if (Array.isArray(v)) {
+        return `[ ${v.map(o => nativeVar(o)).join(', ')} ]`
+      } else {
+        return v === null ? 'null' : JSON.stringify(v)
+      }
+    default:
+      return v
+  }
+}
+
+function formatSchemaFieldsAsText (fields) {
+  function escape (s) {
+    return s.replace(/'/g, "\\'")
+  }
+
+  res = ''
+  for (const k in fields) {
+    res += `      ${k}: { `
+    const props = []
+    for (const j in fields[k]){
+      props.push(`${j}: ${nativeVar(fields[k][j])}`)
+    }
+    res += `${props.join(', ')} }\n`
+  }
+  return res
+}
+
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['server-db-store']
+  let fields
 
   // Set defaults in case some questions weren't asked
   // Falsy ones don't need to be set regardless
@@ -146,6 +184,9 @@ exports.postPrompts = async (config) => {
   }
   if (typeof userInput.positionField === 'undefined') {
     userInput.positionField = 'position'
+  }
+  if (typeof userInput.defaultLimitOnQueries === 'undefined') {
+    userInput.defaultLimitOnQueries = 1000
   }
 
   if (userInput.addFields) {
@@ -162,8 +203,6 @@ exports.postPrompts = async (config) => {
     // This will add positioning if set
     fields = {...fields, ...existingFields}
 
-    console.log(fields)
-
     const searchableFields = Object.keys(fields).filter(f => fields[f].searchable).map(e => { return  { title: e, value: e }} )
     if (searchableFields.length) {
       userInput.sortableFields = (await prompts({
@@ -172,25 +211,23 @@ exports.postPrompts = async (config) => {
         type: 'multiselect',
         choices: searchableFields
       })).value
-      console.log('sortable fields:', userInput.sortableFields)
+    } else {
+      userInput.sortableFields = []
     }
 
     // Set positionFilter
-    userInput.positionFilter = Object.keys(fields).filter(f => fields[f].isParent)
-    
-    console.log('POSITION FILTER:', userInput.positionFilter)
-    console.log('ASKED TO ADD FIELDS!', fields)
   }
 
   // New store's info
   const newStoreInfo = config.vars.newStoreInfo = {
     ...userInput,
+    fields: formatSchemaFieldsAsText(fields),
+    sortableFields: nativeVar(userInput.sortableFields),
+    positionFilter: nativeVar(Object.keys(fields).filter(f => fields[f].isParent)),
     className: config.utils.capitalize(userInput.name),
     db: true
   }
 }
-
-
 
 exports.boot = (config) => { }
 

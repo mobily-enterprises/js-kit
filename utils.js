@@ -284,7 +284,8 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
 
   while (true) {
 
-    console.log(JSON.stringify(fields))
+    console.log('Fields:')
+    console.log(JSON.stringify(fields, null, 2))
 
     try {
       op = await  ask('What do you want to do?', 'select', null, null, [
@@ -367,7 +368,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
             else if (type === 'currency') field.currency = true
             else if (type === 'long') field.long = true
             
-            field.canBeNull = await ask('Is NULL allowed? (yes if 0 is different to <no value>)', 'confirm', true)
+            field.canBeNull = await ask('Is NULL allowed? (yes if 0 is different to <no value>)', 'confirm', false)
   
             if (field.canBeNull) {
               field.emptyAsNull = await ask('Empty as NULL? (empty strings, normally cast as 0, will be stored as "NULL" rather than 0', 'confirm', false)
@@ -392,7 +393,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
             // that the field is actually 'text'
             if (type === 'text') field.asText = true
 
-            field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', true)
+            field.canBeNull = await ask('Is NULL allowed? (Default is "no", only ever use it if "" is different to "no value" NULL)', 'confirm', false)
             if (field.canBeNull) {
               field.emptyAsNull = await ask('Empty string as NULL? (Default is "no", empty string will be stored as NULL rather than "") ', 'confirm', true)
             } else {
