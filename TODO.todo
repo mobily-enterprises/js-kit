@@ -78,10 +78,10 @@ STORES
   ✔ Take positionField out of jsonreststores, make sure another 'positioning' field is used instead @done(21-08-21 10:58)
   ✔ NOTE: positionField is NOT needed in the memory store since things go into arrays @done(21-08-21 10:58)
   ✔ Add template for memory store with required API calls when needed @done(21-08-21 10:58)
-☐ Make it possible to create DB, API and memory stores (table, connection (var), positionfilter, positionField)
-
-☐ Add option to add fields to an existing store (new command)
-☐ Run db creation script automatically after store
+✔ Make it possible to create DB, API and memory stores (table, connection (var), positionfilter, positionField) @done(21-08-24 13:34)
+✔ Add option to add fields to an existing store (new command) @done(21-08-24 22:35)
+☐ Manage situation where store cannot be loaded (syntax error?)
+☐ Run db creation script automatically after store creation or field adding
 
 ☐ NOTES ON STORES
 Companies
@@ -89,8 +89,8 @@ Companies
 People [FK: companyId]
   /people/:id
   /companies/:companyId/people/:id
-Addresses [FK: personId]
-  /addresses/:id
+☐ Addresses [FK: personId]
+  ☐ /addresses/:id
   /people/:personId/addresses/:id
 
 ☐ Add parameters to anchorPoints. Will need it for "useItem"

@@ -10,7 +10,7 @@ if (process.env.PORT) {
 }
 
 exports = {
-  connection: null,
+  connection: { query: () => {} },
   artificialDelay: env === 'development' ? 500 : 0,
   config
 }

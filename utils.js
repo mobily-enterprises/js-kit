@@ -273,19 +273,19 @@ const nativeVar = exports.nativeVar = (v) => {
   }
 }
 
-const formatSchemaFieldsAsText = exports.formatSchemaFieldsAsText = (fields) => {
+const formatSchemaFieldsAsText = exports.formatSchemaFieldsAsText = (fields, indent = 6) => {
   function escape (s) {
     return s.replace(/'/g, "\\'")
   }
 
   res = ''
   for (const k in fields) {
-    res += `      ${k}: { `
+    res += `${' '.repeat(indent)}${k}: { `
     const props = []
     for (const j in fields[k]){
       props.push(`${j}: ${nativeVar(fields[k][j])}`)
     }
-    res += `${props.join(', ')} }\n`
+    res += `${props.join(', ')} },\n`
   }
   return res
 }
@@ -572,6 +572,8 @@ exports.askStoreQuestions = async (config) => {
 
   debugger
   const storeObject = require(path.join(config.dstDir, store.store.file) )
+
+
 
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones

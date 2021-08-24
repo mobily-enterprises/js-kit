@@ -1,0 +1,26 @@
+{
+  "name":"server-store-field",
+  "version":"1.0.0",
+  "component": true,
+  "description":"Add a DB store to the app",
+  "author":"Tony Mobily",
+  "moduleDependencies":[
+  ],
+  "position": 510,
+  "manipulate":{
+    "json":{
+    },  
+    "text":{
+      "<%=vars.newFields.storeFile%>":[
+        {
+           "op":"insert",
+           "position":"before",
+           "newlineBefore":false,
+           "newlineAfter":false,
+           "anchorPoint":"<!-- Fields insertion point -->",
+           "value":"<%-vars.newFields.fields%>"
+        }
+      ]
+    }
+  }
+}

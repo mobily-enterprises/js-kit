@@ -164,8 +164,9 @@ exports.postPrompts = async (config) => {
   if (typeof userInput.fullRecordOnInsert === 'undefined') {
     userInput.fullRecordOnInsert = true
   }
-  if (typeof userInput.beforeIdFields === 'undefined') {
-    userInput.beforeIfFields = 'beforeId'
+  debugger
+  if (typeof userInput.beforeIdField === 'undefined') {
+    userInput.beforeIdField = 'beforeId'
   }
   if (typeof userInput.idProperty === 'undefined') {
     userInput.idProperty = 'id'
@@ -217,7 +218,8 @@ exports.postPrompts = async (config) => {
   }
   
   if (typeOfStore === 'db') {
-    newStoreInfo.positionfilter = utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent))
+    debugger
+    newStoreInfo.positionFilter = utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent))
   }
 }
 

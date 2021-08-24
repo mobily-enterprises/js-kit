@@ -24,6 +24,7 @@ class StoreTemplate extends HttpMixin(JsonRestStores) {
   static get schema () {
     return new Schema({
 <%-vars.newStoreInfo.fields%>      
+      <!-- Fields insertion point -->
     })
   }
 
@@ -35,13 +36,13 @@ class StoreTemplate extends HttpMixin(JsonRestStores) {
   // Default sort (only used when no sorting is specified) and
   // sortable fields
   static get defaultSort () { return { } } // e.g. { surname: : -1 }
-  static get sortableFields () { return <%-vars.newStoreInfo.sortableFields %> } } // e.g. ['surname', 'name']
+  static get sortableFields () { return <%-vars.newStoreInfo.sortableFields %> } // e.g. ['surname', 'name']
 
   // Position and placement configuration
-  static get positioning () { return '<%-vars.newStoreInfo.positioning ? 'true' : 'false' %>' }
-  static get beforeIdField () { return '<%vars.newStoreInfo.beforeIdField %>' }
+  static get positioning () { return <%-vars.newStoreInfo.positioning ? 'true' : 'false' %> }
+  static get beforeIdField () { return '<%-vars.newStoreInfo.beforeIdField %>' }
 <%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
-  static get positionField () { return '<%-vars.newStoreInfo.positioning ? vars.newStoreInfo.positionField : '' %>' }
+  static get positionField () { return '<%-vars.newStoreInfo.positionField %>' }
   static get positionFilter () { return <%-vars.newStoreInfo.positionFilter %> }
 <% } -%>
 
