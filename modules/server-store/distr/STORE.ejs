@@ -1,5 +1,10 @@
 const JsonRestStores = require('jsonreststores')
+<%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
 const MysqlMixin = require('jsonreststores-mysql')
+<% } -%>
+<%if (vars.newStoreInfo.typeOfStore === 'memory') { -%>
+const MemoryMixin = require('jsonreststores-mem')
+<% } -%>
 const HttpMixin = require('jsonreststores/http')
 const Schema = require('simpleschema')
 
@@ -7,7 +12,15 @@ const Schema = require('simpleschema')
 // the connection is in vars.connection
 const vars = require('../../vars')
 
+<%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
 class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
+<% } -%>
+<%if (vars.newStoreInfo.typeOfStore === 'memory') { -%>
+class StoreTemplate extends MemoryMixin(HttpMixin(JsonRestStores)) {
+<% } -%>
+<%if (vars.newStoreInfo.typeOfStore === 'api') { -%>
+class StoreTemplate extends HttpMixin(JsonRestStores) {
+<% } -%>
   static get schema () {
     return new Schema({
 <%-vars.newStoreInfo.fields%>      
@@ -25,10 +38,13 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
   static get sortableFields () { return <%-vars.newStoreInfo.sortableFields %> } } // e.g. ['surname', 'name']
 
   // Position and placement configuration
+  static get positioning () { return '<%-vars.newStoreInfo.positioning ? 'true' : 'false' %>' }
+  static get beforeIdField () { return '<%vars.newStoreInfo.beforeIdField %>' }
+<%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
   static get positionField () { return '<%-vars.newStoreInfo.positioning ? vars.newStoreInfo.positionField : '' %>' }
   static get positionFilter () { return <%-vars.newStoreInfo.positionFilter %> }
-  static get beforeIdField () { return '<%vars.newStoreInfo.beforeIdField %>' }
-  
+<% } -%>
+
   // The next 3 fields will define the stores' URL, in this case
   // it will be `/stores/2.0.0/storeTemplate/:id`.
   static get publicURLprefix () { return '<%=vars.newStoreInfo.publicURLprefix%>' }
@@ -58,9 +74,11 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
 
   static get defaultLimitOnQueries () { return <%=vars.newStoreInfo.defaultLimitOnQueries %> } //  Max number of records returned by default
 
+<%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
   // The MySql connection must be passed, as well as the MySql table
   static get connection () { return vars.connection }
   static get table () { return '<%=vars.newStoreInfo.table%>' }
+<% } -%>
 
   // Only non-http errors will be chained to the next middleware.
   // Everything else (HTTP errors) will be handled by the store
@@ -81,16 +99,10 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
     // being `implementInsert` (a new record) or `implementUpdate` (a new record)
 
     // Example:
-    /*
+
     // No login, no joy
-    if (!request.session.loggedIn) return { granted: false }
+    // if (!request.session.loggedIn) return { granted: false }
 
-    // Admins can always do ANYTHING. This is an example.
-    if (request.session.flags.isAdmin) return { granted: true }
-
-    // All non-operators: nope
-    return { granted: false }
-    */
     return { granted: true }
   }
 
@@ -118,6 +130,7 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
     // if (request.body.name === 'tony') errors.push({ field: 'name', message: 'Name already taken' })
   }
 
+<%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
   /* ***********************************
     *  DB HOOKS FOR FIELDS, JOINS, ETC.
     ************************************
@@ -211,6 +224,148 @@ class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
     */
     return record
   }
+<% } -%>
+
+<%if (vars.newStoreInfo.typeOfStore === 'memory') { -%>
+    // op can be 'fetch', 'update', 'insert', 'query', 'delete'.
+    // If 'query, then data is an array. Otherwise, it's a record
+    async transformResult (request, data, op) {  return data }
+    return data
+  }
+<% } -%>
+<%if (vars.newStoreInfo.typeOfStore === 'api') { -%>
+  
+  // Input:
+  // - request.body
+  // Output: an object (saved record)
+  //
+  // SIDE_EFFECT:
+  //   request.record (the loaded record)
+  
+  async implementInsert (request) {
+    await super.implementInsert(request)
+
+    // TASK: implement insertion of request.record
+    request.record = request.body
+    
+    return request.record
+  }
+
+  // Input:
+  // - request.params (query)
+  // - request.body (data)
+  // Output: an object (updated record, refetched)
+  //
+  async implementUpdate (request) {
+    await super.implementUpdate(request)
+
+    // TASK: implement update of request.record
+    request.record = request.body
+
+    return request.record
+  }
+
+  // Input: request.params (with key this.idProperty set)
+  // Output: nothing
+  async implementDelete (request) {
+    await super.implementDelete(request)
+
+    // TASK: implement deletion of request.record
+  }
+
+  // Input: request.params, request.options.[conditionsHash,skip,limit,sort]
+  // Output: { data: [], grandTotal: ? }
+  async implementQuery (request) {
+    await super.implementQuery(request)
+
+    // TASK: implement fetch of  data set based on conditions, skip, limit, sort, positioning
+    const retData = []
+
+    return { data: retData, grandTotal: retData.length }
+  }
+
+
+  // Input: request.params (with key this.idProperty set)
+  // Output: an object
+  async implementFetch (request) {
+    await super.implementFetch(request)
+
+    // TASK: implement fetch info request.record
+    request.record = request.body
+
+    // Requested by the API: when implementing implementFetch(), this function
+    // must be called when request.record is set
+    if (request.record) this.implementFetchPermissions(request)
+
+    return request.record
+  }
+
+  // Input:
+  // - request.body
+  // Output: an object (saved record)
+  //
+  // SIDE_EFFECT:
+  //   request.record (the loaded record)
+
+  async implementInsert (request) {
+    await super.implementInsert(request)
+
+    // TASK: implement insertion of request.record
+    request.record = request.body
+
+    return request.record
+  }
+
+  // Input:
+  // - request.params (query)
+  // - request.body (data)
+  // Output: an object (updated record, refetched)
+  //
+  async implementUpdate (request) {
+    await super.implementUpdate(request)
+
+    // TASK: implement update of request.record
+    request.record = request.body
+
+    return request.record
+  }
+
+  // Input: request.params (with key this.idProperty set)
+  // Output: nothing
+  async implementDelete (request) {
+    await super.implementDelete(request)
+
+    // TASK: implement deletion of request.record
+    // (No need to return it)
+  }
+
+  // Input: request.params, request.options.[conditionsHash,skip,limit,sort]
+  // Output: { data: [], grandTotal: ? }
+  async implementQuery (request) {
+    await super.implementQuery(request)
+
+    // TASK: implement fetch of  data set based on conditions, skip, limit, sort, positioning
+    const retData = []
+
+    return { data: retData, grandTotal: retData.length }
+  }
+
+
+  // Input: request.params (with key this.idProperty set)
+  // Output: an object
+  async implementFetch (request) {
+    await super.implementFetch(request)
+
+    // TASK: implement fetch info request.record
+    request.record = request.body
+
+    // Requested by the API: when implementing implementFetch(), this function
+    // must be called when request.record is set
+    if (request.record) this.implementFetchPermissions(request)
+
+    return request.record
+  }
+<% } -%>
 }
 
 exports = module.exports = new StoreTemplate()

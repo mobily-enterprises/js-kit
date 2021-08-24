@@ -1,6 +1,7 @@
 const path = require('path')
 const utils = require('../../utils.js')
 const prompts = require('prompts')
+const installModule = require('../../node_modules/scaffoldizer/commands/add.js').installModule
 
 exports.getPromptsHeading = (config) => { }
 
@@ -15,6 +16,27 @@ exports.postPrompts = async (config) => {
   let storeName
   let version
 
+  config.userInput['server-store'] = {}
+
+  const typeOfStore = (await prompts({
+    name: 'value',
+    message: 'What type of store is it?',
+    type: 'select', 
+    choices: [
+      { title: 'DB store', value: 'db' },
+      { title: 'Memory store (non-stored values)', value: 'memory' },
+      { title: 'API store (to be implemented manually)', value: 'api' },
+      { title: 'Cancel', value: 'quit' },
+    ]
+  })).value
+
+  // Install server-db module if it's a db store
+  // (Automatically skipped if it's already installed)
+  // This call is the reason why these prompts are not in the getPrompts() hook
+  if (typeOfStore === 'db') {
+    await installModule('server-db', config)
+  }
+
   // The getPrompts input is skipped altogether as there are
   // conditional questions 
   config.userInput['server-store'] = await prompts([
@@ -25,6 +47,7 @@ exports.postPrompts = async (config) => {
       initial: '',
       validate: utils.storeNameValidator(config)
     },
+    
     {
       type: 'text',
       name: 'version',
@@ -42,7 +65,7 @@ exports.postPrompts = async (config) => {
       validate: utils.storePublicURLValidator(config)
     },
     {
-      type: 'text',
+      type: () => typeOfStore === 'db' ? 'text' : null,
       name: 'table',
       message: 'DB table name',
       initial: (prev) => `${storeName}`,
@@ -52,7 +75,7 @@ exports.postPrompts = async (config) => {
       type: 'confirm',
       name: 'positioning',
       message: 'Should the store manage positioning of rows?',
-      initial: true
+      initial: false
     },
     
     {
@@ -66,13 +89,6 @@ exports.postPrompts = async (config) => {
       name: 'advanced',
       message: 'Would you like to set more advanced options?',
       initial: false
-    },
-
-    {
-      type: (prev, values) => values.advanced && values.positioning ? 'text' : null,
-      name: 'positionField',
-      message: 'Name of positio field (VERY recommended: position',
-      initial: 'position'
     },
 
     {
@@ -119,9 +135,16 @@ exports.postPrompts = async (config) => {
     },
 
     {
+      type: (prev, values) => values.advanced && typeofStore === 'db' && values.positioning ? 'text' : null,
+      name: 'positionField',
+      message: 'Name of position field used by the DB server to keep track of positions (VERY recommended: position)',
+      initial: 'position'
+    },
+
+    {
       type: (prev, values) => values.advanced ? 'text' : null,
       name: 'idProperty',
-      message: 'Name of the id property (VERY recommended: "id"',
+      message: 'Name of the id property (VERY recommended: "id")',
       initial: 'id'
     },
 
@@ -135,6 +158,7 @@ exports.postPrompts = async (config) => {
 
   const userInput = config.userInput['server-store']
 
+  userInput.typeOfStore = typeOfStore
   // Set defaults in case some questions weren't asked
   // Falsy ones don't need to be set regardless
   if (typeof userInput.fullRecordOnInsert === 'undefined') {
@@ -146,7 +170,10 @@ exports.postPrompts = async (config) => {
   if (typeof userInput.idProperty === 'undefined') {
     userInput.idProperty = 'id'
   }
-  if (typeof userInput.positionField === 'undefined') {
+  if (typeof userInput.positioning === 'undefined') {
+    userInput.positioning = false
+  }
+  if (typeOfStore === 'db' && typeof userInput.positionField === 'undefined') {
     userInput.positionField = 'position'
   }
   if (typeof userInput.defaultLimitOnQueries === 'undefined') {
@@ -185,9 +212,12 @@ exports.postPrompts = async (config) => {
     ...userInput,
     fields: utils.formatSchemaFieldsAsText(fields),
     sortableFields: utils.nativeVar(userInput.sortableFields),
-    positionFilter: utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent)),
     className: config.utils.capitalize(userInput.name),
     db: true
+  }
+  
+  if (typeOfStore === 'db') {
+    newStoreInfo.positionfilter = utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent))
   }
 }
 

@@ -12,7 +12,8 @@
     "json":{
       "server/package.json":[
         {
-            "op":"set",
+            "if": "<%=vars.newElementInfo.typeOfStore === 'db'%>", 
+            "op":"setIfNotThere",
             "key":"dependencies.jsonreststores-mysql",
             "value":"^2.x.x"
         }
