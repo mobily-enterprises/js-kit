@@ -29,6 +29,7 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
 
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
+  if (!config) debugger
   const getFileInfo = function (contents) {
     let m
     let res = {}
@@ -75,7 +76,7 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
     return res
   }
 
-  return config.utils.findAnchorPoints(config, anchorPoints, getFileInfo, keepContents)
+  return config.scaffoldizerUtils.findAnchorPoints(config, anchorPoints, getFileInfo, keepContents)
 }
 
 
@@ -98,10 +99,19 @@ exports.allFiles.list = null
 exports.allStores = (config) => {
   let foundStores = exports
     .allFiles(config)
+    .filter(f => f.info.storeName)
+
+  return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName} -- ${e.info.storePublicURL}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
+}
+
+exports.allDbStores = (config) => {
+  let foundStores = exports
+    .allFiles(config)
     .filter(f => f.info.storeName && f.info.storeTable)
 
   return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName} -- ${e.info.storePublicURL}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
 }
+
 
 exports.findAttributeInAllFiles = (config, name, value) => {
   return exports.allFiles(config).find(o => o.info[name] === value)
@@ -468,9 +478,9 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
             field.emptyAsNull = true // (don't want to cast NULL to 0 as NULL won't puke on duplicate if unuque)
             field.searchable = true
 
-            const allStores = exports.allStores(config)
-            if (allStores.length){
-              store = await ask('Which store?', 'select', null, null, allStores)
+            const allDbStores = exports.allDbStores(config)
+            if (allDbStores.length){
+              store = await ask('Which store?', 'select', null, null, allDbStores)
               field.dbConstraint = { store: store.name }
             }
             field.isParent = await ask('Is this store a logical hierarchy parent?', 'confirm', false)
@@ -561,17 +571,17 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
 
 exports.askStoreQuestions = async (config) => {
 
-  store =  await prompts([
+  store =  (await prompts([
     {
       type: 'select',
       message: 'Store to query',
-      name: 'store',
+      name: 'value',
       choices: exports.allStores(config)
     }
-  ])
+  ])).value
 
   debugger
-  const storeObject = require(path.join(config.dstDir, store.store.file) )
+  const storeObject = require(path.join(config.dstDir, store.file) )
 
 
 

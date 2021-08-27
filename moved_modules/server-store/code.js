@@ -71,7 +71,7 @@ exports.postPrompts = async (config) => {
   const newStoreInfo = config.vars.newStoreInfo = {
     name: userInput.name,
     version: userInput.version,
-    className: config.utils.capitalize(userInput.name),
+    className: config.scaffoldizerUtils.capitalize(userInput.name),
     methods: userInput.methods,
     version: userInput.version,
     publicURL: userInput.publicURL,

@@ -80,8 +80,10 @@ STORES
   ✔ Add template for memory store with required API calls when needed @done(21-08-21 10:58)
 ✔ Make it possible to create DB, API and memory stores (table, connection (var), positionfilter, positionField) @done(21-08-24 13:34)
 ✔ Add option to add fields to an existing store (new command) @done(21-08-24 22:35)
+✔ Run db creation script automatically after store creation or field adding @done(21-08-26 13:24)
+✔ Make sure only DB stores are actually dealt with in terms of db sync @done(21-08-27 08:23)
+✔ Ask whether schema should be synced up with DB @done(21-08-27 21:28)
 ☐ Manage situation where store cannot be loaded (syntax error?)
-☐ Run db creation script automatically after store creation or field adding
 
 ☐ NOTES ON STORES
 Companies

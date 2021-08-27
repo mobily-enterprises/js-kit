@@ -11,7 +11,7 @@ exports.boot = (config) => {
     config.vars.appElementName = `${config.vars.appElementName}-app`
   }
 
-  config.vars.appFile =  config.utils.toCamelCase(config.vars.appElementName)
+  config.vars.appFile =  config.scaffoldizerUtils.toCamelCase(config.vars.appElementName)
 }
 
 exports.preAdd = (config) => {

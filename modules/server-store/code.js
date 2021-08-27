@@ -2,14 +2,13 @@ const path = require('path')
 const utils = require('../../utils.js')
 const prompts = require('prompts')
 const installModule = require('../../node_modules/scaffoldizer/commands/add.js').installModule
+const runScript = require('../../node_modules/scaffoldizer/commands/run.js').runScript
 
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-}
-
+exports.getPrompts = (config) => { }
 
 exports.postPrompts = async (config) => {
   let fields
@@ -18,7 +17,7 @@ exports.postPrompts = async (config) => {
 
   config.userInput['server-store'] = {}
 
-  const typeOfStore = (await prompts({
+  const typeOfStore = config.userInput['server-store'].typeOfStore = (await prompts({
     name: 'value',
     message: 'What type of store is it?',
     type: 'select', 
@@ -164,7 +163,6 @@ exports.postPrompts = async (config) => {
   if (typeof userInput.fullRecordOnInsert === 'undefined') {
     userInput.fullRecordOnInsert = true
   }
-  debugger
   if (typeof userInput.beforeIdField === 'undefined') {
     userInput.beforeIdField = 'beforeId'
   }
@@ -213,17 +211,38 @@ exports.postPrompts = async (config) => {
     ...userInput,
     fields: utils.formatSchemaFieldsAsText(fields),
     sortableFields: utils.nativeVar(userInput.sortableFields),
-    className: config.utils.capitalize(userInput.name),
+    className: config.scaffoldizerUtils.capitalize(userInput.name),
     db: true
   }
   
   if (typeOfStore === 'db') {
-    debugger
     newStoreInfo.positionFilter = utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent))
   }
 }
 
 exports.boot = (config) => { }
+
+exports.postAdd = async (config) => {
+  if (config.userInput['server-store'].typeOfStore === 'db') {
+    const syncUp = (await prompts({
+      type: 'confirm',
+      name: 'value',
+      message: 'Would you like to set this store\'s fields?',
+      initial: true
+    })).value
+
+    if (syncUp) {
+      runScript('dbsync', config, {
+        storeToSync: { 
+          file: `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.name}.js`,
+          version: config.vars.newStoreInfo.version,
+          name: config.vars.newStoreInfo.name 
+        }
+      })
+    }
+  }
+}
+
 
 exports.fileRenamer = (config, file) => {
   switch (file) {
