@@ -127,7 +127,7 @@ when having the data available and preloaded, in case the user wants to change o
   ✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
   ✔ Make it select the store @done(2021-01-27 08:01)
   ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
-  ☐ Look for "message: 'Which" and change function to call pageTypeQuestion()
+  ✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
   ☐ Make it work out the fields by actually loading the store
   ☐ Add the fields in add-edit
   ☐ AddEdit now works for root pages, replicate the same thing for other pages

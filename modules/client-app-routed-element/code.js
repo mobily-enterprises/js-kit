@@ -31,29 +31,7 @@ exports.getPrompts = (config) => {
   }
 
   const questions = [
-    {
-      type: 'select',
-      name: 'type',
-      message: 'Which type of element?',
-      choices: [
-        {
-          title: 'Plain element',
-          value: 'plain'
-        },
-        {
-          title: 'List element',
-          value: 'list'
-        },
-        {
-          title: 'View element',
-          value: 'view'
-        },
-        {
-          title: 'Edit element',
-          value: 'add-edit'
-        },
-      ]
-    },
+    utils.elementTypeQuestion(config, 'element'),
     {
       type: 'text',
       name: 'elementName',
@@ -84,8 +62,18 @@ exports.getPrompts = (config) => {
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-routed-element']
 
-  userInput.elementName = userInput.type === 'plain' ? userInput.elementName : `${userInput.type}-${userInput.elementName}`
+  if (!userInput.type) userInput.type = 'plain'
+  userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
+  const baseClass = utils.pageBaseClass(userInput.type)
 
+  if (userInput.type !== 'plain') {
+    const extraStoreInput = await utils.askStoreQuestions(config)
+    userInput = { ...userInput, ...extraStoreInput }
+
+    // For AddEdit, use function to work out form string
+    // Run the transformation to add those fields
+  }
+ 
   // New page's info
   // No placement by default
   const newElementInfo = config.vars.newElementInfo = {
@@ -115,10 +103,10 @@ exports.fileRenamer = (config, file) => {
   const destinationDirectory = config.vars.newElementInfo.destinationDirectory
 
   switch (file) {
-    case 'plain-PREFIX-ELEMENTNAME.js':
-    case 'list-PREFIX-ELEMENTNAME.js':
-    case 'view-PREFIX-ELEMENTNAME.js':
-    case 'add-edit-PREFIX-ELEMENTNAME.js':
+    case 'plain-PREFIX-ELEMENTNAME.ejs':
+    case 'list-PREFIX-ELEMENTNAME.ejs':
+    case 'view-PREFIX-ELEMENTNAME.ejs':
+    case 'add-edit-PREFIX-ELEMENTNAME.ejs':
     return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
       break
     default:

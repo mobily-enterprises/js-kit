@@ -10,7 +10,7 @@ exports.getPrompts = (config) => {
   let globalPrev
 
   const questions = [
-    utils.pageTypeQuestion(config),
+    utils.elementTypeQuestion(config, 'page'),
     {
       type: 'text',
       name: 'elementName',
@@ -57,7 +57,7 @@ exports.getPrompts = (config) => {
 }
 
 exports.postPrompts = async (config) => {
-  let userInput = config.userInput['client-app-root-page']
+  const userInput = config.userInput['client-app-root-page']
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
@@ -71,11 +71,14 @@ exports.postPrompts = async (config) => {
     // Run the transformation to add those fields
   }
 
+
+
   const newElementInfo = config.vars.newElementInfo = {
     baseClass,
     ownHeader: true,
     ownPath: true,
     pagePath: typeof userInput.pagePath !== 'undefined' ? userInput.pagePath : `/${userInput.elementName}`,
+   
     type: userInput.type,
     name: `${config.vars.elPrefix}-${userInput.elementName}`,
     nameNoPrefix: userInput.elementName,
@@ -96,10 +99,10 @@ exports.fileRenamer = (config, file) => {
   if (!file.startsWith(config.vars.newElementInfo.type)) return
 
   switch (file) {
-    case 'plain-PREFIX-ELEMENTNAME.js':
-    case 'list-PREFIX-ELEMENTNAME.js':
-    case 'view-PREFIX-ELEMENTNAME.js':
-    case 'add-edit-PREFIX-ELEMENTNAME.js':
+    case 'plain-PREFIX-ELEMENTNAME.ejs':
+    case 'list-PREFIX-ELEMENTNAME.ejs':
+    case 'view-PREFIX-ELEMENTNAME.ejs':
+    case 'add-edit-PREFIX-ELEMENTNAME.ejs':
       return `src/pages/${config.vars.newElementInfo.name}.js`
     default:
       return file

@@ -14,7 +14,7 @@ exports.addMixinToMixin = async function (contents, m, config) {
 exports.replaceBaseClass = async function (contents, m, config) {
   const originalBaseClassRegExp = /([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/
   const match = contents.match(originalBaseClassRegExp)
-  debugger
+
   if (match) originalBaseClass = match[2]
   return contents
     // Take out the bast class from the class declaration
@@ -29,7 +29,6 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
 
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
-  if (!config) debugger
   const getFileInfo = function (contents) {
     let m
     let res = {}
@@ -143,28 +142,28 @@ exports.pagePathValidator = (config, value, prev) => {
       : true
   )
 }
-exports.pageTypeQuestion = (config) => {
+exports.elementTypeQuestion = (config, lastWord) => {
   let choices
   if (fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))) {
     return {
       type: 'select',
       name: 'type',
-      message: 'Which type of page?',
+      message: `Which type of ${lastWord}?`,
       choices : [
         {
-          title: 'Plain page',
+          title: `Plain ${lastWord}`,
           value: 'plain'
         },
         {
-          title: 'List page',
+          title: `List ${lastWord}`,
           value: 'list'
         },
         {
-          title: 'View page',
+          title: `View ${lastWord}`,
           value: 'view'
         },
         {
-          title: 'Add/edit page',
+          title: `Add/edit ${lastWord}`,
           value: 'add-edit'
         },
       ]
@@ -580,7 +579,6 @@ exports.askStoreQuestions = async (config) => {
     }
   ])).value
 
-  debugger
   const storeObject = require(path.join(config.dstDir, store.file) )
 
 
