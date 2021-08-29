@@ -9,14 +9,13 @@
   },
   "dependencies": {
     "allhttperrors": "^0.4.2",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.4",
-    "debug": "^4.1.1",
-    "es-dev-server": "^1.57.2",
-    "express": "^4.17.1",
+    "body-parser": "^1.x.x",
+    "cookie-parser": "^1.4.x",
+    "debug": "^4.x.x",
+    "express": "^4.x.x",
     "jsonreststores": "^2.x.x",
-    "koa": "^2.13.0",
-    "morgan": "^1.9.1",
-    "original-url": "^1.2.3"
+    "morgan": "^1.x.x",
+    "original-url": "^1.x.x",
+    "es6-dev-server": "^0.x.x"
   }
 }

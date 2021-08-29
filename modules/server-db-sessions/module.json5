@@ -52,7 +52,7 @@
              "position":"after",
              "newLineBefore": true,
              "newlineAfter":true,
-             "anchorPoint":"// After static files -- start\n",
+             "anchorPoint":"/* After static files -- start */\n",
              "value":"\n// Enable sessions, straight after serving static files\napp.use(session)\n"
           }
        ]

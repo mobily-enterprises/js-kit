@@ -227,7 +227,7 @@ exports.postAdd = async (config) => {
     const syncUp = (await prompts({
       type: 'confirm',
       name: 'value',
-      message: 'Would you like to set this store\'s fields?',
+      message: 'Would you like to sync up the DB\'s schema with this store?',
       initial: true
     })).value
 
