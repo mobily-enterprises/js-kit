@@ -567,7 +567,6 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   }
 }
 
-
 exports.askStoreQuestions = async (config) => {
 
   store =  (await prompts([
@@ -581,7 +580,13 @@ exports.askStoreQuestions = async (config) => {
 
   const storeObject = require(path.join(config.dstDir, store.file) )
 
+  
 
+
+  return {
+    store,
+    storeObject
+  }
 
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones
