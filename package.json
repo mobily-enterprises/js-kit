@@ -7,7 +7,7 @@
   "dependencies": {
     "escape-string-regexp": "^4.0.0",
     "readdir-glob": "^1.1.1",
-    "scaffoldizer": "0.0.11"
+    "scaffoldizer": "^0.0.11"
   },
   "bin": {
     "jskit": "./bin/jskit.js"
