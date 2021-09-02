@@ -17,7 +17,7 @@
            "position":"before",
            "newlineBefore":false,
            "newlineAfter":false,
-           "anchorPoint":"<!-- Fields insertion point -->",
+           "anchorPoint":"/*Fields insertion point*/",
            "value":"<%-vars.newFields.fields%>"
         }
       ]
