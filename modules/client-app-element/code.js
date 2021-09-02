@@ -52,7 +52,7 @@ exports.postPrompts = async (config) => {
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
-  const baseClass = utils.pageBaseClass(userInput.type)
+  const baseClass = utils.appBaseClass(userInput.type)
 
   if (userInput.type !== 'plain') {
     const extraStoreInput = await utils.askStoreQuestions(config)

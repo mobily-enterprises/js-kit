@@ -203,6 +203,17 @@ exports.pageBaseClass = (type) => {
   return `${lookup[type]}PageElement`
 }
 
+exports.appBaseClass = (type) => {
+  const lookup = {
+    'plain': '',
+    'add-edit': 'AddEdit',
+    'list': 'List',
+    'view': 'View'
+  }
+
+  return `${lookup[type]}AppElement`
+}
+
 
 exports.storeNameValidator = (config) => {
   return function (value) {
