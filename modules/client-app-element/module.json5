@@ -24,7 +24,7 @@
           "newlineAfter": false,
           "newlineBefore": false,
           "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
-          "value":"<<%=vars.newElementInfo.name%> tab-name=\"<%=vars.newElementInfo.name%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.name%><%-vars.newElementInfo.inTab ? ` tab-name=\"${vars.newElementInfo.name}\" slot=\"content\"` : ''%>></<%=vars.newElementInfo.name%>>"
         },
         {
           "if": "<%=vars.newElementInfo.placeElement%>",
@@ -41,7 +41,7 @@
           "newlineAfter": false,
           "newlineBefore": false,
           "anchorPoint": '<!-- Element tab heading insertion point -->',
-          "value":"<div tab-name=\"<%=vars.newElementInfo.name%>\"><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div>"
+          "value":"<div tab-name=\"<%=vars.newElementInfo.name%>\"><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div>"
         }
       ]
     }

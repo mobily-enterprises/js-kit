@@ -38,7 +38,7 @@
           "newlineAfter": true,
           "newlineBefore": false,
           "anchorPoint": '<!-- Routed element tab heading insertion point -->',
-          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=utils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
         },
         {
            "op":"custom",
