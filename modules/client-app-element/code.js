@@ -88,6 +88,12 @@ exports.postPrompts = async (config) => {
     newElementInfo.destination =  {}
     newElementInfo.destinationDirectory = 'src/elements'
   }
+
+  if (userInput.destination.anchorPoint === '<!-- Element tab insertion point -->') {
+    newElementInfo.inTab = true
+  }
+
+
 }
 
 exports.boot = (config) => { }
