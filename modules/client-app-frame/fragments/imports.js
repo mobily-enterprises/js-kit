@@ -2,7 +2,7 @@
 
 // New TPE import
 // import { myTheme } from 'my-tpe-theme.js'
-// import { tpe } from '../tpe-class.js'
+// import { tpe } from 'tpe2/tpe-class.js'
 // tpe.importTheme(myTheme)
 // await tpe.importer()
 // Default import with TPE2
