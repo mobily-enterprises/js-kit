@@ -1,5 +1,5 @@
 import { back, teleport, history } from 'historify/historify.js'
-import { css } from 'lit-element'
+import { css } from 'lit'
 import { Element as Header} from './<%=vars.elPrefix%>-header.js'
 
 import './<%=vars.elPrefix%>-toggle-button.js'

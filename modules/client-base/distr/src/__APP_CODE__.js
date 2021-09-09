@@ -1,5 +1,5 @@
 /* Loaded modules -- start */
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 /* Loaded modules -- end */
 
 export class <%=vars.appFile%> extends LitElement {

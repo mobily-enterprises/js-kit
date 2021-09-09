@@ -1,5 +1,5 @@
 /* Loaded modules -- start */
-import { LitElement, css } from 'lit-element'
+import { LitElement, css } from 'lit'
 import { SharedStyles } from '../../styles/shared-styles.js'
 import { fadeInFrames } from '../../styles/shared-styles-animations.js'
 /* Loaded modules -- end */

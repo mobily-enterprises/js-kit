@@ -1,4 +1,4 @@
-import { css } from 'lit-element'
+import { css } from 'lit'
 import { shadow2 } from './shared-styles.js'
 
 export const ButtonSharedStyles = css`

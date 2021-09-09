@@ -1,4 +1,4 @@
-import { LitElement, html, css } from 'lit-element'
+import { LitElement, html, css } from 'lit'
 import { rotateFrames, fromBottomFrames } from '../../../styles/shared-styles-animations.js'
 import { arrowDropDown, arrowDropUp } from '../../../styles/icons.js'
 import { ButtonSharedStyles } from '../../../styles/shared-styles-button.js'

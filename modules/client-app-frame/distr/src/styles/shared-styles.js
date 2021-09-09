@@ -1,4 +1,4 @@
-import { css } from 'lit-element'
+import { css } from 'lit'
 
 export const shadowTransition = css`
     box-shadow 0.1s cubic-bezier(.25,.8,.25,1);

@@ -43,7 +43,8 @@ exports.postAdd = async (config) => {
     elementTitle: 'Landing Page',
     elementMenuTitle: 'Landing',
     uncommentedStaticImport: true,
-    pagePath: ''
+    ownPath: true,
+    pagePath: '',
   })
 
   await installModule('client-app-root-page', config, {
@@ -52,7 +53,10 @@ exports.postAdd = async (config) => {
     elementTitle: 'Not found',
     elementMenuTitle: 'Not Found',
     uncommentedStaticImport: true,
-    notInDrawer: true
+    notInDrawer: true,
+    ownPath: true,
+    pagePath: '/**'
+
   })
 
   executeManipulations(config, {

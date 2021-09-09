@@ -18,12 +18,12 @@
           {
              "op":"set",
              "key":"dependencies.tpe",
-             "value":"^0.x.x"
+             "value":"^1.x.x"
           },
           {
              "op":"set",
              "key":"dependencies.tpe-material",
-             "value":"^0.x.x"
+             "value":"^1.x.x"
           },
           {
              "op":"set",
@@ -43,8 +43,8 @@
            "op":"insert",
            "position":"before",
            "newlineAfter":false,
-           "anchorPoint":"<!-- Head - end -->",
-           "value":"<script type=\"module\" src=\"node_modules/tpe-material/material.js\"></script>"
+           "anchorPoint":"<!-- Head - end DELETED -->",
+           "value":"<script type=\"module\" src=\"node_modules/tpe-material/tpe-material.js\"></script>"
         }
       ],
       "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[

@@ -1,4 +1,4 @@
-import { html } from 'lit-element'
+import { html } from 'lit'
 import { AddEditCommonMixin } from '../stores/AddEditCommonMixin.js'
 import { PageElement } from './PageElement.js'
 import { teleport } from 'historify'

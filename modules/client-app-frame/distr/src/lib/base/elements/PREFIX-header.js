@@ -1,5 +1,5 @@
-import { css } from 'lit-element'
-import { EeHeader } from 'tpe/ee-header.js'
+import { css } from 'lit'
+import { EeHeader } from 'tpe/elements/ee-header-class.js'
 import { shadow3 } from '../../../styles/shared-styles.js'
 
 import './<%=vars.elPrefix%>-toggle-button.js'

@@ -1,5 +1,5 @@
 import { StoreMixin } from './StoreMixin.js'
-import { html, css } from 'lit-element'
+import { html, css } from 'lit'
 import { classMap } from 'lit-html/directives/class-map'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
