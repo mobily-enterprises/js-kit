@@ -28,7 +28,8 @@ export class RoutedElement extends RoutingPageMixin(AppElement) {
   render () {}
 
   shouldUpdate (changed) {
-    // If a  page goes from inactive to active, dispatch a very useful "activated" event
+    // If a page goes from inactive to active, dispatch a very useful "activated" event
+    // Note that 'changed' has the OLD value of the property
     const wasInactive = changed.has('active') && !changed.get('active')
     if (this.active && wasInactive) this.dispatchEvent(new CustomEvent('activated', { bubbles: true, composed: true }))
     return this.active
