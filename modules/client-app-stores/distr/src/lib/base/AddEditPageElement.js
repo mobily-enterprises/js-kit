@@ -3,7 +3,7 @@ import { AddEditCommonMixin } from '../stores/AddEditCommonMixin.js'
 import { PageElement } from './PageElement.js'
 import { teleport } from 'historify'
 export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
-  
+
   static get properties () {
     return {
       realtimeEdit: { Type: Boolean, attribute: false }
@@ -12,8 +12,10 @@ export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
 
   // By default, just set the recordId and run this.relaod()
   async routerCallback (newParams) {
+    await super.routerCallback()
+    
     if (!this.mainStore()) {
-      console.error('ERROR! this.store cannot be undefined for PageViewElements:', this)
+      console.error('ERROR! this.store cannot be undefined for AddEditElements:', this)
       return
     }
 

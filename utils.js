@@ -2,6 +2,7 @@ const regexpEscape = require('escape-string-regexp')
 const prompts = require('prompts')
 const fs = require('fs')
 const path = require('path')
+const installModule = require('./node_modules/scaffoldizer/commands/add.js').installModule
 
 exports.addMixinToElement = async function (contents, m, config) {
   return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
@@ -580,23 +581,40 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
 
 exports.askStoreQuestions = async (config) => {
 
-  store =  (await prompts([
-    {
-      type: 'select',
-      message: 'Store to query',
-      name: 'value',
-      choices: exports.allStores(config)
-    }
-  ])).value
+  let store
 
-  const storeObject = require(path.join(config.dstDir, store.file) )
+  createNewStore =  (await prompts({
+    type: 'confirm',
+    name: 'value',
+    message: 'Would you like to create a new store for this element?',
+    initial: true
+  })).value
 
+  if (createNewStore) {
+    await installModule('server-store', config)
+    store = config.vars.newStoreInfo
+  } else {
+    let allStores = exports.allStores(config)
+    debugger
+    if (!allStores.length) {
+      console.log('No stores available. You must create a store first')
+      process.exit(2)
+    } 
+    store =  (await prompts([
+      {
+        type: 'select',
+        message: 'Store to query',
+        name: 'value',
+        choices: allStores
+      }
+    ])).value
   
+    store = require(path.join(config.dstDir, store.file) )
+  }
 
-
+  debugger
   return {
-    store,
-    storeObject
+    store
   }
 
   // storeObject.schema.structure -- get list, filtering out ID and position field

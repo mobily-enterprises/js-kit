@@ -57,7 +57,7 @@ exports.getPrompts = (config) => {
 }
 
 exports.postPrompts = async (config) => {
-  const userInput = config.userInput['client-app-root-page']
+  let userInput = config.userInput['client-app-root-page']
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
@@ -69,6 +69,9 @@ exports.postPrompts = async (config) => {
 
     // For AddEdit, use function to work out form string
     // Run the transformation to add those fields
+
+    
+
   }
 
 
