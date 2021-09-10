@@ -27,11 +27,6 @@
           },
           {
              "op":"set",
-             "key":"dependencies.pwa-helpers",
-             "value":"^0.9.x"
-          },
-          {
-             "op":"set",
              "key":"dependencies.historify",
              "value":"^1.0.3"
           }

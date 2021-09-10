@@ -1,4 +1,4 @@
-import { installMediaQueryWatcher } from 'pwa-helpers/media-query.js'
+import { installMediaQueryWatcher } from '../../media-query.js'
 
 export const ResponsiveMixin = (base) => {
   return class Base extends base {

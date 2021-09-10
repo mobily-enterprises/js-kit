@@ -1,8 +1,8 @@
 // Imports for client-app-frame
-import 'tpe/tpe.js'
+import 'tpe-material/tpe-material.js'
 import { MainPageMixin } from 'routify/lit/MainPageMixin'
 import { activateElement } from 'routify/routify'
-import { installMediaQueryWatcher } from 'pwa-helpers/media-query.js'
+import { installMediaQueryWatcher } from './lib/media-query.js'
 import { historifySetup } from 'historify/historify.js'
 
 import { AppElement } from './lib/base/AppElement.js'

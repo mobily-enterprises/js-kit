@@ -3,7 +3,7 @@ import { html, css } from 'lit'
 import { ifDefined } from 'lit-html/directives/if-defined'
 import { RoutedElement } from './RoutedElement.js'
 import './elements/<%=vars.elPrefix%>-page-header.js'
-import { updateMetadata } from 'pwa-helpers/metadata.js'
+import { updateMetadata } from '../metadata.js'
 /* Loaded modules -- end */
 
 export class PageElement extends RoutedElement {
