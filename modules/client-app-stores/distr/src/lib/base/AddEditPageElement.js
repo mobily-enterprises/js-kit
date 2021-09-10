@@ -3,6 +3,7 @@ import { AddEditCommonMixin } from '../stores/AddEditCommonMixin.js'
 import { PageElement } from './PageElement.js'
 import { teleport } from 'historify'
 export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
+  
   static get properties () {
     return {
       realtimeEdit: { Type: Boolean, attribute: false }
@@ -10,18 +11,17 @@ export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
   }
 
   // By default, just set the recordId and run this.relaod()
-  async routerCallback (params) {
+  async routerCallback (newParams) {
     if (!this.mainStore()) {
       console.error('ERROR! this.store cannot be undefined for PageViewElements:', this)
       return
     }
 
-    this.currentParams = params
     this.storeUrl = this.getStoreUrl()
 
-    if (!this.equalParams(params, this.prevParams)) {
+    if (!this.equalParams(newParams, this.currentParams)) {
       // Set the recordId property depending on the params
-      if (params[this.localDataIdProperty]) this.recordId = params[this.localDataIdProperty]
+      if (newParams[this.localDataIdProperty]) this.recordId = newParams[this.localDataIdProperty]
       else this.recordId = undefined
 
       this.sameParams = false
@@ -37,7 +37,7 @@ export class AddEditPageElement extends AddEditCommonMixin(PageElement) {
       this.sameParams = true
       if (this.recordId && this.autoload && this.alwaysReload) this.reload()
     }
-    this.prevParams = params
+    this.currentParams = newParams
   }
 
   headerSlotted () {
