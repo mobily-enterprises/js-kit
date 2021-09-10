@@ -121,6 +121,25 @@ This means that list elements will always have access to the crucial filtering I
 when having the data available and preloaded, in case the user wants to change ordering fields, go to next page if available, etc.
 
 
+AppElement:
+  *** Parent: LitElement. Common to ALL elements, providing SharedStyles (basic CSS) and basic default mixins  
+  By default, it will add ResponsiveMixin (one of potentially others) which adds "wide" and "mobile" props
+
+RoutedElement:
+  *** Parent: AppElement. Hide contents if not active, depending on pagePath.
+  Mixed with routify's RoutedPageMixin
+    (Which will register the pagePath routes, provide 'active' prop and locationMatch)
+  It will also enhance shouldUpdate to emit, and provide handy equalParams()
+
+PageElement:
+  *** Parent: RoutedElement. Provides renderHeader() which calls headerSlotted(), and sets meta data
+
+  
+
+
+
+
+
 ☐ NOTES
   ✔ AddEdit is done @done(2021-01-27 06:15)
   ✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
