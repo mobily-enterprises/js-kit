@@ -28,8 +28,9 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     super()
     /* Constructor -- start */
 <%if(vars.newElementInfo.ownHeader){ -%>
-    this.pageTitle = '<%=vars.newElementInfo.menuTitle%>'
+    this.pageTitle = '<%-vars.newElementInfo.menuTitle%>'
 <% } -%>
+    this.store = '<%-vars.newElementInfo.store.storeName%>'
     /* Constructor -- end */
   }
 
@@ -41,6 +42,7 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
       <section>
         <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
         ${this.renderAddEditForm(html`
+          <!-- Add/Edit field insertion point -->  
         `)}
         <!-- Element insertion point -->
       </section>

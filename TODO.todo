@@ -134,10 +134,11 @@ RoutedElement:
 PageElement:
   *** Parent: RoutedElement. Provides renderHeader() which calls headerSlotted(), and sets meta data
 
-
-TOMORROW:
-[ ] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
-[ ] add-edit-PREFIX-ELEMENTNAME.ejs: Add the store name there
+  
+[X] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
+[X] add-edit-PREFIX-ELEMENTNAME.ejs: Add the store name there
+[ ] Make sure 1.0.0 is changed with default store version across the app, attempt to create directory on the spot
+[ ] Make sure file-not-found is the last entry in the list of pages 
 [ ] Fix missing messenger problem, add UI stuff
 [ ] Check that workflow follows new specs decided in terms of paths etc.
 [ ] Decide what to do about redirecting to view-a -- it should be a store question, and an attribute to set
@@ -146,7 +147,8 @@ TOMORROW:
 [ ] Check that this works for non-page elements too
 [ ] Add field names directly with their types in add/edit form
 [ ] Make sure that adding a field also adds the input field in pages that use the same store (!)
-
+[ ] Check that navigating out and then back in will reload data (unless flag is set)
+[ ] Final checks and finalise
 
 
 ☐ NOTES

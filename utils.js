@@ -595,7 +595,6 @@ exports.askStoreQuestions = async (config) => {
     store = config.vars.newStoreInfo
   } else {
     let allStores = exports.allStores(config)
-    debugger
     if (!allStores.length) {
       console.log('No stores available. You must create a store first')
       process.exit(2)
@@ -609,7 +608,8 @@ exports.askStoreQuestions = async (config) => {
       }
     ])).value
   
-    store = require(path.join(config.dstDir, store.file) )
+    store = require(path.resolve(path.join(config.dstDir, store.file)))
+
   }
 
   debugger

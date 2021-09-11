@@ -41,7 +41,7 @@ exports.postPrompts = async (config) => {
   config.userInput['server-store'] = await prompts([
     {
       type: 'text',
-      name: 'name',
+      name: 'storeName',
       message: 'Store name (camel case, starting with lower case)',
       initial: '',
       validate: utils.storeNameValidator(config)
@@ -50,7 +50,7 @@ exports.postPrompts = async (config) => {
     {
       type: 'text',
       name: 'version',
-      message: (prev, values) => { storeName = values.name; return 'Store version' },
+      message: (prev, values) => { storeName = values.storeName; return 'Store version' },
       initial: config.vars.defaultStoreVersion,
       validate: (value) => {
         return utils.storeVersionValidator(config, value, storeName)
@@ -60,7 +60,7 @@ exports.postPrompts = async (config) => {
       type: 'text',
       name: 'publicURL',
       message:  (prev, values) => `Store URL. /${values.version}`,
-      initial: (prev, values) => `/${values.name}`,
+      initial: (prev, values) => `/${values.storeName}`,
       validate: utils.storePublicURLValidator(config)
     },
     {
@@ -211,7 +211,7 @@ exports.postPrompts = async (config) => {
     ...userInput,
     fields: utils.formatSchemaFieldsAsText(fields),
     sortableFields: utils.nativeVar(userInput.sortableFields),
-    className: config.scaffoldizerUtils.capitalize(userInput.name),
+    className: config.scaffoldizerUtils.capitalize(userInput.storeName),
     db: true
   }
   
@@ -234,9 +234,9 @@ exports.postAdd = async (config) => {
     if (syncUp) {
       runScript('dbsync', config, {
         storeToSync: { 
-          file: `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.name}.js`,
+          file: `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.storeName}.js`,
           version: config.vars.newStoreInfo.version,
-          name: config.vars.newStoreInfo.name 
+          name: config.vars.newStoreInfo.storeName 
         }
       })
     }
@@ -247,7 +247,7 @@ exports.postAdd = async (config) => {
 exports.fileRenamer = (config, file) => {
   switch (file) {
     case 'STORE.ejs':
-      return `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.name}.js`
+      return `server/stores/${config.vars.newStoreInfo.version}/${config.vars.newStoreInfo.storeName}.js`
     default:
       return file
   }

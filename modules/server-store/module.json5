@@ -20,7 +20,7 @@
       ]
     },  
     "text":{
-      "server/stores/<%=vars.newStoreInfo.version%>/<%=vars.newStoreInfo.name%>.js":[
+      "server/stores/<%=vars.newStoreInfo.version%>/<%=vars.newStoreInfo.storeName%>.js":[
         {
           "op":"resolve-ejs"
         },

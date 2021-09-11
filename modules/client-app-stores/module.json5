@@ -4,6 +4,16 @@
   "description":"Stores editing mixin and elements",
   "author":"Tony Mobily",
   "moduleDependencies":[
+    "server-stores"
   ],
   "position": -1,
+  "manipulate":{
+    "text":{
+      "src/lib/stores/AddEditCommonMixin.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ]
+    }
+  }
 }

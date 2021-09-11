@@ -58,14 +58,16 @@ exports.getPrompts = (config) => {
 
 exports.postPrompts = async (config) => {
   let userInput = config.userInput['client-app-root-page']
+  let extraStoreInput = {}
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
   const baseClass = utils.pageBaseClass(userInput.type)
 
   if (userInput.type !== 'plain') {
-    const extraStoreInput = await utils.askStoreQuestions(config)
-    userInput = { ...userInput, ...extraStoreInput }
+    extraStoreInput = await utils.askStoreQuestions(config)
+
+    debugger
 
     // For AddEdit, use function to work out form string
     // Run the transformation to add those fields
@@ -74,7 +76,7 @@ exports.postPrompts = async (config) => {
 
   }
 
-
+debugger
 
   const newElementInfo = config.vars.newElementInfo = {
     baseClass,
@@ -89,8 +91,11 @@ exports.postPrompts = async (config) => {
     menuTitle: userInput.elementMenuTitle,
     uncommentedStaticImport: userInput.uncommentedStaticImport,
     libPath: '../lib',
-    notInDrawer: userInput.notInDrawer
+    notInDrawer: userInput.notInDrawer,
+    store: extraStoreInput.store
   }
+
+
 }
 
 exports.boot = (config) => { }

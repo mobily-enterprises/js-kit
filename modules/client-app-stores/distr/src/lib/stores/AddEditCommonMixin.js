@@ -99,7 +99,7 @@ export const AddEditCommonMixin = (base) => {
       const storeQueryString = this.getStoreQueryString()
       // This must NOT include the record ID
 
-      return `/stores/2.0.0/${this.mainStore()}${storeQueryString}`
+      return `/<%-userInput['server-stores'].publicURLprefix%>/<%-userInput['server-stores'].defaultVersion%>/${this.mainStore()}${storeQueryString}`
     }
 
     getStoreQueryString () {
