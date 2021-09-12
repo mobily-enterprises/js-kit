@@ -138,17 +138,19 @@ PageElement:
 [X] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
 [X] add-edit-PREFIX-ELEMENTNAME.ejs: Add the store name there
 [ ] Make sure 1.0.0 is changed with default store version across the app, attempt to create directory on the spot
-[ ] Make sure file-not-found is the last entry in the list of pages 
+[ ] Make sure file-not-found is the last entry in the list of pages
 [ ] Fix missing messenger problem, add UI stuff
-[ ] Check that workflow follows new specs decided in terms of paths etc.
+[ ] Check that workflow follows new specs decided in terms of paths etc, and check non-page elements
 [ ] Decide what to do about redirecting to view-a -- it should be a store question, and an attribute to set
 [ ]  -- Also check how or when to redirect to lists.
-[ ] Check realtime fields working too
-[ ] Check that this works for non-page elements too
 [ ] Add field names directly with their types in add/edit form
 [ ] Make sure that adding a field also adds the input field in pages that use the same store (!)
 [ ] Check that navigating out and then back in will reload data (unless flag is set)
+[ ] Check realtime fields working too
 [ ] Final checks and finalise
+[ ] AddEdit now works for root pages, replicate the same thing for other pages
+[ ] Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
+
 
 
 ☐ NOTES
@@ -158,10 +160,7 @@ PageElement:
   ✔ Make it select the store @done(2021-01-27 08:01)
   ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
   ✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
-  ☐ Make it work out the fields by actually loading the store
-  ☐ Add the fields in add-edit
-  ☐ AddEdit now works for root pages, replicate the same thing for other pages
-  ☐ Add save/cancel button to app header
+  ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
 ☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
   ☐ Decide how to add buttons to page from contained element
@@ -191,9 +190,6 @@ PageElement:
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add
 rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add everything; cd testing-app; npm install;cd ..
-
-
-
 
 
 EVERYTHING BELOW THIS LINE NEEDS TO BE ADJUSTED
