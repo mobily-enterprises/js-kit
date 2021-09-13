@@ -37,7 +37,7 @@
                "position":"before",
                "newlineAfter":true,
                "anchorPoint":"/* App routes -- end */",
-               "value":"// Automatically include all stores in stores/1.0.0 and listen to them all\nJsonRestStores.requireStoresFromPath(path.join(__dirname, 'stores/1.0.0'), app)\n"
+               "value":"// Automatically include all stores in stores/<%-vars.defaultStoreVersion%> and listen to them all\nJsonRestStores.requireStoresFromPath(path.join(__dirname, 'stores/<%-vars.defaultStoreVersion%>'), app)\n"
             }
          ]
       }
