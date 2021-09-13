@@ -13,13 +13,13 @@ const Schema = require('simpleschema')
 const vars = require('../../vars')
 
 <%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
-class StoreTemplate extends MysqlMixin(HttpMixin(JsonRestStores)) {
+class Store extends MysqlMixin(HttpMixin(JsonRestStores)) {
 <% } -%>
 <%if (vars.newStoreInfo.typeOfStore === 'memory') { -%>
-class StoreTemplate extends MemoryMixin(HttpMixin(JsonRestStores)) {
+class Store extends MemoryMixin(HttpMixin(JsonRestStores)) {
 <% } -%>
 <%if (vars.newStoreInfo.typeOfStore === 'api') { -%>
-class StoreTemplate extends HttpMixin(JsonRestStores) {
+class Store extends HttpMixin(JsonRestStores) {
 <% } -%>
   static get schema () {
     return new Schema({
@@ -368,4 +368,4 @@ class StoreTemplate extends HttpMixin(JsonRestStores) {
 <% } -%>
 }
 
-exports = module.exports = new StoreTemplate()
+exports = module.exports = new Store()
