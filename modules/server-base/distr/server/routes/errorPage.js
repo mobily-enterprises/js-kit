@@ -1,10 +1,13 @@
 const vars = require('../vars')
 
 exports = (err, req, res, next) => {
+  // TODO: add 'server-log-errors' package will add this
   // Log the error in the `errors` table
-  vars.connection.query('INSERT INTO errors SET name=?, message=?, stackTrace=?', [err.name, err.message, err.stack], (error) => {
-    if (error) console.error('UNABLE TO LOG THIS ERROR:', error) /* eslint-disable-line */
-  })
+  // vars.connection.query('INSERT INTO errors SET name=?, message=?, stackTrace=?', [err.name, err.message, err.stack], (error) => {
+  //  if (error) console.error('UNABLE TO LOG THIS ERROR:', error) /* eslint-disable-line */
+  // })
+
+  console.error('ERROR:', err)
 
   // Set local variables, depending on the env
   res.locals.message = req.app.get('env') === 'development' ? err.message + err.stack : 'There was an error with your request!'
