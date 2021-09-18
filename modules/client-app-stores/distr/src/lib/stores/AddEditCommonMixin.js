@@ -2,6 +2,7 @@ import { StoreMixin } from './StoreMixin.js'
 import { html, css } from 'lit'
 import { classMap } from 'lit-html/directives/class-map'
 import { ifDefined } from 'lit-html/directives/if-defined'
+import '../../elements/co-snack-bar.js'
 
 export const AddEditCommonMixin = (base) => {
   return class Base extends StoreMixin(base) {
@@ -59,10 +60,27 @@ export const AddEditCommonMixin = (base) => {
       }
     }
 
+
+    messenger (params) {
+      let theme
+      if (params.status === 'loading-error' || params.status === 'saving-error') theme = 'error'
+      else if (params.status === 'saved') theme = 'success'
+      else theme = 'info'
+
+      let message = params.status
+      if (params.status === 'saving-error') {
+        message = 'Saving error'
+      }
+
+      if (!(params.networkElement.errorMessagesOnly && params.status !== 'saving-error')) {
+        window.dispatchEvent(new CustomEvent('user-message', { detail: { message, theme }, bubbles: true, composed: true }))
+      }
+    }
+    
     renderAddEditForm (fields) {
       return html`
         <div class=${classMap({ belowCoHeader: !!this.belowHeader })} ?addpadding=${this.addPadding} main>
-          <en-form id="form" action="${this.storeUrl}" ?no-autoload=${!this.autoload} set-form-after-submit .incomingData=${this._incomingData.bind(this)}  .dataLoaded=${this._dataLoaded.bind(this)} .presubmit=${this._presubmit.bind(this)} record-id=${ifDefined(this.recordId)} .response=${this._response.bind(this)}>
+          <en-form id="form" action="${this.storeUrl}" ?no-autoload=${!this.autoload} set-form-after-submit .incomingData=${this.incomingData.bind(this)}  .dataLoaded=${this.dataLoaded.bind(this)} .presubmit=${this._presubmit.bind(this)} record-id=${ifDefined(this.recordId)} .response=${this.response.bind(this)}>
             <ee-network id="network" class="fadeIn" manage-loading-errors .messenger="${this.messenger.bind(this)}" .retryMethod="${this.reload.bind(this)}">
              ${fields}
             </ee-network>
@@ -106,7 +124,7 @@ export const AddEditCommonMixin = (base) => {
       return ''
     }
 
-    _response (response, data, fetchOptions) {
+    response (response, data, fetchOptions) {
       const method = fetchOptions.method.toUpperCase()
       if (method === 'PUT' || method === 'POST') {
         if (response && response.ok) {
@@ -128,7 +146,7 @@ export const AddEditCommonMixin = (base) => {
     _presubmit (fetchOptions) {
     }
 
-    async _dataLoaded (o, op) {
+    async dataLoaded (o, op) {
       // if (op !== 'autoload') return // Without this, it will update info once saved too
       this[this.localDataProperty] = { ...o }
 
@@ -143,7 +161,7 @@ export const AddEditCommonMixin = (base) => {
       this.form.setFormElementValues(o)
     }
 
-    _incomingData (o) {
+    incomingData (o) {
     }
 
     _save () {
