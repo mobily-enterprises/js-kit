@@ -146,7 +146,7 @@ PageElement:
 [X] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
 [X] add-edit-PREFIX-ELEMENTNAME.ejs: Add the store name there
 [X] Make sure 1.0.0 is changed with default store version across the app, attempt to create directory on the spot
-[ ] Make sure file-not-found is the last entry in the list of pages
+[X] Make sure file-not-found is the last entry in the list of pages
 [ ] Fix missing messenger problem, add UI stuff
 
 [ ] Add field names directly with their types in add/edit form

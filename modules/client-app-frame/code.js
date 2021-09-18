@@ -54,6 +54,7 @@ exports.postAdd = async (config) => {
     elementMenuTitle: 'Not Found',
     uncommentedStaticImport: true,
     notInDrawer: true,
+    tailEnd: true,
     ownPath: true,
     pagePath: '/**'
 

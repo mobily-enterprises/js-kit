@@ -18,8 +18,17 @@
       ],
       "src/<%=vars.appFile%>.js":[
         {
+          "if":"<%=!userInput['client-app-root-page'].tailEnd%>",
           "op":"insert",
           "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- App pages -- end -->",
+          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          "if":"<%=userInput['client-app-root-page'].tailEnd%>",
+          "op":"insert",
+          "position":"after",
           "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
           "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
