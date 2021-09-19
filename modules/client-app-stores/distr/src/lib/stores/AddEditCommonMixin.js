@@ -2,7 +2,6 @@ import { StoreMixin } from './StoreMixin.js'
 import { html, css } from 'lit'
 import { classMap } from 'lit-html/directives/class-map'
 import { ifDefined } from 'lit-html/directives/if-defined'
-import '../../elements/co-snack-bar.js'
 
 export const AddEditCommonMixin = (base) => {
   return class Base extends StoreMixin(base) {
@@ -73,10 +72,10 @@ export const AddEditCommonMixin = (base) => {
       }
 
       if (!(params.networkElement.errorMessagesOnly && params.status !== 'saving-error')) {
-        window.dispatchEvent(new CustomEvent('user-message', { detail: { message, theme }, bubbles: true, composed: true }))
+        document.dispatchEvent(new CustomEvent('snack-bar', { detail: { message, theme }, bubbles: true, composed: true }))
       }
     }
-    
+
     renderAddEditForm (fields) {
       return html`
         <div class=${classMap({ belowCoHeader: !!this.belowHeader })} ?addpadding=${this.addPadding} main>
