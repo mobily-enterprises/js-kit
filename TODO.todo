@@ -149,8 +149,8 @@ PageElement:
 [X] Make sure file-not-found is the last entry in the list of pages
 [X] Fix missing messenger problem, add UI stuff
 [X] Add snack-bar to TPE from Compas
-[ ] Fix Jsonreststores so that it doesn't crap if stores not there
-[ ] Fix Jsonreststores so that it copies `request` and doesn't assign request.record at all
+[X] Fix Jsonreststores so that it doesn't crap if stores not there
+[X] Fix Jsonreststores so that it copies `request` and doesn't assign request.record at all
 
 [ ] Add field names directly with their types in add/edit form
 [ ] Check that workflow follows new specs decided in terms of paths etc, and check non-page elements
