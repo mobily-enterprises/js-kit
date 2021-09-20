@@ -23,7 +23,7 @@ class Store extends HttpMixin(JsonRestStores) {
 <% } -%>
   static get schema () {
     return new Schema({
-<%-vars.newStoreInfo.fields%>      
+<%-vars.newStoreInfo.asText.fields%>      
       /* Fields insertion point */
     })
   }
@@ -36,14 +36,14 @@ class Store extends HttpMixin(JsonRestStores) {
   // Default sort (only used when no sorting is specified) and
   // sortable fields
   static get defaultSort () { return { } } // e.g. { surname: : -1 }
-  static get sortableFields () { return <%-vars.newStoreInfo.sortableFields %> } // e.g. ['surname', 'name']
+  static get sortableFields () { return <%-vars.newStoreInfo.asText.sortableFields %> } // e.g. ['surname', 'name']
 
   // Position and placement configuration
   static get positioning () { return <%-vars.newStoreInfo.positioning ? 'true' : 'false' %> }
   static get beforeIdField () { return '<%-vars.newStoreInfo.beforeIdField %>' }
 <%if (vars.newStoreInfo.typeOfStore === 'db') { -%>
   static get positionField () { return '<%-vars.newStoreInfo.positionField %>' }
-  static get positionFilter () { return <%-vars.newStoreInfo.positionFilter %> }
+  static get positionFilter () { return <%-vars.newStoreInfo.asText.positionFilter %> }
 <% } -%>
 
   // The next 3 fields will define the stores' URL, in this case

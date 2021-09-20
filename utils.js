@@ -593,6 +593,7 @@ exports.askStoreQuestions = async (config) => {
   if (createNewStore) {
     await installModule('server-store', config)
     store = config.vars.newStoreInfo
+
   } else {
     let allStores = exports.allStores(config)
     if (!allStores.length) {
@@ -610,9 +611,12 @@ exports.askStoreQuestions = async (config) => {
   
     store = require(path.resolve(path.join(config.dstDir, store.file)))
 
+    // This is needed since it's an expected key by page templates
+    // drawing info from a store
+    store.fields = store.schema.structure
+
   }
 
-  debugger
   return {
     store
   }

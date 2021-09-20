@@ -64,17 +64,34 @@ exports.postPrompts = async (config) => {
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
   const baseClass = utils.pageBaseClass(userInput.type)
 
+  
   if (userInput.type !== 'plain') {
     extraStoreInput = await utils.askStoreQuestions(config)
+    userInput = { ...userInput, ...extraStoreInput }
+  }
+  
+  debugger
 
-    debugger
+  switch (userInput.type) {
+    case 'add-edit':
+      
+      break
+
+    case 'list':
+      break
+
+    case 'view':
+      break
+
+  }
+
 
     // For AddEdit, use function to work out form string
     // Run the transformation to add those fields
 
     
 
-  }
+  
 
 debugger
 

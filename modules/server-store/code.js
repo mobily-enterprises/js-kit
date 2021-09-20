@@ -209,14 +209,17 @@ exports.postPrompts = async (config) => {
   // New store's info
   const newStoreInfo = config.vars.newStoreInfo = {
     ...userInput,
-    fields: utils.formatSchemaFieldsAsText(fields),
-    sortableFields: utils.nativeVar(userInput.sortableFields),
-    className: config.scaffoldizerUtils.capitalize(userInput.storeName),
-    db: true
+    fields,
+    db: true,
+    asText: {
+      sortableFields: utils.nativeVar(userInput.sortableFields),
+      fields: utils.formatSchemaFieldsAsText(fields),
+    }
   }
   
   if (typeOfStore === 'db') {
-    newStoreInfo.positionFilter = utils.nativeVar(Object.keys(fields).filter(f => fields[f].isParent))
+    newStoreInfo.positionFilter = Object.keys(fields).filter(f => fields[f].isParent)
+    newStoreInfo.asText.positionFilter = utils.nativeVar(newStoreInfo.positionFilter)
   }
 }
 
