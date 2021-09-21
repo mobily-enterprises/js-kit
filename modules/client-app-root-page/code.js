@@ -1,5 +1,6 @@
 const utils = require('../../utils.js')
 const path = require('path')
+const executeManipulations = require('../../node_modules/scaffoldizer/lib/utils.js').executeManipulations
 
 exports.getPromptsHeading = (config) => { }
 
@@ -58,39 +59,22 @@ exports.getPrompts = (config) => {
 
 exports.postPrompts = async (config) => {
   let userInput = config.userInput['client-app-root-page']
-  let extraStoreInput = {}
+  let fieldEleents = {}
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
   const baseClass = utils.pageBaseClass(userInput.type)
 
-  
   if (userInput.type !== 'plain') {
-    extraStoreInput = await utils.askStoreQuestions(config)
-    userInput = { ...userInput, ...extraStoreInput }
+     userInput.store = await utils.askStoreQuestions(config)
   }
   
-  debugger
-
-  switch (userInput.type) {
-    case 'add-edit':
-      
-      break
-
-    case 'list':
-      break
-
-    case 'view':
-      break
-
+  if (userInput.type === 'add-edit') {
+    fieldElements = utils.fieldElements(userInput.store)
   }
-
-
+  
     // For AddEdit, use function to work out form string
     // Run the transformation to add those fields
-
-    
-
   
 
 debugger
@@ -109,7 +93,8 @@ debugger
     uncommentedStaticImport: userInput.uncommentedStaticImport,
     libPath: '../lib',
     notInDrawer: userInput.notInDrawer,
-    store: extraStoreInput.store
+    store: userInput.store,
+    fieldElements: fieldElements
   }
 
 
@@ -117,7 +102,43 @@ debugger
 
 exports.boot = (config) => { }
 
-exports.postAdd = (config) => { }
+exports.postAdd = (config) => {
+  /*
+  let userInput = config.userInput['client-app-root-page']
+
+
+YOU ARE HERE
+
+  switch (userInput.type) {
+    case 'add-edit':
+      
+      executeManipulations(config, {
+        "text":{
+          "src/pages/<%=vars.newElementInfo.name%>.js":[
+            {
+              "op":"insert",
+              "position":"before",
+              "newlineAfter":false,
+              "anchorPoint":"<!-- Element insertion point -->",
+              "valueFromFile":"notFound.html"
+            },
+          ]
+        }
+      })
+
+      break
+
+    case 'list':
+      break
+
+    case 'view':
+      break
+
+  }
+
+
+*/
+ }
 
 exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages

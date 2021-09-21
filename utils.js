@@ -579,6 +579,16 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   }
 }
 
+exports.fieldElements = (store) => {
+  const res = []
+  for (let k in store.fields) {
+    if (store.positionField === k) continue // Skip position field
+    let field = store.fields[k]
+    res.push(`<nn-input-text name="${k}"></nn-input-text>`)
+  }
+  return res.join('\n')
+}
+
 exports.askStoreQuestions = async (config) => {
 
   let store
@@ -614,12 +624,10 @@ exports.askStoreQuestions = async (config) => {
     // This is needed since it's an expected key by page templates
     // drawing info from a store
     store.fields = store.schema.structure
-
   }
 
-  return {
-    store
-  }
+  return store
+
 
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones

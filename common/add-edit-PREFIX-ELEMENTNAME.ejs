@@ -42,7 +42,10 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
       <section>
         <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
         ${this.renderAddEditForm(html`
-          <!-- Add/Edit field insertion point -->  
+          
+          <%- vars.newElementInfo.fieldElements %>
+          <!-- Add/Edit field insertion point -->
+
         `)}
         <!-- Element insertion point -->
       </section>
