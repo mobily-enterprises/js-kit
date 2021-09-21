@@ -300,16 +300,20 @@ const formatSchemaFieldsAsText = exports.formatSchemaFieldsAsText = (fields, ind
   }
 
   res = ''
+  
   for (const k in fields) {
     res += `${' '.repeat(indent)}${k}: { `
     const props = []
     for (const j in fields[k]){
       props.push(`${j}: ${nativeVar(fields[k][j])}`)
     }
+    
     res += `${props.join(', ')} },\n`
   }
   return res
+  
 }
+
 
 
 exports.getStoreFields = async (config, storeDefaults, existingFields) => {
@@ -318,7 +322,9 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   let op
   let length
   let searchable
+  
   let required
+  
   let unique
 
   async function ask (message, type = 'text', initial = null, validate = null, choices = null) {
@@ -347,7 +353,9 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
     try {
       op = await  ask('What do you want to do?', 'select', null, null, [
         { title: 'Add a new field', value: 'add' },
+        
         { title: 'Delete a new field just created', value: 'del' },
+        
         { title: 'I changed my mind, cancel that', value: 'cancel' },
         { title: 'All done adding fields, go ahead with changes', value: 'quit' },
       ])
@@ -355,12 +363,14 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
       if (e.message !== 'CancelledError') throw(e)
         let sure
         try {
+          
           sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
         } catch (e) {
           if (e.message !== 'CancelledError') throw(e)
         }
         if (sure) op = 'cancel'
         else continue
+        
     }
 
 
@@ -372,15 +382,19 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
       if (fields[fieldToDelete]) delete fields[fieldToDelete]
       continue
     }
+    
 
+    
     // QUIT
     if (op === 'quit') {
+      
       return fields
     }
 
     // CANCEL
     if (op === 'cancel') {
       return {}
+      
       break
     }
 
@@ -395,6 +409,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
           { title: 'Number', value: 'number' },
           { title: 'String', value: 'string' },
           { title: 'Long text (not searchable)', value: 'text' },
+          
           { title: 'Blob', value: 'blob' },
           { title: 'Boolean', value: 'boolean' },
           { title: 'UTC timestamp', value: 'timestamp' },
@@ -580,11 +595,50 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
 }
 
 exports.fieldElements = (store) => {
+
+  // const valueString = (key) => `.value="\${this.record['${key}']}"`
+  // const valueStringCheckbox = (key) => `.checked="\${this.record['${key}']}"`
+
+  const valueString = (key) => `.value="\${this.record.${key}}"`
+  const valueStringCheckbox = (key) => `.checked="\${this.record.${key}}"`
+
   const res = []
   for (let k in store.fields) {
     if (store.positionField === k) continue // Skip position field
     let field = store.fields[k]
-    res.push(`<nn-input-text name="${k}"></nn-input-text>`)
+    debugger
+    debugger
+    switch (field.type) {
+      case 'number':        
+        if (field.float || field.currency) res.push(`<nn-input-number name="${k}" ${valueString(k)} step="0.01" ></nn-input-number>`) 
+        else res.push(`<nn-input-number name="${k}" ${valueString(k)}></nn-input-number>`)
+        break
+
+      case 'string':
+        if (field.asText) res.push(`<nn-textarea name="${k}" ${valueString(k)}></nn-textarea>`) 
+        else res.push(`<nn-input-text name="${k}" ${valueString(k)}></nn-input-text>`)
+        break
+
+      case 'boolean':
+        res.push(`<nn-checkbox name="${k}" ${valueStringCheckbox(k)}></nn-checkbox>`)
+        break
+
+      case 'blob':
+        res.push(`<nn-textarea name="${k}" ${valueString(k)}></nn-textarea>`) 
+        break
+
+      case 'date':
+        res.push(`<nn-input-date name="${k}" ${valueString(k)}></nn-input-date>`) 
+        break
+
+      case 'dateTime':
+        res.push(`<nn-input-date-time-local name="${k}" ${valueString(k)}></nn-input-date-time-local>`) 
+        break
+
+      default:
+        res.push(`<nn-input-text name="${k}" ${valueString(k)}></nn-input-text>`)
+    }
+
   }
   return res.join('\n')
 }
@@ -629,6 +683,7 @@ exports.askStoreQuestions = async (config) => {
   return store
 
 
+  
   // storeObject.schema.structure -- get list, filtering out ID and position field
   // Let user select which ones
   // Return list of fields, with info attached, in userInput
@@ -637,6 +692,7 @@ exports.askStoreQuestions = async (config) => {
 
             /*
             // MOST LIKELY USELESS, BUT YOU NEVER KNOW
+            
             const how = await ask('Do you want to set a specific length, or just a specific length?', 'select', null, null, [
               { title: 'Specify exact length', value: 'length' },
               { title: 'Type', value: 'type' },

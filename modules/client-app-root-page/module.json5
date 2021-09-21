@@ -15,6 +15,13 @@
         {
           "op":"resolve-ejs"
         },
+        {
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- Add/Edit field insertion point -->",
+          "value":"<%- vars.newElementInfo.fieldElements %>"
+        },
       ],
       "src/<%=vars.appFile%>.js":[
         {

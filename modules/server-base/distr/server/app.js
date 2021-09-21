@@ -62,9 +62,6 @@ if (!serveBuilt) app.use(moduleMiddleware({ root }))
 // Serve static files
 app.use(express.static(root))
 
-// Always serve index.html
-app.use(alwaysIndex(root))
-
 /* After static files -- start */
 /* After static files -- end */
 
@@ -73,6 +70,9 @@ app.use(alwaysIndex(root))
 /* App routes -- 2 */
 /* App routes -- 3 */
 /* App routes -- end */
+
+// Always serve index.html
+app.use(alwaysIndex(root))
 
 // Artificially call the errorPageRoute as "not found"
 // This will never happen for GET or HEAD, but might happen for the
