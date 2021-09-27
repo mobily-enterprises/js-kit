@@ -108,7 +108,7 @@ exports.fileRenamer = (config, file) => {
     case 'plain-PREFIX-ELEMENTNAME.ejs':
     case 'list-PREFIX-ELEMENTNAME.ejs':
     case 'view-PREFIX-ELEMENTNAME.ejs':
-    case 'add-edit-PREFIX-ELEMENTNAME.ejs':
+    case 'edit-PREFIX-ELEMENTNAME.ejs':
       return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
     default:
       return file

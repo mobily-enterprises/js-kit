@@ -111,19 +111,15 @@ NOTE:
 **URL PARAMS ARE ONLY FOR LOADING**
 Routing/Page Elements will have a property `reloadFromLocation` used in routerCallback
 
-Non-list elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('data').
-  - E.g. <view-element .data=${this.data}> (AppElement) or <view-element> (Routing/Page Elements)
-  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people/${this.storeParams.id}`
-  - For AppElement elements, .data MUST be provided since they cannot load it themselves
-  - For Routed/Page elements, .data is optional (it will be loaded unless reloadFromLocation is false)
+Non-list elements will have an internal storeParams variable which will either be set in routerCallback() or in updated('record').
+  - E.g. <view-element storeParams={ {id: 10 } }> OR <view-element record={ ... }>
+  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/ports/${this.storeParams.id}`
+  - The property .record is always optional, although it will override storeParams
 
 List elements will have an internal storeParams variable which will either be set in routerCallback() or passed to it directly
-  - E.g. <list-element .data=${this.(item||data).ports} .storeParams=${this.(item||data)}> or <list-element>
-  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/people?companyId=${this.storeParams.id}`
-  - For AppElement elements, .data MUST be provided since they cannot load it themselves
-  - For Routed/Page elements, .data is optional (it will be loaded unless reloadFromLocation is false)
-  - storeParams is NEVER guaranteed to be a full record. If used in Routed/Page elements, it will only contain the IDs from the URL. A ListElement
-    that has listed items that need data in the parent record will need to be contained into a ViewElement which will load it and pass it along
+  - E.g. <list-element .storeParams=${ { portId: this.record.portId } } records={record.ports }> (records is not mandatory)
+  - getStoreUrl() will always use storeParams.* to make up the URL. E.g. return `/stores/berths?portId=${this.storeParams.id}`
+  - The property .records is optional
 
 This means that list elements will always have access to the crucial filtering IDs they need to fetch/save the correct data. Fetching is important EVEN
 when having the data available and preloaded, in case the user wants to change ordering fields, go to next page if available, etc.

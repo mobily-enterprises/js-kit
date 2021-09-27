@@ -164,8 +164,8 @@ exports.elementTypeQuestion = (config, lastWord) => {
           value: 'view'
         },
         {
-          title: `Add/edit ${lastWord}`,
-          value: 'add-edit'
+          title: `Edit ${lastWord}`,
+          value: 'edit'
         },
       ]
     }
@@ -196,7 +196,7 @@ exports.storeVersionValidator = (config, value, storeName) => {
 exports.pageBaseClass = (type) => {
   const lookup = {
     'plain': '',
-    'add-edit': 'AddEdit',
+    'edit': 'AddEdit',
     'list': 'List',
     'view': 'View'
   }
@@ -207,7 +207,7 @@ exports.pageBaseClass = (type) => {
 exports.appBaseClass = (type) => {
   const lookup = {
     'plain': '',
-    'add-edit': 'AddEdit',
+    'edit': 'AddEdit',
     'list': 'List',
     'view': 'View'
   }
@@ -635,6 +635,9 @@ exports.fieldElements = (store) => {
         res.push(`<nn-input-date-time-local name="${k}" ${valueString(k)}></nn-input-date-time-local>`) 
         break
 
+      case 'id':
+        break
+        
       default:
         res.push(`<nn-input-text name="${k}" ${valueString(k)}></nn-input-text>`)
     }

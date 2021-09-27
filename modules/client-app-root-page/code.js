@@ -59,7 +59,7 @@ exports.getPrompts = (config) => {
 
 exports.postPrompts = async (config) => {
   let userInput = config.userInput['client-app-root-page']
-  let fieldEleents = {}
+  let fieldElements = {}
 
   if (!userInput.type) userInput.type = 'plain'
   userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
@@ -69,7 +69,7 @@ exports.postPrompts = async (config) => {
      userInput.store = await utils.askStoreQuestions(config)
   }
   
-  if (userInput.type === 'add-edit') {
+  if (userInput.type === 'edit') {
     fieldElements = utils.fieldElements(userInput.store)
   }
   
@@ -110,7 +110,7 @@ exports.postAdd = (config) => {
 YOU ARE HERE
 
   switch (userInput.type) {
-    case 'add-edit':
+    case 'edit':
       
       executeManipulations(config, {
         "text":{
@@ -148,7 +148,7 @@ exports.fileRenamer = (config, file) => {
     case 'plain-PREFIX-ELEMENTNAME.ejs':
     case 'list-PREFIX-ELEMENTNAME.ejs':
     case 'view-PREFIX-ELEMENTNAME.ejs':
-    case 'add-edit-PREFIX-ELEMENTNAME.ejs':
+    case 'edit-PREFIX-ELEMENTNAME.ejs':
       return `src/pages/${config.vars.newElementInfo.name}.js`
     default:
       return file
