@@ -494,6 +494,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
             break
 
           case 'timestamp':
+            field.type = 'timestamp'
             field.canBeNull = true // '0' never makes sense
             field.emptyAsNull = true // '0' never makes sense
             break
