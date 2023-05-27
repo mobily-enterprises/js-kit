@@ -24,11 +24,11 @@ async function main () {
       add(`${__dirname}/..`, process.cwd(), modules)
     })
 
-    program.command('run [script]')
-      .description('Run a js-kit script on the project on the current directory. If no script is specified, a user interface will launch.')
-      .action(script => {
-        run(`${__dirname}/..`, process.cwd(), script)
-      })
+  program.command('run [script]')
+    .description('Run a js-kit script on the project on the current directory. If no script is specified, a user interface will launch.')
+    .action(script => {
+      run(`${__dirname}/..`, process.cwd(), script)
+    })
 
   await program.parseAsync(process.argv)
 }
