@@ -134,7 +134,7 @@ exports.postPrompts = async (config) => {
     },
 
     {
-      type: (prev, values) => values.advanced && typeofStore === 'db' && values.positioning ? 'text' : null,
+      type: (prev, values) => values.advanced && typeOfStore === 'db' && values.positioning ? 'text' : null,
       name: 'positionField',
       message: 'Name of position field used by the DB server to keep track of positions (VERY recommended: position)',
       initial: 'position'
