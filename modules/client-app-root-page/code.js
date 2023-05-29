@@ -62,7 +62,7 @@ exports.postPrompts = async (config) => {
   let fieldElements = {}
 
   if (!userInput.type) userInput.type = 'plain'
-  userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
+  userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
   const baseClass = utils.pageBaseClass(userInput.type)
 
   if (userInput.type !== 'plain') {

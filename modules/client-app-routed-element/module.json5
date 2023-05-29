@@ -11,7 +11,7 @@
   "extraCopyDirectory": "common",
   "manipulate":{
     "text":{
-      "<%=vars.newElementInfo.destinationDirectory%>/<%=vars.newElementInfo.name%>.js":[
+      "<%=vars.newElementInfo.copyToDirectory%>/<%=vars.newElementInfo.name%>.js":[
         {
           "op":"resolve-ejs"
         },

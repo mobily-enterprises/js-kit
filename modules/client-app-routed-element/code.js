@@ -63,7 +63,7 @@ exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-routed-element']
 
   if (!userInput.type) userInput.type = 'plain'
-  userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
+  userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
   const baseClass = utils.pageBaseClass(userInput.type)
 
   if (userInput.type !== 'plain') {
@@ -89,8 +89,8 @@ exports.postPrompts = async (config) => {
   }
 
   newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
-  newElementInfo.destination =  userInput.destination
-  newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
+  newElementInfo.destination = userInput.destination
+  newElementInfo.copyToDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
   newElementInfo.libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 }
 
@@ -100,14 +100,14 @@ exports.fileRenamer = (config, file) => {
   // Skip copying of the wrong type of pages
   if (file.split('-')[0] !== config.vars.newElementInfo.type) return
 
-  const destinationDirectory = config.vars.newElementInfo.destinationDirectory
+  const copyToDirectory = config.vars.newElementInfo.copyToDirectory
 
   switch (file) {
     case 'plain-PREFIX-ELEMENTNAME.ejs':
     case 'list-PREFIX-ELEMENTNAME.ejs':
     case 'view-PREFIX-ELEMENTNAME.ejs':
     case 'edit-PREFIX-ELEMENTNAME.ejs':
-    return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
+    return `${copyToDirectory}/${config.vars.newElementInfo.name}.js`
       break
     default:
       return file

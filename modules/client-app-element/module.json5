@@ -11,7 +11,7 @@
   "extraCopyDirectory": "common",
   "manipulate":{
     "text":{
-      "<%=vars.newElementInfo.destinationDirectory%>/<%=vars.newElementInfo.name%>.js":[
+      "<%=vars.newElementInfo.copyToDirectory%>/<%=vars.newElementInfo.name%>.js":[
         {
           "op":"resolve-ejs"
         },
@@ -35,7 +35,7 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if": "<%=vars.newElementInfo.placeElement && vars.newElementInfo.destination.anchorPoint === '<!-- Element tab insertion point -->'%>",
+          "if": "<%=vars.newElementInfo.placeElement && vars.newElementInfo.inTab %>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,

@@ -7,7 +7,7 @@ exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
   function anchorPoints () {
-    let foundAnchorPoints = utils
+    const foundAnchorPoints = utils
       .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'])
       // .filter(e => e.info.pagePath)
 
@@ -47,70 +47,78 @@ exports.getPrompts = (config) => {
   return questions
 }
 
+/*
+ # APP ELEMENT CONTRACT
+
+Template: plain-PREFIX-ELEMENTNAME.js
+
+Utils variables:
+- newElementInfo.type (common)
+
+Template variables:
+- newElementInfo.baseClass (common)
+- newElementInfo.libPath (common)
+- newElementInfo.ownPath (common)
+- newElementInfo.pagePath (common)
+- newElementInfo.ownHeader (common)
+- newElementInfo.menuTitle (common)
+- newElementInfo.name (common)
+- newElementInfo.nameNoPrefix (common)
+
+JSON5 contract:
+- newElementInfo.name (common)
+- newElementInfo.nameNoPrefix (common)
+- newElementInfo.copyToDirectory (common)
+
+- newElementInfo.placeElement (prompt)
+- newElementInfo.destination (.file and .anchorPoint) (prompt)
+- newElementInfo.inTab
+- newElementInfo.importPath
+*/
 exports.postPrompts = async (config) => {
-  const userInput = config.userInput['client-app-element']
+  let userInput = config.userInput['client-app-element']
 
-  if (!userInput.type) userInput.type = 'plain'
-  userInput.elementName = utils.elementNameFromInput(config, userInput.elementName, userInput.type)
-  const baseClass = utils.appBaseClass(userInput.type)
+  /* COMMON PROPS */
+  const type = userInput.type || 'plain'
+  userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
+  const baseClass = utils.appBaseClass(type)
+  const libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 
-  if (userInput.type !== 'plain') {
+  if (type !== 'plain') {
     const extraStoreInput = await utils.askStoreQuestions(config)
     userInput = { ...userInput, ...extraStoreInput }
-
-    // For AddEdit, use function to work out form string
-    // Run the transformation to add those fields
   }
-  
-  // New page's info
-  // No placement by default
-  const newElementInfo = config.vars.newElementInfo = {
+  const name = `${config.vars.elPrefix}-${userInput.elementName}`
+  const nameNoPrefix = userInput.elementName
+  let copyToDirectory = 'src/elements'
+
+  /* EXTRA PROPS */
+  const placeElement = userInput.placeElement && userInput.destination
+  const destination = placeElement ? userInput.destination : {}
+  const inTab = userInput.destination.anchorPoint === '<!-- Element tab insertion point -->'
+  const importPath = placeElement ? `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
+  if (placeElement) copyToDirectory = `${path.dirname(destination.file)}${path.sep}${path.basename(destination.file, '.js')}${path.sep}elements`
+
+  /* RETURN THE RESULT OBJECT */
+  config.vars.newElementInfo = {
+    type,
     baseClass,
-    ownHeader: false,
+    libPath,
     ownPath: false,
+    pagePath: null,
+    ownHeader: false,
+    menuTitle: null,
+    name,
+    nameNoPrefix,
+    copyToDirectory,
 
-    type: userInput.type,
-    name: `${config.vars.elPrefix}-${userInput.elementName}`,
-    nameNoPrefix: userInput.elementName,
-    placeElement: false
+    placeElement,
+    destination,
+    inTab,
+    importPath
   }
-
-  // New page's info
-  if (userInput.placeElement && userInput.destination) {
-    newElementInfo.placeElement = true
-    newElementInfo.importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
-    newElementInfo.destination =  userInput.destination
-    newElementInfo.destinationDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
-    newElementInfo.libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
-
-  // Element doesn't belong to a specific page: simply place it in src/elements
-  } else {
-    newElementInfo.destination =  {}
-    newElementInfo.destinationDirectory = 'src/elements'
-  }
-
-  if (userInput.destination.anchorPoint === '<!-- Element tab insertion point -->') {
-    newElementInfo.inTab = true
-  }
-
-
 }
 
 exports.boot = (config) => { }
 
-exports.fileRenamer = (config, file) => {
-  // Skip copying of the wrong type of pages
-  if (file.split('-')[0] !== config.vars.newElementInfo.type) return
-
-  const destinationDirectory = config.vars.newElementInfo.destinationDirectory
-
-  switch (file) {
-    case 'plain-PREFIX-ELEMENTNAME.ejs':
-    case 'list-PREFIX-ELEMENTNAME.ejs':
-    case 'view-PREFIX-ELEMENTNAME.ejs':
-    case 'edit-PREFIX-ELEMENTNAME.ejs':
-      return `${destinationDirectory}/${config.vars.newElementInfo.name}.js`
-    default:
-      return file
-  }
-}
+exports.fileRenamer = utils.commonElementFileRenamer

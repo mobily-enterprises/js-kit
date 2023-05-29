@@ -28,6 +28,24 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
   return contents.replace(/([ \t]*static[ \t]+get[ \t]+pagePath[ \t]*\([ \t]*\)[ \t]*{[ \t]*return[ \t]*\[[ \t]*\')(.*?)(\'.*?)/,`$1$2', '$2/\*\*$3`)
 }
 
+
+exports.commonElementFileRenamer = (config, file) => {
+  // Skip copying of the wrong type of pages
+  if (file.split('-')[0] !== config.vars.newElementInfo.type) return
+
+  const copyToDirectory = config.vars.newElementInfo.copyToDirectory
+
+  switch (file) {
+    case 'plain-PREFIX-ELEMENTNAME.ejs':
+    case 'list-PREFIX-ELEMENTNAME.ejs':
+    case 'view-PREFIX-ELEMENTNAME.ejs':
+    case 'edit-PREFIX-ELEMENTNAME.ejs':
+      return `${copyToDirectory}/${config.vars.newElementInfo.name}.js`
+    default:
+      return file
+  }
+}
+
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
   const getFileInfo = function (contents) {
@@ -79,8 +97,7 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
   return config.scaffoldizerUtils.findAnchorPoints(config, anchorPoints, getFileInfo, keepContents)
 }
 
-
-exports.humanizeAnchorPoint  = (anchorPoint) => {
+exports.humanizeAnchorPoint = (anchorPoint) => {
   switch (anchorPoint) {
     case '<!-- Element insertion point -->': return ''
     case '<!-- Element tab insertion point -->': return '(in tab)'
@@ -89,7 +106,7 @@ exports.humanizeAnchorPoint  = (anchorPoint) => {
   }
 }
 
-exports.allFiles  = (config) => {
+exports.allFiles = (config) => {
   // Get all the files, memoizing it
   exports.allFiles.list = exports.allFiles.list || exports.findAnchorPoints(config, '')
   return exports.allFiles.list
@@ -97,7 +114,7 @@ exports.allFiles  = (config) => {
 exports.allFiles.list = null
 
 exports.allStores = (config) => {
-  let foundStores = exports
+  const foundStores = exports
     .allFiles(config)
     .filter(f => f.info.storeName)
 
@@ -105,7 +122,7 @@ exports.allStores = (config) => {
 }
 
 exports.allDbStores = (config) => {
-  let foundStores = exports
+  const foundStores = exports
     .allFiles(config)
     .filter(f => f.info.storeName && f.info.storeTable)
 
@@ -127,24 +144,23 @@ exports.elementNameValidator = (config, value, prev) => {
   return !value.match(/^[a-z]+[a-z0-9\-]*$/)
     ? 'Only lower case characters, numbers and dashes allowed'
     : (
-      exports.findAttributeInAllFiles(config, 'definedElement', `${config.vars.elPrefix}-${exports.elementNameFromInput(config, value, prev)}`)
-        ? 'Element already defined'
-        : true
-    )
+        exports.findAttributeInAllFiles(config, 'definedElement', `${config.vars.elPrefix}-${exports.elementNameFromInput(value, prev)}`)
+          ? 'Element already defined'
+          : true
+      )
 }
 
 
 exports.pagePathValidator = (config, value, prev) => {
   return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
-  ? 'Valid URLs, starting with "/" or "#"'
-  : (
-    exports.findAttributeInAllFiles(config, 'pagePath', `${prev.pagePath }${value}`)
-      ? 'Element already defined'
-      : true
-  )
+    ? 'Valid URLs, starting with "/" or "#"'
+    : (
+        exports.findAttributeInAllFiles(config, 'pagePath', `${prev.pagePath }${value}`)
+          ? 'Element already defined'
+          : true
+      )
 }
 exports.elementTypeQuestion = (config, lastWord) => {
-  let choices
   if (fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))) {
     return {
       type: 'select',
@@ -170,15 +186,14 @@ exports.elementTypeQuestion = (config, lastWord) => {
       ]
     }
   } else {
-
     // No input done. Just set the user input
     return {
-      type: null,
+      type: null
     }
   }
 }
 
-exports.elementNameFromInput = (config, enteredName, type = 'plain')  => {
+exports.elementNameFromInput = (enteredName, type = 'plain')  => {
   return `${type === 'plain' ? '' : `${type}-`}${enteredName}`
 }
 
@@ -187,18 +202,18 @@ exports.storeVersionValidator = (config, value, storeName) => {
   return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
     ? 'Must be in format n.n.n E.g. 2.0.0'
     : (
-      (res = exports.findMatchingStoreNameAndVersions(config, value, storeName))
-        ? res
-        : true
-    )
+        (res = exports.findMatchingStoreNameAndVersions(config, value, storeName))
+          ? res
+          : true
+      )
 }
 
 exports.pageBaseClass = (type) => {
   const lookup = {
-    'plain': '',
-    'edit': 'AddEdit',
-    'list': 'List',
-    'view': 'View'
+    plain: '',
+    edit: 'AddEdit',
+    list: 'List',
+    view: 'View'
   }
 
   return `${lookup[type]}PageElement`
@@ -206,21 +221,20 @@ exports.pageBaseClass = (type) => {
 
 exports.appBaseClass = (type) => {
   const lookup = {
-    'plain': '',
-    'edit': 'AddEdit',
-    'list': 'List',
-    'view': 'View'
+    plain: '',
+    edit: 'AddEdit',
+    list: 'List',
+    view: 'View'
   }
 
   return `${lookup[type]}AppElement`
 }
 
-
 exports.storeNameValidator = (config) => {
   return function (value) {
     return !value.match(/^[a-z]+[A-Za-z0-9\-]*$/)
-    ? 'Must be camelCase, with letters and numbers, and start with lower case'
-    : true
+      ? 'Must be camelCase, with letters and numbers, and start with lower case'
+      : true
   }
 }
 
@@ -229,18 +243,18 @@ exports.storePublicURLValidator = (config) => {
     return !value.match(/^\/[a-z0-9A-Z\-\/_]*$/)
       ? 'Valid URLs, starting with "/", and without trailing "/"'
       : (
-        exports.findAttributeInAllFiles(config, 'storePublicURL', value)
-          ? 'Store URL already defined by another store'
-          : true
-      )
+          exports.findAttributeInAllFiles(config, 'storePublicURL', value)
+            ? 'Store URL already defined by another store'
+            : true
+        )
   }
 }
 
 exports.publicURLprefixValidator = (config) => {
   return function (value) {
     return !value.match(/^[A-Za-z0-9\-_]*$/)
-    ? 'Must be letters and numbers (underscore and dash allowed)'
-    : true
+      ? 'Must be letters and numbers (underscore and dash allowed)'
+      : true
   }
 }
 
@@ -272,18 +286,18 @@ exports.storeMethodsChoices = [
     title: 'DELETE (e.g. DELETE /store/1)',
     value: 'delete',
     selected: false
-  },
+  }
 ]
 
 const nativeVar = exports.nativeVar = (v) => {
   switch (typeof v) {
-    case 'integer': 
+    case 'integer':
       return `${v}`
-    case 'string':  
+    case 'string':
       return `'${escape(v)}'`
-    case 'boolean': 
+    case 'boolean':
       return v ? 'true' : false
-    case 'object': 
+    case 'object':
       if (Array.isArray(v)) {
         return `[ ${v.map(o => nativeVar(o)).join(', ')} ]`
       } else {
@@ -295,26 +309,21 @@ const nativeVar = exports.nativeVar = (v) => {
 }
 
 const formatSchemaFieldsAsText = exports.formatSchemaFieldsAsText = (fields, indent = 6) => {
-  function escape (s) {
-    return s.replace(/'/g, "\\'")
-  }
+  // function escape (s) {
+  //  return s.replace(/'/g, "\\'")
+  // }
 
-  res = ''
-  
+  let res = ''
   for (const k in fields) {
     res += `${' '.repeat(indent)}${k}: { `
     const props = []
-    for (const j in fields[k]){
+    for (const j in fields[k]) {
       props.push(`${j}: ${nativeVar(fields[k][j])}`)
     }
-    
     res += `${props.join(', ')} },\n`
   }
   return res
-  
 }
-
-
 
 exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   const fields = {
@@ -353,48 +362,39 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
     try {
       op = await  ask('What do you want to do?', 'select', null, null, [
         { title: 'Add a new field', value: 'add' },
-        
         { title: 'Delete a new field just created', value: 'del' },
-        
         { title: 'I changed my mind, cancel that', value: 'cancel' },
-        { title: 'All done adding fields, go ahead with changes', value: 'quit' },
+        { title: 'All done adding fields, go ahead with changes', value: 'quit' }
       ])
     } catch (e) {
-      if (e.message !== 'CancelledError') throw(e)
-        let sure
-        try {
-          
-          sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
-        } catch (e) {
-          if (e.message !== 'CancelledError') throw(e)
-        }
-        if (sure) op = 'cancel'
-        else continue
-        
+      if (e.message !== 'CancelledError') throw (e)
+      let sure
+      try {
+        sure = await ask('Are you sure you do not want to add fields?', 'confirm', false)
+      } catch (e) {
+        if (e.message !== 'CancelledError') throw (e)
+      }
+      if (sure) op = 'cancel'
+      else continue
     }
 
 
     // DELETE
     if (op === 'del') {
       const fields = Object.keys(fields).map(el => { return { title: el, value: el } })
-      fieldToDelete = await ask('Which field do you want to delete?', 'select', null, null, fields)
+      const fieldToDelete = await ask('Which field do you want to delete?', 'select', null, null, fields)
 
       if (fields[fieldToDelete]) delete fields[fieldToDelete]
       continue
     }
-    
-
-    
     // QUIT
     if (op === 'quit') {
-      
       return fields
     }
 
     // CANCEL
     if (op === 'cancel') {
       return {}
-      
       break
     }
 

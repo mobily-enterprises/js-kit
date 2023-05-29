@@ -31,7 +31,7 @@ exports.getPrompts = (config) => {
 }
 
 exports.boot = (config) => {
-  config.vars.defaultStoreVersion =  config.userInput['server-stores'].defaultVersion
+  config.vars.defaultStoreVersion = config.userInput['server-stores'].defaultVersion
 }
 
 exports.preAdd = (config) => { }
