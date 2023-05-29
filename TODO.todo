@@ -149,11 +149,14 @@ PageElement:
 [X] Fix Jsonreststores so that it copies `request` and doesn't assign request.record at all
 
 [X] Add field names directly with their types in add/edit form
-[ ] Check that workflow follows new specs decided in terms of paths etc
-[ ] Make view element work properly
-[ ] Make list element work properly
-[ ] Make this also work fo app-routed-element and app-element
+[ ] Make sure basic element still works, without store
+[ ] Make sure basic element wtill works with add/etc (using store)
+  [ ] Note: the above might be actually really quite difficult since it will need to use the data-loader
+[ ] Make sure other elements (routed, page) also work 100%
 [ ] Make sure that adding a field also adds the input field in pages that use the same store (!)
+[ ] Check that navigation works in all cases, with the correct page-wide buttons for page, and with some way to swap from view to edit for elements
+
+☐ --- STAGE 2 DONE ---
 
 [ ] Wire pages out together:
   [ ] After adding in page element, redirect to view? Or redirect to list? (Optional)
