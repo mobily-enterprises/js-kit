@@ -138,6 +138,41 @@ RoutedElement:
 PageElement:
   *** Parent: RoutedElement. Provides renderHeader() which calls headerSlotted(), and sets meta data
 
+
+----------------------------------------------------
+FINAL MIXINS/ELEMENTS:
+
+  * RoutingMixin     - Extends RoutingPageMixin, which will set "active" when .pagePath or page-path match, allowing for allowPartialMatch.
+                       But will also and dispatch 'active' when active 
+  * HideInativeMixix - Hides an element if the "active" property is not set. It also prevents updating,
+  * PageElementMixin - Provides header, changes title, 
+  * DataLoaderMixin - Provides the data loader and the data-path attributes
+  * DataLoaderFromRoutingMixin - Will trigger data loading from URL based on routing
+
+  * AppElement: Basic theming styles, basic sizing, etc
+    * AddEditElement - Deriving from AppElement, providing buttons to save an element
+    * ListElement    - Deriving from AppElement, providing buttons to add an element
+    * ViewElement    - Deriving from AppElement, providing buttons to edit an element
+       (ALL need to be mixed with DataRootPageMixin, DataSubPageMixin, DataElementMixin or DataRoutedElementMixin)
+       (Actually, the only absolute must is DataLoaderMixin)
+
+A page will be either AppElement or AddEditElement or ListElement or ViewElement mixed with
+  * Root page WITHOUT data:         RootPageMixin         --- RoutingMixin + HideInactiveMixin + PageElementMixin
+  * Root page with data:            DataRootPageMixin     --- RoutingMixin + HideInactiveMixin + PageElementMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
+  
+  * Sub page WITHOUT data:          SubPageMixin           --- RoutingMixin + HideInactiveMixin
+  * Sub page with data:             DataSubPageMixin       --- RoutingMixin + HideInactiveMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
+  
+  * Element WITHOUT data:           AppElement (as is)
+  * Element with data:              DataElementMixin       --- DataLoaderMixin
+  * Element with data from routing: DataRoutedElementMixin --- DataLoaderMixin + RoutingMixin + DataLoaderFromRoutingMixin
+  
+  
+
+
+
+ 
+
   
 [X] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
 [X] add-edit-PREFIX-ELEMENTNAME.ejs: Add the store name there
@@ -150,24 +185,19 @@ PageElement:
 
 [X] Add field names directly with their types in add/edit form
 [X] Make sure basic element still works, without store
-[ ] Make sure basic element wtill works with add/etc (using store)
-  [ ] Note: the above might be actually really quite difficult since it will need to use the data-loader
-[ ] Make sure other elements (routed, page) also work 100%
-[ ] Make sure that adding a field also adds the input field in pages that use the same store (!)
-[ ] Check that navigation works in all cases, with the correct page-wide buttons for page, and with some way to swap from view to edit for elements
+
+[ ] Make the new structure work for all of the non-data pages (tabs,sub-pages, etc)
+[ ] Make ViewElement work
+[ ] Make EditElement work
+[ ] Make ListElement work
+[ ] Wire things together: when adding ViewElement, ask if editing is wanted. If so, add three things: a tab, a view element and an edit element
+[ ] Wire things together: when adding ListElement, ask if editing/adding is wanted. Use tab 
+[ ] Make inline editing work too
+[ ] Make realtime fields work too
+[ ] Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
 
 ☐ --- STAGE 2 DONE ---
 
-[ ] Wire pages out together:
-  [ ] After adding in page element, redirect to view? Or redirect to list? (Optional)
-  [ ] After saving in page element, just go back? Stay? Go to view?
-  [ ] What about app elements? What about routed elements?
-
-[ ] Make inline editing possible
-[ ] Check realtime fields working too
-[ ] Check that navigating out and then back in will reload data (unless flag is set)
-[ ] Final checks and finalise
-[ ] Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
 
 ☐ NOTES
   ✔ AddEdit is done @done(2021-01-27 06:15)
@@ -178,15 +208,6 @@ PageElement:
   ✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
   ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
-☐ (With Raphael) Add edit/list/view elements (client-app-element, client-app-root-page, client-app-routed-element)
-  ☐ Decide how to add buttons to page from contained element
-  ☐ Final decision on "currentParams" etc.
-    ☐ Have AddEditCommonMixin.js which includes StoreAddEditMixin AND a renderAddEdit() function (with hte current render())
-    ☐ AddEditPageElement.js inherits from PageElement mixed with AddEditMixin.js
-    ☐ AddEditElement.js inherits from AppElement mixed with AddEditElement.js
-    ☐ The difference between AddEditPageElement and AddEditElement is in the UI side of things (ADD), plus reloading with params, etc.
-
-☐ (With Raphael) Decide what to do for initial default tabs
 ☐ --- STAGE 2 DONE ---
 ☐ server-log-error dependent on server-stores and server-db. Add page to view server errors with details etc.
 ☐ client-reducs
@@ -200,7 +221,6 @@ PageElement:
 ☐ Make sure GENERATED code is also literate, and generates a manual
 ☐ --- STAGE 4 DONE
 ☐ Maybe add reflect:true to routify's PageElementMixin
-☐ Watchout, taken autoload out of PageElementMixin
 ☐ Add module to build (rollup config)
 
 
