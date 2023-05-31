@@ -45,24 +45,6 @@ export const StoreMixin = (base) => {
       }))
     }
 
-    emitStoreChangeFromResponse (response, data, fetchOptions) {
-      if (response && response.ok) {
-        switch (fetchOptions.method.toUpperCase()) {
-          case 'PUT':
-            this.emitStoreChange({ record: data, op: 'update' })
-            break
-
-          case 'POST':
-            this.emitStoreChange({ record: data, op: 'insert' })
-            break
-
-          case 'DELETE':
-            this.emitStoreChange({ record: data, op: 'delete' })
-            break
-        }
-      }
-    }
-
     connectedCallback () {
       super.connectedCallback()
       if (this.store && !this.noStoreListener) {

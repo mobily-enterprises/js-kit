@@ -9,7 +9,7 @@
   "position": -1,
   "manipulate":{
     "text":{
-      "src/lib/stores/AddEditCommonMixin.js":[
+      "src/lib/stores/AddEditStoreMixin.js":[
         {
           "op":"resolve-ejs"
         }

@@ -3,7 +3,7 @@ import { html, css } from 'lit'
 import { classMap } from 'lit-html/directives/class-map'
 import { ifDefined } from 'lit-html/directives/if-defined'
 
-export const AddEditCommonMixin = (base) => {
+export const AddEditStoreMixin = (base) => {
   return class Base extends StoreMixin(base) {
     //
     static get styles () {

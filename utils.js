@@ -3,6 +3,7 @@ const prompts = require('prompts')
 const fs = require('fs')
 const path = require('path')
 const installModule = require('./node_modules/scaffoldizer/commands/add.js').installModule
+const executeManipulations = require('./node_modules/scaffoldizer/lib/utils.js').executeManipulations
 
 exports.addMixinToElement = async function (contents, m, config) {
   return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
@@ -221,13 +222,13 @@ exports.pageBaseClass = (type) => {
 
 exports.appBaseClass = (type) => {
   const lookup = {
-    plain: '',
+    plain: 'App',
     edit: 'AddEdit',
     list: 'List',
     view: 'View'
   }
 
-  return `${lookup[type]}AppElement`
+  return `${lookup[type]}Element`
 }
 
 exports.storeNameValidator = (config) => {
@@ -595,8 +596,52 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
   }
 }
 
-exports.fieldElements = (store) => {
+exports.commonElementManupulations = (config) => {
+  executeManipulations(config, {
+    text: {
+      '<%=vars.newElementInfo.copyToDirectory%>/<%=vars.newElementInfo.name%>.js': [
+        {
+          op: 'resolve-ejs'
+        },
+        {
+          op: 'insert',
+          position: 'before',
+          newlineBefore: false,
+          anchorPoint: '<!-- Add/Edit field insertion point -->',
+          value: '<%- vars.newElementInfo.fieldElements %>'
+        }
+      ]
+    }
+  })
+}
 
+exports.fieldElements = (type, config, userInput, store) => {
+  switch (type) {
+    case 'edit' :
+      return exports.editFieldElements(store)
+
+    case 'view' :
+      return exports.viewFieldElements(store)
+
+    case 'list' :
+      return exports.listFieldElements(store)
+  }
+}
+
+exports.viewFieldElements = (store) => {
+  // const valueString = (key) => `.value="\${this.record['${key}']}"`
+  // const valueStringCheckbox = (key) => `.checked="\${this.record['${key}']}"`
+
+  const valueString = (key) => '${this.record.' + key + '}'
+
+  const res = []
+  for (const k in store.fields) {
+    res.push(valueString(k))
+  }
+  return res.join('<br>\n')
+}
+
+exports.editFieldElements = (store) => {
   // const valueString = (key) => `.value="\${this.record['${key}']}"`
   // const valueStringCheckbox = (key) => `.checked="\${this.record['${key}']}"`
 
@@ -604,13 +649,11 @@ exports.fieldElements = (store) => {
   const valueStringCheckbox = (key) => `.checked="\${this.record.${key}}"`
 
   const res = []
-  for (let k in store.fields) {
+  for (const k in store.fields) {
     if (store.positionField === k) continue // Skip position field
-    let field = store.fields[k]
-    debugger
-    debugger
+    const field = store.fields[k]
     switch (field.type) {
-      case 'number':        
+      case 'number':
         if (field.float || field.currency) res.push(`<nn-input-number name="${k}" ${valueString(k)} step="0.01" ></nn-input-number>`) 
         else res.push(`<nn-input-number name="${k}" ${valueString(k)}></nn-input-number>`)
         break
@@ -638,11 +681,9 @@ exports.fieldElements = (store) => {
 
       case 'id':
         break
-        
       default:
         res.push(`<nn-input-text name="${k}" ${valueString(k)}></nn-input-text>`)
     }
-
   }
   return res.join('\n')
 }

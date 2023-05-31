@@ -65,6 +65,8 @@ Template variables:
 - newElementInfo.name (common)
 - newElementInfo.nameNoPrefix (common)
 
+- newElementInfo.store (common, edit)
+
 JSON5 contract:
 - newElementInfo.name (common)
 - newElementInfo.nameNoPrefix (common)
@@ -76,18 +78,21 @@ JSON5 contract:
 - newElementInfo.importPath
 */
 exports.postPrompts = async (config) => {
-  let userInput = config.userInput['client-app-element']
+  const userInput = config.userInput['client-app-element']
 
   /* COMMON PROPS */
+  let store = null
   const type = userInput.type || 'plain'
   userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
   const baseClass = utils.appBaseClass(type)
   const libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 
   if (type !== 'plain') {
-    const extraStoreInput = await utils.askStoreQuestions(config)
-    userInput = { ...userInput, ...extraStoreInput }
+    store = await utils.askStoreQuestions(config)
   }
+
+  const fieldElements = utils.fieldElements(type, config, userInput, store)
+
   const name = `${config.vars.elPrefix}-${userInput.elementName}`
   const nameNoPrefix = userInput.elementName
   let copyToDirectory = 'src/elements'
@@ -111,13 +116,19 @@ exports.postPrompts = async (config) => {
     name,
     nameNoPrefix,
     copyToDirectory,
+    store,
 
     placeElement,
     destination,
     inTab,
-    importPath
+    importPath,
+
+    /* add/edit elements */
+    fieldElements
   }
 }
+
+exports.postAdd = utils.commonElementManupulations
 
 exports.boot = (config) => { }
 

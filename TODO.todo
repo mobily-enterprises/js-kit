@@ -149,7 +149,7 @@ PageElement:
 [X] Fix Jsonreststores so that it copies `request` and doesn't assign request.record at all
 
 [X] Add field names directly with their types in add/edit form
-[ ] Make sure basic element still works, without store
+[X] Make sure basic element still works, without store
 [ ] Make sure basic element wtill works with add/etc (using store)
   [ ] Note: the above might be actually really quite difficult since it will need to use the data-loader
 [ ] Make sure other elements (routed, page) also work 100%
