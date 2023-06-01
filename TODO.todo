@@ -142,30 +142,30 @@ PageElement:
 ----------------------------------------------------
 FINAL MIXINS/ELEMENTS:
 
-  * RoutingMixin     - Extends RoutingPageMixin, which will set "active" when .pagePath or page-path match, allowing for allowPartialMatch.
-                       But will also and dispatch 'active' when active 
-  * HideInativeMixix - Hides an element if the "active" property is not set. It also prevents updating,
-  * PageElementMixin - Provides header, changes title, 
-  * DataLoaderMixin - Provides the data loader and the data-path attributes
-  * DataLoaderFromRoutingMixin - Will trigger data loading from URL based on routing
+  * [X] RoutingMixin     - Extends RoutingPageMixin, which will set "active" when .pagePath or page-path match, allowing for allowPartialMatch.
+                           But will also and dispatch 'active' when active 
+  * [X] HideInativeMixix - Hides an element if the "active" property is not set. It also prevents updating,
+  * [X] PageElementMixin - Provides header, changes title, 
+  *     DataLoaderMixin - Provides the data loader and the data-path attributes
+  *     DataLoaderFromRoutingMixin - Will trigger data loading from URL based on routing
 
-  * AppElement: Basic theming styles, basic sizing, etc
-    * AddEditElement - Deriving from AppElement, providing buttons to save an element
-    * ListElement    - Deriving from AppElement, providing buttons to add an element
-    * ViewElement    - Deriving from AppElement, providing buttons to edit an element
+  * [X] AppElement: Basic theming styles, basic sizing, etc
+      [ ] * AddEditElement - Deriving from AppElement, providing buttons to save an element
+      [ ] * ListElement    - Deriving from AppElement, providing buttons to add an element
+      [ ] * ViewElement    - Deriving from AppElement, providing buttons to edit an element
        (ALL need to be mixed with DataRootPageMixin, DataSubPageMixin, DataElementMixin or DataRoutedElementMixin)
        (Actually, the only absolute must is DataLoaderMixin)
 
 A page will be either AppElement or AddEditElement or ListElement or ViewElement mixed with
-  * Root page WITHOUT data:         RootPageMixin         --- RoutingMixin + HideInactiveMixin + PageElementMixin
-  * Root page with data:            DataRootPageMixin     --- RoutingMixin + HideInactiveMixin + PageElementMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
+  * [X] Root page WITHOUT data:         RootPageMixin         --- RoutingMixin + HideInactiveMixin + PageElementMixin
+  * [ ] Root page with data:            DataRootPageMixin     --- RoutingMixin + HideInactiveMixin + PageElementMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
   
-  * Sub page WITHOUT data:          SubPageMixin           --- RoutingMixin + HideInactiveMixin
-  * Sub page with data:             DataSubPageMixin       --- RoutingMixin + HideInactiveMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
+  * [X] Sub page WITHOUT data:          SubPageMixin           --- RoutingMixin + HideInactiveMixin
+  * [ ] Sub page with data:             DataSubPageMixin       --- RoutingMixin + HideInactiveMixin + DataLoaderMixin + DataLoaderFromRoutingMixin
   
-  * Element WITHOUT data:           AppElement (as is)
-  * Element with data:              DataElementMixin       --- DataLoaderMixin
-  * Element with data from routing: DataRoutedElementMixin --- DataLoaderMixin + RoutingMixin + DataLoaderFromRoutingMixin
+  * [X] Element WITHOUT data:           AppElement (as is)
+  * [ ] Element with data:              DataElementMixin       --- DataLoaderMixin
+  * [ ] Element with data from routing: DataRoutedElementMixin --- DataLoaderMixin + RoutingMixin + DataLoaderFromRoutingMixin
   
   
 
