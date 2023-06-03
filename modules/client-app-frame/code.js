@@ -31,12 +31,14 @@ exports.getPrompts = (config) => {
 }
 
 exports.boot = (config) => {
-  config.vars.elPrefix =  config.userInput['client-app-frame'].elPrefix
+  config.vars.elPrefix = config.userInput['client-app-frame'].elPrefix
 }
 
 exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
+  // Take the return off once installModule() can be used to add a plain element
+  return
   await installModule('client-app-root-page', config, {
     type: 'plain',
     elementName: 'landing',

@@ -6,21 +6,11 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
-  function anchorPoints () {
-    const foundAnchorPoints = utils
-      .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'])
-      // .filter(e => e.info.pagePath)
-
-    if (!foundAnchorPoints.length) {
-      console.log('There are no insertion points available for this element. Please add a page first.')
-      process.exit(1)
-    }
-
-    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
-  }
+  const storesAvailable = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
 
   const questions = [
-    utils.elementTypeQuestion(config, 'element'),
+
+    // Element name (checked with validator)
     {
       type: 'text',
       name: 'elementName',
@@ -31,16 +21,51 @@ exports.getPrompts = (config) => {
       }
     },
     {
-      type: 'confirm',
-      name: 'placeElement',
-      message: 'Would you like to place the element somewhere?',
-      initial: true
+      type: storesAvailable ? 'select' : null,
+      name: 'type',
+      message: 'Which type of element?',
+      choices: [
+        {
+          title: 'Plain (no store)',
+          value: 'plain'
+        },
+        {
+          title: 'List (using a store)',
+          value: 'list'
+        },
+        {
+          title: 'View (using a store)',
+          value: 'view'
+        },
+        {
+          title: 'Edit (using a store)',
+          value: 'edit'
+        }
+      ]
     },
+
     {
-      type: prev => prev ? 'select' : null,
-      name: 'destination',
-      message: 'Destination element',
-      choices: anchorPoints()
+      type: 'select',
+      name: 'placement',
+      message: "What is the element's placement?",
+      choices: [
+        {
+          title: 'Placed as a root page',
+          value: 'root-page'
+        },
+        {
+          title: 'Placed as a sub page',
+          value: 'page'
+        },
+        {
+          title: 'Placed as as general, shared element',
+          value: 'global-element'
+        },
+        {
+          title: 'Placed as a pace-specific element',
+          value: 'page-specific-element'
+        }
+      ]
     }
   ]
 
@@ -80,11 +105,43 @@ JSON5 contract:
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
+  /*
+    function anchorPoints () {
+    const foundAnchorPoints = utils
+      .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Element tab insertion point -->'])
+      // .filter(e => e.info.pagePath)
+
+    if (!foundAnchorPoints.length) {
+      console.log('There are no insertion points available for this element. Please add a page first.')
+      process.exit(1)
+    }
+
+    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
+  }
+
+    // This is needed if the palcement is general-element or page-element
+    {
+      type: 'confirm',
+      name: 'placeElement',
+      message: 'Would you like to place the element somewhere?',
+      initial: true
+    },
+    {
+      type: prev => prev ? 'select' : null,
+      name: 'destination',
+      message: 'Destination element',
+      choices: anchorPoints()
+    }
+  */
+
   /* COMMON PROPS */
   let store = null
   const type = userInput.type || 'plain'
+  const placement = userInput.placement
   userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
-  const baseClass = utils.appBaseClass(type)
+  const baseClass = utils.elementBaseClass(type)
+  const baseMixin = utils.elementBaseMixin(type, placement)
+
   const libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
 
   if (type !== 'plain') {
@@ -108,6 +165,7 @@ exports.postPrompts = async (config) => {
   config.vars.newElementInfo = {
     type,
     baseClass,
+    baseMixin,
     libPath,
     ownPath: false,
     pagePath: null,
@@ -132,4 +190,11 @@ exports.postAdd = utils.commonElementManupulations
 
 exports.boot = (config) => { }
 
-exports.fileRenamer = utils.commonElementFileRenamer
+exports.fileRenamer = (config, file) => {
+  switch (file) {
+    case 'PREFIX-ELEMENTNAME.ejs':
+      return `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.name}.js`
+    default:
+      return file
+  }
+}

@@ -30,23 +30,6 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
 }
 
 
-exports.commonElementFileRenamer = (config, file) => {
-  // Skip copying of the wrong type of pages
-  if (file.split('-')[0] !== config.vars.newElementInfo.type) return
-
-  const copyToDirectory = config.vars.newElementInfo.copyToDirectory
-
-  switch (file) {
-    case 'plain-PREFIX-ELEMENTNAME.ejs':
-    case 'list-PREFIX-ELEMENTNAME.ejs':
-    case 'view-PREFIX-ELEMENTNAME.ejs':
-    case 'edit-PREFIX-ELEMENTNAME.ejs':
-      return `${copyToDirectory}/${config.vars.newElementInfo.name}.js`
-    default:
-      return file
-  }
-}
-
 exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
   const getFileInfo = function (contents) {
@@ -161,38 +144,7 @@ exports.pagePathValidator = (config, value, prev) => {
           : true
       )
 }
-exports.elementTypeQuestion = (config, lastWord) => {
-  if (fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))) {
-    return {
-      type: 'select',
-      name: 'type',
-      message: `Which type of ${lastWord}?`,
-      choices : [
-        {
-          title: `Plain ${lastWord}`,
-          value: 'plain'
-        },
-        {
-          title: `List ${lastWord}`,
-          value: 'list'
-        },
-        {
-          title: `View ${lastWord}`,
-          value: 'view'
-        },
-        {
-          title: `Edit ${lastWord}`,
-          value: 'edit'
-        },
-      ]
-    }
-  } else {
-    // No input done. Just set the user input
-    return {
-      type: null
-    }
-  }
-}
+
 
 exports.elementNameFromInput = (enteredName, type = 'plain')  => {
   return `${type === 'plain' ? '' : `${type}-`}${enteredName}`
@@ -209,26 +161,27 @@ exports.storeVersionValidator = (config, value, storeName) => {
       )
 }
 
-exports.pageBaseClass = (type) => {
+exports.elementBaseClass = (type) => {
   const lookup = {
-    plain: '',
-    edit: 'AddEdit',
-    list: 'List',
-    view: 'View'
+    plain: 'AppElement',
+    edit: 'AddEditElement',
+    list: 'ListElement',
+    view: 'ViewElement'
   }
-
-  return `${lookup[type]}PageElement`
+  return lookup[type]
 }
 
-exports.appBaseClass = (type) => {
+exports.elementBaseMixin = (type, placement) => {
+  const maybeWithLoader = (type === 'plain' ? '' : 'WithLoader')
+
   const lookup = {
-    plain: 'App',
-    edit: 'AddEdit',
-    list: 'List',
-    view: 'View'
+    'root-page': `RootPage${maybeWithLoader}Mixin`,
+    page: `Page${maybeWithLoader}Mixin`,
+    'global-element': `Element${maybeWithLoader}Mixin`,
+    'page-specific-element': `Element${maybeWithLoader}Mixin`
   }
 
-  return `${lookup[type]}Element`
+  return lookup[placement]
 }
 
 exports.storeNameValidator = (config) => {

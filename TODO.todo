@@ -153,7 +153,7 @@ FINAL MIXINS/ELEMENTS:
       [ ] * AddEditElement - Deriving from AppElement, providing buttons to save an element
       [ ] * ListElement    - Deriving from AppElement, providing buttons to add an element
       [ ] * ViewElement    - Deriving from AppElement, providing buttons to edit an element
-       (ALL need to be mixed with RootPageLoaderMixin, PageLoaderMixin, LoaderElementMixin or LoaderRoutedElementMixin)
+       (ALL need to be mixed with RootPageMixin, PageLoaderMixin, LoaderElementMixin or LoaderRoutedElementMixin)
        (Actually, the only absolute must is LoaderMixin)
 
 A page will be either AppElement or AddEditElement or ListElement or ViewElement mixed with
@@ -161,10 +161,10 @@ A page will be either AppElement or AddEditElement or ListElement or ViewElement
   * [ ] Root page with Loader:            RootPageWithLoaderMixin   --- RoutingMixin + HideInactiveMixin + HeaderAndTitleMixin + LoaderMixin + RoutingLoaderMixin
   
   * [X] Page WITHOUT Loader:              PageMixin                 --- RoutingMixin + HideInactiveMixin
-  * [ ] Page with Loader:                 PageWithLoaderMixin       --- RoutingMixin + HideInactiveMixin +             LoaderMixin + RoutingLoaderMixin
+  * [ ] Page with Loader:                 PageWithLoaderMixin       --- RoutingMixin + HideInactiveMixin +                       LoaderMixin + RoutingLoaderMixin
   
-  * [X] Element WITHOUT Loader:                                     --- N/A
-  * [ ] Element with Loader:              LoaderElementMixin        --- LoaderMixin
+  * [X] Element WITHOUT Loader:           ElementMixin              --- N/A
+  * [ ] Element with Loader:              ElementWithLoaderMixin    --- LoaderMixin
  
   NO AUTO-ADD:
   * [ ] Element with Loader from routing: LoaderRoutedElementMixin  --- LoaderMixin + RoutingMixin + RoutingLoaderMixin
