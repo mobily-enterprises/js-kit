@@ -84,8 +84,8 @@ exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 exports.humanizeAnchorPoint = (anchorPoint) => {
   switch (anchorPoint) {
     case '<!-- Element insertion point -->': return ''
-    case '<!-- Element tab insertion point -->': return '(in tab)'
-    case '<!-- Routed element tab insertion point -->': return '(in routed tab)'
+    case '<!-- Page tab insertion point -->': return '(in tab)'
+    case '<!-- Routed Page tab insertion point -->': return '(in routed tab)'
     default: return anchorPoint
   }
 }
@@ -177,8 +177,7 @@ exports.elementBaseMixin = (type, placement) => {
   const lookup = {
     'root-page': `RootPage${maybeWithLoader}Mixin`,
     page: `Page${maybeWithLoader}Mixin`,
-    'global-element': `Element${maybeWithLoader}Mixin`,
-    'page-specific-element': `Element${maybeWithLoader}Mixin`
+    'element': `Element${maybeWithLoader}Mixin`
   }
 
   return lookup[placement]

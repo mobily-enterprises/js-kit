@@ -12,7 +12,7 @@ exports.getPrompts = (config) => {
 
   function anchorPoints () {
     let foundAnchorPoints = utils
-      .findAnchorPoints(config, '<!-- Routed element tab insertion point -->')
+      .findAnchorPoints(config, '<!-- Routed Page tab insertion point -->')
       // .filter(e => e.info.pagePath)
 
     if (!foundAnchorPoints.length) {

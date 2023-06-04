@@ -18,7 +18,7 @@
       ],
       "<%=vars.newElementInfo.destination.file%>":[
         {
-          "if": "<%=vars.newElementInfo.placeElement%>",
+          "if": "<%=vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -27,7 +27,7 @@
           "value":"<<%=vars.newElementInfo.name%><%-vars.newElementInfo.inTab ? ` tab-name=\"${vars.newElementInfo.name}\" slot=\"content\"` : ''%>></<%=vars.newElementInfo.name%>>"
         },
         {
-          "if": "<%=vars.newElementInfo.placeElement%>",
+          "if": "<%=vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -35,12 +35,12 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if": "<%=vars.newElementInfo.placeElement && vars.newElementInfo.inTab %>",
+          "if": "<%=vars.newElementInfo.insertElement && vars.newElementInfo.inTab %>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
           "newlineBefore": false,
-          "anchorPoint": '<!-- Element tab heading insertion point -->',
+          "anchorPoint": '<!-- Page tab heading insertion point -->',
           "value":"<div tab-name=\"<%=vars.newElementInfo.name%>\"><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div>"
         }
       ]
