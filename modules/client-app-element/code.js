@@ -1,6 +1,7 @@
 const path = require('path')
 const utils = require('../../utils.js')
 const fs = require('fs')
+const prompts = require('prompts')
 
 exports.getPromptsHeading = (config) => { }
 
@@ -112,53 +113,105 @@ JSON5 contract:
 
 - newElementInfo.insertElement (prompt)
 - newElementInfo.destination (.file and .anchorPoint) (prompt)
-- newElementInfo.inTab
 - newElementInfo.importPath
 */
 exports.postPrompts = async (config) => {
   const userInput = config.userInput['client-app-element']
 
-  /*
-    function anchorPoints () {
-    const foundAnchorPoints = utils
-      .findAnchorPoints(config, ['<!-- Element insertion point -->', '<!-- Page tab insertion point -->'])
-      // .filter(e => e.info.pagePath)
-
-    if (!foundAnchorPoints.length) {
-      console.log('There are no insertion points available for this element. Please add a page first.')
-      process.exit(1)
-    }
-
-    return foundAnchorPoints.map(e => { return { title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`, value: { file: e.file, anchorPoint: e.anchorPoint } } } )
-  }
-
-    // This is needed if the palcement is general-element or page-element
-    {
+  // Element extra questions
+  if (userInput.type === 'element') {
+    userInput.insertElement = (await prompts({
       type: 'confirm',
       name: 'insertElement',
       message: 'Would you like to place the element somewhere?',
       initial: true
-    },
-    {
-      type: prev => prev ? 'select' : null,
-      name: 'destination',
-      message: 'Destination element',
-      choices: anchorPoints()
+    })).value
+
+    if (userInput.insertElement) {
+      userInput.destination = (await prompts({
+        type: 'select',
+        name: 'destination',
+        message: 'Destination element',
+        choices: utils.findAnchorPoints(config, ['<!-- Element insertion point -->']).map(e => { return {
+          title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`,
+          value: {
+            file: e.file,
+            anchorPoint: e.anchorPoint
+          }
+        } })
+      })).value
     }
-  */
+  }
+
+  if (userInput.type === 'root-page') {
+    //
+    userInput.elementTitle = (await prompts({
+      type: 'text',
+      name: 'value',
+      message: 'Page title',
+      initial: '',
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
+    })).value
+
+    userInput.elementMenuTitle = (await prompts({
+      type: 'text',
+      name: 'value',
+      message: 'Page menu title',
+      initial: '',
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
+    })).value
+
+    if (config.userInput['client-app-frame'].dynamicLoading) {
+      userInput.uncommentedStaticImport = (await prompts({
+        type: 'toggle',
+        name: 'value',
+        message: 'Force static load with static import, even though app supports dynamic imports',
+        initial: false
+      })).value
+    } else {
+      userInput.uncommentedStaticImport = true
+    }
+  }
+
+  if (userInput.type === 'page') {
+    userInput.destination = (await prompts({
+      type: 'select',
+      name: 'value',
+      message: 'Destination element',
+      choices: utils.findAnchorPoints(config, '<!-- Page tab insertion point -->')
+        .map(e => { return {
+          title: `${e.file} -- ${e.info.description} ${utils.humanizeAnchorPoint(e.anchorPoint)}`,
+          value: {
+            file: e.file,
+            anchorPoint: e.anchorPoint,
+            pagePath: e.info.pagePath
+          }
+        } })
+    })).value
+
+    userInput.subPath = (await prompts({
+      type: 'text',
+      name: 'subPath',
+      message: `Nested URL, coming from ${userInput.destination.pagePath}`,
+      validate: (value) => {
+        return utils.pagePathValidator(config, value, userInput.destination.pagePath)
+      }
+    })).value
+  }
+
+  // Store questions (for non-plain elements)
+  const type = userInput.type || 'plain'
+  let store = null
+  if (type !== 'plain') {
+    store = await utils.askStoreQuestions(config)
+  }
 
   /* COMMON PROPS */
-  let store = null
-  const type = userInput.type || 'plain'
   const layout = userInput.layout
   const scope = userInput.scope
   userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
   const baseClass = utils.elementBaseClass(type)
   const baseMixin = utils.elementBaseMixin(type, layout)
-
-  if (type !== 'plain') {
-    store = await utils.askStoreQuestions(config)
-  }
 
   const fieldElements = utils.fieldElements(type, config, userInput, store)
 
@@ -167,27 +220,32 @@ exports.postPrompts = async (config) => {
 
   /* EXTRA PROPS */
   const insertElement = userInput.insertElement && userInput.destination
-  const destination = insertElement ? userInput.destination : {}
-  const inTab = userInput.destination.anchorPoint === '<!-- Page tab insertion point -->'
 
   /* Work out where to copy it */
   let copyToDirectory
   let libPath
   let ownPath
   let pagePath
+  let subPath
   let importPath
   let ownHeader
+  let destination
+  let newElementFile
 
   if (layout === 'element') {
     if (scope === 'global') {
+      destination = insertElement ? userInput.destination : {}
       copyToDirectory = 'src/elements'
-      libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
+      newElementFile = `${copyToDirectory}/${name}.js`
+      libPath = path.relative(`${destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
       importPath = insertElement ? `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
       ownHeader = false
     } else {
+      destination = insertElement ? userInput.destination : {}
       copyToDirectory = `${path.dirname(destination.file)}${path.sep}${path.basename(destination.file, '.js')}${path.sep}elements`
+      newElementFile = `${copyToDirectory}/${name}.js`
       libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
@@ -195,14 +253,19 @@ exports.postPrompts = async (config) => {
       ownHeader = false
     }
   } else if (layout === 'page') {
+    destination = userInput.destination
     copyToDirectory = `${path.dirname(userInput.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
+    newElementFile = `${copyToDirectory}/${name}.js`
     libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
     ownPath = true
-    pagePath = `${userInput.destination.pagePath }${userInput.subPath}`
-    importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${newElementInfo.name}.js`
+    pagePath = `${userInput.destination.pagePath}${userInput.subPath}`
+    subPath = userInput.subPath
+    importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js`
     ownHeader = false
   } else if (layout === 'root-page') {
+    destination = config.vars.appFile
     copyToDirectory = 'src/pages'
+    newElementFile = `${copyToDirectory}/${name}.js`
     libPath = '../lib'
     ownPath = true
     pagePath = userInput.pagePath || `/${userInput.elementName}`
@@ -224,20 +287,22 @@ exports.postPrompts = async (config) => {
   /* RETURN THE RESULT OBJECT */
   config.vars.newElementInfo = {
     type,
+    layout,
     baseClass,
     baseMixin,
     libPath,
     ownPath,
     pagePath,
+    subPath,
     ownHeader,
     name,
     nameNoPrefix,
     copyToDirectory,
+    newElementFile,
     store,
+    destination,
 
     insertElement,
-    destination,
-    inTab,
     importPath,
 
     /* add/edit elements */

@@ -2,7 +2,7 @@
   "name":"client-app-element",
   "version":"1.0.0",
   "component": true,
-  "description":"Generic (placed) element for js-kit",
+  "description":"Element for js-kit",
   "author":"Tony Mobily",
   "moduleDependencies":[
     "client-app-frame"
@@ -11,23 +11,17 @@
   "extraCopyDirectory": "common",
   "manipulate":{
     "text":{
-      "<%=vars.newElementInfo.copyToDirectory%>/<%=vars.newElementInfo.name%>.js":[
+      "<%=vars.newElementInfo.newElementFile%>":[
         {
           "op":"resolve-ejs"
         },
       ],
+
       "<%=vars.newElementInfo.destination.file%>":[
+
+        // Straight element. It will position place it in the right spot, if so requested 
         {
-          "if": "<%=vars.newElementInfo.insertElement%>",
-          "op": "insert",
-          "position": "before",
-          "newlineAfter": false,
-          "newlineBefore": false,
-          "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
-          "value":"<<%=vars.newElementInfo.name%><%-vars.newElementInfo.inTab ? ` tab-name=\"${vars.newElementInfo.name}\" slot=\"content\"` : ''%>></<%=vars.newElementInfo.name%>>"
-        },
-        {
-          "if": "<%=vars.newElementInfo.insertElement%>",
+          "if": "<%=vars.newElementInfo.layout === 'element' && vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -35,13 +29,80 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if": "<%=vars.newElementInfo.insertElement && vars.newElementInfo.inTab %>",
+          "if": "<%=vars.newElementInfo.layout === 'element' && vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
           "newlineBefore": false,
+          "anchorPoint": "<!-- Element insertion point -->",
+          "value":"<<%=vars.newElementInfo.name%>></<%=vars.newElementInfo.name%>>"
+        },
+
+        // Root page. Add element to the page, as well as (maybe) the import and (maybe) in the drawer
+        {
+          "if":"<%=vars.newElementInfo.layout === 'root-page' && !userInput['client-app-element'].tailEnd%>",
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- App pages -- end -->",
+          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'root-page' && userInput['client-app-element'].tailEnd%>",
+          "op":"insert",
+          "position":"after",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- App pages -- end -->",
+          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'root-page'%>",
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"/* Extra app modules -- end */",
+          "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.name%>.js'"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'root-page' && !vars.newElementInfo.notInDrawer%>",
+          "op":"insert",
+          "position":"before",
+          "newlineBefore":false,
+          "anchorPoint":"<!-- Drawer contents -- end -->",
+          "valueFromFile":"drawerEntry.js"
+        },
+
+        // Page (NON-root). Add element to the page, as well as (maybe) the import and (maybe) in the drawer
+        {
+          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "op": "insert",
+          "position": "before",
+          "newlineAfter": true,
+          "newlineBefore": false,
+          "anchorPoint": "<!-- Page tab insertion point -->",
+          "value":"<<%=vars.newElementInfo.name%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "op": "insert",
+          "position": "before",
+          "newlineAfter": false,
+          "anchorPoint": "/* Loaded modules -- end */",
+          "value": "import '<%=vars.newElementInfo.importPath%>'"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "op": "insert",
+          "position": "before",
+          "newlineAfter": true,
+          "newlineBefore": false,
           "anchorPoint": '<!-- Page tab heading insertion point -->',
-          "value":"<div tab-name=\"<%=vars.newElementInfo.name%>\"><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div>"
+          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
+        },
+        {
+          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "op":"custom",
+          "function":"maybeAddStarToPath"
         }
       ]
     }
