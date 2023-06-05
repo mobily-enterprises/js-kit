@@ -203,6 +203,7 @@ Only page elements will ever load data. All of the other elements do not do the 
 ✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
 ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
+STAGE 2:
 ☐ Complete insertion of element, sub-pages, etc. in the right spots
 ☐ Tidy up things, comment, clean up, make sure code is clear
 ☐ Actually try and run what the beast is spitting out, making sure it's functional (no forms, no loader)
