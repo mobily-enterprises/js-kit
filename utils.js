@@ -151,9 +151,18 @@ exports.pagePathValidator = (config, value, prev) => {
       )
 }
 
+exports.elementNameFromInput = (enteredName, type = 'plain') => {
+  const lookup = {
+    plain: '',
+    edit: 'edit-',
+    list: 'list-',
+    view: 'view-',
+    page: 'page-',
+    'root-page': 'page-'
+  }
+  const prefix = lookup[type]
 
-exports.elementNameFromInput = (enteredName, type = 'plain')  => {
-  return `${type === 'plain' ? '' : `${type}-`}${enteredName}`
+  return `${prefix}${enteredName}`
 }
 
 exports.storeVersionValidator = (config, value, storeName) => {
@@ -166,29 +175,6 @@ exports.storeVersionValidator = (config, value, storeName) => {
           : true
       )
 }
-
-exports.elementBaseClass = (type) => {
-  const lookup = {
-    plain: 'AppElement',
-    edit: 'AddEditElement',
-    list: 'ListElement',
-    view: 'ViewElement'
-  }
-  return lookup[type]
-}
-
-exports.elementBaseMixin = (type, placement) => {
-  const maybeWithLoader = (type === 'plain' ? '' : 'WithLoader')
-
-  const lookup = {
-    'root-page': `RootPage${maybeWithLoader}Mixin`,
-    page: `Page${maybeWithLoader}Mixin`,
-    'element': `Element${maybeWithLoader}Mixin`
-  }
-
-  return lookup[placement]
-}
-
 exports.storeNameValidator = (config) => {
   return function (value) {
     return !value.match(/^[a-z]+[A-Za-z0-9\-]*$/)

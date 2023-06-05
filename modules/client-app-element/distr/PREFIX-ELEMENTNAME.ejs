@@ -4,7 +4,7 @@ import { <%=vars.newElementInfo.baseClass%> } from '<%=vars.newElementInfo.libPa
 import { <%=vars.newElementInfo.baseMixin%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.baseMixin%>.js'
 /* Loaded modules -- end */
 
-class Element extends <%=vars.newElementInfo.baseMixin%>(<%=vars.newElementInfo.baseClass%>) {
+class Element extends <%=vars.newElementInfo.baseClass%> {
   <%if(vars.newElementInfo.ownPath){ %>static get pagePath () { return ['<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {

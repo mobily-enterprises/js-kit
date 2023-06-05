@@ -42,63 +42,73 @@ exports.postPrompts = async (config) => {
 
   const storesAvailable = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
 
-  userInput.layout = await utils.prompt({
-    type: 'select',
-    name: 'value',
-    message: "What is the element's layout?",
-    choices: [
-      {
-        title: 'A root page',
-        value: 'root-page'
-      },
-      {
-        title: 'A sub page',
-        value: 'page'
-      },
-      {
-        title: 'An element',
-        value: 'element'
-      }
-    ]
-  })
+  const elementBaseClass = (type) => {
+    const lookup = {
+      plain: 'AppElement',
+      edit: 'EditElement',
+      list: 'ListElement',
+      view: 'ViewElement',
+      page: 'AppPageElement',
+      'root-page': 'AppRootPageElement'
+    }
+    return lookup[type]
+  }
 
   const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`;
 
+  // You are here: getting 
+  let typeChoices = [
+    {
+      title: 'Root page element (for main entry points)',
+      value: 'root-page'
+    },
+    {
+      title: 'Page element (for sub-pages, children of main entry points)',
+      value: 'page'
+    },
+    {
+      title: 'Plain (plain element)',
+      value: 'plain'
+    }
+  ]
+
+  if (storesAvailable) {
+    typeChoices = [...typeChoices,
+      {
+        title: 'View (to view a record)',
+        value: 'view'
+      },
+      {
+        title: 'Edit (to edit a record)',
+        value: 'edit'
+      },
+      {
+        title: 'List (to list several records)',
+        value: 'list'
+      }
+    ]
+  }
+
+  userInput.type = await utils.prompt({
+    type: 'select',
+    message: 'Which type of element?',
+    choices: typeChoices
+  })
+
+  const elementIsPage = userInput.type === 'root-page' || userInput.type === 'page'
+  const elementUsesStores = userInput.type === 'view' || userInput.type === 'edit' || userInput.type === 'list'
+  
+
   userInput.elementName = await utils.prompt({
     type: 'text',
-    name: 'value',
-    message: `${toHumanName(userInput.layout)} name`,
+    message: `${toHumanName(userInput.type)} element name`,
     initial: '',
     validate: (value) => {
       return utils.elementNameValidator(config, value)
     }
   })
 
-  userInput.type = await utils.prompt({
-    type: storesAvailable ? 'select' : null,
-    name: 'value',
-    message: 'Which type of element?',
-    choices: [
-      {
-        title: 'Plain (no store)',
-        value: 'plain'
-      },
-      {
-        title: 'List (using a store)',
-        value: 'list'
-      },
-      {
-        title: 'View (using a store)',
-        value: 'view'
-      },
-      {
-        title: 'Edit (using a store)',
-        value: 'edit'
-      }
-    ]
-  })
-
-  if (userInput.layout === 'element') {
+  if (!elementIsPage) {
     //
     userInput.scope = await utils.prompt({
       type: 'select',
@@ -139,7 +149,7 @@ exports.postPrompts = async (config) => {
     }
   }
 
-  if (userInput.layout === 'root-page') {
+  if (userInput.type === 'root-page') {
     //
     userInput.elementTitle = await utils.prompt({
       type: 'text',
@@ -169,7 +179,7 @@ exports.postPrompts = async (config) => {
     }
   }
 
-  if (userInput.layout === 'page') {
+  if (userInput.type === 'page') {
     //
     userInput.destination = await utils.prompt({
       type: 'select',
@@ -197,18 +207,16 @@ exports.postPrompts = async (config) => {
   }
 
   // Store questions (for non-plain elements)
-  const type = userInput.type || 'plain'
+  const type = userInput.type
   let store = null
-  if (type !== 'plain') {
+  if (elementUsesStores) {
     store = await utils.askStoreQuestions(config)
   }
 
   /* COMMON PROPS */
-  const layout = userInput.layout
   const scope = userInput.scope
   userInput.elementName = utils.elementNameFromInput(userInput.elementName, userInput.type)
-  const baseClass = utils.elementBaseClass(type)
-  const baseMixin = utils.elementBaseMixin(type, layout)
+  const baseClass = elementBaseClass(type)
 
   const fieldElements = utils.fieldElements(type, config, userInput, store)
 
@@ -229,7 +237,7 @@ exports.postPrompts = async (config) => {
   let destination
   let newElementFile
 
-  if (layout === 'element') {
+  if (!elementIsPage) {
     if (scope === 'global') {
       destination = insertElement ? userInput.destination : {}
       copyToDirectory = `src${path.sep}elements`
@@ -249,7 +257,7 @@ exports.postPrompts = async (config) => {
       importPath = insertElement ? `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
       ownHeader = false
     }
-  } else if (layout === 'page') {
+  } else if (type === 'page') {
     destination = userInput.destination
     copyToDirectory = `${path.dirname(userInput.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
     newElementFile = `${copyToDirectory}${path.sep}${name}.js`
@@ -259,7 +267,7 @@ exports.postPrompts = async (config) => {
     subPath = userInput.subPath
     importPath = `./${path.basename(userInput.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js`
     ownHeader = false
-  } else if (layout === 'root-page') {
+  } else if (type === 'root-page') {
     destination = { file: `src${path.sep}${config.vars.appFile}.js` }
     copyToDirectory = `src${path.sep}pages`
     newElementFile = `${copyToDirectory}${path.sep}${name}.js`
@@ -274,7 +282,7 @@ exports.postPrompts = async (config) => {
   let menuTitle
   let uncommentedStaticImport
   let notInDrawer
-  if (layout === 'root-page') {
+  if (type === 'root-page') {
     title = userInput.elementTitle
     menuTitle = userInput.elementMenuTitle
     uncommentedStaticImport = userInput.uncommentedStaticImport
@@ -284,9 +292,7 @@ exports.postPrompts = async (config) => {
   /* RETURN THE RESULT OBJECT */
   config.vars.newElementInfo = {
     type,
-    layout,
     baseClass,
-    baseMixin,
     libPath,
     ownPath,
     pagePath,
@@ -318,7 +324,6 @@ exports.postAdd = (config) => {}
 exports.boot = (config) => { }
 
 exports.fileRenamer = (config, file) => {
-  debugger
   switch (file) {
     case 'PREFIX-ELEMENTNAME.ejs':
       return `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.name}.js`

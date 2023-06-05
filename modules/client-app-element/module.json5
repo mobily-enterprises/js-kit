@@ -31,7 +31,7 @@
 
         // Straight element. It will position place it in the right spot, if so requested 
         {
-          "if": "<%=vars.newElementInfo.layout === 'element' && vars.newElementInfo.insertElement%>",
+          "if": "<%=vars.newElementInfo.type === 'plain' && vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -39,7 +39,7 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if": "<%=vars.newElementInfo.layout === 'element' && vars.newElementInfo.insertElement%>",
+          "if": "<%=vars.newElementInfo.type === 'plain' && vars.newElementInfo.insertElement%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -50,7 +50,7 @@
 
         // Root page. Add element to the page, as well as (maybe) the import and (maybe) in the drawer
         {
-          "if":"<%=vars.newElementInfo.layout === 'root-page' && !userInput['client-app-element'].tailEnd%>",
+          "if":"<%=vars.newElementInfo.type === 'root-page' && !userInput['client-app-element'].tailEnd%>",
           "op":"insert",
           "position":"before",
           "newlineBefore":false,
@@ -58,7 +58,7 @@
           "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'root-page' && userInput['client-app-element'].tailEnd%>",
+          "if":"<%=vars.newElementInfo.type === 'root-page' && userInput['client-app-element'].tailEnd%>",
           "op":"insert",
           "position":"after",
           "newlineBefore":false,
@@ -66,7 +66,7 @@
           "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'root-page'%>",
+          "if":"<%=vars.newElementInfo.type === 'root-page'%>",
           "op":"insert",
           "position":"before",
           "newlineBefore":false,
@@ -74,7 +74,7 @@
           "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.name%>.js'"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'root-page' && !vars.newElementInfo.notInDrawer%>",
+          "if":"<%=vars.newElementInfo.type === 'root-page' && !vars.newElementInfo.notInDrawer%>",
           "op":"insert",
           "position":"before",
           "newlineBefore":false,
@@ -84,7 +84,7 @@
 
         // Page (NON-root). Add element to the page, as well as (maybe) the import and (maybe) in the drawer
         {
-          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "if":"<%=vars.newElementInfo.type === 'page'%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": true,
@@ -93,7 +93,7 @@
           "value":"<<%=vars.newElementInfo.name%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "if":"<%=vars.newElementInfo.type === 'page'%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": false,
@@ -101,7 +101,7 @@
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "if":"<%=vars.newElementInfo.type === 'page'%>",
           "op": "insert",
           "position": "before",
           "newlineAfter": true,
@@ -110,7 +110,7 @@
           "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
         },
         {
-          "if":"<%=vars.newElementInfo.layout === 'page'%>",
+          "if":"<%=vars.newElementInfo.type === 'page'%>",
           "op":"custom",
           "function":"maybeAddStarToPath"
         }

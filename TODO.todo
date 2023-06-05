@@ -168,12 +168,19 @@ A page will be either AppElement or AddEditElement or ListElement or ViewElement
  
   NO AUTO-ADD:
   * [ ] Element with Loader from routing: RoutedElementWithLoaderMixin --- LoaderMixin + RoutingMixin + RoutingLoaderMixin
-  
-  
+
+-----------------------------------------------------------------
+Only page elements will ever load data. All of the other elements do not do the loading.
 
 
+***SIMPLIFIED FINAL VERSION***:
+* AppElement (Basic theming styles, basic sizing, etc)
+* AppPageElement RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement))))
+* AppRootPageElement HeaderAndTitleMixin(AppPageElement)
 
- 
+* AddEditElement (AppElement)
+* ViewElement (AppElement)
+* ListElement (AppElement)
 
   
 [X] AddEditCommonMixin: L 102, 2.0.0 is hardcoded, MAYBE add a way to have default store versions, or maybe specify exact version
@@ -188,27 +195,22 @@ A page will be either AppElement or AddEditElement or ListElement or ViewElement
 [X] Add field names directly with their types in add/edit form
 [X] Make sure basic element still works, without store
 
-[ ] Make the new structure work for all of the non-data pages (tabs,sub-pages, etc)
-[ ] Make ViewElement work
-[ ] Make EditElement work
-[ ] Make ListElement work
-[ ] Wire things together: when adding ViewElement, ask if editing is wanted. If so, add three things: a tab, a view element and an edit element
-[ ] Wire things together: when adding ListElement, ask if editing/adding is wanted. Use tab 
-[ ] Make inline editing work too
-[ ] Make realtime fields work too
-[ ] Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
+✔ AddEdit is done @done(2021-01-27 06:15)
+✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
+✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
+✔ Make it select the store @done(2021-01-27 08:01)
+✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
+✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
+✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
-☐ --- STAGE 2 DONE ---
-
-
-☐ NOTES
-  ✔ AddEdit is done @done(2021-01-27 06:15)
-  ✔ Change renderAddEditElement so that it's a function that includes an argument with the actual form, NO MORE innerRender @done(2021-01-27 06:15)
-  ✔ Rename 'edit' into 'add-edit' everywhere @done(2021-01-27 06:51)
-  ✔ Make it select the store @done(2021-01-27 08:01)
-  ✔ Decide how NOT to ask for store elements if no stores added, maybe check if module is installed @done(2021-01-27 08:58)
-  ✔ Look for "message: 'Which" and change function to call pageTypeQuestion() @done(21-08-28 08:39)
-  ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
+☐ Complete insertion of element, sub-pages, etc. in the right spots
+☐ Tidy up things, comment, clean up, make sure code is clear
+☐ Actually try and run what the beast is spitting out, making sure it's functional (no forms, no loader)
+☐ Make the loader work, and make sure view, list, edit all work
+☐ Add links from one screen to the other
+☐ Make inline editing work too
+☐ Make realtime fields work too
+☐ Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
 
 ☐ --- STAGE 2 DONE ---
 ☐ server-log-error dependent on server-stores and server-db. Add page to view server errors with details etc.
