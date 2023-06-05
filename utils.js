@@ -1,9 +1,15 @@
 const regexpEscape = require('escape-string-regexp')
 const prompts = require('prompts')
-const fs = require('fs')
 const path = require('path')
 const installModule = require('./node_modules/scaffoldizer/commands/add.js').installModule
 const executeManipulations = require('./node_modules/scaffoldizer/lib/utils.js').executeManipulations
+
+exports.prompt = async (question) => {
+  const q = { ...question, name: 'value' }
+
+  const answer = (await prompts(q)).value
+  return answer
+}
 
 exports.addMixinToElement = async function (contents, m, config) {
   return contents.replace(/([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)([ \t]*)\{/,`$1${regexpEscape(m.mixin)}\($2\)$3\{`)
@@ -546,25 +552,6 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
       fields[newFieldName] = field
     }
   }
-}
-
-exports.commonElementManupulations = (config) => {
-  executeManipulations(config, {
-    text: {
-      '<%=vars.newElementInfo.copyToDirectory%>/<%=vars.newElementInfo.name%>.js': [
-        {
-          op: 'resolve-ejs'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineBefore: false,
-          anchorPoint: '<!-- Add/Edit field insertion point -->',
-          value: '<%- vars.newElementInfo.fieldElements %>'
-        }
-      ]
-    }
-  })
 }
 
 exports.fieldElements = (type, config, userInput, store) => {

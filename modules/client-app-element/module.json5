@@ -15,6 +15,16 @@
         {
           "op":"resolve-ejs"
         },
+
+        // Add/edit fields to add-edit forms
+        {
+          "if": "<%=vars.newElementInfo.type === 'edit' %>",        
+          op: 'insert',
+          position: 'before',
+          newlineBefore: false,
+          anchorPoint: '<!-- Add/Edit field insertion point -->',
+          value: '<%- vars.newElementInfo.fieldElements %>'
+        },
       ],
 
       "<%=vars.newElementInfo.destination.file%>":[

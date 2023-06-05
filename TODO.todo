@@ -167,7 +167,7 @@ A page will be either AppElement or AddEditElement or ListElement or ViewElement
   * [ ] Element with Loader:              ElementWithLoaderMixin    --- LoaderMixin
  
   NO AUTO-ADD:
-  * [ ] Element with Loader from routing: LoaderRoutedElementMixin  --- LoaderMixin + RoutingMixin + RoutingLoaderMixin
+  * [ ] Element with Loader from routing: RoutedElementWithLoaderMixin --- LoaderMixin + RoutingMixin + RoutingLoaderMixin
   
   
 
