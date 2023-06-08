@@ -4,12 +4,11 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 import './elements/<%=vars.elPrefix%>-page-header.js'
 import { updateMetadata } from '../metadata.js'
 
-import PageElement from './AppPageElement.js'
-import HeaderAndTitleMixin from './AppElementMixins/HeaderAndTitleMixin.js'
+import { AppPageElement } from './AppPageElement.js'
 
 /* Loaded modules -- end */
 
-export class AppRootPageElement extends HeaderAndTitleMixin(PageElement) {
+export class AppRootPageElement extends AppPageElement {
   static get properties () {
     return {
       pageTitle: { type: String }

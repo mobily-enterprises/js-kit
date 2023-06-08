@@ -1,7 +1,6 @@
 /* Loaded modules -- start */
 import { html, css } from 'lit'
 import { <%=vars.newElementInfo.baseClass%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.baseClass%>.js'
-import { <%=vars.newElementInfo.baseMixin%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.baseMixin%>.js'
 /* Loaded modules -- end */
 
 class Element extends <%=vars.newElementInfo.baseClass%> {
@@ -38,25 +37,19 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
     /* Element render function -- start */
     return html`
       <!-- Element render -- start -->
-      <%if(vars.newElementInfo.ownHeader){ %>${this.renderHeader()} <% } %>
+      <%if(vars.newElementInfo.ownHeader){ %>${this.renderHeader()} <% } -%>
       <%if(vars.newElementInfo.ownPath) { -%>
       
       <ee-tabs use-hash passive id="tab-<%=vars.newElementInfo.nameNoPrefix%>" default="" name-attribute="tab-name">
-      <a name="<%=vars.newElementInfo.nameNoPrefix%>" href="<%=vars.newElementInfo.pagePath%><%=vars.newElementInfo.subPath%>"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>
-
       <!-- Page tab heading insertion point -->
-        <div page-path="<%=vars.newElementInfo.pagePath%>" routing-group="<%=vars.newElementInfo.name%>" slot="content">
-          <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
-          <!-- Element insertion point -->
-        </div>
-      
-      <!-- Page tab insertion point -->
-    </ee-tabs>
-      <% } else { %>
-    <section>
-      <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
+
       <!-- Element insertion point -->
-    </section> 
+      </ee-tabs>
+      <% } else { %>
+      <section>
+        <h2><%=vars.newElementInfo.nameNoPrefix%></h2>
+        <!-- Element insertion point -->
+      </section> 
       <% } %>
 
       <!-- Element render -- end -->

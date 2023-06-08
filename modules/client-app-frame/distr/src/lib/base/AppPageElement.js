@@ -4,15 +4,15 @@ import { ifDefined } from 'lit-html/directives/if-defined'
 import './elements/<%=vars.elPrefix%>-page-header.js'
 import { updateMetadata } from '../metadata.js'
 
-import AppElement from './AppElement.js'
-import RoutingMixin from './AppElementMixins/RoutingMixin.js'
-import HideInactiveMixin from './AppElementMixins/HideInactiveMixin.js'
-import RoutingLoaderMixin from './AppElementMixins/RoutingLoaderMixin.js'
-import LoaderMixin from './AppElementMixins/LoaderMixin.js'
+import { AppElement } from './AppElement.js'
+import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
+import { HideInactiveMixin } from './AppElementMixins/HideInactiveMixin.js'
+import { RoutingLoaderMixin } from './AppElementMixins/RoutingLoaderMixin.js'
+import { LoaderMixin } from './AppElementMixins/LoaderMixin.js'
 
 /* Loaded modules -- end */
 
-export class AppPageElement extends RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) {
+export class PageElement extends RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) {
   static get properties () {
     return {
       pageTitle: { type: String }

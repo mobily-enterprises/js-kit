@@ -57,7 +57,12 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/lib/base/PageElement.js":[
+      "src/lib/base/AppPageElement.js":[
+        {
+          "op":"resolve-ejs"
+        },
+      ],
+      "src/lib/base/AppRootPageElement.js":[
         {
           "op":"resolve-ejs"
         }
@@ -130,20 +135,6 @@
           "newlineAfter":true,
           "anchorPoint":"<!-- App render -- start -->",
           "valueFromFile":"render.html"
-        },
-      ],
-      "src/lib/base/AppElement.js":[
-        {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Loaded modules -- end */",
-          "value":"import { ResponsiveMixin } from './AppElementMixins/ResponsiveMixin.js'"
-        },
-        {
-          "op":"custom",
-          "function":"addMixinToElement",
-          "mixin":"ResponsiveMixin"
         }
       ]
     }

@@ -54,9 +54,8 @@ exports.postPrompts = async (config) => {
     return lookup[type]
   }
 
-  const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`;
+  const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
 
-  // You are here: getting 
   let typeChoices = [
     {
       title: 'Root page element (for main entry points)',
@@ -71,7 +70,6 @@ exports.postPrompts = async (config) => {
       value: 'plain'
     }
   ]
-
   if (storesAvailable) {
     typeChoices = [...typeChoices,
       {
@@ -97,7 +95,6 @@ exports.postPrompts = async (config) => {
 
   const elementIsPage = userInput.type === 'root-page' || userInput.type === 'page'
   const elementUsesStores = userInput.type === 'view' || userInput.type === 'edit' || userInput.type === 'list'
-  
 
   userInput.elementName = await utils.prompt({
     type: 'text',
@@ -116,7 +113,7 @@ exports.postPrompts = async (config) => {
       message: "What is the element's scope?",
       choices: [
         {
-          title: 'Global. General purposes element used by several pagesa',
+          title: 'Global. General purposes element used by several pages/elements',
           value: 'global'
         },
         {

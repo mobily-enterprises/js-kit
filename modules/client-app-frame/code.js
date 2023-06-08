@@ -38,7 +38,6 @@ exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
   // Take the return off once installModule() can be used to add a plain element
-  return
   await installModule('client-app-root-page', config, {
     type: 'plain',
     elementName: 'landing',
@@ -46,7 +45,7 @@ exports.postAdd = async (config) => {
     elementMenuTitle: 'Landing',
     uncommentedStaticImport: true,
     ownPath: true,
-    pagePath: '',
+    pagePath: ''
   })
 
   await installModule('client-app-root-page', config, {
@@ -64,37 +63,37 @@ exports.postAdd = async (config) => {
 
   executeManipulations(config, {
     text: {
-      "src/pages/<%=vars.elPrefix%>-not-found.js":[
+      'src/pages/<%=vars.elPrefix%>-not-found.js': [
         {
-          "op":"resolve-ejs"
+          op: 'resolve-ejs'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"<!-- Element insertion point -->",
-          "valueFromFile":"notFound.html"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '<!-- Element insertion point -->',
+          valueFromFile: 'notFound.html'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Loaded modules -- end */",
-          "value":"import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Loaded modules -- end */',
+          value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Element styles -- end */",
-          "valueFromFile":"warning-css.css"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Element styles -- end */',
+          valueFromFile: 'warning-css.css'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Host styles -- end */",
-          "value":"animation: fadeIn 0.3s ease-in;\ntext-align: center;"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Host styles -- end */',
+          value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ]
     }
@@ -112,37 +111,37 @@ exports.postAdd = async (config) => {
 
   executeManipulations(config, {
     text: {
-      "src/pages/<%=vars.elPrefix%>-load-error.js":[
+      'src/pages/<%=vars.elPrefix%>-load-error.js':[
         {
-          "op":"resolve-ejs"
+          op: 'resolve-ejs'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"<!-- Element insertion point -->",
-          "valueFromFile":"loadError.html"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '<!-- Element insertion point -->',
+          valueFromFile: 'loadError.html'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Loaded modules -- end */",
-          "value":"import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Loaded modules -- end */',
+          value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Element styles -- end */",
-          "valueFromFile":"warning-css.css"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Element styles -- end */',
+          valueFromFile: 'warning-css.css'
         },
         {
-          "op":"insert",
-          "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Host styles -- end */",
-          "value":"animation: fadeIn 0.3s ease-in;\ntext-align: center;"
+          op: 'insert',
+          position: 'before',
+          newlineAfter: false,
+          anchorPoint: '/* Host styles -- end */',
+          value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ],
     }

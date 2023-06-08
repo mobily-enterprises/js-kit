@@ -4,9 +4,8 @@ import { shadow3 } from '../../../styles/shared-styles.js'
 
 import './<%=vars.elPrefix%>-toggle-button.js'
 import { moreVert, infoOutline } from '../../../styles/icons.js'
-import { ResponsiveMixin } from '../AppElementMixins/ResponsiveMixin.js'
 
-export class Element extends ResponsiveMixin(EeHeader) {
+export class Element extends EeHeader {
   static get styles () {
     return [
       super.styles,
