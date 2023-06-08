@@ -38,8 +38,8 @@ exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
   // Take the return off once installModule() can be used to add a plain element
-  await installModule('client-app-root-page', config, {
-    type: 'plain',
+  await installModule('client-app-element', config, {
+    type: 'root-page',
     elementName: 'landing',
     elementTitle: 'Landing Page',
     elementMenuTitle: 'Landing',
@@ -48,8 +48,8 @@ exports.postAdd = async (config) => {
     pagePath: ''
   })
 
-  await installModule('client-app-root-page', config, {
-    type: 'plain',
+  await installModule('client-app-element', config, {
+    type: 'root-page',
     elementName: 'not-found',
     elementTitle: 'Not found',
     elementMenuTitle: 'Not Found',
@@ -100,8 +100,8 @@ exports.postAdd = async (config) => {
   })
 
 
-  await installModule('client-app-root-page', config, {
-    type: 'plain',
+  await installModule('client-app-element', config, {
+    type: 'root-page',
     elementName: 'load-error',
     elementTitle: 'Load error',
     elementMenuTitle: 'Load error',

@@ -219,13 +219,18 @@ Only page elements will ever load data. All of the other elements do not do the 
 ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
 STAGE 2:
-☐ Complete insertion of element, sub-pages, etc. in the right spots
-☐ Tidy up things, comment, clean up, make sure code is clear
-☐ Actually try and run what the beast is spitting out, making sure it's functional (no forms, no loader)
-☐ Make the loader work, and make sure view, list, edit all work
-☐ Add links from one screen to the other
-☐ Make inline editing work too
+☐ Add hook "codedPrompts", and call it in Scaffoldizer, adding there the extra questions
+☐ Make sure the page is still added, that is: all of the variables are passed
+☐ Complete insertion of element and sub-pages (no stores) in the right spots
+☐ Allow adding of store pages
+☐ Make sure stores are give the right parameters (only the main page of a tab gets the list for now)
+☐ Make the loader actually work
+☐ Make a form work (pure html), using the data-loader to load data and making sure add-edit-element uses some of en-form code to gather values
+☐ Add links from one screen to the other, final: view linking to edit, 
+☐ Make inline editing work too: inline-editing
 ☐ Make realtime fields work too
+☐ Make everything resilient if network connection fails
+☐ Make sure every use case in terms of forms really works (real time, inline, normal, etc.) with intra-page linking fully working and full handling of network failures
 ☐ Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
 
 ☐ --- STAGE 2 DONE ---
