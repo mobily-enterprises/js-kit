@@ -1,45 +1,35 @@
 const path = require('path')
 const utils = require('../../utils.js')
-const prompts = require('prompts')
 
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-}
+exports.getPrompts = async (config) => {
+  const answers = {}
 
-
-exports.postPrompts = async (config) => {
-
-
+  answers.store = null
   const allStores = utils.allStores(config)
   if (!allStores.length) return
 
-  const store =  (await prompts([
-    {
-      type: 'select',
-      message: 'Store to add a field to',
-      name: 'value',
-      choices: utils.allStores(config)
-    }
-  ])).value
+  answers.store = await utils.prompt({
+    type: 'select',
+    message: 'Store to add a field to',
+    choices: utils.allStores(config)
+  })
 
-  debugger
+  return answers
+}
 
-  const storeObject = require(path.resolve('./', path.join(config.dstDir, store.file)) )
+exports.postPrompts = async (config, answers) => {
+  const storeObject = require(path.resolve('./', path.join(config.dstDir, answers.store.file)))
 
   const existingFields = storeObject.schema.structure
   const storeDefaults = storeObject
 
   const fields = await utils.getStoreFields(config, storeDefaults, existingFields)
 
-  config.vars.newFields = { fields: utils.formatSchemaFieldsAsText(fields, 0), storeFile: store.file }
-
+  config.vars.newFields = { fields: utils.formatSchemaFieldsAsText(fields, 0), storeFile: answers.store.file }
 }
 
 exports.boot = (config) => { }
-
-exports.fileRenamer = (config, file) => {
-  return file
-}

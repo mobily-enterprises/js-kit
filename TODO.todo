@@ -219,11 +219,14 @@ Only page elements will ever load data. All of the other elements do not do the 
 ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
 STAGE 2:
-☐ Add hook "codedPrompts", and call it in Scaffoldizer, adding there the extra questions
+☐ Add hook "askPrompts", and call it in Scaffoldizer, adding there the extra questions. Note that getPrompts is actually legacy
 ☐ Make sure the page is still added, that is: all of the variables are passed
 ☐ Complete insertion of normal elements to pages
+
 ☐ Complete insertion of sub-pages in pages (as one of their routes) 
+
 ☐ Allow adding of store pages
+
 ☐ Make sure stores are give the right parameters (only the main page of a tab gets the list for now)
 ☐ Make the loader actually work
 ☐ Make a form work (pure html), using the data-loader to load data and making sure add-edit-element uses some of en-form code to gather values

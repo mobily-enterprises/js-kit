@@ -1,40 +1,43 @@
+const utils = require('../../utils.js')
+
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-  return [
-    {
-      type: 'text',
-      name: 'dbHost',
-      message: 'DB host',
-      initial: 'localhost'
-    },
-    {
-      type: 'text',
-      name: 'dbPort',
-      message: 'DB port',
-      initial: '3306'
-    },
-    {
-      type: 'text',
-      name: 'db',
-      message: 'DB name',
-      initial: 'jskit'
-    },
-    {
-      type: 'text',
-      name: 'dbUser',
-      message: 'DB user',
-      initial: 'root'
-    },
-    {
-      type: 'text',
-      name: 'dbPassword',
-      message: 'DB password',
-      initial: ''
-    }
-  ]
+exports.getPrompts = async (config) => {
+  const answers = {}
+  //
+  answers.dbHost = await utils.prompt({
+    type: 'text',
+    message: 'DB host',
+    initial: 'localhost'
+  })
+
+  answers.dbPort = await utils.prompt({
+    type: 'text',
+    message: 'DB port',
+    initial: '3306'
+  })
+
+  answers.db = await utils.prompt({
+    type: 'text',
+    message: 'DB name',
+    initial: 'jskit'
+  })
+
+  answers.dbUser = await utils.prompt({
+    type: 'text',
+    message: 'DB user',
+    initial: 'root'
+  })
+
+  answers.dbPassword = await utils.prompt({
+    type: 'text',
+    message: 'DB password',
+    initial: ''
+  })
+
+  return answers
 }
 
 exports.preAdd = (config) => { }

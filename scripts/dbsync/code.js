@@ -2,19 +2,18 @@ const utils = require('../../utils.js')
 const path = require('path')
 
 exports.script = async (config) => {
-
   // Make the DB connection
   const vars = require(path.resolve(path.join(config.dstDir, 'server', 'vars.js')))
   const makeDbConnection = require(path.resolve(path.join(config.dstDir, 'server', 'lib', 'makeDbConnection.js')))
   vars.connection = makeDbConnection(vars.config.db)
 
-  const storeFile = config.userInput['dbsync'].storeToSync.file
+  const storeFile = config.userInput.dbsync.storeToSync.file
 
   // Load all of the stores in memory first. This is crucial so that
   // schemaDbSync() can actually resolve the references for db constraints
-  let foundStores = utils.allDbStores(config)
+  const foundStores = utils.allDbStores(config)
   for (const storeInfo of foundStores) {
-    const store = require(path.resolve(path.join(config.dstDir, storeInfo.value.file)))
+    require(path.resolve(path.join(config.dstDir, storeInfo.value.file)))
   }
 
   const store = require(path.resolve(path.join(config.dstDir, storeFile)))
@@ -27,13 +26,13 @@ exports.script = async (config) => {
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-  return [
-    {
-      type: 'select',
-      message: 'Store to sync',
-      name: 'storeToSync',
-      choices: utils.allDbStores(config)
-    }
-  ]
- }
+exports.getPrompts = async (config) => {
+  const answers = {}
+  answers.storeToSync = await utils.prompt({
+    type: 'select',
+    message: 'Store to sync',
+    choices: utils.allDbStores(config)
+  })
+
+  return answers
+}

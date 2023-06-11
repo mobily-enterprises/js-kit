@@ -1,5 +1,6 @@
 const installModule = require('../../node_modules/scaffoldizer/commands/add.js').installModule
 const executeManipulations = require('../../node_modules/scaffoldizer/lib/utils.js').executeManipulations
+const utils = require('../../utils.js')
 
 exports.getPromptsHeading = (config) => {
   return "Pick the previx of your app's elements. If you pick 'my', elements will be 'my-something', 'my-something-else' and so on"
@@ -7,27 +8,26 @@ exports.getPromptsHeading = (config) => {
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-  return [
-    {
-      type: 'text',
-      name: 'appName',
-      message: 'App name',
-      initial: ''
-    },
-    {
-      type: 'text',
-      name: 'elPrefix',
-      message: 'Elements\' name prefix',
-      initial: 'my'
-    },
-    {
-      type: 'toggle',
-      name: 'dynamicLoading',
-      message: 'Enable dynamic loading of pages',
-      initial: false
-    },
-  ]
+exports.getPrompts = async (config) => {
+  const answers = {}
+
+  answers.appName = await utils.prompt({
+    type: 'text',
+    message: 'App name',
+    initial: ''
+  })
+  answers.elPrefix = await utils.prompt({
+    type: 'text',
+    message: 'Elements\' name prefix',
+    initial: 'my'
+  })
+  answers.dynamicLoading = await utils.prompt({
+    type: 'toggle',
+    message: 'Enable dynamic loading of pages',
+    initial: false
+  })
+
+  return answers
 }
 
 exports.boot = (config) => {

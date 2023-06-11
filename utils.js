@@ -2,12 +2,17 @@ const regexpEscape = require('escape-string-regexp')
 const prompts = require('prompts')
 const path = require('path')
 const installModule = require('./node_modules/scaffoldizer/commands/add.js').installModule
-const executeManipulations = require('./node_modules/scaffoldizer/lib/utils.js').executeManipulations
+// const executeManipulations = require('./node_modules/scaffoldizer/lib/utils.js').executeManipulations
+
+const onPromptCancel = (prompt) => {
+  console.error('Aborting...')
+  process.exit(1)
+}
 
 exports.prompt = async (question) => {
   const q = { ...question, name: 'value' }
 
-  const answer = (await prompts(q)).value
+  const answer = (await prompts(q, { onCancel: onPromptCancel })).value
   return answer
 }
 
@@ -305,7 +310,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
     console.log(formatSchemaFieldsAsText(fields))
 
     try {
-      op = await  ask('What do you want to do?', 'select', null, null, [
+      op = await ask('What do you want to do?', 'select', null, null, [
         { title: 'Add a new field', value: 'add' },
         { title: 'Delete a new field just created', value: 'del' },
         { title: 'I changed my mind, cancel that', value: 'cancel' },

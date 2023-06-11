@@ -5,9 +5,8 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
-
   function anchorPoints () {
-    let foundAnchorPoints = utils
+    const foundAnchorPoints = utils
       .findAnchorPoints(config, '<!-- Element insertion point -->')
       .filter(e => e.info.baseClass === 'PageElement' || e.info.baseClass === 'RoutedElement')
 

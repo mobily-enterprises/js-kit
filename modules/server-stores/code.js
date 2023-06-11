@@ -1,33 +1,31 @@
-const path = require('path')
 const utils = require('../../utils.js')
 
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
-exports.getPrompts = (config) => {
-  const questions = [
-    {
-      type: 'text',
-      name: 'publicURLprefix',
-      message: 'URL prefix for all stores',
-      initial: 'stores',
-      validate: utils.publicURLprefixValidator(config)
-    },
-    {
-      type: 'text',
-      name: 'defaultVersion',
-      message: 'Default store version',
-      initial: '1.0.0',
-      validate: (value) => {
-        return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
-          ? 'Must be in format n.n.n E.g. 2.0.0'
-          : true
-      }
-    },
-  ]
+exports.getPrompts = async (config) => {
+  const answers = {}
 
-  return questions
+  answers.publicURLprefix = await utils.prompt({
+    type: 'text',
+    message: 'URL prefix for all stores',
+    initial: 'stores',
+    validate: utils.publicURLprefixValidator(config)
+  })
+
+  answers.defaultVersion = await utils.prompt({
+    type: 'text',
+    message: 'Default store version',
+    initial: '1.0.0',
+    validate: (value) => {
+      return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
+        ? 'Must be in format n.n.n E.g. 2.0.0'
+        : true
+    }
+  })
+
+  return answers
 }
 
 exports.boot = (config) => {
