@@ -37,9 +37,7 @@ exports.boot = (config) => {
 exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
-  debugger
   // Take the return off once installModule() can be used to add a plain element
-  debugger
   await installModule('client-app-element', config, {
     type: 'root-page',
     elementName: 'landing',
@@ -144,7 +142,7 @@ exports.postAdd = async (config) => {
           anchorPoint: '/* Host styles -- end */',
           value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
-      ],
+      ]
     }
   })
 }

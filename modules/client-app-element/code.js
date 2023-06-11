@@ -52,7 +52,6 @@ exports.getPrompts = async (config) => {
     choices: typeChoices
   })
 
-
   answers.elementName = await utils.prompt({
     type: 'text',
     message: `${toHumanName(answers.type)} element name`,
