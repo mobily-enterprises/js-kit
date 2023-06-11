@@ -219,13 +219,13 @@ Only page elements will ever load data. All of the other elements do not do the 
 ✔ Make it work out the fields by actually loading the store @done(21-09-12 10:06)
 
 STAGE 2:
-☐ Add hook "askPrompts", and call it in Scaffoldizer, adding there the extra questions. Note that getPrompts is actually legacy
-☐ Make sure the page is still added, that is: all of the variables are passed
-☐ Complete insertion of normal elements to pages
-
-☐ Complete insertion of sub-pages in pages (as one of their routes) 
-
-☐ Allow adding of store pages
+✔ Add hook "askPrompts", and call it in Scaffoldizer, adding there the extra questions. Note that getPrompts is actually legacy @done(23-06-11 15:20)
+✔ Make sure things are still functioning after sweeping changes to prompets architecture @done(23-06-11 21:10)
+✔ Make sure the root page is still added, that is: all of the variables are passed @done(23-06-11 21:10)
+☐ Complete insertion of elements which will be sub-tabs, using the normal element placeholder.
+☐ Make sure that variables are passed (all IDs and *Record values), and make sure that these variables are LIT properties of both pages
+☐ Complete insertion of normal element into another element, as a global element or as a specficically scoped element
+☐ Allow adding of store pages, check parameters passed
 
 ☐ Make sure stores are give the right parameters (only the main page of a tab gets the list for now)
 ☐ Make the loader actually work
@@ -254,9 +254,70 @@ STAGE 2:
 ☐ Maybe add reflect:true to routify's PageElementMixin
 ☐ Add module to build (rollup config)
 
+/all-ports
+Is it a static page? Yes
+
+/all-ports
+Is it a static page? No
+Which store does it query? ports (data-query: `/ports`)
+Do you want to connect it to a specific store or create one? Connect/Create
+
+Do you want to be able to view records? (`/all-ports/:portId`, data: `/ports/:portId`)
+Do you want to be able to add records? (`/all-ports/add`)
+Do you want to be able to edit records? (`/all-ports/:portId/edit`)
+Do you want to be able to inline-edit the record?
+
+/all-ports/1/all-berths
+Is it a static page? No
+Which store does it query? berths (data-query: `/ports/:portId/berths`)
+Do you want to connect it to a specific store or create one? Connect/Create
+
+Do you want to be able to view records? (`/all-ports/:portId/all-berths/:berthId`, data: `/ports/:portId/berths/:berthId`)
+Do you want to be able to add records? (`/all-ports/:portId/all-berths/add`)
+Do you want to be able to edit records? (`/all-ports/:portId/all-berths/:berthId/edit`)
+Do you want to be able to inline-edit the record?
+
+RAMBLINGS
+* ADDING A Root page -- Plain element (`/ports`)
+
+* ADDING A Root page -- Page Element (`/ports`)
+  ++ Always "list" store element, with matching URL
+  ++ MAYBE a "add" element `/ports/add`
+
+* ADDING A Sub page (they can only be added to a page, root or not)
+
+ * When parent page has with isList = true (e.g. `/ports`), child can be
+    * EITHER PAGE loader of an ID, must end with `:portId` (the ID of the store ports), which will give `/ports/:portId`
+      ++ edit and/or view element. edit element is default only if it's the only one there. If view element, then it will be default. 
+    * OR an "add" element `/ports/add`
+    * OR a plain element (`/ports/generalInfo`)
+
+  * When parent page has isList = false (e.g. `/ports/:portId`), child can be
+    * EITHER loader of a LIST, must end with `/berths` for `/ports:portId/berths`
+      ++ Always "list" store element, with matching URL 
+      ++ MAYBE a "add" element `/ports/:portId/berths/add`
+    * OR a view element
+
+* ADDING A View Element (`/ports/:portId/allDetails`)
+  * Always add it to a page with isList = false
+
+* ADDING An Edit Element (`/ports/:portId/editSimplified`)
+  * Always add it to a page with isList = false
+
+* ADDING An Add Element (`/ports/addSimplified`)
+  * Always add it to a page with isList = true
+
+* ADDING A Plain Element (`/ports/generalInfo` or `/ports/:portId/generalInfo`)
+  * Both for pages with isList = true and isList = false. List ones will not get the list loaded usually
+
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add
 rm -rf testing-app;cp -pr testing-app.START testing-app; rm -rf testing-app/node_modules; rm -rf testing-app/server/node_modules;node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add everything; cd testing-app; npm install;cd ..
+
+Testing /2:
+rm -rf ../example-app/*; cp -pr ../example-app.NEWSTART5/* .
+DEBUG="*" node  ../js-kit/bin/jskit.js add
+npm run start:dev
 
 
 EVERYTHING BELOW THIS LINE NEEDS TO BE ADJUSTED

@@ -5,9 +5,8 @@ exports.getPromptsHeading = (config) => { }
 exports.prePrompts = (config) => { }
 
 exports.getPrompts = (config) => {
-
   function anchorPoints () {
-    let foundAnchorPoints = utils.findAnchorPoints(config, '<!-- Element insertion point -->')
+    const foundAnchorPoints = utils.findAnchorPoints(config, '<!-- Element insertion point -->')
     if (!foundAnchorPoints.length) {
       console.log('There are no insertion points available for this element. Please add a page first.')
       process.exit(1)

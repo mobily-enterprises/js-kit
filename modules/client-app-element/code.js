@@ -6,6 +6,8 @@ exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
 
+const elementIsPage = (type) => ['root-page', 'page'].includes(type)
+
 exports.getPrompts = async (config) => {
   const answers = {}
 
@@ -50,7 +52,6 @@ exports.getPrompts = async (config) => {
     choices: typeChoices
   })
 
-  answers.elementIsPage = ['root-page', 'page'].includes(answers.type)
 
   answers.elementName = await utils.prompt({
     type: 'text',
@@ -61,7 +62,7 @@ exports.getPrompts = async (config) => {
     }
   })
 
-  if (!answers.elementIsPage) {
+  if (!elementIsPage(answers.type)) {
     //
     answers.scope = await utils.prompt({
       type: 'select',
@@ -120,7 +121,7 @@ exports.getPrompts = async (config) => {
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     })
 
-    if (config.answers['client-app-frame'].dynamicLoading) {
+    if (config.userInput['client-app-frame'].dynamicLoading) {
       answers.uncommentedStaticImport = await utils.prompt({
         type: 'toggle',
         name: 'value',
@@ -235,7 +236,7 @@ exports.postPrompts = async (config, answers) => {
   let destination
   let newElementFile
 
-  if (!answers.elementIsPage) {
+  if (!elementIsPage(answers.type)) {
     if (scope === 'global') {
       destination = insertElement ? answers.destination : {}
       copyToDirectory = `src${path.sep}elements`
@@ -271,7 +272,7 @@ exports.postPrompts = async (config, answers) => {
     newElementFile = `${copyToDirectory}${path.sep}${name}.js`
     libPath = `..${path.sep}lib`
     ownPath = true
-    pagePath = answers.pagePath || `${path.sep}${elementName}`
+    pagePath = typeof answers.pagePath === 'undefined' ? `${path.sep}${elementName}` : answers.pagePath
     importPath = ''
     ownHeader = true
   }

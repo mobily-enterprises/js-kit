@@ -1,5 +1,4 @@
 const utils = require('../../utils.js')
-const prompts = require('prompts')
 const installModule = require('../../node_modules/scaffoldizer/commands/add.js').installModule
 const runScript = require('../../node_modules/scaffoldizer/commands/run.js').runScript
 
@@ -79,13 +78,13 @@ exports.getPrompts = async (config) => {
     choices: utils.storeMethodsChoices
   })
 
-  answers.advanced = await utils.prompt({
+  const advanced = await utils.prompt({
     name: 'advanced',
     message: 'Would you like to set more advanced options?',
     initial: false
   })
 
-  if (answers.advanded) {
+  if (advanced) {
     answers.canBeNull = await utils.prompt({
       type: 'confirm',
       message: 'Is NULL allowed for field by default? (recommended: false)',

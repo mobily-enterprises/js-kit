@@ -37,7 +37,9 @@ exports.boot = (config) => {
 exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
+  debugger
   // Take the return off once installModule() can be used to add a plain element
+  debugger
   await installModule('client-app-element', config, {
     type: 'root-page',
     elementName: 'landing',
@@ -63,7 +65,7 @@ exports.postAdd = async (config) => {
 
   executeManipulations(config, {
     text: {
-      'src/pages/<%=vars.elPrefix%>-not-found.js': [
+      'src/pages/<%=vars.elPrefix%>-page-not-found.js': [
         {
           op: 'resolve-ejs'
         },
@@ -99,7 +101,6 @@ exports.postAdd = async (config) => {
     }
   })
 
-
   await installModule('client-app-element', config, {
     type: 'root-page',
     elementName: 'load-error',
@@ -111,7 +112,7 @@ exports.postAdd = async (config) => {
 
   executeManipulations(config, {
     text: {
-      'src/pages/<%=vars.elPrefix%>-load-error.js':[
+      'src/pages/<%=vars.elPrefix%>-page-load-error.js': [
         {
           op: 'resolve-ejs'
         },

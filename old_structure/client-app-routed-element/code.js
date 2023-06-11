@@ -92,6 +92,8 @@ exports.postPrompts = async (config) => {
   newElementInfo.destination = userInput.destination
   newElementInfo.copyToDirectory = `${path.dirname(newElementInfo.destination.file)}${path.sep}${path.basename(userInput.destination.file, '.js')}${path.sep}elements`
   newElementInfo.libPath = path.relative(`${userInput.destination.file}/elements`, 'src/lib') || '.'
+
+  config.vars.newElementInfo = newElementInfo
 }
 
 exports.boot = (config) => { }

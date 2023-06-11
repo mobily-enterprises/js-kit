@@ -12,7 +12,7 @@ import { LoaderMixin } from './AppElementMixins/LoaderMixin.js'
 
 /* Loaded modules -- end */
 
-export class PageElement extends RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) {
+export class AppPageElement extends RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) {
   static get properties () {
     return {
       pageTitle: { type: String }
