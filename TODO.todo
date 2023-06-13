@@ -283,7 +283,7 @@ RAMBLINGS
 * ADDING A Root page -- Page Element (`/ports`)
   ++ Always "list" store element, with matching URL
   ++ MAYBE a "add" element `/ports/add`
-
+  
 * ADDING A Sub page (they can only be added to a page, root or not)
 
  * When parent page has with isList = true (e.g. `/ports`), child can be
@@ -307,8 +307,8 @@ RAMBLINGS
 * ADDING An Add Element (`/ports/addSimplified`)
   * Always add it to a page with isList = true
 
-* ADDING A Plain Element (`/ports/generalInfo` or `/ports/:portId/generalInfo`)
-  * Both for pages with isList = true and isList = false. List ones will not get the list loaded usually
+* ADDING A Plain Element
+  * Under ANY existing element, globally or local to the element
 
 Testing:
 rm -rf testing-app;cp -pr testing-app.START testing-app; node Development/scaffoldizer/bin/scaffoldizer -s Development/js-kit -d testing-app add
