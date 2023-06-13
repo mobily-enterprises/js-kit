@@ -219,8 +219,8 @@ exports.postPrompts = async (config, answers) => {
       edit: 'EditElement',
       list: 'ListElement',
       view: 'ViewElement',
-      page: 'AppPageElement',
-      'root-page': 'AppPageElement'
+      page: 'AppStackElement',
+      'root-page': 'AppStackElement'
     }
     return lookup[type]
   }
