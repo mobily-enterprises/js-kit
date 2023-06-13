@@ -1,8 +1,8 @@
 /* Loaded modules -- start */
 import AppElement from '../base/AppElement.js'
 import { RoutingMixin } from '../base/AppElementMixins/RoutingMixin.js'
-import { AddEditStoreMixin } from '../stores/AddEditStoreMixin'
+import { ListStoreMixin } from './mixins/ListStoreMixin'
 /* Loaded modules -- end */
 
-export class EditElement extends RoutingMixin(AddEditStoreMixin(AppElement)) {
+export class ListPageElement extends RoutingMixin(ListStoreMixin(AppElement)) {
 }
