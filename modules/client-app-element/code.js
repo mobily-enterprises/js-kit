@@ -32,19 +32,33 @@ exports.getPrompts = async (config) => {
   if (storesAvailable) {
     typeChoices = [...typeChoices,
       {
-        title: 'View (to view a record)',
+        title: 'View page (to view a record)',
         value: 'view'
       },
       {
-        title: 'Edit (to edit a record)',
+        title: 'Edit page (to edit a record)',
         value: 'edit'
       },
       {
-        title: 'List (to list several records)',
+        title: 'Add page(to add a record)',
+        value: 'add'
+      },
+      {
+        title: 'List page (to list several records)',
         value: 'list'
       }
     ]
   }
+
+
+/*
+YOU ARE HERE 
+ROOT PAGE: If stores are not available, simply force isList = 0. No loading will ever happen
+
+SUB PAGE: IF stores are not available, 
+
+*/
+
 
   answers.type = await utils.prompt({
     type: 'select',
@@ -206,7 +220,7 @@ exports.postPrompts = async (config, answers) => {
       list: 'ListElement',
       view: 'ViewElement',
       page: 'AppPageElement',
-      'root-page': 'AppRootPageElement'
+      'root-page': 'AppPageElement'
     }
     return lookup[type]
   }

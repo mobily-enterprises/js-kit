@@ -62,11 +62,6 @@
           "op":"resolve-ejs"
         },
       ],
-      "src/lib/base/AppRootPageElement.js":[
-        {
-          "op":"resolve-ejs"
-        }
-      ],
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",

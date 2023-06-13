@@ -176,11 +176,11 @@ Only page elements will ever load data. All of the other elements do not do the 
 ***SIMPLIFIED FINAL VERSION***:
 * AppElement (Basic theming styles, basic sizing, etc). **GO: Anywhere
 * AppPageElement RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) **GO: AppPageElement, AppRootPageElement
-* AppRootPageElement PageTitleMixin(AppPageElement). **GO: Only root
-
-* AddEditElement (AppElement) **GO: AppPagageElement, AppRootPageElement
-* ViewElement (AppElement) **GO: AppPagageElement, AppRootPageElement
-* ListElement (AppElement) **GO: AppPagageElement, AppRootPageElement
+*
+* AddPageElement (AppElement) **GO: AppPagageElement, AppRootPageElement
+* EditPageElement (AppElement) **GO: AppPagageElement, AppRootPageElement
+* ViewPageElement (AppElement) **GO: AppPagageElement, AppRootPageElement
+* ListPageElement (AppElement) **GO: AppPagageElement, AppRootPageElement
 
 
 "src/lib/base/AppElement.js":[
@@ -280,7 +280,7 @@ Do you want to be able to inline-edit the record?
 RAMBLINGS
 * ADDING A Root page -- Plain element (`/ports`)
 
-* ADDING A Root page -- Page Element (`/ports`)
+* ADDING A Root page -- Page Element  (always isList = 1) (`/ports`)
   ++ Always "list" store element, with matching URL
   ++ MAYBE a "add" element `/ports/add`
   
@@ -298,13 +298,13 @@ RAMBLINGS
       ++ MAYBE a "add" element `/ports/:portId/berths/add`
     * OR a view element
 
-* ADDING A View Element (`/ports/:portId/allDetails`)
+* ADDING A View Page Element (`/ports/:portId/allDetails`)
   * Always add it to a page with isList = false
 
-* ADDING An Edit Element (`/ports/:portId/editSimplified`)
+* ADDING An Edit Page Element (`/ports/:portId/editSimplified`)
   * Always add it to a page with isList = false
 
-* ADDING An Add Element (`/ports/addSimplified`)
+* ADDING An Add Page Element (`/ports/addSimplified`)
   * Always add it to a page with isList = true
 
 * ADDING A Plain Element
