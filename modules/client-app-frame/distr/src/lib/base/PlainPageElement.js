@@ -4,5 +4,5 @@ import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
 import { HideInactiveMixin } from './AppElementMixins/HideInactiveMixin.js'
 /* Loaded modules -- end */
 
-export class ViewPageElement extends RoutingMixin(HideInactiveMixin(AppElement)) {
+export class PageViewElement extends RoutingMixin(HideInactiveMixin(AppElement)) {
 }

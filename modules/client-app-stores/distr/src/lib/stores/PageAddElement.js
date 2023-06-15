@@ -1,9 +1,9 @@
 /* Loaded modules -- start */
 import AppElement from '../base/AppElement.js'
 import { RoutingMixin } from '../base/AppElementMixins/RoutingMixin.js'
+import { AddEditStoreMixin } from './mixins/AddEditStoreMixin.js'
 import { HideInactiveMixin } from '../base/AppElementMixins/HideInactiveMixin.js'
-import { ViewStoreMixin } from './mixins/ListStoreMixin'
 /* Loaded modules -- end */
 
-export class ViewPageElement extends ViewStoreMixin(RoutingMixin(HideInactiveMixin(AppElement))) {
+export class PageAddElement extends RoutingMixin(HideInactiveMixin(AddEditStoreMixin(AppElement))) {
 }

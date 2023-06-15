@@ -57,7 +57,7 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/lib/base/AppStackElement.js":[
+      "src/lib/base/PageStackElement.js":[
         {
           "op":"resolve-ejs"
         },

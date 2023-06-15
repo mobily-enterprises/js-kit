@@ -4,5 +4,5 @@ import { RoutingMixin } from '../base/AppElementMixins/RoutingMixin.js'
 import { ListStoreMixin } from './mixins/ListStoreMixin'
 /* Loaded modules -- end */
 
-export class ListPageElement extends RoutingMixin(ListStoreMixin(AppElement)) {
+export class PageListElement extends RoutingMixin(ListStoreMixin(AppElement)) {
 }

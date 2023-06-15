@@ -7,10 +7,9 @@ import { updateMetadata } from '../metadata.js'
 import { AppElement } from './AppElement.js'
 import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
 import { HideInactiveMixin } from './AppElementMixins/HideInactiveMixin.js'
-
 /* Loaded modules -- end */
 
-export class AppStackElement extends RoutingMixin(HideInactiveMixin(AppElement)) {
+export class PageStackElement extends RoutingMixin(HideInactiveMixin(AppElement)) {
   static get properties () {
     return {
       pageTitle: { type: String }

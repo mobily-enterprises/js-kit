@@ -15,10 +15,139 @@ exports.getPrompts = async (config) => {
 
   const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
 
+  /*
+    NON STORE
+    PlainElement (Dest: PlainElement, PagePlainElement, PageStackElement) (Placement: app's /elements or in ./my-parent-element/elements  | ./my-parent-stack-element/elements)
+    *PageStackElement (Dest: App, PageStackElement) (Placement: /src/pages, or under ./my-parent-stack-element/)
+    PagePlainElement (Dest: PageStackElement) (Placement: always under ./my-parent-stack-element/ )
+
+    STORE
+    PageStackListLoadingElement (Dest: App or PageStackSingleLoadingElement) (Placement: /src/pages, or under ./my-parent-stack-single-element/)
+    PageStackSingleLoadingElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-element/elements)
+    Page View/Add/Edit Element (Dest: PageStackSingleLoadingElement) (Placement: ./my-parent-stack-element/)
+    PageListElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-list-element/)
+
+QUESTIONS:
+
+Q: Is it a page?
+A: Yes
+  Q: Is it a stack?
+  A: Yes
+    Q: Pick PageStackElement -- PageStackListLoadingElement PageStackSingleLoadingElement
+    A: ***CHOICE***
+    Q: Where?
+    A: ***POSITION***
+
+  A: No
+    Q: PagePlainElement -- PageAddElement PageEditElement PageViewElement PageListElement
+    A: ***CHOICE***
+    Q: Where?
+    A: ***POSITION***
+
+A: No (not a page)
+    Q: Pick PlainElement -- AddElement EditElement ViewElement ListElement
+    A: ***CHOICE***
+    Q: Where?
+    A: ***POSITION***
+
+PLACEMENTS:
+
+* Page elements:
+  * PageStackElement (NS) can only go into another PageStackElement or /src/pages (main page)
+  * PageStackSingleLoading can only go into a PageStackListLoading
+  * PageStackListLoading can only go into a PageStackSingleLoading or /src/pages (main page)
+
+  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or /src/pages (main page)
+  * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+  * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+  * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+  * PageListElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+
+* Non-page elements:
+  * PlainElement (NS) ]
+  * AddElement        |
+  * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
+  * ViewElement       |
+  * ListElement       ]
+
+
+PLAIN PAGES:
+------------
+
+IF PageStackElement:
+   What is the Destination element? (Root page, or another PageStackElement)
+   (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackElement )
+
+IF PlainElement:
+   What is the Destination element? (Any element type)
+   File placement: Choose: "General /elements directory | Within the Destination element's domain"
+     (
+      Placement automatic:
+         General: /src/elements
+         Specific: ./my-parent-element/elements
+      )
+
+IF PagePlainElement:
+  What is the Destination element? (Root page, Any Stack element)
+  (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackElement )
+
+STORE/LOADER PAGES:
+-------------------
+
+IF PageStackListLoadingElement
+  What is the destination element? (Root page, or a PageStackSingleLoadingElement)
+  (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackSingleLoadingElement )
+
+IF PageStackSingleLoadingElement
+  What is the destination element? (Any PageStackListLoadingElement)
+  (File placement automatic: ./my-parent-stack-element/)
+
+IF View/Edit Element
+  What is the destination element? (Any Element type)
+   File placement: Choose: "General /elements directory | Within the Destination element's domain"
+     (
+      Placement automatic:
+         General: /src/elements
+         Specific: ./my-parent-element/elements
+      )
+
+IF AddElement
+  What is the destination element? (Any element type)
+   File placement: Choose: "General /elements directory | Within the Destination element's domain"
+     (
+      Placement automatic:
+         General: /src/elements
+         Specific: ./my-parent-element/elements
+      )
+
+IF ListElement
+  What is the destination element? (Any element type)
+   File placement: Choose: "General /elements directory | Within the Destination element's domain"
+     (
+      Placement automatic:
+         General: /src/elements
+         Specific: ./my-parent-element/elements
+      )
+
+IF PageView/Edit Element
+  What is the destination element? (Any PageStackSingleLoadingElement)
+  (File placement automatic: ./my-parent-stack-element/)
+
+IF PageAddElement
+  What is the destination element? (Any PageStackListLoadingElement)
+  (File placement automatic: ./my-parent-stack-element/)
+
+IF PageListElement
+  What is the destination element? (Any PageStackListLoadingElement)
+  (File placement automatic: ./my-parent-stack-element/)
+
+
+
+*/
   let typeChoices = [
     {
       title: 'Root page element (for main entry points)',
-      value: 'root-page'
+      value: 'stack-page'
     },
     {
       title: 'Page element (for sub-pages, children of main entry points)',
@@ -219,8 +348,8 @@ exports.postPrompts = async (config, answers) => {
       edit: 'EditElement',
       list: 'ListElement',
       view: 'ViewElement',
-      page: 'AppStackElement',
-      'root-page': 'AppStackElement'
+      page: 'PageStackElement',
+      'root-page': 'PageStackElement'
     }
     return lookup[type]
   }
@@ -253,7 +382,7 @@ exports.postPrompts = async (config, answers) => {
     if (scope === 'global') {
       destination = insertElement ? answers.destination : {}
       copyToDirectory = `src${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      newElementFile = `root-page${copyToDirectory}${path.sep}${name}.js`
       libPath = path.relative(`${destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
