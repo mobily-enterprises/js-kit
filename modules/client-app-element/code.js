@@ -13,7 +13,7 @@ exports.getPrompts = async (config) => {
 
   const storesAvailable = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
 
-  const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
+  // const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
 
   /*
 QUESTIONS:
@@ -145,9 +145,311 @@ INITIAL WRITEUP:
     PageStackSingleLoadingElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-element/elements)
     Page View/Add/Edit Element (Dest: PageStackSingleLoadingElement) (Placement: ./my-parent-stack-element/)
     PageListElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-list-element/)
-
-
 */
+
+  function availableDestinations(answers) {
+
+    const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
+    const allClasses = ['PageStackElement', 'PagePlainElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement', 'ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
+    
+    const classes = {
+      PageStackElement: 'PageStackElement',
+      PagePlainElement: allStackClasses,
+      PageStackListLoadingElement: 'PageStackSingleLoadingElement',
+      PageStackSingleLoadingElement: 'PageStackListLoadingElement',
+      PageViewElement: 'PageStackSingleLoadingElement',
+      PageEditElement: 'PageStackSingleLoadingElement',
+      PageAddElement: 'PageStackListLoadingElement',
+      PageListElement: 'PageStackListLoadingElement',
+      ViewElement: ['ALL OF THEM'],
+      PlainElement: ['ALL OF THEM'],
+      AddElement: ['ALL OF THEM'],
+      EditElement: ['ALL OF THEM'],
+      ListElement: ['ALL OF THEM']
+    }[answers.elementClass]
+    
+
+
+    /*
+      * PageStackElement (NS) can only go into another PageStackElement (./my-parent-stack-element/) or main page (/src/pages)
+  * PageStackSingleLoading can only go into a PageStackListLoading (./my-parent-stack-element/)
+  * PageStackListLoading can only go into a PageStackSingleLoading (./my-parent-stack-element/) or main page (/src/pages)
+
+  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or main page (/src/pages)
+  * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+  * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+  * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+  * PageListElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+
+* Non-page elements:
+  * PlainElement (NS) ]
+  * AddElement        |
+  * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
+  * ViewElement       |
+  * ListElement       ]
+
+
+    */
+    const matching = findElementsWithClass = function (config, classes) 
+
+
+    // YOU ARE HERE: Add Root page (which is the app page), add isRootPag e =true to it    
+  }
+
+  function destinationElement (answers) {
+    return utils.prompt({
+      type: 'select',
+      message: "Containing element?",
+      choices: availableDestinations(answers)
+    })
+  }    
+
+  function elementPrefix (elementClass) {
+      return {
+        PageStackElement: 'page-stack-',
+        PlainElement: 'plain-',
+        PagePlainElement: 'page-plain-',
+        PageStackListLoadingElement: 'page-stack-list-',
+        PageStackSingleLoadingElement: 'page-stack-single-',
+        PageViewElement: 'page-view-',
+        PageAddElement: 'page-add-',
+        PageEditElement: 'page-edit-',
+        PageListElement: 'page-list-',
+        ViewElement: 'view-',
+        AddElement: 'add-',
+        EditElement: 'edit-',
+        ListElement: 'list-'
+      }[elementClass]        
+  }
+
+  function elementUrlPrefix (elementClass) {
+    return {
+      PageStackElement: '',
+      PagePlainElement: '',
+      PageStackListLoadingElement: 'list-',
+      PageStackSingleLoadingElement: '',
+      PageViewElement: 'view',
+      PageAddElement: 'add',
+      PageEditElement: 'edit',
+      PageListElement: 'list',
+    }[elementClass]        
+}
+
+
+  answers.elementName = await utils.prompt({
+    type: 'text',
+    message: `Element name`,
+    initial: '',
+    validate: (value) => {
+      return utils.elementNameValidator(config, value)
+    }
+  })
+
+
+  answers.isPage = await utils.prompt({
+    type: 'confirm',
+    message: 'Is it a page rather than a simple element?',
+    initial: true
+  })
+
+  if (answers.isPage) {
+    answers.typeOfPage = await utils.prompt({
+      type: 'select',
+      message: "What kind of page is it?",
+      choices: [
+        {
+          title: 'A stack. A page which is able to contain other pages',
+          description: 'Used to create a page which will contain routed to sub-pages',
+          value: 'stack'
+        },
+        {
+          title: 'A plain page. Its route will not be able to contain sub-routes',
+          value: 'plain'
+        }
+      ]
+    })
+
+    if (answers.typeOfPage === 'stack') {
+
+      const choices = [
+        // Plain stack
+        {
+          title: 'PageStackElement',
+          description: 'A simple stack, for non-data pages. Can contain subroutes. E.g. /faq',
+          value: 'PageStackElement'
+        }
+      ]
+
+      if (storesAvailable) {
+        choices = [
+          ...choices,
+          // Loading stack
+          {
+            title: 'PageStackListLoadingElement',
+            description: 'A stack element which will load a list from a server store. E.g. /people',
+            value: 'PageStackListLoadingElement'
+          },
+
+          // Loading stack
+          {
+            title: 'PageStackSingleLoadingElement',
+            description: 'A stack element which will load a single value from a server store. E.g. /people/:personId',
+            value: 'PageStackSingleLoadingElement'
+          }
+        ]
+      }
+
+      answers.elementClass = await utils.prompt({
+        type: 'select',
+        message: "What type of stack is it?",
+        choices
+      })
+
+      answers.destination = await containingElement(answers) 
+    } else {
+      const choices = [
+        // Plain page
+        {
+          title: 'PagePlainElement',
+          description: 'A simple page, for non-data pages. Cannot contain subroutes.',
+          value: 'PagePlainElement'
+        }
+      ]
+
+      if (storesAvailable) {
+        choices = [
+          ...choices,
+          // Loading stack
+          {
+            title: 'PageAddElement',
+            description: 'A record-adding page, contained in a PageStackListLoadingElement stack',
+            value: 'PageAddElement'
+          },
+
+          // Loading stack
+          {
+            title: 'PageListElement',
+            description: 'A record-listing page, contained in a PageStackListLoadingElement stack',
+            value: 'PageListElement'
+          },
+
+          // Loading stack
+          {
+            title: 'PageEditElement',
+            description: 'A record-editing page, contained in a PageStackSingleLoadingElement stack',
+            value: 'PageAddElement'
+          },
+
+          // Loading stack
+          {
+            title: 'PageViewElement',
+            description: 'A record-viewing page, contained in a PageStackSingleLoadingElement stack',
+            value: 'PageViewElement'
+          },
+        ]
+      }
+
+      answers.elementClass = await utils.prompt({
+        type: 'select',
+        message: "What type of element is it?",
+        choices
+      })
+
+      const destination = await destinationElement(answers)
+      answers.
+      
+      // These are very likely to be main elements
+      if (['PageEditElement', 'PageViewElement', 'PageListElement'].includes(answers.elementClass)) {
+
+        // TODO: Add IF to check that there is not already a main element for the child.
+        // This can easily be done by looking for an element with the same path as the parent
+        // that is NOT a stack
+        answers.isMainElement = await utils.prompt({
+          type: 'confirm',
+          message: 'Is this element the main element of the stack? (URLs will match)',
+          initial: true
+        })
+      } else {
+        answers.isMainElement = false
+      }
+
+      if (!answers.isMainElement){
+        answers.subPath = await utils.prompt({
+          type: 'text',
+          name: 'subPath',
+          message: `Nested URL, coming from ${answers.destination.pagePath}`,
+          validate: (value) => {
+            return utils.pagePathValidator(config, value, answers.destination.pagePath)
+          }
+        })
+      }
+            
+
+
+     
+      
+
+    }
+
+    // Page-specific questions
+    answers.elementTitle = await utils.prompt({
+      type: 'text',
+      name: 'value',
+      message: 'Page title',
+      initial: '',
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
+    })
+
+    answers.elementMenuTitle = await utils.prompt({
+      type: 'text',
+      name: 'value',
+      message: 'Page menu title',
+      initial: '',
+      validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
+    })
+
+    if (TODO_isRootPage && config.userInput['client-app-frame'].dynamicLoading) {
+      answers.uncommentedStaticImport = await utils.prompt({
+        type: 'toggle',
+        name: 'value',
+        message: 'Force static load with static import, even though app supports dynamic imports',
+        initial: false
+      })
+    } else {
+      answers.uncommentedStaticImport = true
+    }
+
+  } else {
+
+  }
+
+    Q1: Is it a stack?
+    A1: Yes
+      Q: Pick PageStackElement -- PageStackListLoadingElement PageStackSingleLoadingElement
+      A: ***CHOICE***
+      Q: Where?
+      A: ***POSITION***
+    A1: No
+      Q: PagePlainElement -- PageAddElement PageEditElement PageViewElement PageListElement
+      A: ***CHOICE***
+      Q: Where?
+      A: ***POSITION***
+  
+    Q2: Page-specific questions
+    A2: ***PAGE ANSWERS***
+  
+  A: No (not a page)
+      Q: Pick PlainElement -- AddElement EditElement ViewElement ListElement
+      A: ***CHOICE***
+      Q: Where?
+      A: ***POSITION***
+      Q: General purpose or element specific?
+      A: ***GENERAL***
+      
+  }
+
+
+
   let typeChoices = [
     {
       title: 'Root page element (for main entry points)',

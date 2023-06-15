@@ -1,6 +1,7 @@
 const regexpEscape = require('escape-string-regexp')
 const prompts = require('prompts')
 const path = require('path')
+const fs = require('fs')
 const installModule = require('./node_modules/scaffoldizer/commands/add.js').installModule
 // const executeManipulations = require('./node_modules/scaffoldizer/lib/utils.js').executeManipulations
 
@@ -41,54 +42,79 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
 }
 
 
-exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
 
-  const getFileInfo = function (contents) {
-    let m
-    let res = {}
+const getFileInfo = function (contents) {
+  let m
+  let res = {}
+  // Look for mixed in classes
+  m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)\(([\w]+)[\)]+.*$/m)
+  if (m) {
+    res = {
+      ...res,
+      mixins: m[1].split('(').join(','),
+      baseClass: m[2],
+      description: `${m[2]}, mixed with ${m[1]}`
+    }
+  } else {
     // Look for mixed in classes
-    m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)\(([\w]+)[\)]+.*$/m)
+    m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)[ \t]+\{$/m)
     if (m) {
       res = {
         ...res,
-        mixins: m[1].split('(').join(','),
-        baseClass: m[2],
-        description: `${m[2]}, mixed with ${m[1]}`
-      }
-    } else {
-      // Look for mixed in classes
-      m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)[ \t]+\{$/m)
-      if (m) {
-        res = {
-          ...res,
-          baseClass: m[1],
-          description: `${m[1]}`
-        }
+        baseClass: m[1],
+        description: `${m[1]}`
       }
     }
-
-    // Find the page's path
-    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+pagePath[ \t]+.*?\'(.*?)\'.*?$/m)
-    if (m) res.pagePath = m[1]
-
-    m = contents.match(/^[ \t]*window[ \t]*\.[ \t]*customElements[ \t]*\.[ \t]*define[ \t]*\(\'(.*?)\'.*$/m)
-    if (m) res.definedElement = m[1]
-
-    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+storeName[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
-    if (m) res.storeName = m[1]
-
-    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+table[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
-    if (m) res.storeTable = m[1]
-
-    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+publicURL[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
-    if (m) res.storePublicURL = m[1]
-
-    m = contents.match(/^[ \t]*static[ \t]+get[ \t]+version[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
-    if (m) res.storeVersion = m[1]
-
-    return res
   }
 
+  // Find the page's path
+  m = contents.match(/^[ \t]*static[ \t]+get[ \t]+pagePath[ \t]+.*?\'(.*?)\'.*?$/m)
+  if (m) res.pagePath = m[1]
+
+  m = contents.match(/^[ \t]*window[ \t]*\.[ \t]*customElements[ \t]*\.[ \t]*define[ \t]*\(\'(.*?)\'.*$/m)
+  if (m) res.definedElement = m[1]
+
+  m = contents.match(/^[ \t]*static[ \t]+get[ \t]+storeName[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+  if (m) res.storeName = m[1]
+
+  m = contents.match(/^[ \t]*static[ \t]+get[ \t]+table[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+  if (m) res.storeTable = m[1]
+
+  m = contents.match(/^[ \t]*static[ \t]+get[ \t]+publicURL[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+  if (m) res.storePublicURL = m[1]
+
+  m = contents.match(/^[ \t]*static[ \t]+get[ \t]+version[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
+  if (m) res.storeVersion = m[1]
+
+  return res
+}
+
+exports.findElementsWithClass = function (config, classes, keepContents = false) {
+  if (!Array.isArray(classes)) classes = [classes]
+  const allFiles = exports.walk(config.dstDir)
+  const matchingFiles = []
+
+  const regExp = new RegExp(`class\\s+\\w+\\s+extends\\s+(${classes.join('|')})`)
+
+  for (const file of allFiles) {
+    const contents = fs.readFileSync(path.join(config.dstDir, file)).toString()
+
+    // Looking for a matching anchor point
+    const foundClass = contents.match(regExp, contents)
+    if (foundClass) {
+      const info = getFileInfo(contents)
+      matchingFiles.push({
+        file,
+        contents: keepContents ? contents : null,
+        info,
+        class: foundClass
+      })
+    }
+  }
+  return matchingFiles
+}
+
+exports.findAnchorPoints = (config, anchorPoints, keepContents = false) => {
   return config.scaffoldizerUtils.findAnchorPoints(config, anchorPoints, getFileInfo, keepContents)
 }
 
