@@ -16,48 +16,41 @@ exports.getPrompts = async (config) => {
   const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
 
   /*
-    NON STORE
-    PlainElement (Dest: PlainElement, PagePlainElement, PageStackElement) (Placement: app's /elements or in ./my-parent-element/elements  | ./my-parent-stack-element/elements)
-    *PageStackElement (Dest: App, PageStackElement) (Placement: /src/pages, or under ./my-parent-stack-element/)
-    PagePlainElement (Dest: PageStackElement) (Placement: always under ./my-parent-stack-element/ )
-
-    STORE
-    PageStackListLoadingElement (Dest: App or PageStackSingleLoadingElement) (Placement: /src/pages, or under ./my-parent-stack-single-element/)
-    PageStackSingleLoadingElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-element/elements)
-    Page View/Add/Edit Element (Dest: PageStackSingleLoadingElement) (Placement: ./my-parent-stack-element/)
-    PageListElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-list-element/)
-
 QUESTIONS:
 
 Q: Is it a page?
 A: Yes
-  Q: Is it a stack?
-  A: Yes
+  Q1: Is it a stack?
+  A1: Yes
     Q: Pick PageStackElement -- PageStackListLoadingElement PageStackSingleLoadingElement
     A: ***CHOICE***
     Q: Where?
     A: ***POSITION***
-
-  A: No
+  A1: No
     Q: PagePlainElement -- PageAddElement PageEditElement PageViewElement PageListElement
     A: ***CHOICE***
     Q: Where?
     A: ***POSITION***
+
+  Q2: Page-specific questions
+  A2: ***PAGE ANSWERS***
 
 A: No (not a page)
     Q: Pick PlainElement -- AddElement EditElement ViewElement ListElement
     A: ***CHOICE***
     Q: Where?
     A: ***POSITION***
+    Q: General purpose or element specific?
+    A: ***GENERAL***
 
 PLACEMENTS:
 
 * Page elements:
-  * PageStackElement (NS) can only go into another PageStackElement or /src/pages (main page)
-  * PageStackSingleLoading can only go into a PageStackListLoading
-  * PageStackListLoading can only go into a PageStackSingleLoading or /src/pages (main page)
+  * PageStackElement (NS) can only go into another PageStackElement (./my-parent-stack-element/) or main page (/src/pages)
+  * PageStackSingleLoading can only go into a PageStackListLoading (./my-parent-stack-element/)
+  * PageStackListLoading can only go into a PageStackSingleLoading (./my-parent-stack-element/) or main page (/src/pages)
 
-  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or /src/pages (main page)
+  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or main page (/src/pages)
   * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
   * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
   * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
@@ -69,7 +62,6 @@ PLACEMENTS:
   * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
   * ViewElement       |
   * ListElement       ]
-
 
 PLAIN PAGES:
 ------------
@@ -141,6 +133,18 @@ IF PageListElement
   What is the destination element? (Any PageStackListLoadingElement)
   (File placement automatic: ./my-parent-stack-element/)
 
+
+INITIAL WRITEUP:
+  NON STORE
+    PlainElement (Dest: PlainElement, PagePlainElement, PageStackElement) (Placement: app's /elements or in ./my-parent-element/elements  | ./my-parent-stack-element/elements)
+    *PageStackElement (Dest: App, PageStackElement) (Placement: /src/pages, or under ./my-parent-stack-element/)
+    PagePlainElement (Dest: PageStackElement) (Placement: always under ./my-parent-stack-element/ )
+
+  STORE
+    PageStackListLoadingElement (Dest: App or PageStackSingleLoadingElement) (Placement: /src/pages, or under ./my-parent-stack-single-element/)
+    PageStackSingleLoadingElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-element/elements)
+    Page View/Add/Edit Element (Dest: PageStackSingleLoadingElement) (Placement: ./my-parent-stack-element/)
+    PageListElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-list-element/)
 
 
 */
