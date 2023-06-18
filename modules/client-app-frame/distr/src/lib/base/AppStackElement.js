@@ -2,7 +2,6 @@
 import { html, css } from 'lit'
 import { ifDefined } from 'lit-html/directives/if-defined'
 import './elements/<%=vars.elPrefix%>-page-header.js'
-import { updateMetadata } from '../metadata.js'
 
 import { AppElement } from './AppElement.js'
 import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
@@ -10,12 +9,6 @@ import { HideInactiveMixin } from './AppElementMixins/HideInactiveMixin.js'
 /* Loaded modules -- end */
 
 export class PageStackElement extends RoutingMixin(HideInactiveMixin(AppElement)) {
-  static get properties () {
-    return {
-      pageTitle: { type: String }
-    }
-  }
-
   static get styles () {
     return [
       super.styles,
@@ -29,13 +22,6 @@ export class PageStackElement extends RoutingMixin(HideInactiveMixin(AppElement)
   }
 
   render () {}
-
-  routerCallback () {
-    updateMetadata({
-      title: `<%=userInput['client-app-frame'].appName%> - ${this.pageTitle}`,
-      description: this.pageTitle
-    })
-  }
 
   headerSlotted () { /* eslint-disable-line class-methods-use-this */
     return ''

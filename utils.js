@@ -29,6 +29,7 @@ exports.replaceBaseClass = async function (contents, m, config) {
   const originalBaseClassRegExp = /([ \t]*class[ \t]+\w+[ \t]+extends[ \t]+)(.*?)[ \t]*\{/
   const match = contents.match(originalBaseClassRegExp)
 
+  let originalBaseClass
   if (match) originalBaseClass = match[2]
   return contents
     // Take out the bast class from the class declaration
@@ -48,6 +49,7 @@ const getFileInfo = function (contents) {
   let res = {}
   // Look for mixed in classes
   m = contents.match(/^[ \t]*class[ \t]+\w+[ \t]+extends[ \t]+(.*)\(([\w]+)[\)]+.*$/m)
+  
   if (m) {
     res = {
       ...res,
@@ -89,12 +91,13 @@ const getFileInfo = function (contents) {
   return res
 }
 
+/*
 exports.findElementsWithClass = function (config, classes, keepContents = false) {
   if (!Array.isArray(classes)) classes = [classes]
   const allFiles = exports.walk(config.dstDir)
   const matchingFiles = []
 
-  const regExp = new RegExp(`class\\s+\\w+\\s+extends\\s+(${classes.join('|')})`)
+  const regExp = new RegExp(`class\\s+\\w+\\s+extends\\s+(?:\\w+\\([^)]*\\))?(${classes.join('|')})`)
 
   for (const file of allFiles) {
     const contents = fs.readFileSync(path.join(config.dstDir, file)).toString()
@@ -106,8 +109,7 @@ exports.findElementsWithClass = function (config, classes, keepContents = false)
       matchingFiles.push({
         file,
         contents: keepContents ? contents : null,
-        info,
-        class: foundClass
+        info
       })
     }
   }
@@ -133,6 +135,49 @@ exports.allFiles = (config) => {
   return exports.allFiles.list
 }
 exports.allFiles.list = null
+*/
+exports.getFiles = function (config, filter) {
+  return config.scaffoldizerUtils(config, filter, getFileInfo)
+}
+
+exports.getFilesWithAttribute = (config, name, value) => {
+  return exports.getFiles(config, (o) => o.info[name] === value)
+}
+
+exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
+  const list = exports.getFiles(config, o => o.info.storeName === storeName)
+  if (!list.find(o => o.info.storeVersion === version)) return ''
+  return `Store already exists in this version - ${list.map(e => `${e.info.storeVersion}/${e.info.storeName}`).join(', ')}`
+}
+
+exports.elementNameValidator = (config, value, prev) => {
+  return !value.match(/^[a-z]+[a-z0-9\-]*$/)
+    ? 'Only lower case characters, numbers and dashes allowed'
+    : (
+        exports.getFilesWithAttribute(config, 'definedElement', `${config.vars.elPrefix}-${exports.elementNameFromInput(value, prev)}`)
+          ? 'Element already defined'
+          : true
+      )
+}
+
+exports.pagePathValidator = (config, value, prev) => {
+  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
+    ? 'Valid URLs, starting with "/" or "#"'
+    : (
+        exports.getFilesWithAttribute(config, 'pagePath', `${prev.pagePath }${value}`)
+          ? 'Element already defined'
+          : true
+      )
+}
+
+/*
+exports.allPagesWithPath = (config, pagePath) => {
+  const pagesWithPath = exports
+    .allFiles(config)
+    .filter(f => )
+
+  return foundStores.map(e => { return { title: `/${e.info.storeVersion}/${e.info.storeName} -- ${e.info.storePublicURL}`, value: { file: e.file, version: e.info.storeVersion, name: e.info.storeName } } } )
+}
 
 exports.allStores = (config) => {
   const foundStores = exports
@@ -171,7 +216,6 @@ exports.elementNameValidator = (config, value, prev) => {
       )
 }
 
-
 exports.pagePathValidator = (config, value, prev) => {
   return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
     ? 'Valid URLs, starting with "/" or "#"'
@@ -182,6 +226,7 @@ exports.pagePathValidator = (config, value, prev) => {
       )
 }
 
+*/
 exports.elementNameFromInput = (enteredName, type = 'plain') => {
   const lookup = {
     plain: '',
@@ -201,7 +246,7 @@ exports.storeVersionValidator = (config, value, storeName) => {
   return !value.match(/^[0-9]+\.[0-9]\.[0-9]$/)
     ? 'Must be in format n.n.n E.g. 2.0.0'
     : (
-        (res = exports.findMatchingStoreNameAndVersions(config, value, storeName))
+        ((res = exports.findMatchingStoreNameAndVersions(config, value, storeName)))
           ? res
           : true
       )
@@ -219,7 +264,7 @@ exports.storePublicURLValidator = (config) => {
     return !value.match(/^\/[a-z0-9A-Z\-\/_]*$/)
       ? 'Valid URLs, starting with "/", and without trailing "/"'
       : (
-          exports.findAttributeInAllFiles(config, 'storePublicURL', value)
+          exports.getFilesWithAttribute(config, 'storePublicURL', value)
             ? 'Store URL already defined by another store'
             : true
         )

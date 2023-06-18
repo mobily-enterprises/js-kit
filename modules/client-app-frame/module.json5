@@ -66,15 +66,16 @@
         {
           "op":"insert",
           "position":"before",
-          "newlineAfter":false,
-          "anchorPoint":"/* Loaded modules -- end */",
+          "newlineAfter":true,
+          "anchorPoint":"***...export class",
           "valueFromFile":"imports.js"
         },
         {
           "op":"insert",
           "position":"after",
-          "newlineBefore":false,
-          "anchorPoint":"/* Style array -- start */",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":"static get styles () {...return [...***css`",
           "value":"appTheme,"
         },
 
@@ -91,23 +92,26 @@
         {
           "op":"insert",
           "newlineBefore":true,
+          "newlineAfter":true,
+          
           "position":"before",
-          "anchorPoint":"/* App methods -- end */",
+          "anchorPoint":"...***}",
           "valueFromFile":"methods.js"
         },
         {
           "op":"insert",
           "position":"after",
           "newlineBefore":true,
-          "anchorPoint":"/* Loaded modules -- end */",
+          "newlineAfter":true,
+          "anchorPoint":"***...export class",
           "valueFromFile":"dynamicImports.js"
         },
-        /* App styles -- start */
         {
           "op":"insert",
           "position":"after",
           "newlineBefore":true,
-          "anchorPoint":"/* App styles -- start */",
+          "newlineAfter":true,
+          "anchorPoint":"static get styles () {...return [...css`***",
           "valueFromFile":"styles.css"
         },
         {
@@ -120,7 +124,7 @@
           "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"/* App render function -- start */",
+          "anchorPoint":"render () {***",
           "valueFromFile":"drawer.js"
         },
         {
@@ -128,7 +132,7 @@
           "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"<!-- App render -- start -->",
+          "anchorPoint":"...  render () {...return html`***",
           "valueFromFile":"render.html"
         }
       ]

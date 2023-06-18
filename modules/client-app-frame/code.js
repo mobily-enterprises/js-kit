@@ -37,6 +37,8 @@ exports.boot = (config) => {
 exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
+
+  /*
   // Take the return off once installModule() can be used to add a plain element
   await installModule('client-app-element', config, {
     type: 'root-page',
@@ -78,21 +80,21 @@ exports.postAdd = async (config) => {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Loaded modules -- end */',
+          anchorPoint: '/* Loaded modules -- end ',
           value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
         },
         {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Element styles -- end */',
+          anchorPoint: '/* Element styles -- end ',
           valueFromFile: 'warning-css.css'
         },
         {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Host styles -- end */',
+          anchorPoint: '/* Host styles -- end ',
           value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ]
@@ -125,26 +127,27 @@ exports.postAdd = async (config) => {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Loaded modules -- end */',
+          anchorPoint: '/* Loaded modules -- end/',
           value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
         },
         {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Element styles -- end */',
+          anchorPoint: '/* Element styles -- end/',
           valueFromFile: 'warning-css.css'
         },
         {
           op: 'insert',
           position: 'before',
           newlineAfter: false,
-          anchorPoint: '/* Host styles -- end */',
+          anchorPoint: '/* Host styles -- end/',
           value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ]
     }
   })
+  */
 }
 
 exports.fileRenamer = (config, file) => {
