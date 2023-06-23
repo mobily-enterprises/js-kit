@@ -3,8 +3,5 @@
 // At build time, any uncommented code is directly impored, and so will be
 // included in the main app
 
-/* Extra app modules -- start */
-/* Extra app modules -- end */
-
 // Dynamic loading flag
 const DYNAMIC_LOADING = <%=userInput['client-app-frame'].dynamicLoading ? 'true' : 'false'%>

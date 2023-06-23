@@ -1,19 +1,14 @@
-/* Loaded modules -- start */
 const cookieParser = require('cookie-parser')
 const express = require('express')
 const logger = require('morgan')
 const e = require('allhttperrors')
 const path = require('path')
-/* Loaded modules -- end */
-
-/* Loaded modules -- start */
 const errorPageRoute = require('./routes/errorPage')
 const vars = require('./vars.js') /*  eslint-disable-line */
 const maybeRedirectToHttps = require('./routes/maybeRedirectToHttps')
 const asyncMiddleware = require('./lib/asyncMiddleware')
 const moduleMiddleware = require('es6-dev-server').moduleMiddleware
 const alwaysIndex = require('./routes/alwaysIndex')
-/* Loaded modules -- end */
 
 // Print unhandled exception if it happens. This will prevent unmanaged
 // errors going silent
@@ -21,23 +16,14 @@ process.on('unhandledRejection', (err, p) => {
   console.log('UNHANDLED REJECTION!', err, 'PROMISE:', p)
 })
 
-/* Before app is created -- start */
-/* Before app is created -- end */
-
 const app = express() // Create the express app
-
-/* After app is created -- start */
-/* After app is created -- end */
 
 // Ready checker. This allows app.js (this file) to complete async work
 // before the server is actually started (in ./www)
 app._readyChecker = async () => {
-  /* Ready checker -- start */
-  /* Ready checker -- end */
   return true
 }
 
-/* Express essentials -- start */
 app.use(maybeRedirectToHttps) // Redirect to HTTPS for production
 logger.token('headers', function (req) { return JSON.stringify(req.headers) })
 logger.token('body', function (req) { return JSON.stringify(req.body) })
@@ -45,10 +31,6 @@ app.use(logger(':remote-addr :remote-user :method :url HTTP/:http-version :statu
 app.use(express.json({ limit: '4mb' })) // Make up request.body, json
 app.use(express.urlencoded({ limit: '4mb', extended: false })) // // Make up request.body, urlencoded
 app.use(cookieParser()) // Cookie parser
-/* Express essentials -- end */
-
-/* Before serving static files -- start */
-/* Before serving static files -- end */
 
 // Important server variables
 const serveBuilt = process.env.SERVE_BUILT
@@ -61,15 +43,6 @@ if (!serveBuilt) app.use(moduleMiddleware({ root }))
 
 // Serve static files
 app.use(express.static(root))
-
-/* After static files -- start */
-/* After static files -- end */
-
-/* App routes -- start */
-/* App routes -- 1 */
-/* App routes -- 2 */
-/* App routes -- 3 */
-/* App routes -- end */
 
 // Always serve index.html
 app.use(alwaysIndex(root))

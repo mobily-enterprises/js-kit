@@ -49,16 +49,18 @@
             {
                "op":"insert",
                "position":"before",
-               "newlineAfter":true,
-               "anchorPoint":"/* Loaded modules -- end */",
+               "newlineBefore":true,
+               "newlineAfter": false,
+               "anchorPoint":".....= require(...)***...//...process.on.....",
                "value":"const makeDbConnection = require('./lib/makeDbConnection.js')"
             },
             {
                "op":"insert",
                "position":"before",
+               "newlineBefore":false,
                "newlineAfter":true,
-               "anchorPoint":"/* Before serving static files -- end */",
-               "value":"vars.connection = makeDbConnection(vars.config.db)"
+               "anchorPoint":".....***//...app.use(express.static(root)).....",
+               "value":"// Make the DB connection\nvars.connection = makeDbConnection(vars.config.db)\n"
             }
          ]
       }

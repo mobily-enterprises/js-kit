@@ -65,17 +65,15 @@
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",
-          "position":"before",
           "newlineAfter":true,
-          "anchorPoint":"***...export class",
+          "anchorPoint":"***.....export class.....",
           "valueFromFile":"imports.js"
         },
         {
           "op":"insert",
-          "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"static get styles () {...return [...***css`",
+          "anchorPoint":".....static get styles () {...return [***...css`.....",
           "value":"appTheme,"
         },
 
@@ -95,15 +93,15 @@
           "newlineAfter":true,
           
           "position":"before",
-          "anchorPoint":"...***}",
+          "anchorPoint":".....***}",
           "valueFromFile":"methods.js"
         },
         {
           "op":"insert",
           "position":"after",
-          "newlineBefore":true,
+          "newlineBefore":false,
           "newlineAfter":true,
-          "anchorPoint":"***...export class",
+          "anchorPoint":"***.....export class.....",
           "valueFromFile":"dynamicImports.js"
         },
         {
@@ -111,7 +109,7 @@
           "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"static get styles () {...return [...css`***",
+          "anchorPoint":".....static get styles () {...return [...css`***.....",
           "valueFromFile":"styles.css"
         },
         {
@@ -124,7 +122,7 @@
           "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"render () {***",
+          "anchorPoint":".....render () {***.....",
           "valueFromFile":"drawer.js"
         },
         {
@@ -132,7 +130,7 @@
           "position":"after",
           "newlineBefore":true,
           "newlineAfter":true,
-          "anchorPoint":"...  render () {...return html`***",
+          "anchorPoint":".....render () {...return html`***.....",
           "valueFromFile":"render.html"
         }
       ]
