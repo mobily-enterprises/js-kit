@@ -52,7 +52,7 @@
                "newlineBefore":true,
                "newlineAfter": false,
                "anchorPoint":".....= require(...)***...//...process.on.....",
-               "value":"const makeDbConnection = require('./lib/makeDbConnection.js')"
+               "value":"const makeDbConnection = require('./lib/makeDbConnection.js')\n"
             },
             {
                "op":"insert",

@@ -27,23 +27,26 @@
           {
              "op":"insert",
              "position":"before",
+             "newlineBefore":false,
              "newlineAfter":true,
-             "anchorPoint":"/* Loaded modules -- end */",
+             "anchorPoint":".....***//...app.use(express.static(root)).....",
              "value":"const expressSession = require('express-session')"
           },
           {
              "op":"insert",
              "position":"before",
+             "newlineBefore":false,
              "newlineAfter":true,
-             "anchorPoint":"/* Loaded modules -- end */",
+             "anchorPoint":".....***//...app.use(express.static(root)).....",
              "value":"const expressMySqlSession = require('express-mysql-session')"
           },
 
           {
              "op":"insert",
              "position":"before",
+             "newlineBefore":false,
              "newlineAfter":true,
-             "anchorPoint":"/* Before serving static files -- end */",
+             "anchorPoint":".....***//...app.use(express.static(root)).....",
              "valueFromFile":"session.js"
           },
 
@@ -52,8 +55,8 @@
              "position":"after",
              "newLineBefore": true,
              "newlineAfter":true,
-             "anchorPoint":"/* After static files -- start */\n",
-             "value":"\n// Enable sessions, straight after serving static files\napp.use(session)\n"
+             "anchorPoint":".....static(root))***.....",
+             "value":"// Enable sessions, straight after serving static files\napp.use(session)\n"
           }
        ]
     }

@@ -137,7 +137,7 @@ exports.allFiles = (config) => {
 exports.allFiles.list = null
 */
 exports.getFiles = function (config, filter) {
-  return config.scaffoldizerUtils(config, filter, getFileInfo)
+  return config.scaffoldizerUtils.getFiles(config, filter, getFileInfo)
 }
 
 exports.getFilesWithAttribute = (config, name, value) => {
@@ -227,19 +227,6 @@ exports.pagePathValidator = (config, value, prev) => {
 }
 
 */
-exports.elementNameFromInput = (enteredName, type = 'plain') => {
-  const lookup = {
-    plain: '',
-    edit: 'edit-',
-    list: 'list-',
-    view: 'view-',
-    page: 'page-',
-    'root-page': 'page-'
-  }
-  const prefix = lookup[type]
-
-  return `${prefix}${enteredName}`
-}
 
 exports.storeVersionValidator = (config, value, storeName) => {
   let res

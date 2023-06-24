@@ -27,16 +27,16 @@
          "server/app.js":[
             {
                "op":"insert",
-               "position":"before",
-               "newlineAfter":true,
-               "anchorPoint":"/* Loaded modules -- end */",
-               "value":"const JsonRestStores = require('jsonreststores')"
+               "newlineBefore":true,
+               "newlineAfter": false,
+               "anchorPoint":".....= require(...)***...//...process.on.....",
+               "value":"const JsonRestStores = require('jsonreststores')\n"
             },
             {
                "op":"insert",
-               "position":"before",
+               "newlineBefore":true,
                "newlineAfter":true,
-               "anchorPoint":"/* App routes -- end */",
+               "anchorPoint":".....app.use(express.static(root))***.....",
                "value":"// Automatically include all stores in stores/<%-vars.defaultStoreVersion%> and listen to them all\nJsonRestStores.requireStoresFromPath(path.join(__dirname, 'stores/<%-vars.defaultStoreVersion%>'), app)\n"
             }
          ]

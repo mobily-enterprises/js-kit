@@ -2,6 +2,102 @@ const path = require('path')
 const utils = require('../../utils.js')
 const fs = require('fs')
 
+function destinationElement (config, answers) {
+  return utils.prompt({
+    type: 'select',
+    message: 'Containing element?',
+    choices: availableDestinations(config, answers)
+  })
+}
+
+function elementNamePrefix (elementClass) {
+  return {
+    PageStackElement: 'page-stack-',
+    PlainElement: 'plain-',
+    PagePlainElement: 'page-plain-',
+    PageStackListLoadingElement: 'page-stack-list-',
+    PageStackSingleLoadingElement: 'page-stack-single-',
+    PageViewElement: 'page-view-',
+    PageAddElement: 'page-add-',
+    PageEditElement: 'page-edit-',
+    PageListElement: 'page-list-',
+    ViewElement: 'view-',
+    AddElement: 'add-',
+    EditElement: 'edit-',
+    ListElement: 'list-'
+  }[elementClass]
+}
+
+function elementUrlPrefix (elementClass) {
+  return {
+    PageStackElement: '',
+    PagePlainElement: '',
+    PageStackListLoadingElement: 'list-',
+    PageStackSingleLoadingElement: '',
+    PageViewElement: 'view-',
+    PageAddElement: 'add-',
+    PageEditElement: 'edit-',
+    PageListElement: 'list-'
+  }[elementClass]
+}
+
+function availableDestinations (config, answers, keepContents = false) {
+  const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
+  const allClasses = ['PageStackElement', 'PagePlainElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement', 'ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
+
+  const classes = {
+    PageStackElement: ['PageStackElement'],
+    PagePlainElement: allStackClasses,
+    PageStackListLoadingElement: ['PageStackSingleLoadingElement'],
+    PageStackSingleLoadingElement: ['PageStackListLoadingElement'],
+    PageViewElement: ['PageStackSingleLoadingElement'],
+    PageEditElement: ['PageStackSingleLoadingElement'],
+    PageAddElement: ['PageStackListLoadingElement'],
+    PageListElement: ['PageStackListLoadingElement'],
+    ViewElement: allClasses,
+    PlainElement: allClasses,
+    AddElement: allClasses,
+    EditElement: allClasses,
+    ListElement: allClasses
+  }[answers.elementClass]
+
+  /*
+    * PageStackElement (NS) can only go into another PageStackElement (./my-parent-stack-element/) or main page (/src/pages)
+    * PageStackSingleLoading can only go into a PageStackListLoading (./my-parent-stack-element/)
+    * PageStackListLoading can only go into a PageStackSingleLoading (./my-parent-stack-element/) or main page (/src/pages)
+
+    * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or main page (/src/pages)
+    * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+    * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
+    * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+    * PageListElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
+
+    * Non-page elements:
+    * PlainElement (NS) ]
+    * AddElement        |
+    * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
+    * ViewElement       |
+    * ListElement       ]
+  */
+  const matches = utils
+    .getFiles(config, o => classes.include(o.baseClass))
+    .map(o => ({ ...o, title: o.file, value: o.file }))
+
+  // Add the main page for specific elements that CAN go there
+  if (['pageStackElement', 'PageStackListLoadingElement', 'PagePlainElement'].includes(answers.elementClass)) {
+    const file = `src/${config.vars.appFile}.js`
+    matches.push({
+      title: file,
+      file,
+      value: `src/${config.vars.appFile}.js`,
+      info: {},
+      mainAppPage: true
+    })
+  }
+
+  return matches
+}
+
 exports.getPromptsHeading = (config) => { }
 
 exports.prePrompts = (config) => { }
@@ -11,37 +107,16 @@ const elementIsPage = (type) => ['root-page', 'page'].includes(type)
 exports.getPrompts = async (config) => {
   const answers = {}
 
-  const storesAvailable = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
+  const availableStores = utils.getFiles(config, o => o.info.storeName)
+  const storesModuleInstalled = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
+
+  const storesAvailable = storesModuleInstalled && availableStores.length
+  const noStoresAvailableMessage = availableStores.length ? '' : ' (No stores available yet)'
 
   // const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
 
   /*
 QUESTIONS:
-
-Q: Is it a page?
-A: Yes
-  Q1: Is it a stack?
-  A1: Yes
-    Q: Pick PageStackElement -- PageStackListLoadingElement PageStackSingleLoadingElement
-    A: ***CHOICE***
-    Q: Where?
-    A: ***POSITION***
-  A1: No
-    Q: PagePlainElement -- PageAddElement PageEditElement PageViewElement PageListElement
-    A: ***CHOICE***
-    Q: Where?
-    A: ***POSITION***
-
-  Q2: Page-specific questions
-  A2: ***PAGE ANSWERS***
-
-A: No (not a page)
-    Q: Pick PlainElement -- AddElement EditElement ViewElement ListElement
-    A: ***CHOICE***
-    Q: Where?
-    A: ***POSITION***
-    Q: General purpose or element specific?
-    A: ***GENERAL***
 
 PLACEMENTS:
 
@@ -63,181 +138,7 @@ PLACEMENTS:
   * ViewElement       |
   * ListElement       ]
 
-PLAIN PAGES:
-------------
-
-IF PageStackElement:
-   What is the Destination element? (Root page, or another PageStackElement)
-   (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackElement )
-
-IF PlainElement:
-   What is the Destination element? (Any element type)
-   File placement: Choose: "General /elements directory | Within the Destination element's domain"
-     (
-      Placement automatic:
-         General: /src/elements
-         Specific: ./my-parent-element/elements
-      )
-
-IF PagePlainElement:
-  What is the Destination element? (Root page, Any Stack element)
-  (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackElement )
-
-STORE/LOADER PAGES:
--------------------
-
-IF PageStackListLoadingElement
-  What is the destination element? (Root page, or a PageStackSingleLoadingElement)
-  (File placement automatic: /src/pages if destination is root page, or under ./my-parent-stack-element/ if destination is an PageStackSingleLoadingElement )
-
-IF PageStackSingleLoadingElement
-  What is the destination element? (Any PageStackListLoadingElement)
-  (File placement automatic: ./my-parent-stack-element/)
-
-IF View/Edit Element
-  What is the destination element? (Any Element type)
-   File placement: Choose: "General /elements directory | Within the Destination element's domain"
-     (
-      Placement automatic:
-         General: /src/elements
-         Specific: ./my-parent-element/elements
-      )
-
-IF AddElement
-  What is the destination element? (Any element type)
-   File placement: Choose: "General /elements directory | Within the Destination element's domain"
-     (
-      Placement automatic:
-         General: /src/elements
-         Specific: ./my-parent-element/elements
-      )
-
-IF ListElement
-  What is the destination element? (Any element type)
-   File placement: Choose: "General /elements directory | Within the Destination element's domain"
-     (
-      Placement automatic:
-         General: /src/elements
-         Specific: ./my-parent-element/elements
-      )
-
-IF PageView/Edit Element
-  What is the destination element? (Any PageStackSingleLoadingElement)
-  (File placement automatic: ./my-parent-stack-element/)
-
-IF PageAddElement
-  What is the destination element? (Any PageStackListLoadingElement)
-  (File placement automatic: ./my-parent-stack-element/)
-
-IF PageListElement
-  What is the destination element? (Any PageStackListLoadingElement)
-  (File placement automatic: ./my-parent-stack-element/)
-
-INITIAL WRITEUP:
-  NON STORE
-    PlainElement (Dest: PlainElement, PagePlainElement, PageStackElement) (Placement: app's /elements or in ./my-parent-element/elements  | ./my-parent-stack-element/elements)
-    *PageStackElement (Dest: App, PageStackElement) (Placement: /src/pages, or under ./my-parent-stack-element/)
-    PagePlainElement (Dest: PageStackElement) (Placement: always under ./my-parent-stack-element/ )
-
-  STORE
-    PageStackListLoadingElement (Dest: App or PageStackSingleLoadingElement) (Placement: /src/pages, or under ./my-parent-stack-single-element/)
-    PageStackSingleLoadingElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-element/elements)
-    Page View/Add/Edit Element (Dest: PageStackSingleLoadingElement) (Placement: ./my-parent-stack-element/)
-    PageListElement (Dest: PageStackListLoadingElement) (Placement: ./my-parent-stack-list-element/)
 */
-
-  function availableDestinations (config, answers, keepContents = false) {
-    const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
-    const allClasses = ['PageStackElement', 'PagePlainElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement', 'ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
-
-    const classes = {
-      PageStackElement: 'PageStackElement',
-      PagePlainElement: allStackClasses,
-      PageStackListLoadingElement: 'PageStackSingleLoadingElement',
-      PageStackSingleLoadingElement: 'PageStackListLoadingElement',
-      PageViewElement: 'PageStackSingleLoadingElement',
-      PageEditElement: 'PageStackSingleLoadingElement',
-      PageAddElement: 'PageStackListLoadingElement',
-      PageListElement: 'PageStackListLoadingElement',
-      ViewElement: allClasses,
-      PlainElement: allClasses,
-      AddElement: allClasses,
-      EditElement: allClasses,
-      ListElement: allClasses
-    }[answers.elementClass]
-
-    /*
-  * PageStackElement (NS) can only go into another PageStackElement (./my-parent-stack-element/) or main page (/src/pages)
-  * PageStackSingleLoading can only go into a PageStackListLoading (./my-parent-stack-element/)
-  * PageStackListLoading can only go into a PageStackSingleLoading (./my-parent-stack-element/) or main page (/src/pages)
-
-  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or main page (/src/pages)
-  * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
-  * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
-  * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
-  * PageListElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
-
-* Non-page elements:
-  * PlainElement (NS) ]
-  * AddElement        |
-  * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
-  * ViewElement       |
-  * ListElement       ]
-
-    */
-    const matches = utils.findElementsWithClass(config, classes, keepContents)
-
-    // Add the main page for specific elements that CAN go there
-    if (['pageStackElement', 'PageStackListLoadingElement', 'PagePlainElement'].includes(answers.elementClass)) {
-      matches.push({
-        file: `src/${config.vars.appFile}.js`,
-        contents: false,
-        info: {},
-        mainAppPage: true
-      })
-    }
-
-    return matches
-  }
-
-  function destinationElement (config, answers) {
-    return utils.prompt({
-      type: 'select',
-      message: 'Containing element?',
-      choices: availableDestinations(config, answers)
-    })
-  }
-
-  function elementNamePrefix (elementClass) {
-    return {
-      PageStackElement: 'page-stack-',
-      PlainElement: 'plain-',
-      PagePlainElement: 'page-plain-',
-      PageStackListLoadingElement: 'page-stack-list-',
-      PageStackSingleLoadingElement: 'page-stack-single-',
-      PageViewElement: 'page-view-',
-      PageAddElement: 'page-add-',
-      PageEditElement: 'page-edit-',
-      PageListElement: 'page-list-',
-      ViewElement: 'view-',
-      AddElement: 'add-',
-      EditElement: 'edit-',
-      ListElement: 'list-'
-    }[elementClass]
-  }
-
-  function elementUrlPrefix (elementClass) {
-    return {
-      PageStackElement: '',
-      PagePlainElement: '',
-      PageStackListLoadingElement: 'list-',
-      PageStackSingleLoadingElement: '',
-      PageViewElement: 'view',
-      PageAddElement: 'add',
-      PageEditElement: 'edit',
-      PageListElement: 'list'
-    }[elementClass]
-  }
 
   answers.elementName = await utils.prompt({
     type: 'text',
@@ -277,7 +178,7 @@ INITIAL WRITEUP:
         // Plain stack
         {
           title: 'PageStackElement',
-          description: 'A simple stack, for non-data pages. Can contain subroutes. E.g. /faq',
+          description: `A simple stack, for non-data pages. Can contain subroutes. E.g. /faq.${noStoresAvailableMessage}`,
           value: 'PageStackElement'
         }
       ]
@@ -324,7 +225,7 @@ INITIAL WRITEUP:
         // Plain page
         {
           title: 'PagePlainElement',
-          description: 'A simple page, for non-data pages. Cannot contain subroutes.',
+          description: `A simple page, for non-data pages. Cannot contain subroutes.${noStoresAvailableMessage}`,
           value: 'PagePlainElement'
         }
       ]
@@ -332,28 +233,28 @@ INITIAL WRITEUP:
       if (storesAvailable) {
         choices = [
           ...choices,
-          // Stack page
+          // Store Page
           {
             title: 'PageAddElement',
             description: 'A record-adding page, contained in a PageStackListLoadingElement stack',
             value: 'PageAddElement'
           },
 
-          // Stack page
+          // Store Page
           {
             title: 'PageListElement',
             description: 'A record-listing page, contained in a PageStackListLoadingElement stack',
             value: 'PageListElement'
           },
 
-          // Stack page
+          // Store Page
           {
             title: 'PageEditElement',
             description: 'A record-editing page, contained in a PageStackSingleLoadingElement stack',
             value: 'PageAddElement'
           },
 
-          // Stack page
+          // Store Page
           {
             title: 'PageViewElement',
             description: 'A record-viewing page, contained in a PageStackSingleLoadingElement stack',
@@ -426,12 +327,13 @@ INITIAL WRITEUP:
     } else {
       answers.uncommentedStaticImport = true
     }
+  // NOT a page...
   } else {
     let choices = [
-      // Plain page
+      // Plain Element
       {
         title: 'PlainElement',
-        description: 'A simple page, for non-data pages. Cannot contain subroutes.',
+        description: `A simple page, for non-data pages. Cannot contain subroutes.${noStoresAvailableMessage}`,
         value: 'PlainElement'
       }
     ]
@@ -439,7 +341,7 @@ INITIAL WRITEUP:
     if (storesAvailable) {
       choices = [
         ...choices,
-        // Loading stack
+        // Store-bound
         {
           title: 'AddElement',
           description: 'A record-adding element, stand-alone, not a page',
@@ -479,6 +381,14 @@ INITIAL WRITEUP:
     answers.destinationFile = destination.file
   }
 
+  if (['PageStackListLoadingElement', 'PageStackSingleLoadingElement'].includes(answers.elementClass)) {
+    answers.storeFile = await utils.prompt({
+      type: 'select',
+      message: 'Which store will this loading stack get its data from?',
+      choices: availableStores
+    })
+  }
+
   return answers
 }
 
@@ -512,6 +422,20 @@ JSON5 contract:
 - newElementInfo.importPath
 */
 exports.postPrompts = async (config, answers) => {
+  //
+  const newElementInfo = {}
+
+  // COMMON PROPS
+  const type = answers.type
+  const scope = answers.scope
+  const storeFile = answers.storeFile
+  const elementName = elementNamePrefix() + answers.elementName
+  const baseClass = answers.baseClass
+  const name = `${config.vars.elPrefix}-${elementName}`
+  const nameNoPrefix = elementName
+
+  // const fieldElements = utils.fieldElements(type, config, answers, store)
+
   if (answers.isPage) {
     if (answers.typeOfPage === 'stack') {
       // answers.elementClass: 'pageStackElement', 'PageStackListLoadingElement' or 'PageStackSingleLoadingElement'
@@ -533,31 +457,6 @@ exports.postPrompts = async (config, answers) => {
     // answers.destinationFile
     // TODO: set a store name, or create one, in PROMPT code above and get that store's info here
   }
-
-  // -------------------------------------------------------------------------------
-  /*
-  //
-  const elementBaseClass = (type) => {
-    const lookup = {
-      plain: 'AppElement',
-      edit: 'EditElement',
-      list: 'ListElement',
-      view: 'ViewElement',
-      page: 'PageStackElement',
-      'root-page': 'PageStackElement'
-    }
-    return lookup[type]
-  }
-
-  // COMMON PROPS
-  const type = answers.type
-  const scope = answers.scope
-  const store = answers.store
-  const elementName = utils.elementNameFromInput(answers.elementName, answers.type)
-  const baseClass = elementBaseClass(type)
-  const fieldElements = utils.fieldElements(type, config, answers, store)
-  const name = `${config.vars.elPrefix}-${elementName}`
-  const nameNoPrefix = elementName
 
   // EXTRA PROPS
   const insertElement = answers.insertElement && answers.destination
@@ -653,7 +552,6 @@ exports.postPrompts = async (config, answers) => {
     uncommentedStaticImport,
     notInDrawer
   }
-  */
 }
 
 exports.postAdd = (config) => {

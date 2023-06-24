@@ -177,10 +177,10 @@ Only page elements will ever load data. All of the other elements do not do the 
 * AppElement (Basic theming styles, basic sizing, etc). **GO: Anywhere
 * AppPageElement RoutingMixin(HideInactiveMixin(LoaderMixin(RoutingLoaderMixin(AppElement)))) **GO: AppPageElement, AppRootPageElement
 *
-* PageAddElement (AppElement) **GO: AppPagageElement, AppRootPageElement
-* PageEditElement (AppElement) **GO: AppPagageElement, AppRootPageElement
-* PageViewElement (AppElement) **GO: AppPagageElement, AppRootPageElement
-* PageListElement (AppElement) **GO: AppPagageElement, AppRootPageElement
+* PageAddElement (AppElement) **GO: AppPageElement, AppRootPageElement
+* PageEditElement (AppElement) **GO: AppPageElement, AppRootPageElement
+* PageViewElement (AppElement) **GO: AppPageElement, AppRootPageElement
+* PageListElement (AppElement) **GO: AppPageElement, AppRootPageElement
 
 
 "src/lib/base/AppElement.js":[
