@@ -10,37 +10,6 @@ function destinationElement (config, answers) {
   })
 }
 
-function elementNamePrefix (elementClass) {
-  return {
-    PageStackElement: 'page-stack-',
-    PlainElement: 'plain-',
-    PagePlainElement: 'page-plain-',
-    PageStackListLoadingElement: 'page-stack-list-',
-    PageStackSingleLoadingElement: 'page-stack-single-',
-    PageViewElement: 'page-view-',
-    PageAddElement: 'page-add-',
-    PageEditElement: 'page-edit-',
-    PageListElement: 'page-list-',
-    ViewElement: 'view-',
-    AddElement: 'add-',
-    EditElement: 'edit-',
-    ListElement: 'list-'
-  }[elementClass]
-}
-
-function elementUrlPrefix (elementClass) {
-  return {
-    PageStackElement: '',
-    PagePlainElement: '',
-    PageStackListLoadingElement: 'list-',
-    PageStackSingleLoadingElement: '',
-    PageViewElement: 'view-',
-    PageAddElement: 'add-',
-    PageEditElement: 'edit-',
-    PageListElement: 'list-'
-  }[elementClass]
-}
-
 function availableDestinations (config, answers, keepContents = false) {
   const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
   const allClasses = ['PageStackElement', 'PagePlainElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement', 'ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
@@ -79,12 +48,13 @@ function availableDestinations (config, answers, keepContents = false) {
     * ViewElement       |
     * ListElement       ]
   */
+ debugger
   const matches = utils
-    .getFiles(config, o => classes.include(o.baseClass))
+    .getFiles(config, info => classes.includes(info.baseClass))
     .map(o => ({ ...o, title: o.file, value: o.file }))
 
   // Add the main page for specific elements that CAN go there
-  if (['pageStackElement', 'PageStackListLoadingElement', 'PagePlainElement'].includes(answers.elementClass)) {
+  if (['PageStackElement', 'PageStackListLoadingElement', 'PagePlainElement'].includes(answers.elementClass)) {
     const file = `src/${config.vars.appFile}.js`
     matches.push({
       title: file,
@@ -107,7 +77,7 @@ const elementIsPage = (type) => ['root-page', 'page'].includes(type)
 exports.getPrompts = async (config) => {
   const answers = {}
 
-  const availableStores = utils.getFiles(config, o => o.info.storeName)
+  const availableStores = utils.getFiles(config, info => info.storeName)
   const storesModuleInstalled = fs.existsSync(path.join(config.dstScaffoldizerInstalledDir, 'client-app-stores'))
 
   const storesAvailable = storesModuleInstalled && availableStores.length
@@ -139,15 +109,6 @@ PLACEMENTS:
   * ListElement       ]
 
 */
-
-  answers.elementName = await utils.prompt({
-    type: 'text',
-    message: 'Element name',
-    initial: '',
-    validate: (value) => {
-      return utils.elementNameValidator(config, value)
-    }
-  })
 
   answers.isPage = await utils.prompt({
     type: 'confirm',
@@ -208,17 +169,8 @@ PLACEMENTS:
         choices
       })
 
-      const destination = await destinationElement(answers)
+      const destination = await destinationElement(config, answers)
       answers.destinationFile = destination.file
-
-      // List stacks are the only way to "initiate" a store,
-      // since single stacks will always inherit it from the parent list.
-      // So, if elementClass === PageStackListLoadingElement,
-      // ask which store or allow creating one
-      if (answers.elementClass === 'PageStackListLoadingElement') {
-        const store = await utils.askStoreQuestions(config)
-        answers.store = store.storeName
-      }
       //
     } else {
       let choices = [
@@ -269,7 +221,7 @@ PLACEMENTS:
         choices
       })
 
-      const destination = await destinationElement(answers)
+      const destination = await destinationElement(config, answers)
       answers.destinationFile = destination.file
       answers.mainAppPage = destination.mainAppPage
 
@@ -377,11 +329,25 @@ PLACEMENTS:
       choices
     })
 
-    const destination = await destinationElement(answers)
+    const destination = await destinationElement(config, answers)
     answers.destinationFile = destination.file
   }
 
-  if (['PageStackListLoadingElement', 'PageStackSingleLoadingElement'].includes(answers.elementClass)) {
+  answers.elementName = await utils.prompt({
+    type: 'text',
+    message: 'Element name',
+    initial: '',
+    validate: (elementName) => {
+      return utils.elementNameValidator(config, answers.elementClass, elementName)
+    }
+  })
+
+  // List stacks are the only way to "initiate" a store,
+  // since single stacks will always inherit it from the parent list.
+  // So, if elementClass === PageStackListLoadingElement,
+  // ask which store or allow creating one
+  // Even PageStackSingleLoadingElement will inherit the store from the list
+  if (answers.elementClass === 'PageStackListLoadingElement') {
     answers.storeFile = await utils.prompt({
       type: 'select',
       message: 'Which store will this loading stack get its data from?',
@@ -429,7 +395,7 @@ exports.postPrompts = async (config, answers) => {
   const type = answers.type
   const scope = answers.scope
   const storeFile = answers.storeFile
-  const elementName = elementNamePrefix() + answers.elementName
+  const elementName = utils.elementNameFromInput(answers.baseClass, answers.elementName)
   const baseClass = answers.baseClass
   const name = `${config.vars.elPrefix}-${elementName}`
   const nameNoPrefix = elementName

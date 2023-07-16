@@ -23,8 +23,7 @@ class Store extends HttpMixin(JsonRestStores) {
 <% } -%>
   static get schema () {
     return new Schema({
-<%-vars.newStoreInfo.asText.fields%>      
-      /* Fields insertion point */
+<%-vars.newStoreInfo.asText.fields%>
     })
   }
 

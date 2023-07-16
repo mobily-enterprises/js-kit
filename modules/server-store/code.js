@@ -136,19 +136,20 @@ exports.getPrompts = async (config) => {
       initial: 'id'
     })
 
-    answers.addFields = await utils.prompt({
-      type: 'confirm',
-      message: 'Would you like to set this store\'s fields?',
-      initial: true
-    })
   }
+
+  answers.addFields = await utils.prompt({
+    type: 'confirm',
+    message: 'Would you like to set this store\'s fields?',
+    initial: true
+  })
 
   if (answers.addFields) {
     answers.fields = await utils.getStoreFields(config, answers, maybePositionField(answers.positionField))
 
     const searchableFields = Object.keys(answers.fields).filter(f => answers.fields[f].searchable).map(e => { return { title: e, value: e } })
     if (searchableFields.length) {
-      answers.sortableFields = utils.prompt({
+      answers.sortableFields = await utils.prompt({
         type: 'multiselect',
         message: 'Which fields are sortable?',
         choices: searchableFields
@@ -159,7 +160,7 @@ exports.getPrompts = async (config) => {
   }
 
   if (answers.typeOfStore === 'db') {
-    answers.syncUp = await config.prompts({
+    answers.syncUp = await utils.prompt({
       type: 'confirm',
       message: 'Would you like to sync up the DB\'s schema with this store?',
       initial: true
@@ -198,6 +199,7 @@ exports.postPrompts = (config, answers) => {
     newStoreInfo.positionFilter = Object.keys(answers.fields).filter(f => answers.fields[f].isParent)
     newStoreInfo.asText.positionFilter = utils.nativeVar(newStoreInfo.positionFilter)
   }
+  config.vars.newStoreInfo = newStoreInfo
 }
 
 exports.boot = (config) => { }

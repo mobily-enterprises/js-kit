@@ -141,20 +141,40 @@ exports.getFiles = function (config, filter) {
 }
 
 exports.getFilesWithAttribute = (config, name, value) => {
-  return exports.getFiles(config, (o) => o.info[name] === value)
+  return exports.getFiles(config, (info) => info[name] === value)
 }
 
 exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
-  const list = exports.getFiles(config, o => o.info.storeName === storeName)
+  const list = exports.getFiles(config, (info) => info.storeName === storeName)
   if (!list.find(o => o.info.storeVersion === version)) return ''
   return `Store already exists in this version - ${list.map(e => `${e.info.storeVersion}/${e.info.storeName}`).join(', ')}`
 }
 
-exports.elementNameValidator = (config, value, prev) => {
-  return !value.match(/^[a-z]+[a-z0-9\-]*$/)
+exports.elementNameFromInput = (elementClass, inputElementName) => {
+  const prefix = {
+    PageStackElement: 'page-stack-',
+    PlainElement: 'plain-',
+    PagePlainElement: 'page-plain-',
+    PageStackListLoadingElement: 'page-stack-list-',
+    PageStackSingleLoadingElement: 'page-stack-single-',
+    PageViewElement: 'page-view-',
+    PageAddElement: 'page-add-',
+    PageEditElement: 'page-edit-',
+    PageListElement: 'page-list-',
+    ViewElement: 'view-',
+    AddElement: 'add-',
+    EditElement: 'edit-',
+    ListElement: 'list-'
+  }[elementClass]
+
+  return prefix + inputElementName
+}
+
+exports.elementNameValidator = (config, elementClass, elementName) => {
+  return !elementName.match(/^[a-z]+[a-z0-9\-]*$/)
     ? 'Only lower case characters, numbers and dashes allowed'
     : (
-        exports.getFilesWithAttribute(config, 'definedElement', `${config.vars.elPrefix}-${exports.elementNameFromInput(value, prev)}`)
+        exports.getFilesWithAttribute(config, 'definedElement', `${exports.elementNameFromInput(elementClass, elementName)}}`)
           ? 'Element already defined'
           : true
       )
@@ -251,7 +271,7 @@ exports.storePublicURLValidator = (config) => {
     return !value.match(/^\/[a-z0-9A-Z\-\/_]*$/)
       ? 'Valid URLs, starting with "/", and without trailing "/"'
       : (
-          exports.getFilesWithAttribute(config, 'storePublicURL', value)
+          exports.getFilesWithAttribute(config, 'storePublicURL', value).length
             ? 'Store URL already defined by another store'
             : true
         )
@@ -426,7 +446,7 @@ exports.getStoreFields = async (config, storeDefaults, existingFields) => {
         ])
 
         let defaultInitialValue
-        switch(type) {
+        switch (type) {
           case 'cancel':
             continue
 
