@@ -12,7 +12,9 @@ function destinationElement (config, answers) {
 
 function availableDestinations (config, answers, keepContents = false) {
   const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
-  const allClasses = ['PageStackElement', 'PagePlainElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement', 'ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
+  const allPageElements = ['PagePlainElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement']
+  const allPlainElements = ['ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
+  const allClasses = [...allStackClasses, allPageElements, allPlainElements]
 
   const classes = {
     PageStackElement: ['PageStackElement'],
@@ -48,7 +50,6 @@ function availableDestinations (config, answers, keepContents = false) {
     * ViewElement       |
     * ListElement       ]
   */
- debugger
   const matches = utils
     .getFiles(config, info => classes.includes(info.baseClass))
     .map(o => ({ ...o, title: o.file, value: o.file }))
@@ -406,10 +407,10 @@ exports.postPrompts = async (config, answers) => {
     if (answers.typeOfPage === 'stack') {
       // answers.elementClass: 'pageStackElement', 'PageStackListLoadingElement' or 'PageStackSingleLoadingElement'
       // answers.destinationFile
-      // answers.mainAppPage
-      // TODO: set a store name, or create one, in PROMPT code above and get that store's info here
+      // answers.mainAppPage (bool)
+      // TODO: for Loading elements, set a store name, or create one, in PROMPT code above and get that store's info here
       //
-    } else { // answers.typeOfPage === 'stack'
+    } else { // answers.typeOfPage !== 'stack'
       // answers.elementClass: 'PagePlainElement', 'PageAddElement', 'PageListElement', 'PageEditElement', 'PageViewElement'
       // answers.destinationFile
       // answers.mainAppPage (bool)

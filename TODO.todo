@@ -222,22 +222,22 @@ STAGE 2:
 ✔ Add hook "askPrompts", and call it in Scaffoldizer, adding there the extra questions. Note that getPrompts is actually legacy @done(23-06-11 15:20)
 ✔ Make sure things are still functioning after sweeping changes to prompets architecture @done(23-06-11 21:10)
 ✔ Make sure the root page is still added, that is: all of the variables are passed @done(23-06-11 21:10)
+✔ Check possibility of NOT having insertion points, but analyse code instead. <--- PLEASE @done(23-07-16 09:48)
+☐ Complete insertion of main pages
 ☐ Complete insertion of elements which will be sub-tabs, using the normal element placeholder.
-☐ Make sure that variables are passed (all IDs and *Record values), and make sure that these variables are LIT properties of both pages
 ☐ Complete insertion of normal element into another element, as a global element or as a specficically scoped element
 ☐ Allow adding of store pages, check parameters passed
 
 ☐ Make sure stores are give the right parameters (only the main page of a tab gets the list for now)
 ☐ Make the loader actually work
+☐ Make sure that variables are passed (all IDs and *Record values), and make sure that these variables are LIT properties of both pages
 ☐ Make a form work (pure html), using the data-loader to load data and making sure add-edit-element uses some of en-form code to gather values
 ☐ Make sure everything works as intended in terms of loading, saving, etc.
 ☐ Add links from one screen to the other, final: view linking to edit, 
 ☐ Make inline editing work too: inline-editing
-☐ Make realtime fields work too
-☐ Make everything resilient if network connection fails
+☐ Make realtime fields work too☐ Make everything resilient if network connection fails
 ☐ Make sure every use case in terms of forms really works (real time, inline, normal, etc.) with intra-page linking fully working and full handling of network failures
 ☐ Run 'npm install' (script) when an item is added to dependencies so that sync work at first go and module not in node_modules
-☐ Check possibility of NOT having insertion points, but analyse code instead. <--- PLEASE
 
 ☐ --- STAGE 2 DONE ---
 ☐ server-log-error dependent on server-stores and server-db. Add page to view server errors with details etc.

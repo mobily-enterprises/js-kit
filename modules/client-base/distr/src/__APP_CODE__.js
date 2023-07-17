@@ -25,5 +25,6 @@ export class <%=vars.appFile%> extends LitElement {
 
         <p>Edit <code>src/<%=vars.appFile%></code> and save to reload.</p>
       </main>
+    `
   }
 }

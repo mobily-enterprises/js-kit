@@ -174,7 +174,7 @@ exports.elementNameValidator = (config, elementClass, elementName) => {
   return !elementName.match(/^[a-z]+[a-z0-9\-]*$/)
     ? 'Only lower case characters, numbers and dashes allowed'
     : (
-        exports.getFilesWithAttribute(config, 'definedElement', `${exports.elementNameFromInput(elementClass, elementName)}}`)
+        exports.getFilesWithAttribute(config, 'definedElement', exports.elementNameFromInput(elementClass, elementName)).length
           ? 'Element already defined'
           : true
       )
