@@ -61,8 +61,7 @@ function availableDestinations (config, answers, keepContents = false) {
       title: file,
       file,
       value: `src/${config.vars.appFile}.js`,
-      info: {},
-      mainAppPage: true
+      info: {}
     })
   }
 
@@ -111,13 +110,13 @@ PLACEMENTS:
 
 */
 
-  answers.isPage = await utils.prompt({
+  const isPage = await utils.prompt({
     type: 'confirm',
     message: 'Is it a page rather than a simple element?',
     initial: true
   })
 
-  if (answers.isPage) {
+  if (isPage) {
     //
     answers.typeOfPage = await utils.prompt({
       type: 'select',
@@ -172,6 +171,7 @@ PLACEMENTS:
 
       const destination = await destinationElement(config, answers)
       answers.destinationFile = destination.file
+      answers.destinationFileInfo = destination.info
       //
     } else {
       let choices = [
@@ -224,7 +224,16 @@ PLACEMENTS:
 
       const destination = await destinationElement(config, answers)
       answers.destinationFile = destination.file
-      answers.mainAppPage = destination.mainAppPage
+
+      const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
+
+      if (rootPage) {
+        answers.notInDrawer = await utils.prompt({
+          type: 'confirm',
+          message: 'Do you want to plage the element in the drawer?',
+          initial: true
+        })
+      }
 
       // These are very likely to be main elements
       if (['PageEditElement', 'PageViewElement', 'PageListElement'].includes(answers.elementClass)) {
@@ -270,7 +279,8 @@ PLACEMENTS:
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     })
 
-    if (config.userInput['client-app-frame'].dynamicLoading) { // TODO: Only for root pages
+    const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
+    if (config.userInput['client-app-frame'].dynamicLoading && rootPage) {
       answers.uncommentedStaticImport = await utils.prompt({
         type: 'toggle',
         name: 'value',
@@ -330,8 +340,41 @@ PLACEMENTS:
       choices
     })
 
-    const destination = await destinationElement(config, answers)
-    answers.destinationFile = destination.file
+
+    answers.scope = await utils.prompt({
+      type: 'select',
+      message: 'Is this element global, or only for the destination element?',
+      choices: [
+        {
+          title: 'Global, useful to any element in the app',
+          description: 'Global, available to all elements, and placed in the global /elements directory',
+          value: 'global'
+        },
+        {
+          title: 'Scoped, only useful to destination element',
+          description: 'Scoped, only really useful to the destination element, and placed in the destination element\'s /elements directory',
+          value: 'element'
+        }
+      ]
+    })
+
+    // A scoped element will always be inserted
+    // A global element, on the other hand, might not be
+    let insertElement
+    if (answers.scope === 'element') insertElement = true
+    else {
+      insertElement = await utils.prompt({
+        type: 'confirm',
+        message: 'Do you want to place this element somewhere immediately?',
+        initial: true
+      })
+    }
+
+    if (insertElement) {
+      const destination = await destinationElement(config, answers)
+      answers.destinationFile = destination.file
+      answers.destinationFileInfo = destination.info
+    }
   }
 
   answers.elementName = await utils.prompt({
@@ -362,6 +405,26 @@ PLACEMENTS:
 /*
  # APP ELEMENT CONTRACT
 
+TODO:
+[ ] Check the contract below, maybe delete it, maybe update it
+[ ] Load up information about store and destinationFile
+
+[ ] NON-STORE - convert module.json/template enough to :
+  [ ] add a root stack page
+  [ ] add non-stack pages
+  [ ] add a sub-stack page
+  [ ] add a clean element everywhere
+
+[ ] STORES PAGES - convert module.json/template enough to:
+  [ ] add a list stack with list and add element underneath
+  [ ] add a viewer stack with view, edit element
+  [ ] add a clean element everywhere (again, in store elements)
+  [ ] programmatically add full CRUD to a list
+
+[ ] STORE FILES - convert module.json/template enough to:
+  [ ] add a list as an element
+  [ ] Figure out how to add adding + viewing/editing without routing (no pages, no routing)
+
 Template: plain-PREFIX-ELEMENTNAME.js
 
 Utils variables:
@@ -370,7 +433,6 @@ Utils variables:
 Template variables:
 - newElementInfo.baseClass (common)
 - newElementInfo.libPath (common)
-- newElementInfo.ownPath (common)
 - newElementInfo.pagePath (common)
 - newElementInfo.ownHeader (common)
 - newElementInfo.menuTitle (common)
@@ -384,66 +446,100 @@ JSON5 contract:
 - newElementInfo.nameNoPrefix (common)
 - newElementInfo.copyToDirectory (common)
 
-- newElementInfo.insertElement (prompt)
-- newElementInfo.destination (.file and .anchorPoint) (prompt)
+- newElementInfo.destinationFile
+- newElementInfo.destinationFileInfo
 - newElementInfo.importPath
 */
 exports.postPrompts = async (config, answers) => {
   //
-  const newElementInfo = {}
-
+ 
   // COMMON PROPS
   const type = answers.type
-  const scope = answers.scope
   const storeFile = answers.storeFile
   const elementName = utils.elementNameFromInput(answers.baseClass, answers.elementName)
   const baseClass = answers.baseClass
   const name = `${config.vars.elPrefix}-${elementName}`
   const nameNoPrefix = elementName
+  const isPage = answers.elementClass.startsWith('Page')
+  const isStack = answers.elementClass.startsWith('PageStack')
+  const scope = answers.scope && !isPage
+  const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
+  const notInDrawer = answers.notInDrawer
+  const uncommentedStaticImport = answers.uncommentedStaticImport
+  const title = answers.elementTitle
+  const menuTitle = answers.elementMenuTitle
+
+  if (answers.destinationFile && !answers.destinationFileInfo) {
+    // TODO: there is a destination file, but no loaded info. This was likely
+    // added programmatically. Load the info and place them in destinationFileInfo variable
+  }
+
+  if (answers.storeFile && !answers.storeFileInfo) {
+    // TODO: store info not therem load it up
+  }
+
+  let copyToDirectory
+  let libPath
+  let pagePath = ''
+  let subPath
+  let importPath
+  let destination
+  let newElementFile
 
   // const fieldElements = utils.fieldElements(type, config, answers, store)
 
   if (answers.isPage) {
-    if (answers.typeOfPage === 'stack') {
-      // answers.elementClass: 'pageStackElement', 'PageStackListLoadingElement' or 'PageStackSingleLoadingElement'
-      // answers.destinationFile
-      // answers.mainAppPage (bool)
-      // TODO: for Loading elements, set a store name, or create one, in PROMPT code above and get that store's info here
+    // answers.elementClass: (stacks)     'pageStackElement', 'PageStackListLoadingElement' or 'PageStackSingleLoadingElement'
+    // answers.elementClass: (non-stacks) 'PagePlainElement', 'PageAddElement', 'PageListElement', 'PageEditElement', 'PageViewElement'
+    // answers.destinationFile
+    // answers.destinationFileInfo (TODO: MAYBE, might be missing, if missing, load it to allow programmatic adding straight to a file)
+    // answers.elementTitle, answers.elementMenuTitle, answers.uncommentedStaticImport
+
+    // answers.pagePath
+    // answers.subPath
+    // TODO: for Loading elements, set a store name, or create one, in PROMPT code above and get that store's info here
+    // TODO: get store from the destination, and set it here
+    if (rootPage) {
+      copyToDirectory = `src${path.sep}pages`
+      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      libPath = `..${path.sep}lib`
+      pagePath = typeof answers.pagePath === 'undefined' ? `${path.sep}${elementName}` : answers.pagePath
+      importPath = `.${path.sep}pages${path.sep}name.js`
       //
-    } else { // answers.typeOfPage !== 'stack'
-      // answers.elementClass: 'PagePlainElement', 'PageAddElement', 'PageListElement', 'PageEditElement', 'PageViewElement'
-      // answers.destinationFile
-      // answers.mainAppPage (bool)
-      // answers.isMainElement (bool)
-      // answers.subPath
-      // answers.elementTitle, answers.elementMenuTitle, answers.uncommentedStaticImport
-      // TODO: get store from the destination, and set it here
+    } else {
+      copyToDirectory = `${path.dirname(answers.destination.file)}${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, `src${path.sep}lib`) || '.'
+      pagePath = `${answers.destination.pagePath}${answers.subPath}`
+      subPath = answers.subPath
+      importPath = `./${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js`
     }
   } else {
     // elementClass: 'PlainElement', 'AddElement', 'ListElement', 'EditElement', 'ViewElement',
     // answers.destinationFile
+    // answers.destinationFileInfo (MAYBE, might be missing)
+    // answers.scope: 'global', 'element'
     // TODO: set a store name, or create one, in PROMPT code above and get that store's info here
+    if (scope === 'global') {
+      copyToDirectory = `src${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
+      importPath = answers.destinationFile ? `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
+    } else {
+      copyToDirectory = `${path.dirname(destination.file)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, 'src/lib') || '.'
+      importPath = answers.destinationFile ? `.${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
+    }
   }
 
-  // EXTRA PROPS
-  const insertElement = answers.insertElement && answers.destination
-
   // Work out where to copy it
-  let copyToDirectory
-  let libPath
-  let ownPath
-  let pagePath
-  let subPath
-  let importPath
-  let ownHeader
-  let destination
-  let newElementFile
-
+/*
   if (!elementIsPage(answers.type)) {
     if (scope === 'global') {
       destination = insertElement ? answers.destination : {}
       copyToDirectory = `src${path.sep}elements`
-      newElementFile = `root-page${copyToDirectory}${path.sep}${name}.js`
+      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
       libPath = path.relative(`${destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
@@ -464,7 +560,6 @@ exports.postPrompts = async (config, answers) => {
     copyToDirectory = `${path.dirname(answers.destination.file)}${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements`
     newElementFile = `${copyToDirectory}${path.sep}${name}.js`
     libPath = path.relative(`${answers.destination.file}${path.sep}elements`, `src${path.sep}lib`) || '.'
-    ownPath = true
     pagePath = `${answers.destination.pagePath}${answers.subPath}`
     subPath = answers.subPath
     importPath = `./${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js`
@@ -474,7 +569,6 @@ exports.postPrompts = async (config, answers) => {
     copyToDirectory = `src${path.sep}pages`
     newElementFile = `${copyToDirectory}${path.sep}${name}.js`
     libPath = `..${path.sep}lib`
-    ownPath = true
     pagePath = typeof answers.pagePath === 'undefined' ? `${path.sep}${elementName}` : answers.pagePath
     importPath = ''
     ownHeader = true
@@ -490,28 +584,30 @@ exports.postPrompts = async (config, answers) => {
     uncommentedStaticImport = answers.uncommentedStaticImport
     notInDrawer = answers.notInDrawer
   }
+*/
 
   // RETURN THE RESULT OBJECT
   config.vars.newElementInfo = {
     type,
     baseClass,
     libPath,
-    ownPath,
+    isPage,
+    isStack,
     pagePath,
     subPath,
-    ownHeader,
+    rootPage,
     name,
     nameNoPrefix,
     copyToDirectory,
     newElementFile,
-    store,
+    // store,
     destination,
 
-    insertElement,
+    // insertElement,
     importPath,
 
     // add/edit elements
-    fieldElements,
+    // fieldElements,
 
     // Root pages
     title,
@@ -522,8 +618,8 @@ exports.postPrompts = async (config, answers) => {
 }
 
 exports.postAdd = (config) => {
-  // Check answers to adding full add/view/edit if adding PageStackListLoadingElement
-  // Check answers to adding full view/edit (and which default) if adding PageStackSingleLoadingElement
+  // TODO: Check answers to adding full add/view/edit if adding PageStackListLoadingElement
+  // TODO: Check answers to adding full view/edit (and which default) if adding PageStackSingleLoadingElement
 
 }
 
