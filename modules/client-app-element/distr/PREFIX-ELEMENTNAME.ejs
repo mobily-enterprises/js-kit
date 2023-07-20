@@ -1,9 +1,9 @@
 /* Loaded modules -- start */
 import { html, css } from 'lit'
-import { <%=vars.newElementInfo.baseClass%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.baseClass%>.js'
+import { <%=vars.newElementInfo.elementClass%> } from '<%=vars.newElementInfo.libPath%>/base/<%=vars.newElementInfo.elementClass%>.js'
 /* Loaded modules -- end */
 
-class Element extends <%=vars.newElementInfo.baseClass%> {
+class Element extends <%=vars.newElementInfo.elementClass%> {
   <%if(vars.newElementInfo.isPage){ %>static get pagePath () { return ['<%=vars.newElementInfo.pagePath%>'] }<% } else { %>// No URL since this is not a page<% } %>
 
   static get styles () {
@@ -59,4 +59,4 @@ class Element extends <%=vars.newElementInfo.baseClass%> {
   /* Element methods -- end */
 }
 
-window.customElements.define('<%=vars.newElementInfo.name%>', Element)
+window.customElements.define('<%=vars.newElementInfo.nameWithPrefix%>', Element)

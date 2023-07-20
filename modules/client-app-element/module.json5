@@ -45,7 +45,7 @@
           "newlineAfter": false,
           "newlineBefore": false,
           "anchorPoint": "<!-- Element insertion point -->",
-          "value":"<<%=vars.newElementInfo.name%>></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%>></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
 
         // Root page. Add element to the page, as well as (maybe) the import and (maybe) in the drawer
@@ -55,7 +55,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
-          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
         {
           "if":"<%=vars.newElementInfo.type === 'root-page' && userInput['client-app-element'].tailEnd%>",
@@ -63,7 +63,7 @@
           "position":"after",
           "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
-          "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
         {
           "if":"<%=vars.newElementInfo.type === 'root-page'%>",
@@ -71,7 +71,7 @@
           "position":"before",
           "newlineBefore":false,
           "anchorPoint":"/* Extra app modules -- end */",
-          "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.name%>.js'"
+          "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.nameWithPrefix%>.js'"
         },
         {
           "if":"<%=vars.newElementInfo.type === 'root-page' && !vars.newElementInfo.notInDrawer%>",
@@ -90,7 +90,7 @@
           "newlineAfter": true,
           "newlineBefore": false,
           "anchorPoint": "<!-- Page tab insertion point -->",
-          "value":"<<%=vars.newElementInfo.name%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
         {
           "if":"<%=vars.newElementInfo.type === 'page'%>",

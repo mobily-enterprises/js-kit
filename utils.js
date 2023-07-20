@@ -42,8 +42,6 @@ exports.maybeAddStarToPath = async function (contents, m, config) {
   return contents.replace(/([ \t]*static[ \t]+get[ \t]+pagePath[ \t]*\([ \t]*\)[ \t]*{[ \t]*return[ \t]*\[[ \t]*\')(.*?)(\'.*?)/,`$1$2', '$2/\*\*$3`)
 }
 
-
-
 const getFileInfo = function (contents) {
   let m
   let res = {}
@@ -717,7 +715,7 @@ exports.askStoreQuestions = async (config) => {
       console.log('No stores available. You must create a store first')
       process.exit(2)
     } 
-    store =  (await prompts([
+    store = (await prompts([
       {
         type: 'select',
         message: 'Store to query',
