@@ -10,6 +10,7 @@ function destinationElement (config, answers) {
   })
 }
 
+
 function availableDestinations (config, answers, keepContents = false) {
   const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
   const allPageElements = ['PagePlainElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement']
