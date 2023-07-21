@@ -83,6 +83,9 @@ const getFileInfo = function (contents) {
   m = contents.match(/^[ \t]*static[ \t]+get[ \t]+publicURL[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
   if (m) res.storePublicURL = m[1]
 
+  m = contents.match(/^[ \t]*render[ \t]+\(.*$/m)
+  if (m) res.hasRender = true
+
   m = contents.match(/^[ \t]*static[ \t]+get[ \t]+version[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
   if (m) res.storeVersion = m[1]
 
@@ -150,15 +153,12 @@ exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
 
 exports.elementNameFromInput = (elementClass, inputElementName) => {
   const prefix = {
-    PageStackElement: 'page-stack-',
-    PlainElement: 'plain-',
     PagePlainElement: 'page-plain-',
-    PageStackListLoadingElement: 'page-stack-list-',
-    PageStackSingleLoadingElement: 'page-stack-single-',
     PageViewElement: 'page-view-',
     PageAddElement: 'page-add-',
     PageEditElement: 'page-edit-',
     PageListElement: 'page-list-',
+    PlainElement: 'plain-',
     ViewElement: 'view-',
     AddElement: 'add-',
     EditElement: 'edit-',
@@ -178,11 +178,11 @@ exports.elementNameValidator = (config, elementClass, elementName) => {
       )
 }
 
-exports.pagePathValidator = (config, value, prev) => {
-  return !value.match(/^[\/\#]+[a-z0-9\-\/_]*$/)
-    ? 'Valid URLs, starting with "/" or "#"'
+exports.pagePathValidator = (config, value) => {
+  return !value.match(/^[\/]+[a-z0-9\-\/_]*$/)
+    ? 'Valid URLs, starting with "/"'
     : (
-        exports.getFilesWithAttribute(config, 'pagePath', `${prev.pagePath }${value}`)
+        exports.getFilesWithAttribute(config, 'pagePath', value)
           ? 'Element already defined'
           : true
       )

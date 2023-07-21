@@ -57,11 +57,6 @@
           "op":"resolve-ejs"
         }
       ],
-      "src/lib/base/PageStackElement.js":[
-        {
-          "op":"resolve-ejs"
-        },
-      ],
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",

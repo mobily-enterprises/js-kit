@@ -6,49 +6,10 @@ function destinationElement (config, answers) {
   return utils.prompt({
     type: 'select',
     message: 'Containing element?',
-    choices: availableDestinations(config, answers)
+    choices: utils
+      .getFiles(config, info => info.hasRender)
+      .map(o => ({ ...o, title: o.file, value: o.file }))
   })
-}
-
-
-function availableDestinations (config, answers, keepContents = false) {
-  const allStackClasses = ['PageStackElement', 'PageStackListLoadingElement', 'PageStackSingleLoadingElement']
-  const allPageElements = ['PagePlainElement', 'PageViewElement', 'PageEditElement', 'PageAddElement', 'PageListElement']
-  const allPlainElements = ['ViewElement', 'PlainElement', 'AddElement', 'EditElement', 'ListElement']
-  const allClasses = [...allStackClasses, allPageElements, allPlainElements]
-
-  const classes = {
-    PageStackElement: ['PageStackElement'],
-    PagePlainElement: allStackClasses,
-    PageStackListLoadingElement: ['PageStackSingleLoadingElement'],
-    PageStackSingleLoadingElement: ['PageStackListLoadingElement'],
-    PageViewElement: ['PageStackSingleLoadingElement'],
-    PageEditElement: ['PageStackSingleLoadingElement'],
-    PageAddElement: ['PageStackListLoadingElement'],
-    PageListElement: ['PageStackListLoadingElement'],
-    ViewElement: allClasses,
-    PlainElement: allClasses,
-    AddElement: allClasses,
-    EditElement: allClasses,
-    ListElement: allClasses
-  }[answers.elementClass]
-
-  const matches = utils
-    .getFiles(config, info => classes.includes(info.baseClass))
-    .map(o => ({ ...o, title: o.file, value: o.file }))
-
-  // Add the main page for specific elements that CAN go there
-  if (['PageStackElement', 'PageStackListLoadingElement', 'PagePlainElement'].includes(answers.elementClass)) {
-    const file = `src/${config.vars.appFile}.js`
-    matches.push({
-      title: file,
-      file,
-      value: `src/${config.vars.appFile}.js`,
-      info: {}
-    })
-  }
-
-  return matches
 }
 
 exports.getPromptsHeading = (config) => { }
@@ -64,30 +25,6 @@ exports.getPrompts = async (config) => {
   const storesAvailable = storesModuleInstalled && availableStores.length
   const noStoresAvailableMessage = availableStores.length ? '' : ' (No stores available yet)'
 
-  // const toHumanName = ([first, ...rest]) => `${first.toUpperCase()}${rest.join('').replace(/-/g, ' ')}`
-
-  /*
-PLACEMENTS:        (Took a while)
-* Page elements:
-  * PageStackElement (NS) can only go into another PageStackElement (./my-parent-stack-element/) or main page (/src/pages)
-  * PageStackSingleLoading can only go into a PageStackListLoading (./my-parent-stack-element/)
-  * PageStackListLoading can only go into a PageStackSingleLoading (./my-parent-stack-element/) or main page (/src/pages)
-
-  * PagePlainElement(NS)  can go in any *StackElement (./my-parent-stack-element/) or main page (/src/pages)
-  * PageEditElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
-  * PageViewElement can only go in a PageStackSingleLoadingElement (./my-parent-stack-element/)
-  * PageAddElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
-  * PageListElement can only go in a PageStackListLoadingElement (./my-parent-stack-element/)
-
-* Non-page elements:
-  * PlainElement (NS) ]
-  * AddElement        |
-  * EditElement       can go in any element (page or not), placed either in /src/elements or./my-parent-element/elements
-  * ViewElement       |
-  * ListElement       ]
-
-  */
-
   const isPage = await utils.prompt({
     type: 'confirm',
     message: 'Is it a page rather than a simple element?',
@@ -95,155 +32,64 @@ PLACEMENTS:        (Took a while)
   })
 
   if (isPage) {
-    //
-    const typeOfPage = await utils.prompt({
-      type: 'select',
-      message: 'What kind of page is it?',
-      choices: [
+    let choices = [
+      // Plain page (page)
+      {
+        title: 'PagePlainElement',
+        description: `A simple page, for non-data pages. Cannot contain subroutes.${noStoresAvailableMessage}`,
+        value: 'PagePlainElement'
+      }
+    ]
+
+    if (storesAvailable) {
+      choices = [
+        ...choices,
+        // Store Page
         {
-          title: 'A stack. A page which is able to contain other pages',
-          description: 'Used to create a page which will contain routed to sub-pages',
-          value: 'stack'
+          title: 'PageAddElement',
+          description: 'A record-adding page',
+          value: 'PageAddElement'
         },
+
+        // Store Page
         {
-          title: 'A plain page. Its route will not be able to contain sub-routes',
-          value: 'plain'
+          title: 'PageListElement',
+          description: 'A record-listing page',
+          value: 'PageListElement'
+        },
+
+        // Store Page
+        {
+          title: 'PageEditElement',
+          description: 'A record-editing page',
+          value: 'PageAddElement'
+        },
+
+        // Store Page
+        {
+          title: 'PageViewElement',
+          description: 'A record-viewing page',
+          value: 'PageViewElement'
         }
       ]
-    })
-
-    if (typeOfPage === 'stack') {
-      let choices = [
-        // Plain stack (page)
-        {
-          title: 'PageStackElement',
-          description: `A simple stack, for non-data pages. Can contain subroutes. E.g. /faq.${noStoresAvailableMessage}`,
-          value: 'PageStackElement'
-        }
-      ]
-
-      if (storesAvailable) {
-        choices = [
-          ...choices,
-          // Loading stack (page)
-          {
-            title: 'PageStackListLoadingElement',
-            description: 'A stack element which will load a list from a server store. E.g. /people',
-            value: 'PageStackListLoadingElement'
-          },
-
-          // Loading stack
-          {
-            title: 'PageStackSingleLoadingElement',
-            description: 'A stack element which will load a single value from a server store. E.g. /people/:personId',
-            value: 'PageStackSingleLoadingElement'
-          }
-        ]
-      }
-
-      answers.elementClass = await utils.prompt({
-        type: 'select',
-        message: 'What type of stack is it?',
-        choices
-      })
-
-      const destination = await destinationElement(config, answers)
-      answers.destinationFile = destination.file
-      answers.destinationFileInfo = destination.info
-      //
-    } else { // Page, but not a stack
-      let choices = [
-        // Plain page (page)
-        {
-          title: 'PagePlainElement',
-          description: `A simple page, for non-data pages. Cannot contain subroutes.${noStoresAvailableMessage}`,
-          value: 'PagePlainElement'
-        }
-      ]
-
-      if (storesAvailable) {
-        choices = [
-          ...choices,
-          // Store Page
-          {
-            title: 'PageAddElement',
-            description: 'A record-adding page, contained in a PageStackListLoadingElement stack',
-            value: 'PageAddElement'
-          },
-
-          // Store Page
-          {
-            title: 'PageListElement',
-            description: 'A record-listing page, contained in a PageStackListLoadingElement stack',
-            value: 'PageListElement'
-          },
-
-          // Store Page
-          {
-            title: 'PageEditElement',
-            description: 'A record-editing page, contained in a PageStackSingleLoadingElement stack',
-            value: 'PageAddElement'
-          },
-
-          // Store Page
-          {
-            title: 'PageViewElement',
-            description: 'A record-viewing page, contained in a PageStackSingleLoadingElement stack',
-            value: 'PageViewElement'
-          }
-        ]
-      }
-
-      answers.elementClass = await utils.prompt({
-        type: 'select',
-        message: 'What type of page is it?',
-        choices
-      })
-
-      const destination = await destinationElement(config, answers)
-      answers.destinationFile = destination.file
-
-      const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
-
-      if (rootPage) {
-        answers.notInDrawer = await utils.prompt({
-          type: 'confirm',
-          message: 'Do you want to plage the element in the drawer?',
-          initial: true
-        })
-      }
-
-      // These are very likely to be main elements
-      if (['PageEditElement', 'PageViewElement', 'PageListElement'].includes(answers.elementClass)) {
-        //
-        // TODO: Add IF to check that there is not already a main element for the child.
-        // This can easily be done by looking for an element with the same path as the parent
-        // that is NOT a stack
-        answers.isMainElement = await utils.prompt({
-          type: 'confirm',
-          message: 'Is this element the main one (displayed by default) of the destination stack? (URLs will match)',
-          initial: true
-        })
-      } else {
-        answers.isMainElement = false
-      }
-
-      if (!answers.isMainElement) {
-        answers.subPath = await utils.prompt({
-          type: 'text',
-          name: 'subPath',
-          message: `Nested URL, coming from ${destination.info.pagePath}`,
-          validate: (value) => {
-            return utils.pagePathValidator(config, value, destination.info.pagePath)
-          }
-        })
-      }
     }
 
-    // Page-specific questions
+    answers.elementClass = await utils.prompt({
+      type: 'select',
+      message: 'What type of page is it?',
+      choices
+    })
+
+    answers.pagePath = await utils.prompt({
+      type: 'text',
+      message: 'Page URL',
+      validate: (value) => {
+        return utils.pagePathValidator(config, value)
+      }
+    })
+
     answers.elementTitle = await utils.prompt({
       type: 'text',
-      name: 'value',
       message: 'Page title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
@@ -251,17 +97,14 @@ PLACEMENTS:        (Took a while)
 
     answers.elementMenuTitle = await utils.prompt({
       type: 'text',
-      name: 'value',
       message: 'Page menu title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     })
 
-    const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
-    if (config.userInput['client-app-frame'].dynamicLoading && rootPage) {
+    if (config.userInput['client-app-frame'].dynamicLoading) {
       answers.uncommentedStaticImport = await utils.prompt({
         type: 'toggle',
-        name: 'value',
         message: 'Force static load with static import, even though app supports dynamic imports',
         initial: false
       })
@@ -322,32 +165,28 @@ PLACEMENTS:        (Took a while)
 
     answers.scope = await utils.prompt({
       type: 'select',
-      message: 'Is this element global, or only for the destination element?',
+      message: 'Where do you want to place the element?',
       choices: [
+        // Store-bound
         {
-          title: 'Global, useful to any element in the app',
-          description: 'Global, available to all elements, and placed in the global /elements directory',
+          title: 'Global scope',
+          description: 'The element will be placed in the app\'s `elements` directory',
           value: 'global'
         },
+        // Store-bound
         {
-          title: 'Scoped, only useful to destination element',
-          description: 'Scoped, only really useful to the destination element, and placed in the destination element\'s /elements directory',
-          value: 'element'
+          title: 'Local scope',
+          description: 'The element will be placed in a folder named after the containing element',
+          value: 'global'
         }
       ]
     })
 
-    // A scoped element will always be inserted
-    // A global element, on the other hand, might not be
-    let insertElement
-    if (answers.scope === 'element') insertElement = true
-    else {
-      insertElement = await utils.prompt({
-        type: 'confirm',
-        message: 'Do you want to place this element somewhere immediately?',
-        initial: true
-      })
-    }
+    const insertElement = await utils.prompt({
+      type: 'confirm',
+      message: 'Do you want to place this element somewhere immediately?',
+      initial: true
+    })
 
     if (insertElement) {
       const destination = await destinationElement(config, answers)
@@ -365,15 +204,10 @@ PLACEMENTS:        (Took a while)
     }
   })
 
-  // List stacks are the only way to "initiate" a store,
-  // since single stacks will always inherit it from the parent list.
-  // So, if elementClass === PageStackListLoadingElement,
-  // ask which store or allow creating one
-  // Even PageStackSingleLoadingElement will inherit the store from the list
-  if (answers.elementClass === 'PageStackListLoadingElement') {
+  if (!(answers.elementClass.endsWith('PlainElement'))) {
     answers.storeFile = await utils.prompt({
       type: 'select',
-      message: 'Which store will this loading stack get its data from?',
+      message: 'Which store will this element get its data from?',
       choices: availableStores
     })
   }
@@ -381,50 +215,24 @@ PLACEMENTS:        (Took a while)
   return answers
 }
 
-/*
-TODO:
-[X] Check the contract below, maybe delete it, maybe update it
-[X] Load up information about storeFile and destinationFile (done) if not present
-[X] Work out name of store from parent, and add it to the list of variables
-[ ] Add prompt for store (but always load the info in postPrompt regardless for 100% consistency)
-
-[ ] NON-STORE - convert module.json/template enough to :
-  [ ] add a root stack page
-  [ ] add non-stack pages
-  [ ] add a sub-stack page
-  [ ] add a clean element everywhere
-
-[ ] STORES PAGES - convert module.json/template enough to:
-  [ ] add a list stack with list and add element underneath
-  [ ] add a viewer stack with view, edit element
-  [ ] add a clean element everywhere (again, in store elements)
-  [ ] programmatically add full CRUD to a list
-
-[ ] STORE FILES - convert module.json/template enough to:
-  [ ] add a list as an element
-  [ ] Figure out how to add adding + viewing/editing without routing (no pages, no routing)
-
-*/
 exports.postPrompts = async (config, answers) => {
   //
   // Some worked out variables
   const isPage = answers.elementClass.startsWith('Page')
-  const rootPage = answers.destinationFile === `src/${config.vars.appFile}.js`
-  const isStack = answers.elementClass.startsWith('PageStack')
 
   // API attributes. These are the ones available in the API
-  const elementClass = answers.elementClass // PageStack(ListLoading|SingleLoading|'')Element, Page(Plain|Add|List|Edit|View)Element, (Plain|List|Edit|View)Element)
+  const elementClass = answers.elementClass 
   const elementName = utils.elementNameFromInput(answers.baseClass, answers.elementName)
   const destinationFile = answers.destinationFile || '' // Not necessarily there, Plain elements might not be copied over
   const destinationFileInfo = answers.destinationFileInfo || null // Not necessarity available (e.g. if used via API)
-  const notInDrawer = rootPage && !!answers.notInDrawer // Pages (root ones) only
+  const notInDrawer = !!answers.notInDrawer // Pages (root ones) only
   const uncommentedStaticImport = !!answers.uncommentedStaticImport // Pages (root ones) only
-  const isMainElement = !!answers.isMainElement // Page(Edit|View|List)Element only. It's main element of stack
   const storeFile = answers.storeFile || '' // Page(Edit|View|List)Element only. The store's file
   const title = !isPage ? '' : (answers.elementTitle || '') // Pages only
   const menuTitle = !isPage ? '' : (answers.elementMenuTitle || '') // Pages only
-  const scope = !isPage && answers.scope // Only non-pages: global or local 
   const tailEnd = !!answers.tailEnd // Not asked interactively, but usable if adding element programmatically
+  const scope = answers.scope
+  const pagePath = answers.pagePath
 
   // More worked out variables
   const nameWithPrefix = `${config.vars.elPrefix}-${elementName}`
@@ -443,27 +251,12 @@ exports.postPrompts = async (config, answers) => {
   let newElementFile = '' // Req
   let libPath = '' // Req
   let importPath = '' //  Req for pages
-  let pagePath = ''
-  let subPath = ''
-
-  // const fieldElements = utils.fieldElements(type, config, answers, store)
 
   if (answers.isPage) {
-    if (rootPage) {
-      copyToDirectory = `src${path.sep}pages`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = `..${path.sep}lib`
-      importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
-      pagePath = `/${answers.subPath}`
-      //
-    } else {
-      copyToDirectory = `${path.dirname(answers.destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destinationFile}${path.sep}elements`, `src${path.sep}lib`) || '.'
-      pagePath = isMainElement ? answers.destinationFileInfo.pagePath : `${answers.destinationFileInfo.pagePath}${answers.subPath}`
-      subPath = answers.subPath
-      importPath = `./${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
-    }
+    copyToDirectory = `src${path.sep}pages`
+    newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+    libPath = `..${path.sep}lib`
+    importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
   } else {
     if (scope === 'global') {
       copyToDirectory = `src${path.sep}elements`
@@ -471,10 +264,10 @@ exports.postPrompts = async (config, answers) => {
       libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
       if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
     } else {
-      copyToDirectory = `${path.dirname(destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
+      copyToDirectory = `${path.dirname(destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}`
       newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, 'src/lib') || '.'
-      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destinationFile}${path.sep}`, 'src/lib') || '.'
+      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}${nameWithPrefix}.js`
     }
   }
 
@@ -482,8 +275,6 @@ exports.postPrompts = async (config, answers) => {
   config.vars.newElementInfo = {
 
     isPage,
-    rootPage,
-    isStack,
 
     // API
     elementClass,
@@ -492,12 +283,12 @@ exports.postPrompts = async (config, answers) => {
     destinationFileInfo,
     notInDrawer,
     uncommentedStaticImport,
-    isMainElement,
     storeFile,
     title,
     menuTitle,
     scope,
     tailEnd,
+    pagePath,
     // END OF API
 
     storeFileInfo,
@@ -508,17 +299,12 @@ exports.postPrompts = async (config, answers) => {
     copyToDirectory,
     newElementFile,
     libPath,
-    importPath,
-    pagePath,
-    subPath
+    importPath
   }
 }
 
 exports.postAdd = (config) => {
-  // TODO: Check answers to adding full add/view/edit if adding PageStackListLoadingElement
-  // TODO: Check answers to adding full view/edit (and which default) if adding PageStackSingleLoadingElement
-  // Dreeeeeeeeeeeeeaaaaaaaaaammmmmmmmiiiiiiiinnnnnnnnnnggggggggggggggggg
-
+  // TODO: Check answers to adding full view/edit (and which default) if adding PageViewElement
 }
 
 exports.boot = (config) => { }
@@ -582,4 +368,36 @@ exports.fileRenamer = (config, file) => {
     uncommentedStaticImport = answers.uncommentedStaticImport
     notInDrawer = answers.notInDrawer
   }
+
+  // THIS USED TO BE FOR SUB-PAGES, SOMETHING I NO LONGER DO
+  if (answers.isPage) {
+    if (rootPage) {
+      copyToDirectory = `src${path.sep}pages`
+      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+      libPath = `..${path.sep}lib`
+      importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
+      pagePath = `/${answers.subPath}`
+      //
+    } else {
+      copyToDirectory = `${path.dirname(answers.destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destinationFile}${path.sep}elements`, `src${path.sep}lib`) || '.'
+      pagePath = isMainElement ? answers.destinationFileInfo.pagePath : `${answers.destinationFileInfo.pagePath}${answers.subPath}`
+      subPath = answers.subPath
+      importPath = `./${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+    }
+  } else {
+    if (scope === 'global') {
+      copyToDirectory = `src${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
+      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+    } else {
+      copyToDirectory = `${path.dirname(destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
+      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, 'src/lib') || '.'
+      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+    }
+  }
+
 */
