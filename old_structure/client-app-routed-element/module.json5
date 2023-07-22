@@ -15,8 +15,8 @@
         {
           "op":"resolve-ejs"
         },
-      ],
-      "<%=vars.newElementInfo.destination.file%>":[
+      ],vars.newElementInfo.destinationFile
+      "<%=%>":[
         {
           "op": "insert",
           "position": "before",

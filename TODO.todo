@@ -319,6 +319,10 @@ rm -rf ../example-app/*; cp -pr ../example-app.NEWSTART5/* .
 DEBUG="*" node  ../js-kit/bin/jskit.js add
 npm run start:dev
 
+Testing /3:
+rm -rf ../spain-app/*;cp -pr ../spain-app.BASE/* .
+DEBUG="*" node  ../js-kit/bin/jskit.js add
+npm run start:dev
 
 EVERYTHING BELOW THIS LINE NEEDS TO BE ADJUSTED
 

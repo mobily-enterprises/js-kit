@@ -102,6 +102,14 @@ exports.getPrompts = async (config) => {
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     })
 
+    if (answers.pagePath.indexOf(':') === -1) {
+      answers.inDrawer = await utils.prompt({
+        type: 'confirm',
+        message: 'Do you want to place the element in the drawer?',
+        initial: true
+      })
+    }
+
     if (config.userInput['client-app-frame'].dynamicLoading) {
       answers.uncommentedStaticImport = await utils.prompt({
         type: 'toggle',
@@ -221,18 +229,18 @@ exports.postPrompts = async (config, answers) => {
   const isPage = answers.elementClass.startsWith('Page')
 
   // API attributes. These are the ones available in the API
-  const elementClass = answers.elementClass 
-  const elementName = utils.elementNameFromInput(answers.baseClass, answers.elementName)
+  const elementClass = answers.elementClass
+  const elementName = utils.elementNameFromInput(answers.elementClass, answers.elementName)
   const destinationFile = answers.destinationFile || '' // Not necessarily there, Plain elements might not be copied over
   const destinationFileInfo = answers.destinationFileInfo || null // Not necessarity available (e.g. if used via API)
-  const notInDrawer = !!answers.notInDrawer // Pages (root ones) only
+  const inDrawer = !!answers.inDrawer // Pages (root ones) only
   const uncommentedStaticImport = !!answers.uncommentedStaticImport // Pages (root ones) only
   const storeFile = answers.storeFile || '' // Page(Edit|View|List)Element only. The store's file
   const title = !isPage ? '' : (answers.elementTitle || '') // Pages only
   const menuTitle = !isPage ? '' : (answers.elementMenuTitle || '') // Pages only
   const tailEnd = !!answers.tailEnd // Not asked interactively, but usable if adding element programmatically
-  const scope = answers.scope
-  const pagePath = answers.pagePath
+  const scope = answers.scope || ''
+  const pagePath = answers.pagePath || ''
 
   // More worked out variables
   const nameWithPrefix = `${config.vars.elPrefix}-${elementName}`
@@ -252,7 +260,7 @@ exports.postPrompts = async (config, answers) => {
   let libPath = '' // Req
   let importPath = '' //  Req for pages
 
-  if (answers.isPage) {
+  if (isPage) {
     copyToDirectory = `src${path.sep}pages`
     newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
     libPath = `..${path.sep}lib`
@@ -281,7 +289,7 @@ exports.postPrompts = async (config, answers) => {
     elementName,
     destinationFile,
     destinationFileInfo,
-    notInDrawer,
+    inDrawer,
     uncommentedStaticImport,
     storeFile,
     title,
@@ -312,7 +320,7 @@ exports.boot = (config) => { }
 exports.fileRenamer = (config, file) => {
   switch (file) {
     case 'PREFIX-ELEMENTNAME.ejs':
-      return `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.name}.js`
+      return `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.nameWithPrefix}.js`
     default:
       return file
   }

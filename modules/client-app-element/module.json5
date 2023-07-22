@@ -27,94 +27,95 @@
         },
       ],
 
-      "<%=vars.newElementInfo.destination.file%>":[
+      // App page. For pages, add element to the page, as well as the import and (maybe) in the drawer
+      "src/<%=vars.appFile%>.js":[
+         {
+          "if":"<%=vars.newElementInfo.isPage && userInput['client-app-element'].tailEnd%>",
+          "op":"insert",
+          "newlineAfter":true,
+          "anchorPoint":".....<main...tailend...>...***</main>.....",
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
+        },
+        {
+          "if":"<%=vars.newElementInfo.isPage%>",
+          "op":"insert",
+          "newlineBefore":false,
+          "newlineAfter":true,
+          "anchorPoint":".....***export class.....",
+          "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.nameWithPrefix%>.js'\n"
+        },
+        {
+          "if":"<%=vars.newElementInfo.isPage && vars.newElementInfo.inDrawer%>",
+          "op":"insert",
+          "newlineBefore": false,
+          "newlineAfter": true,
+          "anchorPoint":".....render ()...<ee-drawer...>...***</ee-drawer>.....",
+          "valueFromFile":"drawerEntry.js"
+        },
+        {
+          "if":"<%=vars.newElementInfo.isPage && !userInput['client-app-element'].tailEnd%>",
+          "op":"insert",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":".....<main...>...***</main>.....",
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
+        }
+      ],
+
+      "<%=vars.newElementInfo.destinationFile%>":[
 
         // Straight element. It will position place it in the right spot, if so requested 
         {
-          "if": "<%=vars.newElementInfo.type === 'plain' && vars.newElementInfo.insertElement%>",
+          "if": "<%=!vars.newElementInfo.isPage && vars.newElementInfo.insertElement%>",
           "op": "insert",
-          "position": "before",
-          "newlineAfter": false,
-          "anchorPoint": "/* Loaded modules -- end */",
+          "newlineAfter": true,
+          "anchorPoint":"***.....export class.....",
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "if": "<%=vars.newElementInfo.type === 'plain' && vars.newElementInfo.insertElement%>",
+          "if": "<%=!vars.newElementInfo.isPage && vars.newElementInfo.insertElement%>",
           "op": "insert",
-          "position": "before",
-          "newlineAfter": false,
-          "newlineBefore": false,
-          "anchorPoint": "<!-- Element insertion point -->",
+          "newlineAfter": true,
+          "anchorPoint": ".....<contents>...***</contents>",
           "value":"<<%=vars.newElementInfo.nameWithPrefix%>></<%=vars.newElementInfo.nameWithPrefix%>>"
-        },
-
-        // Root page. Add element to the page, as well as (maybe) the import and (maybe) in the drawer
-        {
-          "if":"<%=vars.newElementInfo.type === 'root-page' && !userInput['client-app-element'].tailEnd%>",
-          "op":"insert",
-          "position":"before",
-          "newlineBefore":false,
-          "anchorPoint":"<!-- App pages -- end -->",
-          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'root-page' && userInput['client-app-element'].tailEnd%>",
-          "op":"insert",
-          "position":"after",
-          "newlineBefore":false,
-          "anchorPoint":"<!-- App pages -- end -->",
-          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'root-page'%>",
-          "op":"insert",
-          "position":"before",
-          "newlineBefore":false,
-          "anchorPoint":"/* Extra app modules -- end */",
-          "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.nameWithPrefix%>.js'"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'root-page' && !vars.newElementInfo.notInDrawer%>",
-          "op":"insert",
-          "position":"before",
-          "newlineBefore":false,
-          "anchorPoint":"<!-- Drawer contents -- end -->",
-          "valueFromFile":"drawerEntry.js"
-        },
-
-        // Page (NON-root). Add element to the page, as well as (maybe) the import and (maybe) in the drawer
-        {
-          "if":"<%=vars.newElementInfo.type === 'page'%>",
-          "op": "insert",
-          "position": "before",
-          "newlineAfter": true,
-          "newlineBefore": false,
-          "anchorPoint": "<!-- Page tab insertion point -->",
-          "value":"<<%=vars.newElementInfo.nameWithPrefix%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.nameWithPrefix%>>"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'page'%>",
-          "op": "insert",
-          "position": "before",
-          "newlineAfter": false,
-          "anchorPoint": "/* Loaded modules -- end */",
-          "value": "import '<%=vars.newElementInfo.importPath%>'"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'page'%>",
-          "op": "insert",
-          "position": "before",
-          "newlineAfter": true,
-          "newlineBefore": false,
-          "anchorPoint": '<!-- Page tab heading insertion point -->',
-          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
-        },
-        {
-          "if":"<%=vars.newElementInfo.type === 'page'%>",
-          "op":"custom",
-          "function":"maybeAddStarToPath"
         }
       ]
     }
   }
 }
+
+
+
+ // Page (NON-root). Add element to the page, as well as (maybe) the import and (maybe) in the drawer
+//        {
+//          "if":"<%=vars.newElementInfo.type === 'page'%>",
+//          "op": "insert",
+//          "position": "before",
+//          "newlineAfter": true,
+//          "newlineBefore": false,
+//          "anchorPoint": "<!-- Page tab insertion point -->",
+//          "value":"<<%=vars.newElementInfo.nameWithPrefix%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.nameWithPrefix%>>"
+//        },
+//        {
+//          "if":"<%=vars.newElementInfo.type === 'page'%>",
+//          "op": "insert",
+//          "position": "before",
+//          "newlineAfter": false,
+//          "anchorPoint": "/* Loaded modules -- end */",
+//          "value": "import '<%=vars.newElementInfo.importPath%>'"
+//        },
+//        {
+//          "if":"<%=vars.newElementInfo.type === 'page'%>",
+//          "op": "insert",
+//          "position": "before",
+//          "newlineAfter": true,
+//          "newlineBefore": false,
+//          "anchorPoint": '<!-- Page tab heading insertion point -->',
+//          "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
+//        },
+//        {
+//          "if":"<%=vars.newElementInfo.type === 'page'%>",
+//          "op":"custom",
+//          "function":"maybeAddStarToPath"
+//        }
+//        */

@@ -182,7 +182,7 @@ exports.pagePathValidator = (config, value) => {
   return !value.match(/^[\/]+[a-z0-9\-\/_]*$/)
     ? 'Valid URLs, starting with "/"'
     : (
-        exports.getFilesWithAttribute(config, 'pagePath', value)
+        exports.getFilesWithAttribute(config, 'pagePath', value).length
           ? 'Element already defined'
           : true
       )

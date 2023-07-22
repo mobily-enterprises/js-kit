@@ -33,15 +33,6 @@
        ]
     },
     "text":{
-      "index.html":[
-        {
-           "op":"insert",
-           "position":"before",
-           "newlineAfter":false,
-           "anchorPoint":"<!-- Head - end DELETED -->",
-           "value":"<script type=\"module\" src=\"node_modules/tpe-material/tpe-material.js\"></script>"
-        }
-      ],
       "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[
         {
           "op":"resolve-ejs"
@@ -57,6 +48,7 @@
           "op":"resolve-ejs"
         }
       ],
+
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",
