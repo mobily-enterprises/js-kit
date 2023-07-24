@@ -88,14 +88,14 @@ exports.getPrompts = async (config) => {
       }
     })
 
-    answers.elementTitle = await utils.prompt({
+    answers.title = await utils.prompt({
       type: 'text',
       message: 'Page title',
       initial: '',
       validate: value => !value.match(/^[a-zA-Z0-9 ]+$/) ? 'Only characters, numbers and spaces allowed' : true
     })
 
-    answers.elementMenuTitle = await utils.prompt({
+    answers.menuTitle = await utils.prompt({
       type: 'text',
       message: 'Page menu title',
       initial: '',
@@ -236,8 +236,8 @@ exports.postPrompts = async (config, answers) => {
   const inDrawer = !!answers.inDrawer // Pages (root ones) only
   const uncommentedStaticImport = !!answers.uncommentedStaticImport // Pages (root ones) only
   const storeFile = answers.storeFile || '' // Page(Edit|View|List)Element only. The store's file
-  const title = !isPage ? '' : (answers.elementTitle || '') // Pages only
-  const menuTitle = !isPage ? '' : (answers.elementMenuTitle || '') // Pages only
+  const title = !isPage ? '' : (answers.title || '') // Pages only
+  const menuTitle = !isPage ? '' : (answers.menuTitle || '') // Pages only
   const tailEnd = !!answers.tailEnd // Not asked interactively, but usable if adding element programmatically
   const scope = answers.scope || ''
   const pagePath = answers.pagePath || ''

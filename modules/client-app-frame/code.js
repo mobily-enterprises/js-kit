@@ -37,6 +37,37 @@ exports.boot = (config) => {
 exports.preAdd = async (config) => { }
 
 exports.postAdd = async (config) => {
+  //
+  await installModule('client-app-element', config, {
+    elementClass: 'PagePlainElement',
+    pagePath: '',
+    title: 'Home',
+    menuTitle: 'Home',
+    inDrawer: true,
+    uncommentedStaticImport: true,
+    elementName: 'home'
+  })
+
+  await installModule('client-app-element', config, {
+    elementClass: 'PagePlainElement',
+    pagePath: '/**',
+    title: 'Not found',
+    menuTitle: 'Home',
+
+    inDrawer: false,
+    uncommentedStaticImport: true,
+    elementName: 'not-found',
+    tailEnd: true
+  })
+
+  await installModule('client-app-element', config, {
+    elementClass: 'PagePlainElement',
+    pagePath: 'load-error',
+    title: 'Load Error',
+    inDrawer: false,
+    uncommentedStaticImport: true,
+    elementName: 'load-error'
+  })
 
   /*
   // Take the return off once installModule() can be used to add a plain element
@@ -89,13 +120,6 @@ exports.postAdd = async (config) => {
           newlineAfter: false,
           anchorPoint: '/* Element styles -- end ',
           valueFromFile: 'warning-css.css'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Host styles -- end ',
-          value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ]
     }
@@ -136,13 +160,6 @@ exports.postAdd = async (config) => {
           newlineAfter: false,
           anchorPoint: '/* Element styles -- end/',
           valueFromFile: 'warning-css.css'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Host styles -- end/',
-          value: 'animation: fadeIn 0.3s ease-in;\ntext-align: center;'
         }
       ]
     }

@@ -18,7 +18,7 @@ class Element extends <%=vars.newElementInfo.elementClass%> {
   constructor () {
     super()
 <%if(vars.newElementInfo.isPage){ -%>
-    this.pageTitle = '<%=vars.newElementInfo.menuTitle%>'
+    this.pageTitle = '<%=vars.newElementInfo.title%>'
 <% } -%>
   }
 
@@ -26,11 +26,16 @@ class Element extends <%=vars.newElementInfo.elementClass%> {
     return html`
       <%if(vars.newElementInfo.isPage){ %>${this.renderHeader()} <% } -%>
       
-      <ee-tabs use-hash id="tab-<%=vars.newElementInfo.nameNoPrefix%>" default="" name-attribute="tab-name">
-        <div is-main-tab routing-group="<%=vars.newElementInfo.nameNoPrefix%>" slot="content">
+      <ee-tabs use-hash id="tab-<%=vars.newElementInfo.nameNoPrefix%>" default="main" name-attribute="tab-name">
+        
+        <a href="<%=vars.newElementInfo.pagePath%>#main" tab-name="main"><div>Main</div></a>
+
+        <div tab-name="main" routing-group="<%=vars.newElementInfo.nameNoPrefix%>" slot="content">
           <contents>
+             <h1><%=vars.newElementInfo.nameNoPrefix%></h1>
           </contents>
         </div>
+
       </ee-tabs>
     `
   }

@@ -33,7 +33,12 @@
        ]
     },
     "text":{
-      "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[
+      "src/lib/base/PagePlainElement.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+      "src/lib/base/AppElementMixins/PageTitleMixin.js":[
         {
           "op":"resolve-ejs"
         }
@@ -48,7 +53,12 @@
           "op":"resolve-ejs"
         }
       ],
-
+      "src/lib/base/elements/<%=vars.elPrefix%>-header.js":[
+        {
+          "op":"resolve-ejs"
+        }
+      ],
+  
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",

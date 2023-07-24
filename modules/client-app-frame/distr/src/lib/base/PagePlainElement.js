@@ -6,10 +6,10 @@ import './elements/<%=vars.elPrefix%>-page-header.js'
 import { AppElement } from './AppElement.js'
 import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
 import { HideInactiveMixin } from './AppElementMixins/HideInactiveMixin.js'
-import { PageTitleMixin } from './AppElementMixins/PagetitleMixin.js'
+import { PageTitleMixin } from './AppElementMixins/PageTitleMixin.js'
 /* Loaded modules -- end */
 
-export class PlainPageElement extends PageTitleMixin(RoutingMixin(HideInactiveMixin(AppElement))) {
+export class PagePlainElement extends PageTitleMixin(RoutingMixin(HideInactiveMixin(AppElement))) {
   static get styles () {
     return [
       super.styles,

@@ -254,6 +254,27 @@ STAGE 2:
 ☐ Maybe add reflect:true to routify's PageElementMixin
 ☐ Add module to build (rollup config)
 
+
+# ACTUAL TODO
+✔ Port the "main" thing onto js-kit, before losing it again -- it will be permanent @done(23-07-23 22:48)
+✔ Fix ee-tab, `pages = this.shadowRoot.querySelector('slot[name="content"]').assignedElements()` needs to be out of ifs @done(23-07-23 22:49)
+✔ Understand why clicking on "main" zaps the /home part of the story and links to #home @done(23-07-23 22:49)
+✔ Add a nice function to swap between tabs @done(23-07-23 22:50)
+✔ Figure out how to prevent the popstate select() to overide whatever is loaded, neatly @done(23-07-24 11:23)
+✔ Figure out a good way of having /home be the same as / (possibly client redirect) @done(23-07-24 21:48)
+✔ Automatically add basic pages (home, not-found, loading-error) to the base app @done(23-07-24 21:57)
+✔ Find better (working) way so that not-found page is at the end, make new section @done(23-07-24 23:06)
+✔ Check why not-found page is missing title/description @done(23-07-24 23:22)
+✔ Publish latest tpe (update npm beforehand) @done(23-07-24 23:37)
+✔ Check why there are too many spaces in SpainApp.js (Drawer and file-not-found) @done(23-07-25 00:12)
+☐ Add option NOT to compare hashes in routify
+☐ Delete tabs from not-found and loading-error
+☐ Run other manipulations to those pages
+
+☐ Make adding of elements (non-pages) work properly
+☐ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it)
+☐ [Raphael] Figure out how to make "Main" invisible when it's the only tab
+ 
 /all-ports
 Is it a static page? Yes
 

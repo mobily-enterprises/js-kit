@@ -32,8 +32,17 @@
          {
           "if":"<%=vars.newElementInfo.isPage && userInput['client-app-element'].tailEnd%>",
           "op":"insert",
+          "newlineBefore":false,
           "newlineAfter":true,
-          "anchorPoint":".....<main...tailend...>...***</main>.....",
+          "anchorPoint":".....<div ...tailend...>...***</div>.....",
+          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
+        },
+                {
+          "if":"<%=vars.newElementInfo.isPage && !userInput['client-app-element'].tailEnd%>",
+          "op":"insert",
+          "newlineBefore":true,
+          "newlineAfter":true,
+          "anchorPoint":".....<div ...main-pages...>...***</div>.....",
           "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
         {
@@ -51,14 +60,6 @@
           "newlineAfter": true,
           "anchorPoint":".....render ()...<ee-drawer...>...***</ee-drawer>.....",
           "valueFromFile":"drawerEntry.js"
-        },
-        {
-          "if":"<%=vars.newElementInfo.isPage && !userInput['client-app-element'].tailEnd%>",
-          "op":"insert",
-          "newlineBefore":true,
-          "newlineAfter":true,
-          "anchorPoint":".....<main...>...***</main>.....",
-          "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         }
       ],
 
