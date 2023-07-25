@@ -201,16 +201,16 @@ exports.getPrompts = async (config) => {
       answers.destinationFile = destination.file
       answers.destinationFileInfo = destination.info
     }
-  }
 
-  answers.elementName = await utils.prompt({
-    type: 'text',
-    message: 'Element name',
-    initial: '',
-    validate: (elementName) => {
-      return utils.elementNameValidator(config, answers.elementClass, elementName)
-    }
-  })
+    answers.elementName = await utils.prompt({
+      type: 'text',
+      message: 'Element name',
+      initial: '',
+      validate: (elementName) => {
+        return utils.elementNameValidator(config, answers.elementClass, elementName)
+      }
+    })
+  }
 
   if (!(answers.elementClass.endsWith('PlainElement'))) {
     answers.storeFile = await utils.prompt({
@@ -230,7 +230,7 @@ exports.postPrompts = async (config, answers) => {
 
   // API attributes. These are the ones available in the API
   const elementClass = answers.elementClass
-  const elementName = utils.elementNameFromInput(answers.elementClass, answers.elementName)
+  const elementName = isPage ? utils.elementNameFromPagePath(config, answers.pagePath) : utils.elementNameFromInput(answers.elementClass, answers.elementName)
   const destinationFile = answers.destinationFile || '' // Not necessarily there, Plain elements might not be copied over
   const destinationFileInfo = answers.destinationFileInfo || null // Not necessarity available (e.g. if used via API)
   const inDrawer = !!answers.inDrawer // Pages (root ones) only

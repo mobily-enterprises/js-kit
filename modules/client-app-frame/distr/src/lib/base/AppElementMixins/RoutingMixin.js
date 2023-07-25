@@ -4,6 +4,11 @@ import { RoutingPageMixin } from 'routify/lit/RoutingPageMixin'
 
 export const RoutingMixin = (base) => {
   return class Base extends RoutingPageMixin(base) {
+    constructor () {
+      super()
+      this.ignoreUrlHashes = true
+    }
+
     shouldUpdate (changed) {
       // If a page goes from inactive to active, dispatch a very useful "activated" event
       // Note that 'changed' has the OLD value of the property

@@ -13,7 +13,7 @@
           {
              "op":"set",
              "key":"dependencies.routify",
-             "value":"^1.2.x"
+             "value":"^2.x.x"
           },
           {
              "op":"set",

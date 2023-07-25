@@ -267,12 +267,14 @@ STAGE 2:
 ✔ Check why not-found page is missing title/description @done(23-07-24 23:22)
 ✔ Publish latest tpe (update npm beforehand) @done(23-07-24 23:37)
 ✔ Check why there are too many spaces in SpainApp.js (Drawer and file-not-found) @done(23-07-25 00:12)
-☐ Add option NOT to compare hashes in routify
-☐ Delete tabs from not-found and loading-error
-☐ Run other manipulations to those pages
+✔ Add option NOT to compare hashes in routify @done(23-07-25 10:07)
+✔ Delete tabs from not-found and loading-error @done(23-07-25 16:44)
+✔ Run other manipulations to those pages @done(23-07-25 16:44)
+☐ Fix the automatic loading of pages, by renaming everything in a totally new way
 
 ☐ Make adding of elements (non-pages) work properly
 ☐ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it)
+
 ☐ [Raphael] Figure out how to make "Main" invisible when it's the only tab
  
 /all-ports

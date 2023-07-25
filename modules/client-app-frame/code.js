@@ -24,7 +24,7 @@ exports.getPrompts = async (config) => {
   answers.dynamicLoading = await utils.prompt({
     type: 'toggle',
     message: 'Enable dynamic loading of pages',
-    initial: false
+    initial: true
   })
 
   return answers
@@ -50,6 +50,26 @@ exports.postAdd = async (config) => {
 
   await installModule('client-app-element', config, {
     elementClass: 'PagePlainElement',
+    pagePath: '/load-error',
+    title: 'Load Error',
+    inDrawer: false,
+    uncommentedStaticImport: true,
+    elementName: 'load-error',
+    tailEnd: true
+  })
+
+  await installModule('client-app-element', config, {
+    elementClass: 'PagePlainElement',
+    pagePath: '/loading',
+    title: 'Loading',
+    inDrawer: false,
+    uncommentedStaticImport: true,
+    elementName: 'loading',
+    tailEnd: true
+  })
+
+  await installModule('client-app-element', config, {
+    elementClass: 'PagePlainElement',
     pagePath: '/**',
     title: 'Not found',
     menuTitle: 'Home',
@@ -60,111 +80,66 @@ exports.postAdd = async (config) => {
     tailEnd: true
   })
 
-  await installModule('client-app-element', config, {
-    elementClass: 'PagePlainElement',
-    pagePath: 'load-error',
-    title: 'Load Error',
-    inDrawer: false,
-    uncommentedStaticImport: true,
-    elementName: 'load-error'
-  })
-
-  /*
-  // Take the return off once installModule() can be used to add a plain element
-  await installModule('client-app-element', config, {
-    type: 'root-page',
-    elementName: 'landing',
-    elementTitle: 'Landing Page',
-    elementMenuTitle: 'Landing',
-    uncommentedStaticImport: true,
-    ownPath: true,
-    pagePath: ''
-  })
-
-  await installModule('client-app-element', config, {
-    type: 'root-page',
-    elementName: 'not-found',
-    elementTitle: 'Not found',
-    elementMenuTitle: 'Not Found',
-    uncommentedStaticImport: true,
-    notInDrawer: true,
-    tailEnd: true,
-    ownPath: true,
-    pagePath: '/**'
-
-  })
-
-  executeManipulations(config, {
-    text: {
-      'src/pages/<%=vars.elPrefix%>-page-not-found.js': [
-        {
-          op: 'resolve-ejs'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '<!-- Element insertion point -->',
-          valueFromFile: 'notFound.html'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Loaded modules -- end ',
-          value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Element styles -- end ',
-          valueFromFile: 'warning-css.css'
-        }
-      ]
+  const changes = [
+    {
+      srcFile: 'src/pages/<%=vars.elPrefix%>-not-found.js',
+      contentsfile: 'notFound.html'
+    },
+    {
+      srcFile: 'src/pages/<%=vars.elPrefix%>-load-error.js',
+      contentsfile: 'loadError.html'
+    },
+    {
+      srcFile: 'src/pages/<%=vars.elPrefix%>-loading.js',
+      contentsfile: 'loading.html'
     }
-  })
 
-  await installModule('client-app-element', config, {
-    type: 'root-page',
-    elementName: 'load-error',
-    elementTitle: 'Load error',
-    elementMenuTitle: 'Load error',
-    uncommentedStaticImport: true,
-    notInDrawer: true
-  })
-
-  executeManipulations(config, {
-    text: {
-      'src/pages/<%=vars.elPrefix%>-page-load-error.js': [
-        {
-          op: 'resolve-ejs'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '<!-- Element insertion point -->',
-          valueFromFile: 'loadError.html'
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Loaded modules -- end/',
-          value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
-        },
-        {
-          op: 'insert',
-          position: 'before',
-          newlineAfter: false,
-          anchorPoint: '/* Element styles -- end/',
-          valueFromFile: 'warning-css.css'
-        }
-      ]
-    }
-  })
-  */
+  ]
+  for (const data of changes) {
+    // Manipulation of the two "error" files
+    executeManipulations(config, {
+      text: {
+        [data.srcFile]: [
+          {
+            op: 'insert',
+            newlineBefore: true,
+            newlineAfter: false,
+            anchorPoint: '.....<ee-tabs...</ee-tabs>***.....',
+            value: '<contents>\n  <!--Page contents -->\n</contents>'
+          },
+          {
+            op: 'deleteText',
+            deleteRegexp: '<ee-tabs[\\s\\S]*</ee-tabs>',
+            deleteRegexpOptions: 'm'
+          },
+          {
+            op: 'insert',
+            position: 'before',
+            newlineBefore: true,
+            newlineAfter: false,
+            anchorPoint: '.....<contents>...***</contents>.....',
+            valueFromFile: data.contentsfile
+          },
+          {
+            op: 'insert',
+            position: 'before',
+            newlineBefore: false,
+            newlineAfter: true,
+            anchorPoint: '.....***class Element.....',
+            value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
+          },
+          {
+            op: 'insert',
+            position: 'before',
+            newlineBefore: true,
+            newlineAfter: false,
+            anchorPoint: '.....static get styles () {...return [...css`***.....',
+            valueFromFile: 'warning-css.css'
+          }
+        ]
+      }
+    })
+  }
 }
 
 exports.fileRenamer = (config, file) => {

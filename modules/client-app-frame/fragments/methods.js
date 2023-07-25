@@ -23,29 +23,44 @@ async routerCallback (params) {
 async runDynamicLoading () {
   const path = window.location.pathname
 
-  // If the element isn't here, teleport to 404 since it's a straight not found
-  const cleanPath = path.split(/[#?/]/)[1]
+  const elementNameFromPagePath = (pagePath) => {
+    if (pagePath === '/**') return 'not-found'
+    if (pagePath === '' || pagePath === '/') return 'home'
+    return pagePath
+      .replace(/^\//, '')
+      .replace(/\//g, '_')
+      .replace(/:/g, '')
+      .replace(/\*\*/g, 'starstar')
+  }
 
-  // Only try to load
-  if (cleanPath !== '') {
-    if (!this.shadowRoot.querySelector(`my-${cleanPath}`)) {
-      activateElement(this.shadowRoot.querySelector('my-not-found'))
-      return
-    }
+  const elementName = elementNameFromPagePath(path)
 
-    // Import the correct module for this page
-    let mod
-    try {
-      mod = await import(`./pages/my-${cleanPath}.js`)
-    } catch (e) {
-      console.error('Error loading module:', e) /* eslint-disable-line no-console */
-      // Nothing needs to happen here
-    }
+  const pageElement = this.shadowRoot.querySelector(`<%=vars.elPrefix%>-${elementName}`)
 
-    // Loading error: display the loading error page
-    if (!mod) {
-      activateElement(this.shadowRoot.querySelector('my-load-error'))
-    }
+  // If it's not in the list pages listed in the main app, issue a file not found
+  if (!pageElement) {
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-not-found'))
+    return
+  }
+
+  // The element is already loaded, since it already has a shadow root
+  if (pageElement.shadowRoot) return
+
+  // Activate the "loading" page
+  activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-loading'))
+ 
+  // Import the correct module for this page
+  let mod
+  try {
+    mod = await import(`./pages/<%=vars.elPrefix%>-${elementName}.js`)
+  } catch (e) {
+    console.error('Error loading module:', e) /* eslint-disable-line no-console */
+    // Nothing needs to happen here
+  }
+
+  // Loading error: display the loading error page
+  if (!mod) {
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-load-error'))
   }
 
   await this.updateComplete

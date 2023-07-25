@@ -153,11 +153,6 @@ exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
 
 exports.elementNameFromInput = (elementClass, inputElementName) => {
   const prefix = {
-    PagePlainElement: 'page-plain-',
-    PageViewElement: 'page-view-',
-    PageAddElement: 'page-add-',
-    PageEditElement: 'page-edit-',
-    PageListElement: 'page-list-',
     PlainElement: 'plain-',
     ViewElement: 'view-',
     AddElement: 'add-',
@@ -166,6 +161,16 @@ exports.elementNameFromInput = (elementClass, inputElementName) => {
   }[elementClass]
 
   return prefix + inputElementName
+}
+
+exports.elementNameFromPagePath = (config, pagePath) => {
+  if (pagePath === '/**') return 'not-found'
+  if (pagePath === '' || pagePath === '/') return 'home'
+  return pagePath
+    .replace(/^\//, '')
+    .replace(/\//g, '_')
+    .replace(/:/g, '')
+    .replace(/\*\*/g, 'starstar')
 }
 
 exports.elementNameValidator = (config, elementClass, elementName) => {
