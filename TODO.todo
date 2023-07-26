@@ -271,9 +271,12 @@ STAGE 2:
 ✔ Delete tabs from not-found and loading-error @done(23-07-25 16:44)
 ✔ Run other manipulations to those pages @done(23-07-25 16:44)
 ✔ Fix the automatic loading of pages, by renaming everything in a totally new way @done(23-07-25 22:04)
-
-☐ Make adding of elements (non-pages) work properly
-☐ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it)
+✔ Make adding of elements (non-pages) work properly @done(23-07-26 23:26)
+✔ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it) @done(23-07-26 23:26)
+☐ Add info about PARENT to newElementInfo, so that it can know things like path and routing group. Fix tabs.js and module.json
+☐ Check if an element has already been created when picking a name
+☐ Add ability to have tab title and option NOT to add tabs for tabs-elements
+☐ Fix weird issues with tabs and spacing, improve in that department so that weirdness doesn't happen
 
 ☐ [Raphael] Figure out how to make "Main" invisible when it's the only tab
  
