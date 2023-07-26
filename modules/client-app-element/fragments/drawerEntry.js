@@ -2,3 +2,4 @@
   <!-- <iron-icon icon="icons:class"></iron-icon> -->
   <span><%=vars.newElementInfo.menuTitle%></span>
 </a>
+

@@ -24,7 +24,8 @@ class Element extends <%=vars.newElementInfo.elementClass%> {
 
   render () {
     return html`
-      <%if(vars.newElementInfo.typeOfElement === 'page'){ %>${this.renderHeader()} <% } -%>
+      <%if(vars.newElementInfo.typeOfElement === 'page'){ %>
+      ${this.renderHeader()} 
       
       <ee-tabs use-hash id="tab-<%=vars.newElementInfo.nameNoPrefix%>" default="main" name-attribute="tab-name">
         
@@ -37,6 +38,11 @@ class Element extends <%=vars.newElementInfo.elementClass%> {
         </div>
 
       </ee-tabs>
+      <% } else { -%>
+      <contents>
+        <h1><%=vars.newElementInfo.nameNoPrefix%></h1>
+     </contents>
+      <% } -%>
     `
   }
 }

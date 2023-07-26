@@ -2,14 +2,20 @@ const path = require('path')
 const utils = require('../../utils.js')
 const fs = require('fs')
 
-function destinationElement (config, answers) {
-  return utils.prompt({
-    type: 'select',
-    message: 'Containing element?',
-    choices: utils
-      .getFiles(config, info => info.hasRender)
-      .map(o => ({ ...o, title: o.file, value: o.file }))
-  })
+function destinationElement (config, answers, choices) {
+  if (answers.typeOfElement === 'tab-element') {
+    return utils.prompt({
+      type: 'select',
+      message: 'Where would you like to add this tab?',
+      choices
+    })
+  } else {
+    return utils.prompt({
+      type: 'select',
+      message: 'Where would you like to insert this element?',
+      choices
+    })
+  }
 }
 
 exports.getPromptsHeading = (config) => { }
@@ -57,9 +63,24 @@ exports.getPrompts = async (config) => {
   }
 
   if (answers.insertElement || answers.typeOfElement === 'tab-element') {
-    const destination = await destinationElement(config, answers)
-    answers.destinationFile = destination.file
-    answers.destinationFileInfo = destination.info
+    let choices
+    if (answers.typeOfElement === 'tab-element') {
+      choices = utils
+        .getFiles(config, info => info.hasTabs && typeof info.pagePath !== 'undefined')
+        .map(o => ({ ...o, title: o.file, value: o }))
+    } else {
+      choices = utils
+        .getFiles(config, info => info.hasContents)
+        .map(o => ({ ...o, title: o.file, value: o }))
+    }
+    if (choices.length) {
+      const destination = await destinationElement(config, answers, choices)
+      answers.destinationFile = destination.file
+      answers.destinationFileInfo = destination.info
+    } else {
+      console.error('No available destinations, aborting...')
+      process.exit(1)
+    }
   }
 
   if (answers.typeOfElement === 'page') {
@@ -239,10 +260,17 @@ exports.postPrompts = async (config, answers) => {
   const tailEnd = !!answers.tailEnd // Not asked interactively, but usable if adding element programmatically
   const filePosition = answers.filePosition || ''
   const pagePath = answers.pagePath || ''
+  const insertElement = answers.insertElement || false
 
   // More worked out variables
   const nameWithPrefix = `${config.vars.elPrefix}-${elementName}`
   const nameNoPrefix = elementName
+  const willNeedToInsertElement = typeOfElement === 'tab-element' || insertElement
+
+  if (typeOfElement === 'tab-element' && !destinationFile) {
+    console.error('Destination file is mandatory for tabs')
+    process.exit(1)
+  }
 
   if (destinationFile && !destinationFileInfo) {
     answers.destinationFileInfo = config.scaffoldizerUtils.fileToInfo(destinationFile)
@@ -258,23 +286,30 @@ exports.postPrompts = async (config, answers) => {
   let libPath = '' // Req
   let importPath = '' //  Req for pages
 
-  if (answers.typeOfElement === 'page') {
-    copyToDirectory = `src${path.sep}pages`
-    newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-    libPath = `..${path.sep}lib`
-    importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
-  } else {
-    if (filePosition === 'global') {
-      copyToDirectory = `src${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
-      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
-    } else {
-      copyToDirectory = `${path.dirname(destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destinationFile}${path.sep}`, 'src/lib') || '.'
-      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}${nameWithPrefix}.js`
-    }
+  switch (answers.typeOfElement) {
+    case 'page':
+      copyToDirectory = 'src/pages'
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = '../lib'
+      importPath = `./pages/${nameWithPrefix}.js`
+      break
+
+    case 'general-element':
+      debugger
+      copyToDirectory = 'src/elements'
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = '../lib'
+      importPath = `./${path.relative(path.dirname(destinationFile), newElementFile)}`
+      break
+
+    case 'tab-element':
+    case 'page-specific':
+      debugger
+      copyToDirectory = `${path.dirname(destinationFile)}/${path.basename(answers.destinationFile, '.js')}`
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = `./${path.relative(path.dirname(newElementFile), 'src/lib')}`
+      importPath = `./${path.relative(path.dirname(destinationFile), newElementFile)}`
+      break
   }
 
   // RETURN THE RESULT OBJECT
@@ -294,12 +329,14 @@ exports.postPrompts = async (config, answers) => {
     filePosition,
     tailEnd,
     pagePath,
+    insertElement,
     // END OF API
 
     storeFileInfo,
 
     nameWithPrefix,
     nameNoPrefix,
+    willNeedToInsertElement,
 
     copyToDirectory,
     newElementFile,
@@ -317,7 +354,9 @@ exports.boot = (config) => { }
 exports.fileRenamer = (config, file) => {
   switch (file) {
     case 'PREFIX-ELEMENTNAME.ejs':
+      // return config.vars.newElementFile // `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.nameWithPrefix}.js`
       return `${config.vars.newElementInfo.copyToDirectory}/${config.vars.newElementInfo.nameWithPrefix}.js`
+
     default:
       return file
   }
@@ -327,38 +366,38 @@ exports.fileRenamer = (config, file) => {
   if (!elementIsPage(answers.type)) {
     if (scope === 'global') {
       destination = insertElement ? answers.destination : {}
-      copyToDirectory = `src${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
+      copyToDirectory = `src/elements`
+      newElementFile = `${copyToDirectory}/${name}.js`
       libPath = path.relative(`${destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
-      importPath = insertElement ? `./${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
+      importPath = insertElement ? `./${path.basename(answers.destination.file, '.js')}/elements/${name}.js` : ''
       ownHeader = false
     } else {
       destination = insertElement ? answers.destination : {}
-      copyToDirectory = `${path.dirname(destination.file)}${path.sep}${path.basename(destination.file, '.js')}${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${name}.js`
-      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, 'src/lib') || '.'
+      copyToDirectory = `${path.dirname(destination.file)}/${path.basename(destination.file, '.js')}/elements`
+      newElementFile = `${copyToDirectory}/${name}.js`
+      libPath = path.relative(`${answers.destination.file}/elements`, 'src/lib') || '.'
       ownPath = false
       pagePath = ''
-      importPath = insertElement ? `./${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js` : ''
+      importPath = insertElement ? `./${path.basename(answers.destination.file, '.js')}/elements/${name}.js` : ''
       ownHeader = false
     }
   } else if (type === 'page') {
     destination = answers.destination
-    copyToDirectory = `${path.dirname(answers.destination.file)}${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements`
-    newElementFile = `${copyToDirectory}${path.sep}${name}.js`
-    libPath = path.relative(`${answers.destination.file}${path.sep}elements`, `src${path.sep}lib`) || '.'
+    copyToDirectory = `${path.dirname(answers.destination.file)}/${path.basename(answers.destination.file, '.js')}/elements`
+    newElementFile = `${copyToDirectory}/${name}.js`
+    libPath = path.relative(`${answers.destination.file}/elements`, `src/lib`) || '.'
     pagePath = `${answers.destination.pagePath}${answers.subPath}`
     subPath = answers.subPath
-    importPath = `./${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${name}.js`
+    importPath = `./${path.basename(answers.destination.file, '.js')}/elements/${name}.js`
     ownHeader = false
   } else if (type === 'root-page') {
-    destination = { file: `src${path.sep}${config.vars.appFile}.js` }
-    copyToDirectory = `src${path.sep}pages`
-    newElementFile = `${copyToDirectory}${path.sep}${name}.js`
-    libPath = `..${path.sep}lib`
-    pagePath = typeof answers.pagePath === 'undefined' ? `${path.sep}${elementName}` : answers.pagePath
+    destination = { file: `src/${config.vars.appFile}.js` }
+    copyToDirectory = `src/pages`
+    newElementFile = `${copyToDirectory}/${name}.js`
+    libPath = `../lib`
+    pagePath = typeof answers.pagePath === 'undefined' ? `/${elementName}` : answers.pagePath
     importPath = ''
     ownHeader = true
   }
@@ -377,31 +416,31 @@ exports.fileRenamer = (config, file) => {
   // THIS USED TO BE FOR SUB-PAGES, SOMETHING I NO LONGER DO
   if (answers.isPage) {
     if (rootPage) {
-      copyToDirectory = `src${path.sep}pages`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = `..${path.sep}lib`
-      importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
+      copyToDirectory = `src/pages`
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = `../lib`
+      importPath = `./pages/${nameWithPrefix}.js`
       pagePath = `/${answers.subPath}`
       //
     } else {
-      copyToDirectory = `${path.dirname(answers.destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destinationFile}${path.sep}elements`, `src${path.sep}lib`) || '.'
+      copyToDirectory = `${path.dirname(answers.destinationFile)}/${path.basename(answers.destinationFile, '.js')}/elements`
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destinationFile}/elements`, `src/lib`) || '.'
       pagePath = isMainElement ? answers.destinationFileInfo.pagePath : `${answers.destinationFileInfo.pagePath}${answers.subPath}`
       subPath = answers.subPath
-      importPath = `./${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+      importPath = `./${path.basename(answers.destinationFile, '.js')}/elements/${nameWithPrefix}.js`
     }
   } else {
     if (scope === 'global') {
-      copyToDirectory = `src${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
+      copyToDirectory = `src/elements`
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
       libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
-      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+      if (answers.destinationFile) importPath = `./${path.basename(answers.destinationFile, '.js')}/elements/${nameWithPrefix}.js`
     } else {
-      copyToDirectory = `${path.dirname(destinationFile)}${path.sep}${path.basename(answers.destinationFile, '.js')}${path.sep}elements`
-      newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
-      libPath = path.relative(`${answers.destination.file}${path.sep}elements`, 'src/lib') || '.'
-      if (answers.destinationFile) importPath = `.${path.sep}${path.basename(answers.destination.file, '.js')}${path.sep}elements${path.sep}${nameWithPrefix}.js`
+      copyToDirectory = `${path.dirname(destinationFile)}/${path.basename(answers.destinationFile, '.js')}/elements`
+      newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
+      libPath = path.relative(`${answers.destination.file}/elements`, 'src/lib') || '.'
+      if (answers.destinationFile) importPath = `./${path.basename(answers.destination.file, '.js')}/elements/${nameWithPrefix}.js`
     }
   }
 

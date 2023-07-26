@@ -1,5 +1,5 @@
 /* Loaded modules -- start */
-import AppElement from './AppElement.js'
+import { AppElement } from './AppElement.js'
 // import { RoutingMixin } from './AppElementMixins/RoutingMixin.js'
 /* Loaded modules -- end */
 

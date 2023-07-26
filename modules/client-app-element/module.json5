@@ -15,16 +15,6 @@
         {
           "op":"resolve-ejs"
         },
-
-        // Add/edit fields to add-edit forms
-        {
-          "if": "<%=vars.newElementInfo.type === 'edit' %>",        
-          op: 'insert',
-          position: 'before',
-          newlineBefore: false,
-          anchorPoint: '<!-- Add/Edit field insertion point -->',
-          value: '<%- vars.newElementInfo.fieldElements %>'
-        },
       ],
 
       // App page. For pages, add element to the page, as well as the import and (maybe) in the drawer
@@ -63,23 +53,46 @@
         }
       ],
 
+      // All other types: change the destination file, adding the element
       "<%=vars.newElementInfo.destinationFile%>":[
 
-        // Straight element. It will position place it in the right spot, if so requested 
+        // Add the `import` statement for every non-page element (general-element, tab-element and page-specific)), 
+        // if newElementInfo.insertElement is true 
         {
-          "if": "<%=!vars.newElementInfo.typeOfElement === 'page' && vars.newElementInfo.insertElement%>",
+          "if": "<%=vars.newElementInfo.typeOfElement !== 'page' && vars.newElementInfo.willNeedToInsertElement %>",
           "op": "insert",
           "newlineAfter": true,
-          "anchorPoint":"***.....export class.....",
+          "anchorPoint":".....***class .....",
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
+        // General element and page-specific
         {
-          "if": "<%=!vars.newElementInfo.isPage && vars.newElementInfo.insertElement%>",
+          "if": "<%=['general-element', 'page-specific'].indexOf(vars.newElementInfo.typeOfElement) !== -1 && vars.newElementInfo.insertElement %>",
           "op": "insert",
           "newlineAfter": true,
-          "anchorPoint": ".....<contents>...***</contents>",
+          "anchorPoint": ".....<contents>...***</contents>.....",
           "value":"<<%=vars.newElementInfo.nameWithPrefix%>></<%=vars.newElementInfo.nameWithPrefix%>>"
-        }
+        },
+        // Tab element
+        {
+          "if": "<%=vars.newElementInfo.willNeedToInsertElement %>",
+          "op": "insert",
+          "newlineAfter": true,
+          "anchorPoint": ".....<ee-tabs .....***</ee-tabs>.....",
+          "valueFromFile":"tab.js"
+        },
+        {
+          "if": "<%=vars.newElementInfo.willNeedToInsertElement %>",
+          "op": "insert",
+          "newlineAfter": true,
+          "anchorPoint": ".....<ee-tabs.....</a>...***<div.....",
+          "value":"<a href=\"#<%=vars.newElementInfo.nameWithPrefix%>\" tab-name=\"<%=vars.newElementInfo.nameWithPrefix%>\"><div><%=vars.newElementInfo.nameNoPrefix%></div></a>"
+        },
+        {
+          "op":"resolve-ejs"
+        },
+ 
+
       ]
     }
   }

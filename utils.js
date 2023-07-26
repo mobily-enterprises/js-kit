@@ -89,6 +89,12 @@ const getFileInfo = function (contents) {
   m = contents.match(/^[ \t]*static[ \t]+get[ \t]+version[ \t]*\([ \t]*\)[ \t]*\{.*?'(.*?)'.*$/m)
   if (m) res.storeVersion = m[1]
 
+  m = contents.match(/^[ \t]*<ee-tabs[ >].*$/m)
+  if (m) res.hasTabs = true
+
+  m = contents.match(/^[ \t]*<contents[ >].*$/m)
+  if (m) res.hasContents = true
+
   return res
 }
 
@@ -153,7 +159,7 @@ exports.findMatchingStoreNameAndVersions = (config, version, storeName) => {
 
 exports.elementNameFromInput = (elementClass, inputElementName) => {
   const prefix = {
-    PlainElement: 'plain-',
+    PlainElement: '',
     ViewElement: 'view-',
     AddElement: 'add-',
     EditElement: 'edit-',
