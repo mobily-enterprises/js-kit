@@ -39,58 +39,57 @@ exports.preAdd = async (config) => { }
 exports.postAdd = async (config) => {
   //
   await installModule('client-app-element', config, {
+    typeOfElement: 'page',
     elementClass: 'PagePlainElement',
     pagePath: '',
     title: 'Home',
     menuTitle: 'Home',
     inDrawer: true,
     uncommentedStaticImport: true,
-    elementName: 'home'
   })
 
   await installModule('client-app-element', config, {
+    typeOfElement: 'page',
     elementClass: 'PagePlainElement',
-    pagePath: '/load-error',
+    pagePath: '/_load-error',
     title: 'Load Error',
     inDrawer: false,
     uncommentedStaticImport: true,
-    elementName: 'load-error',
     tailEnd: true
   })
 
   await installModule('client-app-element', config, {
+    typeOfElement: 'page',
     elementClass: 'PagePlainElement',
-    pagePath: '/loading',
+    pagePath: '/_loading',
     title: 'Loading',
     inDrawer: false,
     uncommentedStaticImport: true,
-    elementName: 'loading',
     tailEnd: true
   })
 
   await installModule('client-app-element', config, {
+    typeOfElement: 'page',
     elementClass: 'PagePlainElement',
     pagePath: '/**',
     title: 'Not found',
     menuTitle: 'Home',
-
     inDrawer: false,
     uncommentedStaticImport: true,
-    elementName: 'not-found',
     tailEnd: true
   })
 
   const changes = [
     {
-      srcFile: 'src/pages/<%=vars.elPrefix%>-not-found.js',
+      srcFile: 'src/pages/<%=vars.elPrefix%>-_not-found.js',
       contentsfile: 'notFound.html'
     },
     {
-      srcFile: 'src/pages/<%=vars.elPrefix%>-load-error.js',
+      srcFile: 'src/pages/<%=vars.elPrefix%>-_load-error.js',
       contentsfile: 'loadError.html'
     },
     {
-      srcFile: 'src/pages/<%=vars.elPrefix%>-loading.js',
+      srcFile: 'src/pages/<%=vars.elPrefix%>-_loading.js',
       contentsfile: 'loading.html'
     }
 

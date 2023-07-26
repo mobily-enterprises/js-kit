@@ -24,8 +24,8 @@ async runDynamicLoading () {
   const path = window.location.pathname
 
   const elementNameFromPagePath = (pagePath) => {
-    if (pagePath === '/**') return 'not-found'
-    if (pagePath === '' || pagePath === '/') return 'home'
+    if (pagePath === '/**') return '_not-found'
+    if (pagePath === '' || pagePath === '/') return '_home'
     return pagePath
       .replace(/^\//, '')
       .replace(/\//g, '_')
@@ -39,7 +39,7 @@ async runDynamicLoading () {
 
   // If it's not in the list pages listed in the main app, issue a file not found
   if (!pageElement) {
-    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-not-found'))
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-_not-found'))
     return
   }
 
@@ -47,7 +47,7 @@ async runDynamicLoading () {
   if (pageElement.shadowRoot) return
 
   // Activate the "loading" page
-  activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-loading'))
+  activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-_loading'))
  
   // Import the correct module for this page
   let mod
@@ -60,7 +60,7 @@ async runDynamicLoading () {
 
   // Loading error: display the loading error page
   if (!mod) {
-    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-load-error'))
+    activateElement(this.shadowRoot.querySelector('<%=vars.elPrefix%>-_load-error'))
   }
 
   await this.updateComplete

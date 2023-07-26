@@ -25,13 +25,44 @@ exports.getPrompts = async (config) => {
   const storesAvailable = storesModuleInstalled && availableStores.length
   const noStoresAvailableMessage = availableStores.length ? '' : ' (No stores available yet)'
 
-  const isPage = await utils.prompt({
-    type: 'confirm',
-    message: 'Is it a page rather than a simple element?',
-    initial: true
+  answers.typeOfElement = await utils.prompt({
+    type: 'select',
+    message: 'What type of element are you adding?',
+    choices: [
+      {
+        title: 'A page element (a page with a route)',
+        value: 'page'
+      },
+      {
+        title: 'An new tab in a page',
+        value: 'tab-element'
+      },
+      {
+        title: 'A general purpose element, to be copied in the `elements` directory',
+        value: 'general-element'
+      },
+      {
+        title: 'A page-specific element, to be copied in a folder named after the page',
+        value: 'page-specific'
+      }
+    ]
   })
 
-  if (isPage) {
+  if (answers.typeOfElement === 'general-element' || answers.typeOfElement === 'page-specific') {
+    answers.insertElement = await utils.prompt({
+      type: 'confirm',
+      message: 'Do you want to insert this element in another element\'s body automatically?',
+      initial: true
+    })
+  }
+
+  if (answers.insertElement || answers.typeOfElement === 'tab-element') {
+    const destination = await destinationElement(config, answers)
+    answers.destinationFile = destination.file
+    answers.destinationFileInfo = destination.info
+  }
+
+  if (answers.typeOfElement === 'page') {
     let choices = [
       // Plain page (page)
       {
@@ -171,37 +202,6 @@ exports.getPrompts = async (config) => {
       choices
     })
 
-    answers.scope = await utils.prompt({
-      type: 'select',
-      message: 'Where do you want to place the element?',
-      choices: [
-        // Store-bound
-        {
-          title: 'Global scope',
-          description: 'The element will be placed in the app\'s `elements` directory',
-          value: 'global'
-        },
-        // Store-bound
-        {
-          title: 'Local scope',
-          description: 'The element will be placed in a folder named after the containing element',
-          value: 'global'
-        }
-      ]
-    })
-
-    const insertElement = await utils.prompt({
-      type: 'confirm',
-      message: 'Do you want to place this element somewhere immediately?',
-      initial: true
-    })
-
-    if (insertElement) {
-      const destination = await destinationElement(config, answers)
-      answers.destinationFile = destination.file
-      answers.destinationFileInfo = destination.info
-    }
-
     answers.elementName = await utils.prompt({
       type: 'text',
       message: 'Element name',
@@ -225,21 +225,19 @@ exports.getPrompts = async (config) => {
 
 exports.postPrompts = async (config, answers) => {
   //
-  // Some worked out variables
-  const isPage = answers.elementClass.startsWith('Page')
-
   // API attributes. These are the ones available in the API
   const elementClass = answers.elementClass
-  const elementName = isPage ? utils.elementNameFromPagePath(config, answers.pagePath) : utils.elementNameFromInput(answers.elementClass, answers.elementName)
+  const typeOfElement = answers.typeOfElement
+  const elementName = typeOfElement === 'page' ? utils.elementNameFromPagePath(config, answers.pagePath) : utils.elementNameFromInput(answers.elementClass, answers.elementName)
   const destinationFile = answers.destinationFile || '' // Not necessarily there, Plain elements might not be copied over
   const destinationFileInfo = answers.destinationFileInfo || null // Not necessarity available (e.g. if used via API)
   const inDrawer = !!answers.inDrawer // Pages (root ones) only
   const uncommentedStaticImport = !!answers.uncommentedStaticImport // Pages (root ones) only
   const storeFile = answers.storeFile || '' // Page(Edit|View|List)Element only. The store's file
-  const title = !isPage ? '' : (answers.title || '') // Pages only
-  const menuTitle = !isPage ? '' : (answers.menuTitle || '') // Pages only
+  const title = typeOfElement !== 'page' ? '' : (answers.title || '') // Pages only
+  const menuTitle = typeOfElement !== 'page' ? '' : (answers.menuTitle || '') // Pages only
   const tailEnd = !!answers.tailEnd // Not asked interactively, but usable if adding element programmatically
-  const scope = answers.scope || ''
+  const filePosition = answers.filePosition || ''
   const pagePath = answers.pagePath || ''
 
   // More worked out variables
@@ -260,13 +258,13 @@ exports.postPrompts = async (config, answers) => {
   let libPath = '' // Req
   let importPath = '' //  Req for pages
 
-  if (isPage) {
+  if (answers.typeOfElement === 'page') {
     copyToDirectory = `src${path.sep}pages`
     newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
     libPath = `..${path.sep}lib`
     importPath = `.${path.sep}pages${path.sep}${nameWithPrefix}.js`
   } else {
-    if (scope === 'global') {
+    if (filePosition === 'global') {
       copyToDirectory = `src${path.sep}elements`
       newElementFile = `${copyToDirectory}${path.sep}${nameWithPrefix}.js`
       libPath = path.relative(`${answers.destinationFile}/elements`, 'src/lib') || '.'
@@ -282,9 +280,8 @@ exports.postPrompts = async (config, answers) => {
   // RETURN THE RESULT OBJECT
   config.vars.newElementInfo = {
 
-    isPage,
-
     // API
+    typeOfElement,
     elementClass,
     elementName,
     destinationFile,
@@ -294,7 +291,7 @@ exports.postPrompts = async (config, answers) => {
     storeFile,
     title,
     menuTitle,
-    scope,
+    filePosition,
     tailEnd,
     pagePath,
     // END OF API

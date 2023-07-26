@@ -164,8 +164,8 @@ exports.elementNameFromInput = (elementClass, inputElementName) => {
 }
 
 exports.elementNameFromPagePath = (config, pagePath) => {
-  if (pagePath === '/**') return 'not-found'
-  if (pagePath === '' || pagePath === '/') return 'home'
+  if (pagePath === '/**') return '_not-found'
+  if (pagePath === '' || pagePath === '/') return '_home'
   return pagePath
     .replace(/^\//, '')
     .replace(/\//g, '_')

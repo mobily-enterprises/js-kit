@@ -30,7 +30,7 @@
       // App page. For pages, add element to the page, as well as the import and (maybe) in the drawer
       "src/<%=vars.appFile%>.js":[
          {
-          "if":"<%=vars.newElementInfo.isPage && userInput['client-app-element'].tailEnd%>",
+          "if":"<%=vars.newElementInfo.typeOfElement === 'page' && userInput['client-app-element'].tailEnd%>",
           "op":"insert",
           "newlineBefore":false,
           "newlineAfter":true,
@@ -38,7 +38,7 @@
           "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
                 {
-          "if":"<%=vars.newElementInfo.isPage && !userInput['client-app-element'].tailEnd%>",
+          "if":"<%=vars.newElementInfo.typeOfElement === 'page' && !userInput['client-app-element'].tailEnd%>",
           "op":"insert",
           "newlineBefore":true,
           "newlineAfter":true,
@@ -46,7 +46,7 @@
           "value":"<<%=vars.newElementInfo.nameWithPrefix%> class=\"page\" ></<%=vars.newElementInfo.nameWithPrefix%>>"
         },
         {
-          "if":"<%=vars.newElementInfo.isPage%>",
+          "if":"<%=vars.newElementInfo.typeOfElement === 'page'%>",
           "op":"insert",
           "newlineBefore":false,
           "newlineAfter":true,
@@ -54,7 +54,7 @@
           "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.nameWithPrefix%>.js'\n"
         },
         {
-          "if":"<%=vars.newElementInfo.isPage && vars.newElementInfo.inDrawer%>",
+          "if":"<%=vars.newElementInfo.typeOfElement === 'page' && vars.newElementInfo.inDrawer%>",
           "op":"insert",
           "newlineBefore": false,
           "newlineAfter": true,
@@ -67,7 +67,7 @@
 
         // Straight element. It will position place it in the right spot, if so requested 
         {
-          "if": "<%=!vars.newElementInfo.isPage && vars.newElementInfo.insertElement%>",
+          "if": "<%=!vars.newElementInfo.typeOfElement === 'page' && vars.newElementInfo.insertElement%>",
           "op": "insert",
           "newlineAfter": true,
           "anchorPoint":"***.....export class.....",
