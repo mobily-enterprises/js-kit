@@ -18,25 +18,20 @@
       ],vars.newElementInfo.destinationFile
       "<%=%>":[
         {
-          "op": "insert",
+          "op":"insert",
           "position": "before",
-          "newlineAfter": true,
-          "newlineBefore": false,
           "anchorPoint": "<%-vars.newElementInfo.destination.anchorPoint%>",
           "value":"<<%=vars.newElementInfo.name%> routing-group=\"<%=vars.newElementInfo.destination.pagePath%>\" slot=\"content\"></<%=vars.newElementInfo.name%>>"
         },
         {
-          "op": "insert",
+          "op":"insert",
           "position": "before",
-          "newlineAfter": false,
           "anchorPoint": "/* Loaded modules -- end */",
           "value": "import '<%=vars.newElementInfo.importPath%>'"
         },
         {
-          "op": "insert",
+          "op":"insert",
           "position": "before",
-          "newlineAfter": true,
-          "newlineBefore": false,
           "anchorPoint": '<!-- Routed Page tab heading insertion point -->',
           "value":"<a name=\"<%=vars.newElementInfo.nameNoPrefix%>\" href=\"<%=vars.newElementInfo.destination.pagePath%><%=vars.newElementInfo.subPath%>\"><div><%=scaffoldizerUtils.capitalize(vars.newElementInfo.nameNoPrefix)%></div></a>"
         },

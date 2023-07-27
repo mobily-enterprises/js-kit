@@ -295,7 +295,6 @@ exports.postPrompts = async (config, answers) => {
       break
 
     case 'general-element':
-      debugger
       copyToDirectory = 'src/elements'
       newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
       libPath = '../lib'
@@ -304,7 +303,6 @@ exports.postPrompts = async (config, answers) => {
 
     case 'tab-element':
     case 'page-specific':
-      debugger
       copyToDirectory = `${path.dirname(destinationFile)}/${path.basename(answers.destinationFile, '.js')}`
       newElementFile = `${copyToDirectory}/${nameWithPrefix}.js`
       libPath = `./${path.relative(path.dirname(newElementFile), 'src/lib')}`

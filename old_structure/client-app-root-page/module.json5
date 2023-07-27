@@ -18,7 +18,6 @@
         {
           "op":"insert",
           "position":"before",
-          "newlineBefore":false,
           "anchorPoint":"<!-- Add/Edit field insertion point -->",
           "value":"<%- vars.newElementInfo.fieldElements %>"
         },
@@ -28,30 +27,23 @@
           "if":"<%=!userInput['client-app-root-page'].tailEnd%>",
           "op":"insert",
           "position":"before",
-          "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
           "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
         },
         {
           "if":"<%=userInput['client-app-root-page'].tailEnd%>",
           "op":"insert",
-          "position":"after",
-          "newlineBefore":false,
           "anchorPoint":"<!-- App pages -- end -->",
           "value":"<<%=vars.newElementInfo.name%> class=\"page\" ></<%=vars.newElementInfo.name%>>"
         },
         {
           "op":"insert",
-          "position":"before",
-          "newlineBefore":false,
           "anchorPoint":"/* Extra app modules -- end */",
           "value":"<%=vars.newElementInfo.uncommentedStaticImport ? '' : '// '%>import './pages/<%=vars.newElementInfo.name%>.js'"
         },
         {
           "if":"<%=!vars.newElementInfo.notInDrawer%>",
           "op":"insert",
-          "position":"before",
-          "newlineBefore":false,
           "anchorPoint":"<!-- Drawer contents -- end -->",
           "valueFromFile":"drawerEntry.js"
         }

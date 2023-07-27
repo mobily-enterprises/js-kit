@@ -26,35 +26,24 @@
        "server/app.js":[
           {
              "op":"insert",
-             "position":"before",
-             "newlineBefore":false,
-             "newlineAfter":true,
              "anchorPoint":".....***//...app.use(express.static(root)).....",
              "value":"const expressSession = require('express-session')"
           },
           {
              "op":"insert",
-             "position":"before",
-             "newlineBefore":false,
-             "newlineAfter":true,
              "anchorPoint":".....***//...app.use(express.static(root)).....",
              "value":"const expressMySqlSession = require('express-mysql-session')"
           },
 
           {
              "op":"insert",
-             "position":"before",
-             "newlineBefore":false,
-             "newlineAfter":true,
              "anchorPoint":".....***//...app.use(express.static(root)).....",
              "valueFromFile":"session.js"
           },
 
           {
              "op":"insert",
-             "position":"after",
-             "newLineBefore": true,
-             "newlineAfter":true,
+             "insertBelow": true,
              "anchorPoint":".....static(root))***.....",
              "value":"// Enable sessions, straight after serving static files\napp.use(session)\n"
           }

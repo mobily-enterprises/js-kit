@@ -14,9 +14,6 @@
       "<%=vars.newFields.storeFile%>":[
         {
            "op":"insert",
-           "position":"before",
-           "newlineBefore":false,
-           "newlineAfter":false,
            "anchorPoint":"/* Fields insertion point */",
            "value":"<%-vars.newFields.fields%>"
         }

@@ -87,10 +87,15 @@ STORES
 
 BIG MISSING THINGS:
   - GOOD DnD
-  - GOOD FILE UPLOAD 
+  - GOOD FILE UPLOADS 
   - WEBSOCKET PUSH STORE CHANGES
-  - 
-  -
+
+
+JSONRESTSTORES:
+  - Better hooks
+  - Embedded, simple file uploads
+  - Automatic joins
+  - Automatic grouping
 
 ☐ NOTES ON STORES
 Companies
@@ -187,7 +192,6 @@ Only page elements will ever load data. All of the other elements do not do the 
   {
     "op":"insert",
     "position":"before",
-    "newlineAfter":false,
     "anchorPoint":"/* Loaded modules -- end */",
     "value":"import { ResponsiveMixin } from './AppElementMixins/ResponsiveMixin.js'"
   },
@@ -223,11 +227,10 @@ STAGE 2:
 ✔ Make sure things are still functioning after sweeping changes to prompets architecture @done(23-06-11 21:10)
 ✔ Make sure the root page is still added, that is: all of the variables are passed @done(23-06-11 21:10)
 ✔ Check possibility of NOT having insertion points, but analyse code instead. <--- PLEASE @done(23-07-16 09:48)
-☐ Complete insertion of main pages
-☐ Complete insertion of elements which will be sub-tabs, using the normal element placeholder.
-☐ Complete insertion of normal element into another element, as a global element or as a specficically scoped element
+✔ Complete insertion of main pages @done(23-07-26 23:53)
+✔ Complete insertion of elements which will be sub-tabs, using the normal element placeholder. @done(23-07-26 23:53)
+✔ Complete insertion of normal element into another element, as a global element or as a specficically scoped element @done(23-07-26 23:53)
 ☐ Allow adding of store pages, check parameters passed
-
 ☐ Make sure stores are give the right parameters (only the main page of a tab gets the list for now)
 ☐ Make the loader actually work
 ☐ Make sure that variables are passed (all IDs and *Record values), and make sure that these variables are LIT properties of both pages
@@ -251,7 +254,6 @@ STAGE 2:
 ☐ Document the lot as literate code
 ☐ Make sure GENERATED code is also literate, and generates a manual
 ☐ --- STAGE 4 DONE
-☐ Maybe add reflect:true to routify's PageElementMixin
 ☐ Add module to build (rollup config)
 
 
@@ -273,10 +275,10 @@ STAGE 2:
 ✔ Fix the automatic loading of pages, by renaming everything in a totally new way @done(23-07-25 22:04)
 ✔ Make adding of elements (non-pages) work properly @done(23-07-26 23:26)
 ✔ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it) @done(23-07-26 23:26)
+✔ Fix weird issues with tabs and spacing, improve in that department so that weirdness doesn't happen @done(23-07-27 18:55)
 ☐ Add info about PARENT to newElementInfo, so that it can know things like path and routing group. Fix tabs.js and module.json
 ☐ Check if an element has already been created when picking a name
 ☐ Add ability to have tab title and option NOT to add tabs for tabs-elements
-☐ Fix weird issues with tabs and spacing, improve in that department so that weirdness doesn't happen
 
 ☐ [Raphael] Figure out how to make "Main" invisible when it's the only tab
  

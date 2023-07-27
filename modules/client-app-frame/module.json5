@@ -62,14 +62,12 @@
       "src/<%=vars.appFile%>.js":[
         {
           "op":"insert",
-          "newlineAfter":true,
           "anchorPoint":"***.....export class.....",
           "valueFromFile":"imports.js"
         },
         {
           "op":"insert",
-          "newlineBefore":true,
-          "newlineAfter":true,
+          "insertBelow": true,
           "anchorPoint":".....static get styles () {...return [***...css`.....",
           "value":"appTheme,"
         },
@@ -86,26 +84,18 @@
         },
         {
           "op":"insert",
-          "newlineBefore":true,
-          "newlineAfter":true,
-          
-          "position":"before",
-          "anchorPoint":".....***}",
+          "insertBelow": true,
+          "anchorPoint":".....***}...",
           "valueFromFile":"methods.js"
         },
         {
           "op":"insert",
-          "position":"after",
-          "newlineBefore":false,
-          "newlineAfter":true,
           "anchorPoint":"***.....export class.....",
           "valueFromFile":"dynamicImports.js"
         },
         {
           "op":"insert",
-          "position":"after",
-          "newlineBefore":true,
-          "newlineAfter":true,
+          "insertBelow": true,
           "anchorPoint":".....static get styles () {...return [...css`***.....",
           "valueFromFile":"styles.css"
         },
@@ -116,17 +106,13 @@
         },
         {
           "op":"insert",
-          "position":"after",
-          "newlineBefore":true,
-          "newlineAfter":true,
+          "insertBelow": true,
           "anchorPoint":".....render () {***.....",
           "valueFromFile":"drawer.js"
         },
         {
           "op":"insert",
-          "position":"after",
-          "newlineBefore":true,
-          "newlineAfter":true,
+          "insertBelow": true,
           "anchorPoint":".....render () {...return html`***.....",
           "valueFromFile":"render.html"
         }

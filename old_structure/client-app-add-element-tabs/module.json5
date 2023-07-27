@@ -13,7 +13,6 @@
         {
            "op":"insert",
            "position":"after",
-           "newlineAfter":true,
            "anchorPoint":"<!-- Element insertion point -->",
            "valueFromFile":"element-tabs.js"
         }

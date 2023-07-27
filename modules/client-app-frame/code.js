@@ -101,8 +101,6 @@ exports.postAdd = async (config) => {
         [data.srcFile]: [
           {
             op: 'insert',
-            newlineBefore: true,
-            newlineAfter: false,
             anchorPoint: '.....<ee-tabs...</ee-tabs>***.....',
             value: '<contents>\n  <!--Page contents -->\n</contents>'
           },
@@ -114,26 +112,20 @@ exports.postAdd = async (config) => {
           {
             op: 'insert',
             position: 'before',
-            newlineBefore: true,
-            newlineAfter: false,
             anchorPoint: '.....<contents>...***</contents>.....',
             valueFromFile: data.contentsfile
           },
           {
             op: 'insert',
             position: 'before',
-            newlineBefore: false,
-            newlineAfter: true,
             anchorPoint: '.....***class Element.....',
             value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
           },
           {
             op: 'insert',
-            position: 'before',
-            newlineBefore: true,
-            newlineAfter: false,
             anchorPoint: '.....static get styles () {...return [...css`***.....',
-            valueFromFile: 'warning-css.css'
+            valueFromFile: 'warning-css.css',
+            insertBelow: true
           }
         ]
       }

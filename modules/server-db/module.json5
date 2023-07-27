@@ -48,17 +48,12 @@
          "server/app.js":[
             {
                "op":"insert",
-               "position":"before",
-               "newlineBefore":true,
-               "newlineAfter": false,
+               "insertBelow": true,
                "anchorPoint":".....= require(...)***...//...process.on.....",
                "value":"const makeDbConnection = require('./lib/makeDbConnection.js')\n"
             },
             {
                "op":"insert",
-               "position":"before",
-               "newlineBefore":false,
-               "newlineAfter":true,
                "anchorPoint":".....***//...app.use(express.static(root)).....",
                "value":"// Make the DB connection\nvars.connection = makeDbConnection(vars.config.db)\n"
             }
