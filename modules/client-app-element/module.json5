@@ -74,7 +74,7 @@
           "if":"<%=vars.newElementInfo.typeOfElement === 'tab-element' && vars.newElementInfo.willNeedToInsertElement %>",
           "op":"insert",
           "anchorPoint": ".....<ee-tabs.....</a>...***<div.....",
-          "value":"<a href=\"#<%=vars.newElementInfo.nameWithPrefix%>\" tab-name=\"<%=vars.newElementInfo.nameWithPrefix%>\"><div><%=vars.newElementInfo.nameNoPrefix%></div></a>"
+          "value":"<a href=\"<%=vars.newElementInfo.destinationFileInfo.pagePath%>#<%=vars.newElementInfo.nameWithPrefix%>\" tab-name=\"<%=vars.newElementInfo.nameWithPrefix%>\"><div><%=vars.newElementInfo.nameNoPrefix%></div></a>"
         },
         {
           "op":"resolve-ejs"

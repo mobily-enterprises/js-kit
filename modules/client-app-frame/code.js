@@ -82,15 +82,15 @@ exports.postAdd = async (config) => {
   const changes = [
     {
       srcFile: 'src/pages/<%=vars.elPrefix%>-_not-found.js',
-      contentsfile: 'notFound.html'
+      contentsFile: 'notFound.html'
     },
     {
       srcFile: 'src/pages/<%=vars.elPrefix%>-_load-error.js',
-      contentsfile: 'loadError.html'
+      contentsFile: 'loadError.html'
     },
     {
       srcFile: 'src/pages/<%=vars.elPrefix%>-_loading.js',
-      contentsfile: 'loading.html'
+      contentsFile: 'loading.html'
     }
 
   ]
@@ -101,6 +101,7 @@ exports.postAdd = async (config) => {
         [data.srcFile]: [
           {
             op: 'insert',
+            insertBelow: true,
             anchorPoint: '.....<ee-tabs...</ee-tabs>***.....',
             value: '<contents>\n  <!--Page contents -->\n</contents>'
           },
@@ -111,13 +112,11 @@ exports.postAdd = async (config) => {
           },
           {
             op: 'insert',
-            position: 'before',
             anchorPoint: '.....<contents>...***</contents>.....',
-            valueFromFile: data.contentsfile
+            valueFromFile: data.contentsFile
           },
           {
             op: 'insert',
-            position: 'before',
             anchorPoint: '.....***class Element.....',
             value: "import { warning } from '../styles/icons.js'\nimport { shadow2 } from '../styles/shared-styles.js'"
           },

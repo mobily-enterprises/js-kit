@@ -277,10 +277,9 @@ STAGE 2:
 ✔ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it) @done(23-07-26 23:26)
 ✔ Fix weird issues with tabs and spacing, improve in that department so that weirdness doesn't happen @done(23-07-27 18:55)
 ☐ Add info about PARENT to newElementInfo, so that it can know things like path and routing group. Fix tabs.js and module.json
+☐ Make sure the indent function looks for the first NOT EMPTY line above
 ☐ Check if an element has already been created when picking a name
 ☐ Add ability to have tab title and option NOT to add tabs for tabs-elements
-
-☐ [Raphael] Figure out how to make "Main" invisible when it's the only tab
  
 /all-ports
 Is it a static page? Yes

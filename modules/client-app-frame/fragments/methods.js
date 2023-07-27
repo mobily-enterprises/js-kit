@@ -2,13 +2,9 @@ static get pagePath () {
   return ['/:page', '/:page/**']
 }
 
-static get routingGroup () {
-  return 'main'
-}
-
 async routerCallback (params) {
-  if (this._page === params.page) return
-  this._page = params.page
+  //
+  const path = this.path = window.location.pathname
 
   // ////////////////////////////////////////////////////////////////
   // Sets _page and close the drawer regardless
@@ -21,8 +17,6 @@ async routerCallback (params) {
 }
 
 async runDynamicLoading () {
-  const path = window.location.pathname
-
   const elementNameFromPagePath = (pagePath) => {
     if (pagePath === '/**') return '_not-found'
     if (pagePath === '' || pagePath === '/') return '_home'
@@ -32,6 +26,8 @@ async runDynamicLoading () {
       .replace(/:/g, '')
       .replace(/\*\*/g, 'starstar')
   }
+
+  const path = this.path = window.location.pathname
 
   const elementName = elementNameFromPagePath(path)
 
