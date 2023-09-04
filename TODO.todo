@@ -276,10 +276,13 @@ STAGE 2:
 ✔ Make adding of elements (non-pages) work properly @done(23-07-26 23:26)
 ✔ Figure out how to add tabs, MOST LIKELY when adding an element "as tab" or "in page" (when adding it) @done(23-07-26 23:26)
 ✔ Fix weird issues with tabs and spacing, improve in that department so that weirdness doesn't happen @done(23-07-27 18:55)
-☐ Add info about PARENT to newElementInfo, so that it can know things like path and routing group. Fix tabs.js and module.json
+✔ Add info about PARENT to newElementInfo, so that it can know things like path and routing group. Fix tabs.js and module.json @done(23-07-27 23:09)
+✔ Fix huge problems with going from a dynamic module to another @done(23-07-27 23:10)
+✔ Fixed issues with selection of drawer item on the left, reworked the "page" property which was obsolete @done(23-07-27 23:10)
+☐ Only allow pages without ":" in the URL to go in the drawer
+☐ If there are no stores, don't ask for the element, it's always PageElement or PlainElement.
 ☐ Make sure the indent function looks for the first NOT EMPTY line above
 ☐ Check if an element has already been created when picking a name
-☐ Add ability to have tab title and option NOT to add tabs for tabs-elements
  
 /all-ports
 Is it a static page? Yes
